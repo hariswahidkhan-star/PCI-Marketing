@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCI — Post-Launch Film (15s)</title>
+<!--
+  PCI post-launch film — deterministic scene.
+  Rendered frame-by-frame by render.mjs. Nothing here animates on a real-time
+  clock: window.seek(tSeconds) computes every style from t, so frame N is
+  byte-identical no matter how long the renderer takes to grab it.
+
+  Query params:  ?w=1920&h=1080&cc=1&t=0
+    w,h  stage size in px           cc  1 = burned-in captions, 0 = clean plate
+    t    seek time in seconds (the renderer calls window.seek instead)
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+
+:root{
+  /* Brand tokens lifted verbatim from backend/wwwroot/assets/styles.css */
+  --ink:#0F172A; --noir:#0E1525; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
+  --paper:#FFFFFF; --mist:#94A3B8; --card:#111D33;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:1;     /* scale unit, set by JS from stage width */
+  --padb:14; /* bottom safe area in units, raised for square (see JS) */
+  --h1:6.5;  /* headline size in units, reduced for square (see JS) */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+
+#stage{position:relative;overflow:hidden;background:var(--ink);
+  font-family:var(--sans);color:#fff;-webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision}
+
+/* ---------- ambient background ---------- */
+#glow{position:absolute;inset:-20%;pointer-events:none;
+  background:radial-gradient(closest-side, rgba(37,99,235,.34), rgba(37,99,235,0) 70%);
+  will-change:transform,opacity}
+#glow2{position:absolute;inset:-20%;pointer-events:none;
+  background:radial-gradient(closest-side, rgba(193,51,41,.20), rgba(193,51,41,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none;opacity:.5}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%)}
+#sheen{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;
+  background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.10) 50%,rgba(255,255,255,0) 62%)}
+
+/* ---------- shot scaffolding ---------- */
+/* Vertical padding is a safe area, not decoration: it keeps every shot clear of
+   the topbar above and the caption band below at both aspect ratios. */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:calc(12 * var(--s) * 1px) calc(9.5 * var(--s) * 1px) calc(var(--padb) * var(--s) * 1px);
+  will-change:opacity,transform}
+.shot.center{align-items:center;text-align:center}
+
+.eyebrow{font-family:var(--sans);font-weight:600;
+  font-size:calc(1.36 * var(--s) * 1px);letter-spacing:.19em;text-transform:uppercase;
+  color:#E4785F;white-space:nowrap}
+.eyebrow.blue{color:#7FA9E8}
+
+.uline{height:calc(.42 * var(--s) * 1px);width:calc(7.2 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  border-radius:calc(.3 * var(--s) * 1px);transform-origin:left center;will-change:transform}
+.shot.center .uline{transform-origin:center}
+
+h1,h2{font-family:var(--display);font-weight:800;line-height:1.02;letter-spacing:-.023em}
+h1{font-size:calc(var(--h1) * var(--s) * 1px)}
+h2{font-size:calc(6.1 * var(--s) * 1px)}
+.sub{font-family:var(--sans);font-weight:400;color:#B9C6DA;
+  font-size:calc(1.95 * var(--s) * 1px);line-height:1.5}
+
+/* word-level reveal: each word rides in a clipping mask */
+.ln{display:block;overflow:hidden;padding-bottom:calc(.55 * var(--s) * 1px)}
+.w{display:inline-block;will-change:transform,opacity}
+
+/* ---------- shot 3 credential chips ---------- */
+.chips{display:flex;gap:calc(1.55 * var(--s) * 1px);justify-content:center}
+.chip{background:var(--card);border:calc(.115 * var(--s) * 1px) solid rgba(59,130,246,.42);
+  padding:calc(1.75 * var(--s) * 1px) calc(2.35 * var(--s) * 1px);
+  min-width:calc(15.4 * var(--s) * 1px);text-align:left;will-change:transform,opacity}
+.chip b{display:block;font-family:var(--display);font-weight:800;
+  font-size:calc(3.05 * var(--s) * 1px);letter-spacing:-.02em;color:#fff;line-height:1}
+.chip span{display:block;margin-top:calc(.72 * var(--s) * 1px);
+  font-size:calc(1.16 * var(--s) * 1px);color:#8FA6C4;letter-spacing:.055em;
+  text-transform:uppercase;font-weight:600;white-space:nowrap}
+
+.facts{display:flex;gap:calc(2.6 * var(--s) * 1px);justify-content:center;align-items:center;
+  font-size:calc(1.6 * var(--s) * 1px);color:#A9BAD3;font-weight:500}
+.facts i{font-style:normal;color:#3B82F6;font-weight:700}
+.dot{width:calc(.34 * var(--s) * 1px);height:calc(.34 * var(--s) * 1px);
+  border-radius:50%;background:#3B5680;flex:0 0 auto}
+
+/* ---------- shot 4 invitation verbs ---------- */
+.verbs{display:flex;gap:calc(1.15 * var(--s) * 1px);justify-content:center;flex-wrap:nowrap}
+.verb{font-family:var(--display);font-weight:800;letter-spacing:.02em;
+  font-size:calc(2.05 * var(--s) * 1px);
+  padding:calc(.82 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);
+  border:calc(.115 * var(--s) * 1px) solid rgba(148,180,230,.30);
+  color:#DCE7F7;white-space:nowrap;will-change:transform,opacity}
+
+/* Square overrides: the 5-verb row and the credential row are the two places a
+   1:1 crop runs out of horizontal room before it runs out of vertical. */
+#stage.sq .verbs{gap:calc(.80 * var(--s) * 1px)}
+#stage.sq .verb{font-size:calc(1.75 * var(--s) * 1px);
+  padding:calc(.72 * var(--s) * 1px) calc(1.15 * var(--s) * 1px)}
+#stage.sq .chips{gap:calc(1.05 * var(--s) * 1px)}
+#stage.sq .chip{min-width:0;padding:calc(1.5 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
+#stage.sq .chip b{font-size:calc(2.6 * var(--s) * 1px)}
+#stage.sq .chip span{font-size:calc(1.02 * var(--s) * 1px)}
+#stage.sq .facts{gap:calc(1.5 * var(--s) * 1px);font-size:calc(1.45 * var(--s) * 1px)}
+#stage.sq .quote{font-size:calc(2.15 * var(--s) * 1px)}
+
+/* ---------- shot 5 end card ---------- */
+#mark{width:calc(8.6 * var(--s) * 1px);height:calc(8.6 * var(--s) * 1px);
+  border-radius:calc(2.0 * var(--s) * 1px);display:block}
+.wordmark{display:flex;align-items:center;gap:calc(1.05 * var(--s) * 1px)}
+.wordmark .wm-t{font-family:var(--display);font-weight:800;letter-spacing:-.01em;
+  font-size:calc(3.0 * var(--s) * 1px);line-height:1}
+.wordmark .wm-t em{font-style:normal;color:#3B82F6}
+.wordmark .wm-s{font-family:var(--sans);font-weight:500;color:#93A7C4;
+  font-size:calc(1.12 * var(--s) * 1px);line-height:1.3;
+  border-left:calc(.115 * var(--s) * 1px) solid rgba(148,180,230,.34);
+  padding-left:calc(.95 * var(--s) * 1px)}
+.url{font-family:var(--sans);font-weight:600;font-size:calc(2.0 * var(--s) * 1px);
+  color:#fff;letter-spacing:.005em}
+.quote{font-family:var(--display);font-weight:800;font-size:calc(2.5 * var(--s) * 1px);
+  letter-spacing:-.018em;color:#fff}
+.legal{font-family:var(--sans);font-weight:400;font-size:calc(1.02 * var(--s) * 1px);
+  color:#6F8099;line-height:1.5;max-width:calc(58 * var(--s) * 1px)}
+
+/* ---------- persistent brand furniture ---------- */
+#topbar{position:absolute;display:flex;align-items:center;gap:calc(.85 * var(--s) * 1px);
+  left:calc(9.5 * var(--s) * 1px);top:calc(6.2 * var(--s) * 1px);will-change:opacity}
+#topbar img{width:calc(3.05 * var(--s) * 1px);height:calc(3.05 * var(--s) * 1px);
+  border-radius:calc(.66 * var(--s) * 1px)}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.62 * var(--s) * 1px);
+  letter-spacing:-.01em}
+#topbar .t em{font-style:normal;color:#3B82F6}
+#topbar .s{font-family:var(--sans);font-weight:500;font-size:calc(.92 * var(--s) * 1px);
+  color:#8497B2;line-height:1.28;border-left:calc(.1 * var(--s) * 1px) solid rgba(148,180,230,.3);
+  padding-left:calc(.7 * var(--s) * 1px)}
+
+#footrule{position:absolute;left:calc(9.5 * var(--s) * 1px);right:calc(9.5 * var(--s) * 1px);
+  bottom:calc(5.0 * var(--s) * 1px);height:1px;background:rgba(148,180,230,.20)}
+#footl{position:absolute;left:calc(9.5 * var(--s) * 1px);bottom:calc(3.0 * var(--s) * 1px);
+  font-size:calc(1.02 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;
+  color:#7E90AC;font-weight:600}
+#footr{position:absolute;right:calc(9.5 * var(--s) * 1px);bottom:calc(3.0 * var(--s) * 1px);
+  font-size:calc(1.02 * var(--s) * 1px);color:#7E90AC;font-weight:500;letter-spacing:.03em}
+
+/* ---------- captions ---------- */
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;
+  padding:0 calc(11 * var(--s) * 1px);pointer-events:none}
+#ccbox{background:rgba(6,12,24,.80);
+  border-bottom:calc(.28 * var(--s) * 1px) solid var(--crimson);
+  padding:calc(.92 * var(--s) * 1px) calc(1.7 * var(--s) * 1px);
+  font-family:var(--sans);font-weight:600;color:#fff;text-align:center;
+  font-size:calc(1.92 * var(--s) * 1px);line-height:1.34;letter-spacing:.004em;
+  max-width:100%}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div>
+  <div id="glow2"></div>
+  <svg id="grid" preserveAspectRatio="none"></svg>
+  <div id="vig"></div>
+  <div id="sheen"></div>
+
+  <!-- persistent furniture -->
+  <div id="topbar">
+    <img src="../brand/logo.svg" alt="">
+    <div class="t">PCI <em>AI</em></div>
+    <div class="s">Project Controls<br>Institute Global, Inc.</div>
+  </div>
+  <div id="footrule"></div>
+  <div id="footl">Project Controls Institute</div>
+  <div id="footr">projectcontrolsinstitute.org</div>
+
+  <!-- ============ SHOT 1 — TITLE ============ -->
+  <section class="shot" id="s1">
+    <div class="eyebrow" data-a="1">Now live · 1 September 2026</div>
+    <div class="uline" data-a="1" style="margin:calc(1.5*var(--s)*1px) 0 calc(3.1*var(--s)*1px)"></div>
+    <h1 data-aspect="169">
+      <span class="ln"><span class="w">The</span> <span class="w">professional</span> <span class="w">home</span></span>
+      <span class="ln"><span class="w">of</span> <span class="w">project</span> <span class="w">controls.</span></span>
+    </h1>
+    <h1 data-aspect="sq">
+      <span class="ln"><span class="w">The</span> <span class="w">professional</span></span>
+      <span class="ln"><span class="w">home</span> <span class="w">of</span></span>
+      <span class="ln"><span class="w">project</span> <span class="w">controls.</span></span>
+    </h1>
+    <div class="sub" data-a="1" style="margin-top:calc(2.5*var(--s)*1px);max-width:calc(56*var(--s)*1px)">
+      Certification, membership and community for the integrated
+      discipline — with governed AI at the core.
+    </div>
+  </section>
+
+  <!-- ============ SHOT 2 — THE PRINCIPLE ============ -->
+  <section class="shot center" id="s2">
+    <div class="eyebrow blue" data-a="1">The governing principle</div>
+    <h2 style="margin-top:calc(2.6*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">AI</span> <span class="w" data-a="1">proposes.</span></span>
+    </h2>
+    <h2 style="margin-top:calc(.5*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">The</span> <span class="w" data-a="1">professional</span> <span class="w" data-a="1">disposes.</span></span>
+    </h2>
+    <div class="uline" data-a="1" style="margin:calc(2.5*var(--s)*1px) 0 0"></div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px);max-width:calc(50*var(--s)*1px)">
+      The first certification standard to treat governed AI
+      as core competence — not a bolt-on.
+    </div>
+  </section>
+
+  <!-- ============ SHOT 3 — WHAT IS LIVE ============ -->
+  <section class="shot center" id="s3">
+    <div class="eyebrow blue" data-a="1">Live worldwide</div>
+    <div class="chips" style="margin-top:calc(3.0*var(--s)*1px)">
+      <div class="chip" data-a="1"><b>PCL-AI</b><span>Project Controls</span></div>
+      <div class="chip" data-a="1"><b>PFL-AI</b><span>Project Finance</span></div>
+      <div class="chip" data-a="1"><b>PML-AI</b><span>Project Management</span></div>
+    </div>
+    <div class="facts" style="margin-top:calc(3.3*var(--s)*1px)">
+      <span data-a="1"><i>13</i>-domain body of knowledge</span>
+      <span class="dot" data-a="1"></span>
+      <span data-a="1"><i>25</i> country chapters</span>
+      <span class="dot" data-a="1"></span>
+      <span data-a="1">every credential publicly verifiable</span>
+    </div>
+  </section>
+
+  <!-- ============ SHOT 4 — THE INVITATION ============ -->
+  <section class="shot center" id="s4">
+    <div class="eyebrow" data-a="1">An open invitation</div>
+    <h2 style="margin-top:calc(2.4*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">Help</span> <span class="w" data-a="1">us</span> <span class="w" data-a="1">build</span> <span class="w" data-a="1">it.</span></span>
+    </h2>
+    <div class="verbs" style="margin-top:calc(3.0*var(--s)*1px)">
+      <div class="verb" data-a="1">CONTRIBUTE</div>
+      <div class="verb" data-a="1">SHAPE</div>
+      <div class="verb" data-a="1">SHARE</div>
+      <div class="verb" data-a="1">CONNECT</div>
+      <div class="verb" data-a="1">LEAD</div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.9*var(--s)*1px);max-width:calc(54*var(--s)*1px)">
+      Add to the body of knowledge. Tell us what to fix.
+      Mentor, moderate, and lead a chapter or an initiative.
+    </div>
+  </section>
+
+  <!-- ============ SHOT 5 — END CARD ============ -->
+  <section class="shot center" id="s5">
+    <img id="mark" src="../brand/logo.svg" alt="" data-a="1">
+    <div class="wordmark" data-a="1" style="margin-top:calc(2.3*var(--s)*1px)">
+      <div class="wm-t">PCI <em>AI</em></div>
+      <div class="wm-s">Project Controls<br>Institute Global, Inc.</div>
+    </div>
+    <div class="quote" data-a="1" style="margin-top:calc(2.7*var(--s)*1px)">
+      “AI proposes. The professional disposes.”
+    </div>
+    <div class="url" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">
+      projectcontrolsinstitute.org
+    </div>
+    <div class="legal" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      Project Controls Institute Global, Inc. — a Delaware Non-Stock Corporation.
+      Not yet accredited; framework developed with reference to ISO/IEC 17024.
+    </div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+</div>
+
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const W  = +(Q.get('w') || 1920);
+const H  = +(Q.get('h') || 1080);
+const CC = Q.get('cc') !== '0';
+const DUR = 15.0;
+
+/* Nominal design width per aspect: square needs a larger relative type size
+   than 16:9 or everything reads tiny in a feed. */
+const SQUARE  = (W / H) < 1.15;
+const NOMINAL = SQUARE ? 1350 : 1920;
+
+const stage = document.getElementById('stage');
+stage.style.width  = W + 'px';
+stage.style.height = H + 'px';
+document.documentElement.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+document.documentElement.style.setProperty('--padb', SQUARE ? '17' : '14');
+if (SQUARE) stage.classList.add('sq');
+if (SQUARE) document.documentElement.style.setProperty('--h1', '5.4');
+
+/* Drop the headline variant this aspect does not use, BEFORE the cue sheet is
+   resolved — otherwise its words join the stagger and skew every delay. */
+document.querySelectorAll('h1[data-aspect]').forEach((h) => {
+  if (h.dataset.aspect !== (SQUARE ? 'sq' : '169')) h.remove();
+});
+
+/* ---------- background grid, drawn to the stage aspect ---------- */
+(function grid(){
+  const g = document.getElementById('grid');
+  g.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const step = W / 26;
+  let d = '';
+  for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
+  for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
+  g.innerHTML =
+    `<path d="${d}" stroke="rgba(148,180,230,.075)" stroke-width="1" fill="none"/>` +
+    `<path id="spark" d="" stroke="rgba(59,130,246,.5)" stroke-width="${(W/620).toFixed(2)}"
+       fill="none" stroke-linecap="round"/>`;
+  /* an S-curve "progress" line — a controls motif, not decoration for its own sake */
+  const pts = [], n = 90;
+  for (let i = 0; i <= n; i++){
+    const p = i / n, x = p * W;
+    const y = H * (0.80 - 0.52 * (1 / (1 + Math.exp(-(p - 0.5) * 9))))
+            + Math.sin(p * 7.1) * H * 0.012;
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const sp = g.querySelector('#spark');
+  sp.setAttribute('d', 'M' + pts.join('L'));
+  sp.__len = sp.getTotalLength();
+  sp.style.strokeDasharray = sp.__len;
+})();
+
+/* ---------- easing ---------- */
+const clamp = (v,a,b) => v < a ? a : v > b ? b : v;
+const outCubic = x => 1 - Math.pow(1 - x, 3);
+const outExpo  = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const inOut    = x => x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
+/** progress of t through [a,b], eased */
+const seg = (t,a,b,e) => { const p = clamp((t - a) / (b - a), 0, 1); return (e||outCubic)(p); };
+
+/* ---------- the cut list ---------- */
+const SHOTS = [
+  { el:'s1', in:0.00, out:3.40 },
+  { el:'s2', in:3.40, out:6.80 },
+  { el:'s3', in:6.80, out:9.90 },
+  { el:'s4', in:9.90, out:13.10 },
+  { el:'s5', in:13.10, out:15.00 }
+];
+const XF = 0.30; /* cross-dissolve length */
+
+/* Per-shot element cue sheet: [selector, delayAfterShotIn, stagger] */
+const CUES = {
+  s1: [['.eyebrow',0.18,0],['.uline',0.34,0],['h1 .w',0.46,0.075],['.sub',1.20,0]],
+  s2: [['.eyebrow',0.14,0],['h2:nth-of-type(1) .w',0.30,0.085],
+       ['h2:nth-of-type(2) .w',0.86,0.075],['.uline',1.40,0],['.sub',1.58,0]],
+  s3: [['.eyebrow',0.12,0],['.chip',0.30,0.14],['.facts > *',0.92,0.055]],
+  s4: [['.eyebrow',0.12,0],['h2 .w',0.26,0.075],['.verb',0.70,0.095],['.sub',1.32,0]],
+  s5: [['#mark',0.10,0],['.wordmark',0.28,0],['.quote',0.52,0],['.url',0.74,0],['.legal',0.94,0]]
+};
+
+/* Resolve cues once into a flat animation list. */
+const ANIM = [];
+for (const shot of SHOTS){
+  const root = document.getElementById(shot.el);
+  for (const [sel, delay, stagger] of (CUES[shot.el] || [])){
+    root.querySelectorAll(sel).forEach((el, i) => {
+      ANIM.push({ el, start: shot.in + delay + i * stagger });
+    });
+  }
+}
+
+/* ---------- captions (timings mirror captions/*.srt exactly) ---------- */
+const CAPS = [
+  [0.30,  3.25, 'Project controls now has a professional home.'],
+  [3.70,  6.65, 'AI proposes. The professional disposes.'],
+  [6.95,  9.75, 'The Project Controls Institute is live, worldwide.'],
+  [10.05, 13.00,'Bring your expertise. Help us build it.']
+];
+
+const stageEls = {
+  glow: document.getElementById('glow'),
+  glow2: document.getElementById('glow2'),
+  sheen: document.getElementById('sheen'),
+  spark: document.getElementById('spark'),
+  topbar: document.getElementById('topbar'),
+  footrule: document.getElementById('footrule'),
+  footl: document.getElementById('footl'),
+  footr: document.getElementById('footr'),
+  cc: document.getElementById('cc'),
+  ccbox: document.getElementById('ccbox')
+};
+
+/* Captions sit above the footer rule on 16:9, higher on square. */
+stageEls.cc.style.bottom = ((W/H) < 1.15 ? H * 0.135 : H * 0.148) + 'px';
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+
+  /* --- background --- */
+  const drift = t / DUR;
+  stageEls.glow.style.transform =
+    `translate(${(-8 + drift * 26).toFixed(2)}%, ${(-14 + Math.sin(drift * 3.1) * 7).toFixed(2)}%) scale(${(1.05 + drift * .22).toFixed(3)})`;
+  stageEls.glow.style.opacity = (0.55 + 0.35 * Math.sin(drift * 2.4)).toFixed(3);
+  stageEls.glow2.style.transform =
+    `translate(${(26 - drift * 20).toFixed(2)}%, ${(18 - drift * 10).toFixed(2)}%) scale(${(1.15 - drift * .12).toFixed(3)})`;
+  stageEls.glow2.style.opacity = (0.30 + 0.30 * drift).toFixed(3);
+
+  /* the S-curve draws across the whole film — one continuous through-line */
+  const sp = stageEls.spark;
+  sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 0.4, 12.5, inOut))).toFixed(1);
+  sp.style.opacity = (0.30 + 0.45 * seg(t, 0.4, 6.0)).toFixed(3);
+
+  /* --- furniture: topbar hides on the end card (the big mark takes over) --- */
+  const furn = (1 - seg(t, 12.95, 13.35)) * seg(t, 0.10, 0.85);
+  stageEls.topbar.style.opacity = furn.toFixed(3);
+  stageEls.footrule.style.opacity = furn.toFixed(3);
+  stageEls.footl.style.opacity = furn.toFixed(3);
+  stageEls.footr.style.opacity = furn.toFixed(3);
+
+  /* --- shots: cross-dissolve with a small parallax push --- */
+  for (const shot of SHOTS){
+    const el = document.getElementById(shot.el);
+    const isLast = shot.out >= DUR;
+    const fadeIn  = shot.in <= 0 ? 1 : seg(t, shot.in, shot.in + XF);
+    const fadeOut = isLast ? 1 : 1 - seg(t, shot.out - XF, shot.out);
+    const o = fadeIn * fadeOut;
+    el.style.opacity = o.toFixed(3);
+    el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    /* leaving shots drift left a touch; entering shots settle from the right */
+    const push = (1 - fadeIn) * 2.2 - (isLast ? 0 : (1 - fadeOut) * 2.2);
+    el.style.transform = `translateX(${push.toFixed(3)}%)`;
+  }
+
+  /* --- element reveals --- */
+  const RISE = 0.62; /* seconds per element reveal */
+  for (const a of ANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1 - p) * 1.18).toFixed(3)}em)`;
+  }
+  /* the uline wipes rather than rises */
+  document.querySelectorAll('.uline').forEach(u => {
+    u.style.transform = `scaleX(${u.style.opacity || 0})`;
+  });
+  /* the big end-card mark scales up rather than sliding */
+  const mk = document.getElementById('mark');
+  const mkp = seg(t, 13.20, 13.90, outExpo);
+  mk.style.transform = `translateY(0) scale(${(0.86 + 0.14 * mkp).toFixed(4)})`;
+
+  /* --- a single sheen sweep across the credential chips --- */
+  const sh = seg(t, 7.45, 8.55, inOut);
+  stageEls.sheen.style.opacity = (sh > 0 && sh < 1 ? Math.sin(sh * Math.PI) : 0).toFixed(3);
+  stageEls.sheen.style.transform = `translateX(${(-60 + sh * 120).toFixed(2)}%)`;
+
+  /* --- captions --- */
+  if (!CC){ stageEls.cc.style.opacity = '0'; }
+  else {
+    const cue = CAPS.find(c => t >= c[0] - 0.14 && t <= c[1] + 0.14);
+    if (!cue){ stageEls.cc.style.opacity = '0'; }
+    else {
+      stageEls.ccbox.textContent = cue[2];
+      const fi = seg(t, cue[0] - 0.14, cue[0] + 0.06);
+      const fo = 1 - seg(t, cue[1] - 0.02, cue[1] + 0.14);
+      stageEls.cc.style.opacity = (fi * fo).toFixed(3);
+    }
+  }
+}
+window.seek = seek;
+window.__DUR = DUR;
+seek(+(Q.get('t') || 0));
+
+/* Live preview when opened by hand (never used by the frame renderer). */
+if (Q.get('play') === '1'){
+  const t0 = performance.now();
+  (function loop(){
+    seek(((performance.now() - t0) / 1000) % DUR);
+    requestAnimationFrame(loop);
+  })();
+}
+</script>
+</body>
+</html>

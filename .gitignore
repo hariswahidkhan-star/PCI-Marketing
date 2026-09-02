@@ -1,0 +1,13 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Render intermediates — frame sequences are large and fully reproducible
+# from source via video/*/src/build.sh. Built masters in dist/ are committed
+# so the deliverable is available without a rebuild.
+video/*/build/
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db

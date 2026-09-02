@@ -1,0 +1,16 @@
+{
+  "name": "pci-launch-15s",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frame renderer for the PCI 15-second post-launch film",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "./build.sh",
+    "build:fast": "./build.sh --fast",
+    "preview": "echo 'open scene.html?w=1920&h=1080&play=1 in a browser'"
+  },
+  "dependencies": {
+    "playwright": "^1.62.1"
+  }
+}
