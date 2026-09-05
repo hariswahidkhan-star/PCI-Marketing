@@ -23,6 +23,11 @@ where it stands today.
 | `vo/pci-intro-60s-vo-take-1.mp3` | Raw ElevenLabs take 1 (47.31 s continuous read) |
 | `vo/pci-intro-60s-vo-take-2.mp3` | Raw ElevenLabs take 2 (46.44 s) — the alternate |
 | `vo/cues.json` | Measured in/out for all nine lines, machine-readable |
+| `src/overlay.html` | The brand overlay — type only, transparent ground, deterministic in `t` |
+| `src/render-overlay.mjs` | Frame renderer (Playwright + Chromium) |
+| `src/build.sh` | Rebuilds the overlay and re-composites the master |
+| `dist/pci-intro-60s-1920x1080.mp4` | **The master** — 60.000 s, branded, voiced |
+| `dist/pci-intro-60s-poster.png` | Poster frame (45 s, the founding-stage shot) |
 
 ---
 
@@ -48,6 +53,17 @@ ffmpeg -i vo/pci-intro-60s-vo-take-1.mp3 \
   -af silencedetect=noise=-38dB:d=0.25 -f null -
 ```
 
+## Rebuilding
+
+```bash
+cd src && ./build.sh
+```
+
+The overlay is fully reproducible — `overlay.html` computes every style from `t`,
+so frame N is byte-identical on every run. **The footage is not.** The six plates
+in `build/` were generated once and cannot be regenerated identically; keep them.
+Their prompts are in the shot table above if they are ever lost.
+
 ---
 
 ## How the picture was made
@@ -72,18 +88,27 @@ mid-construction, not a finished tower. It must not be cut short.
 
 **No on-screen text is generated.** Every prompt says *no text, no signage*.
 Generative models render type unreliably, and this brand's type is not
-negotiable — the eyebrow, the crimson→blue rule and the end card are laid over
-the footage in the edit, from the same design tokens as `../launch-15s/`.
+negotiable. All type is rendered separately by `src/overlay.html` — the PCI AI
+lockup, the eyebrows, the crimson→blue rule, the credential chips and the end
+card — using the tokens lifted verbatim from `../launch-15s/src/scene.html`, then
+composited over the footage. Both films are one system, not two lookalikes.
+
+Three shots carry their own darker ground (`.shot.heavy`, `.shot.card`). The
+plates behind them — an overcast sky, a bright doorway, a dawn horizon — cannot
+hold white type or, more importantly, the legal line on the shared scrim alone.
+The ground fades with its shot, so it never darkens a neighbour.
+
+**Loudness.** The raw TTS bed sits around −28 dB mean, which reads as *no voice*
+on laptop and phone speakers. The composite pass normalises to **−16 LUFS**
+(`loudnorm=I=-16:TP=-1.5:LRA=11`), standard for web video.
 
 ---
 
 ## What still needs a human
 
-- **Type pass.** On-screen copy is specified verbatim in `script.md`; it is not
-  yet burned in. Shot 9's end card carries the legal line and cannot ship without
-  it.
-- **Grade.** The six clips are generated independently and will not match. They
-  need a single pass to the navy/grey palette.
+- **Grade.** The six plates are generated independently and do not match. They
+  need a single pass to the navy/grey palette. The shot grounds mask this but do
+  not fix it.
 - **Score.** `../launch-15s/src/music.py` produces the house bed; the 6.60 s tail
   is scored, not silent.
 - **Listen to beat 8** (42.71 s). The founding-stage line must sound level and
