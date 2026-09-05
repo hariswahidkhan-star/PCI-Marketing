@@ -32,6 +32,8 @@ where it stands today.
 | `src/render-overlay.mjs` | Frame renderer (Playwright + Chromium) |
 | `src/build.sh` | Rebuilds the overlay and re-composites the master |
 | `dist/pci-intro-60s-1920x1080.mp4` | **The master** — 60.000 s, branded, voiced |
+| `dist/pci-intro-60s-1920x1080-compat.mp4` | Same film, maximum-compatibility encode (H.264 Main / L4.0, AAC-LC 44.1 kHz, mp42) |
+| `dist/pci-intro-60s-FULL-MIX.mp3` | Complete soundtrack — voice **and** score — as plain audio |
 | `dist/pci-intro-60s-poster.png` | Poster frame (45 s, the founding-stage shot) |
 
 ---
@@ -129,6 +131,25 @@ Three shots carry their own darker ground (`.shot.heavy`, `.shot.card`). The
 plates behind them — an overcast sky, a bright doorway, a dawn horizon — cannot
 hold white type or, more importantly, the legal line on the shared scrim alone.
 The ground fades with its shot, so it never darkens a neighbour.
+
+### If a player reports no audio
+
+The master carries a correct AAC-LC stereo track at 48 kHz, `DISPOSITION:default=1`,
+start time 0.000 on both streams, −15.9 LUFS integrated and −1.5 dB peak, and it
+decodes end to end without error. If a player is silent anyway, work down this
+list rather than re-encoding blindly:
+
+1. **Play `dist/pci-intro-60s-FULL-MIX.mp3`.** It is the same soundtrack with no
+   video container. If that plays and the MP4 does not, the file is fine and the
+   video playback path is the problem.
+2. **Try `-compat.mp4`.** Main profile at level 4.0 with AAC-LC at 44.1 kHz suits
+   older and stricter players than High profile at 48 kHz.
+3. **Download rather than preview.** Inline previews in chat and mail clients
+   commonly start muted or drop audio entirely.
+
+Note that both tracks carry an **edit list** (`elst`). This looks suspicious and
+is not: AAC encoder priming delay produces one in nearly every AAC/MP4 file, it
+survives every muxer flag, and it is not the cause of a silent track.
 
 **Sound.** The voice is normalised to **−16 LUFS**; the raw TTS bed sits around
 −28 dB mean, which reads as *no voice* on laptop and phone speakers. The score
