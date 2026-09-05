@@ -74,12 +74,22 @@ ceiling steps from 6M to 28M automatically. The script refuses to run if the six
 plates are not all the same width, because a mismatched concat produces a broken
 stream rather than an obvious error.
 
-**Getting 4K plates.** Runway's video upscaler does this (its 40 s limit is fine
-— each plate is 10.28 s). Upload and upscale both work from a CLI session, but
-Runway serves finished assets from a CDN this environment's egress policy blocks,
-so the results cannot be pulled back in here. Download them from the Runway
-library and drop them into `build/`, or run the whole step from a machine without
-that restriction.
+**Getting 4K plates.** Runway's video upscaler does this, and its 40 s limit is
+fine — each plate is 10.28 s. One plate was upscaled as a pilot and the result is
+good. Two things stopped it going further, both measured rather than assumed:
+
+- **Cost.** 941 credits for one 10.28 s plate, so ~5,646 for six. Worth checking
+  the balance before starting.
+- **Retrieval.** Upload and upscale both work from a CLI session, but Runway
+  serves finished assets from a CDN this environment's egress policy blocks. The
+  results have to be fetched from the Runway library, or the whole step run from
+  a machine without that restriction.
+
+**The decision was to ship at 1080p.** For a 60-second institutional film that
+plays embedded on a site or in a social feed, resolution is not the weak link —
+the plates being generated rather than photographed matters more, and no amount
+of upscaling changes that. The 4K path above stays documented so it can be taken
+later without re-deriving any of it.
 
 The overlay is fully reproducible — `overlay.html` computes every style from `t`,
 so frame N is byte-identical on every run. **The footage is not.** The six plates
@@ -137,11 +147,16 @@ as far as it goes without crushing the sky.
 
 ---
 
-## What still needs a human
+## Status
 
-- **Nothing blocking.** The grade, the score and the mix are done. The open
-  question is editorial, not technical: whether the deck substantiates the three
-  claims this film drops (see below).
+**Shipping at 1080p.** The master is final: 60.000 s, 1920×1080 at 25 fps,
+H.264 + AAC, −15.9 LUFS integrated, faststart set, clean decode end to end.
+Script, voice, score, grade, brand type and mix are all done.
+
+One open question remains, and it is editorial rather than technical: whether the
+launch deck substantiates the three claims this film drops (see below). Nothing
+in the film depends on the answer — it already omits them — but the 15-second
+launch film and the root README do.
 - **Score.** `../launch-15s/src/music.py` produces the house bed; the 6.60 s tail
   is scored, not silent.
 - **Listen to beat 8** (42.71 s). The founding-stage line must sound level and
