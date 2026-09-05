@@ -132,6 +132,38 @@ as far as it goes without crushing the sky.
 
 ---
 
+## Campaign assets held outside this repository
+
+Produced through connectors; not committed here because they live in their own
+services (or, in Runway's case, on a CDN this environment cannot reach).
+
+| Asset | Where |
+|---|---|
+| Launch deck | `gamma.app/docs/s8dspcw0pgi789b` |
+| Production record | Notion, private draft |
+| Reference photography | Unsplash collection `cT9cX9Vgg80` (private) — 3 plates incl. the *ThisisEngineering* library |
+| Key art still | Runway task `fbcc61d7-37c3-4b1a-a3fa-119226e6ebb3`, 16:9 2K |
+| Stakeholder email | Gmail **draft** — written, not sent |
+
+## Distribution research
+
+Keyword demand does not sit where the brand name does:
+
+| Keyword | Est. monthly | Competition |
+|---|---|---|
+| `project controls certification` | **<750** | — |
+| `project control academy` | 4,246 | 11.8 |
+| `pmp certification` | 6,373 | 23.7 |
+| `project management` | 190,340 | 39.6 |
+
+Plan distribution around where the demand is, not around our own category name.
+
+**On titles.** CTR scoring ranked fear-based and outcome-promising titles highest
+— including one implying certification is obtainable today, and one implying job
+loss. Both were rejected: they contradict the editorial rule, and for a body
+whose product is trust a CTR gain is the wrong trade. Recommended title, scoring
+87: *"Introducing PCI: The new standard for AI in project controls."*
+
 ## The editorial rule still applies
 
 Every claim in this film traces to a live platform page via
