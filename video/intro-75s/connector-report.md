@@ -14,7 +14,7 @@ state, not a judgement about the products.
 
 | Connector | Actual action performed | Output | File or preview location | Status | Limitations |
 |---|---|---|---|---|---|
-| **Notion** | Built a 10-page production workspace: creative brief, source register, verified-claims register, script, storyboard, shot list, production status, connector activity log, asset-licensing register, review checklist | Live Notion workspace | See the parent page URL reported at the end of this run | ✅ Done | Content mirrors this repository; Notion is the readable copy, the repo is the source of truth |
+| **Notion** | Built a 10-page production workspace: creative brief, source register, verified-claims register, script, storyboard, shot list, production status, connector activity log, asset-licensing register, review checklist | Live Notion workspace, 11 pages | [Parent page](https://app.notion.com/p/3d278df9d44481b28bffe37fe3bca817) (**private** — no destination was named) | ✅ Done | Content mirrors this repository; Notion is the readable copy, the repo is the source of truth |
 | **Unsplash** | 40 assets shortlisted across the 7 required themes; public collection created; full licensing register with photographer, profile, photo URL and licence per asset | `assets/unsplash-register.md` + collection `2_SQb2vY4uQ` | [Collection](https://unsplash.com/collections/2_SQb2vY4uQ/pci-ai-75s-institutional-film-visual-reference) | ✅ Done | First `create_collection` returned `422` on a long description; retried shorter and succeeded. **No credible Gantt/programme-wall photography exists on Unsplash** — that beat was not faked. **Reference only: no Unsplash asset appears in the delivered film.** |
 | **vidIQ** | `keyword_research` on "project controls" + `score_title` ×3; produced 3 titles, YouTube description, 8 chapters, LinkedIn caption, 20 search phrases, 3 thumbnail wordings, 2 alt texts | `metadata/vidiq-metadata.md` | Repo | ✅ Done | **20 credits spent** (150 → 130), the authorised ceiling. Only one keyword call was affordable, so 12 of 20 phrases are labelled *editorial, not tool-derived*. Honest finding: these are low-volume specialist terms (`project controls` ≈ 4,485/mo) — this is a credibility piece, not a reach play. |
 | **Gamma** | `get_gammas` + `read_gamma` on the workspace | Recovered a **pre-existing** deck, *"PCI AI Introduction Film — Launch Kit"* (`g_nwgal8v5rv6fa4e`), from an earlier 60-second effort — **not created by this production** | [Gamma](https://gamma.app/docs/PCI-AI-Introduction-Film-Launch-Kit-s8dspcw0pgi789b) | ✅ Read | **This is the single most valuable connector result of the run.** It records three claims dropped as unsubstantiated; those same figures are listed as "substantiated" in `PCI-Marketing/README.md`. Independently confirmed against the site source — see `claims-register.md` §4. **Generating a new treatment deck is a paid action and is in the approval gate.** |
@@ -22,7 +22,7 @@ state, not a judgement about the products.
 | **Runway** | `whoami` — authenticated, enumerated genuinely available models | Workspace "Certuvo"; **452 credits** | — | ✅ Inspected | **Material finding: `availableVideoModels` is EMPTY.** Every Runway video capability — generate, edit, expand, multi-shot, upscale — is plan-gated on this account. Runway can do **images only** (`nano-banana-pro`, `gen-4`, `seedream-5`, …). The brief's Runway tasks (B-roll, continuity, artefact removal, transitions, aspect adaptation) are **not technically possible** on this plan. |
 | **Higgsfield** | `balance` + `models_explore` (video, cinematic) | **80 credits, "basic" plan.** Enumerated available models | — | ✅ Inspected | 80 credits is very low for video generation. `unlim.available: false` — no free trial generations. **Useful discovery: Kling v3.0 is reachable *through* Higgsfield** as model `kling3_0`, which is how the Kling requirement can honestly be met (see §B). |
 | **HyperFrames by HeyGen** | `list_projects` (empty) + `get-send-to-hyperframes-guide` — read the full authoring contract | Established the only viable path for this client | — | ✅ Inspected | **`compose` and `render_video` are disabled for CLI/IDE clients** by the server's own design — this session is Claude Code, so they are unavailable regardless of approval. The viable path is `import-claude-design-from-url` with one self-contained HTML (fonts/logo inlined as base64). Per the guide: **import is free, enhance is free, render is the paid step** (20 credits/rendered minute). |
-| **Gmail** | `create_draft` — approval email saved as a **draft only** | Draft in the account | Gmail → Drafts | ✅ Done | **Not sent.** Sending requires explicit authorisation, per the brief and standing policy. |
+| **Gmail** | `create_draft` — approval email saved as a **draft only** | Draft `r120491591506615097` — title, executive summary, preview location, exact 15-segment transcript, connectors used, licensing status, outstanding issues, 12-point approval checklist | Gmail → Drafts | ✅ Done | **Not sent.** The **recipient field is deliberately blank** so it cannot be sent by accident. |
 
 ---
 
@@ -54,3 +54,29 @@ exact cost, files affected and reversibility for each.
 missing is the synthesised voiceover, and the masters ship with picture,
 captions and the music bed — exactly as the 15-second film does — so the
 approval decision is about upgrading the deliverable, not unblocking it.
+
+
+---
+
+## D. Connector-by-connector production plan
+
+The plan and its execution, side by side. "Held" means technically possible and
+awaiting your approval; "not possible" means the connector cannot do it here.
+
+| Connector | Planned role (from the brief) | Executed | Held / not possible |
+|---|---|---|---|
+| Google Drive | Retrieve brand material; create a production folder; save all outputs | — | **Not possible** — expired token. Outputs are committed to git instead |
+| Notion | 10-part production workspace | ✅ All 10 pages | — |
+| Gamma | Visual-treatment + storyboard deck | ✅ Read the workspace; recovered decision-critical prior art | Deck generation **held** (paid) |
+| Unsplash | Licensed reference across 7 themes, with creator/URL/licence | ✅ 40 assets + collection + register | — |
+| Higgsfield | Cinematic establishing shots and controlled camera moves | ✅ Capability + balance inspected | Generation **held** — 80 credits, likely insufficient |
+| Runway | B-roll, continuity, artefact removal, compositing, transitions, aspect adaptation | ✅ Authenticated and inspected | **Not possible** — video models plan-gated (`availableVideoModels: []`) |
+| Kling | Complementary motion sequences | — | **Not possible** standalone (needs reconnect). Reachable as `kling3_0` **via Higgsfield** — **held** |
+| HyperFrames (HeyGen) | Assemble scenes, pacing, visual continuity | ✅ Projects listed; authoring contract reviewed | `compose`/`render_video` **disabled for this client type**; import path **held** (render ~25 credits) |
+| ElevenLabs | Final English narration with the mandated pronunciations | ✅ Voice surveyed and selected | Synthesis **held** — ~1,227 characters |
+| Cloudinary | Normalise, optimise, preserve a master, produce 3 ratios, clean filenames | — | **Not possible** — not enabled in session. **Done locally with ffmpeg instead**, in full |
+| vidIQ | Titles, description, captions, phrases, chapters, thumbnail wording, alt text | ✅ Complete, 20 credits | Thumbnail scoring skipped (budget) |
+| Gmail | Approval email as a draft | ✅ Draft saved | Sending **held** |
+| Cling | Any genuine production task | — | **Not possible** — needs reconnect; capabilities could not even be inspected |
+| Microsoft 365 | (not assigned) | — | Not enabled in session; nothing went unmet |
+| Tella | (not assigned) | — | Requires authorisation; nothing went unmet |
