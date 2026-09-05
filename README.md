@@ -15,6 +15,7 @@ deploys; nothing here is a second copy of the site.
 | Path | What it is |
 |---|---|
 | `video/launch-15s/` | 15-second post-launch film — sources, script, captions and built masters |
+| `messaging/institutional/` | Approved institutional copy — overview, honorary and founding routes, each with a claims audit |
 
 ---
 
