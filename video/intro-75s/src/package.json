@@ -1,0 +1,18 @@
+{
+  "name": "pci-ai-intro-75s",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frame renderer for the PCI AI 75-second institutional film",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "./build.sh",
+    "build:fast": "./build.sh --fast",
+    "probe": "node probe.mjs 1920 1080 L && node probe.mjs 1080 1080 S && node probe.mjs 1080 1920 P",
+    "preview": "echo 'open scene.html?w=1920&h=1080&play=1 in a browser'"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "playwright": "^1.63.0"
+  }
+}
