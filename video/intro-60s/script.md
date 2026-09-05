@@ -24,17 +24,21 @@ silence distributed as eight beats. The pauses carry the register.
 
 | # | In | Out | Line | Words | Direction |
 |---|---|---|---|---|---|
-| 1 | 0.60 | 4.60 | Every project runs on numbers someone has to be accountable for. | 11 | Settled, factual. Land "accountable". No lift at the end. |
-| 2 | 5.10 | 10.20 | AI can now produce those numbers in seconds. It can also be confidently wrong. | 14 | Second sentence slower. "Confidently wrong" is the hinge of the film — do not soften it, do not sell it. |
-| 3 | 10.90 | 14.60 | AI proposes. The professional disposes. | 5 | The doctrine line. Full stop after "proposes" — a real beat. Weight, not volume. |
-| 4 | 15.30 | 20.10 | The Project Controls Institute certifies the professional who knows the difference. | 11 | Warm. This is the first mention of the Institute; let the name sit. |
-| 5 | 20.80 | 25.60 | Three credentials. One standard. Governed AI at its core, not bolted on. | 12 | Crisp, listed. "Not bolted on" is dry, almost thrown away. |
-| 6 | 26.30 | 32.20 | Thirteen domains, sixty-one knowledge areas, and an examination built on judgement rather than recall. | 14 | Even pace through the numbers. Do not accelerate — the specificity is the point. |
-| 7 | 33.00 | 39.40 | The only entry requirement is three years' experience, in any field. There is no degree barrier. | 16 | Open, direct. This is the film's most generous line; deliver it as fact, not as a boast. |
-| 8 | 40.20 | 47.60 | We are a founding-stage body, and not yet accredited. We are building toward it, and we say so plainly. | 19 | The most important read in the film. Level, unembarrassed. A body that states its own limits is not apologising. |
-| 9 | 48.60 | 53.40 | Project controls has a professional home. Help us build it. | 10 | Direct address. Open, unhurried. Do not sell it. |
+| 1 | 0.60 | 4.18 | Every project runs on numbers someone has to be accountable for. | 11 | Settled, factual. Land "accountable". No lift at the end. |
+| 2 | 5.38 | 10.23 | AI can now produce those numbers in seconds. It can also be confidently wrong. | 14 | Second sentence slower. "Confidently wrong" is the hinge of the film — do not soften it, do not sell it. |
+| 3 | 11.43 | 14.67 | AI proposes. The professional disposes. | 5 | The doctrine line. Full stop after "proposes" — a real beat. Weight, not volume. |
+| 4 | 15.87 | 20.22 | The Project Controls Institute certifies the professional who knows the difference. | 11 | Warm. This is the first mention of the Institute; let the name sit. |
+| 5 | 21.42 | 26.83 | Three credentials. One standard. Governed AI at its core, not bolted on. | 12 | Crisp, listed. "Not bolted on" is dry, almost thrown away. |
+| 6 | 28.03 | 34.54 | Thirteen domains, sixty-one knowledge areas, and an examination built on judgement rather than recall. | 14 | Even pace through the numbers. Do not accelerate — the specificity is the point. |
+| 7 | 35.74 | 41.51 | The only entry requirement is three years' experience, in any field. There is no degree barrier. | 16 | Open, direct. This is the film's most generous line; deliver it as fact, not as a boast. |
+| 8 | 42.71 | 48.66 | We are a founding-stage body, and not yet accredited. We are building toward it, and we say so plainly. | 19 | The most important read in the film. Level, unembarrassed. A body that states its own limits is not apologising. |
+| 9 | 49.86 | 53.40 | Project controls has a professional home. Help us build it. | 10 | Direct address. Open, unhurried. Do not sell it. |
 
 **Total: 112 words. Tail 53.40–60.00 is score only, under the end card.**
+
+Timings above are **measured from the delivered bed** (`vo/pci-intro-60s-vo-bed.wav`,
+60.000 s), not estimated: take 1 was split at its detected line boundaries and
+respaced to an even 1.20 s beat. Cue sheet in `vo/cues.json`.
 
 ### Casting note
 Mid-range, unforced authority. British English. The reference is a national
@@ -59,19 +63,20 @@ same voice should carry both films.
 
 | Shot | Window | Type on screen |
 |---|---|---|
-| 1 | 0.0–5.0 | `THE DISCIPLINE` — **Every project runs on numbers.** — Planning · cost · forecasting · earned value · risk |
-| 2 | 5.0–10.6 | `WHAT CHANGED` — **Seconds to produce. Still yours to defend.** — AI can be confidently wrong |
-| 3 | 10.6–15.0 | `THE GOVERNING PRINCIPLE` — **AI proposes.** / **The professional disposes.** |
-| 4 | 15.0–20.5 | `THE INSTITUTE` — **Project Controls Institute** — An independent professional body for the integrated discipline |
-| 5 | 20.5–26.0 | `THE CREDENTIALS` — **PCL-AI** Project Controls · **PFL-AI** Project Finance · **PML-AI** Project Management — one standard, governed AI at its core |
-| 6 | 26.0–32.8 | `THE STANDARD` — **13 domains · 61 knowledge areas** — Scenario-based examination · 40 / 40 / 20 weighting |
-| 7 | 32.8–39.9 | `OPEN BY DESIGN` — **Three years' experience. Any field.** — No degree barrier · assessed on capability |
-| 8 | 39.9–48.2 | `WHERE WE STAND` — **Founding stage. Not yet accredited.** — Developed with reference to ISO/IEC 17024 personnel-certification principles · building toward formal accreditation · enrolment open, examinations forthcoming |
-| 9 | 48.2–60.0 | PCI AI / Project Controls Institute Global, Inc. — "AI proposes. The professional disposes." — projectcontrolsinstitute.org — *Delaware Non-Stock Corporation. Intends to seek 501(c)(3); not yet granted. Not accredited by ANAB, IAS or any ISO/IEC 17024 body.* |
+| 1 | 0.00–4.78 | `THE DISCIPLINE` — **Every project runs on numbers.** — Planning · cost · forecasting · earned value · risk |
+| 2 | 4.78–10.83 | `WHAT CHANGED` — **Seconds to produce. Still yours to defend.** — AI can be confidently wrong |
+| 3 | 10.83–15.27 | `THE GOVERNING PRINCIPLE` — **AI proposes.** / **The professional disposes.** |
+| 4 | 15.27–20.82 | `THE INSTITUTE` — **Project Controls Institute** — An independent professional body for the integrated discipline |
+| 5 | 20.82–27.43 | `THE CREDENTIALS` — **PCL-AI** Project Controls · **PFL-AI** Project Finance · **PML-AI** Project Management — one standard, governed AI at its core |
+| 6 | 27.43–35.14 | `THE STANDARD` — **13 domains · 61 knowledge areas** — Scenario-based examination · 40 / 40 / 20 weighting |
+| 7 | 35.14–42.11 | `OPEN BY DESIGN` — **Three years' experience. Any field.** — No degree barrier · assessed on capability |
+| 8 | 42.11–49.26 | `WHERE WE STAND` — **Founding stage. Not yet accredited.** — Developed with reference to ISO/IEC 17024 personnel-certification principles · building toward formal accreditation · enrolment open, examinations forthcoming |
+| 9 | 49.26–60.00 | PCI AI / Project Controls Institute Global, Inc. — "AI proposes. The professional disposes." — projectcontrolsinstitute.org — *Delaware Non-Stock Corporation. Intends to seek 501(c)(3); not yet granted. Not accredited by ANAB, IAS or any ISO/IEC 17024 body.* |
 
-Shot 8 is the film's spine. It is on screen for **8.3 seconds** — longer than any
-other shot — because the claim it makes is the one a certification body is least
-expected to make about itself.
+Shot 8 is the film's spine. It holds for **7.15 seconds**, and it is the only
+shot whose type is a list of limits rather than a list of strengths — because the
+claim it makes is the one a certification body is least expected to make about
+itself. It must not be cut short in any edit.
 
 ---
 
