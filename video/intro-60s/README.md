@@ -8,7 +8,8 @@ where it stands today.
 |---|---|
 | Duration | 60.000 s |
 | Aspect | 16:9, 1080p, 25 fps |
-| Voice | ElevenLabs, British narrative register |
+| Voice | ElevenLabs `eleven_v3`, British narrative register, directed read |
+| Score | ElevenLabs `eleven_music_v2`, instrumental, ducked under the voice |
 | Script | `script.md` — copy, timings, on-screen type, claims audit |
 | Cue sheet | `vo/cues.json` |
 
@@ -20,8 +21,12 @@ where it stands today.
 |---|---|
 | `script.md` | The film. Nine VO beats, nine shot windows, direction notes, claims audit |
 | `vo/pci-intro-60s-vo-bed.wav` | **The deliverable voice track** — 60.000 s, 48 kHz / 24-bit mono |
-| `vo/pci-intro-60s-vo-take-1.mp3` | Raw ElevenLabs take 1 (47.31 s continuous read) |
-| `vo/pci-intro-60s-vo-take-2.mp3` | Raw ElevenLabs take 2 (46.44 s) — the alternate |
+| `vo/src-v3a.mp3` | **Take used** — `eleven_v3` directed read, 54.44 s |
+| `vo/src-v3b.mp3` | `eleven_v3` alternate, 57.47 s |
+| `vo/src-score.mp3` | The orchestral score, 60 s instrumental |
+| `vo/pci-intro-60s-VOICE-ONLY.mp3` | Voice with no picture or score — for checking the read |
+| `vo/pci-intro-60s-vo-take-1.mp3` | Earlier `eleven_multilingual_v2` take (47.31 s) |
+| `vo/pci-intro-60s-vo-take-2.mp3` | Earlier alternate (46.44 s) |
 | `vo/cues.json` | Measured in/out for all nine lines, machine-readable |
 | `src/overlay.html` | The brand overlay — type only, transparent ground, deterministic in `t` |
 | `src/render-overlay.mjs` | Frame renderer (Playwright + Chromium) |
@@ -98,17 +103,28 @@ plates behind them — an overcast sky, a bright doorway, a dawn horizon — can
 hold white type or, more importantly, the legal line on the shared scrim alone.
 The ground fades with its shot, so it never darkens a neighbour.
 
-**Loudness.** The raw TTS bed sits around −28 dB mean, which reads as *no voice*
-on laptop and phone speakers. The composite pass normalises to **−16 LUFS**
-(`loudnorm=I=-16:TP=-1.5:LRA=11`), standard for web video.
+**Sound.** The voice is normalised to **−16 LUFS**; the raw TTS bed sits around
+−28 dB mean, which reads as *no voice* on laptop and phone speakers. The score
+sits beneath it through a sidechain compressor keyed off the voice, so it opens
+in the gaps and steps back under every line. The finished master measures
+**−15.9 LUFS integrated, LRA 2.9**.
+
+The score is delayed **2.6 s**. `eleven_music_v2` wrote its own resolve into the
+final five seconds; undelayed, that fade lands *before* the end card and the film
+ends on silence. Delayed, it resolves under the end card.
+
+**Grade.** The plates are corrected toward one navy-cool look before a shared
+filmic curve. Measured mean luma ran ~40 on shots 1–4 and ~135 on shots 5–6 — a
+3× jump that reads as a mismatched cut; after grading the gap is ~1.8×, which is
+as far as it goes without crushing the sky.
 
 ---
 
 ## What still needs a human
 
-- **Grade.** The six plates are generated independently and do not match. They
-  need a single pass to the navy/grey palette. The shot grounds mask this but do
-  not fix it.
+- **Nothing blocking.** The grade, the score and the mix are done. The open
+  question is editorial, not technical: whether the deck substantiates the three
+  claims this film drops (see below).
 - **Score.** `../launch-15s/src/music.py` produces the house bed; the 6.60 s tail
   is scored, not silent.
 - **Listen to beat 8** (42.71 s). The founding-stage line must sound level and
