@@ -53,10 +53,41 @@ film carries it typographically instead.
 | Legal / status lines | Verbatim from the live-site footer |
 | Captions | Generated from `src/vo.py`; never hand-typed |
 
-## 4. If generated media is approved later
+## 4. AI-generated media — five Runway clips (NOT in the delivered masters)
 
-Nothing here is approved yet (see `approval-request.md`). If Higgsfield, Kling
-or Runway material is later added, then before it ships:
+After the Runway package was purchased, five B-roll clips were generated. **They
+are not in any delivered master** — Runway's artifact CDN is egress-blocked in
+the production environment, so they could not be pulled in and composited.
+They live in the Runway workspace; `assets/generated/README.md` has the task IDs,
+signed URLs and expiry times.
+
+| Clip | Model | Dur | Scene | Provenance |
+|---|---|---|---|---|
+| `s1-infrastructure` | Runway `gen-4.5` | 5 s | S1 | **AI-generated** |
+| `s2-project-office` | Runway `gen-4.5` | 5 s | S2 | **AI-generated** |
+| `s3-analysis` | Runway `gen-4.5` | 10 s | S3 | **AI-generated** |
+| `s4-decision-meeting` | Runway `gen-4.5` | 10 s | S4 | **AI-generated** |
+| `s7-judgment` | **Kling `kling-3-pro`** (via Runway) | 10 s | S7 | **AI-generated** |
+
+Cost: **480 Runway credits** at 12 credits/second, 1080p. Balance after: 837.
+
+**Disclosure obligations, which apply the moment any of these is used:**
+
+- Label each as AI-generated wherever the film's provenance is stated.
+- **No clip depicts an actual PCI facility** and none may be presented as one.
+- The people in `s3`, `s4` and `s7` are **generated, not real**. None is a PCI
+  employee, examiner, certified professional or named person, and no on-screen
+  text identifies any of them. `s4` shows faces clearly despite the prompt
+  asking for profiles — usable, but never caption those figures.
+- **Scenes 5, 6 and 8 carry no footage by design.** Generated imagery must not
+  sit behind the identity, the credential framework or the end card.
+
+The original masters in `dist/` remain **entirely free of AI-generated media** —
+that variant is unaffected by any of the above.
+
+## 5. If further generated media is added
+
+If more Higgsfield, Kling or Runway material is added later, then before it ships:
 
 1. Add each clip to this manifest, **labelled as AI-generated**, with the model, prompt and date.
 2. Confirm no generated environment is presented as an actual PCI facility.

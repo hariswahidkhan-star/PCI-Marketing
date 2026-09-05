@@ -44,7 +44,7 @@ I would actually recommend.
 | **Reversible?** | No — generation credits are spent whether or not the output is usable. |
 | **Recommendation** | **Hold this one.** The delivered film is a designed, typographic institutional piece and does not need B-roll to work. If you want live-action footage, the honest sequence is: top up credits first, then approve a small test generation, then decide. Also note the delivered film currently contains **zero AI-generated imagery** — approving this changes that, and every generated shot would need labelling in the asset manifest, with no generated environment presented as an actual PCI facility. |
 
-### D. Runway — **not viable, listed for completeness**
+### D. Runway — ✅ **DONE** (the package was purchased, which unblocked this)
 
 | | |
 |---|---|
@@ -52,7 +52,8 @@ I would actually recommend.
 | **Connector** | Runway (workspace "Certuvo", 452 credits) |
 | **Expected cost** | n/a |
 | **Reversible?** | n/a |
-| **Status** | **Technically impossible on this plan, not merely unapproved.** `whoami` returns `availableVideoModels: []` and gates video, editVideo, expandVideo, multishotVideo and upscaleImage behind a paid plan. Runway can generate **images only** here. If you want a Runway still (e.g. an alternative poster), say so and I will quote it separately — but every task the brief assigned to Runway needs the video models. |
+| **Status** | **Complete.** After the purchase, `whoami` returned **14 video models** and 1,317 credits, with nothing gated. Five B-roll clips were generated — 4 × `gen-4.5` and the closing shot with **`kling-3-pro`**, which is also how the Kling requirement was properly met. **480 credits spent** at 12/sec, 1080p; **837 remain**. |
+| **Blocker that remains** | The clips **could not be downloaded into the build environment** — Runway's CDN `dnznrvs05pmza.cloudfront.net` is refused by the egress policy (`connect_rejected`, 403 to CONNECT). Per the proxy's own guidance a policy denial is reported, not routed around. Delivered instead: **alpha type-layer masters** (VP9/WebM, three aspects) and a **tested** `src/composite.sh`. See `assets/generated/README.md`. |
 
 ### E. Render the film through HyperFrames
 
@@ -76,6 +77,10 @@ I would actually recommend.
 
 ## My recommendation in one line
 
-**Approve A. Hold B, C and E. D is not available.** That gets you the finished
-film with a professional narration for roughly 1,200 ElevenLabs characters, and
-spends nothing else.
+**D is done.** Still outstanding: **approve A** (the voiceover, ~1,227
+ElevenLabs characters) — that is the one remaining gap in the deliverable. **B,
+C and E remain worth holding.**
+
+If you want the B-roll variant finished end-to-end rather than handed over as a
+composite script, the cleanest fix is to allow `dnznrvs05pmza.cloudfront.net`
+through the egress policy; everything else is already built and tested.

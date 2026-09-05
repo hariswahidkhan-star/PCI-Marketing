@@ -78,6 +78,48 @@ expected, sidechain instead:
 
 ---
 
+## The B-roll variant
+
+After the Runway package was purchased, five cinematic B-roll clips were
+generated — four with Runway `gen-4.5` and the closing shot with Kling
+`kling-3-pro`. **They are not in `dist/`.** Runway's artifact CDN is refused by
+the production environment's egress policy, so the clips could not be pulled in
+and composited there.
+
+What is delivered instead is the piece that actually matters for an editor:
+
+| File | Use |
+|---|---|
+| `…-16x9-typelayer-alpha.mov` | **ProRes 4444 with alpha.** Drop it over any footage in any NLE — type, furniture, captions and the legibility scrim land in exactly the verified positions and timings |
+| `…-16x9-typelayer-alpha.webm` | VP9 with alpha, for web and lightweight review |
+| …and the same pair for `9x16` and `1x1` | |
+
+To rebuild the composite yourself:
+
+```bash
+# 1. download the five clips from your Runway workspace into assets/generated/
+#    (filenames and task IDs are in assets/generated/README.md)
+cd src && ./plates.sh        # transparent type-layer frames, if not already built
+./composite.sh               # 16:9   -> dist/…-1920x1080-broll-captions.mp4
+./composite.sh 1080 1920 9x16
+./composite.sh 1080 1080 1x1
+```
+
+`composite.sh` fits each clip to its scene, grades it toward the brand palette,
+cross-fades at the scene edges, and lays the alpha plate over the top. **It has
+been run end-to-end against stand-in clips**, so the pipeline is verified — only
+the footage itself is substituted.
+
+**Scenes 5, 6 and 8 deliberately receive no footage.** They carry the identity,
+the credential framework and the end card, and generated imagery must not sit
+behind the frames that state who PCI is and what it certifies.
+
+One difference worth knowing: in the B-roll variant the scene-7 light inversion
+is disabled, because pale type over footage is not reliably legible. The
+original masters keep it.
+
+---
+
 ## Files
 
 ```
@@ -96,6 +138,9 @@ src/music.py           the score, synthesised from scratch (stdlib only)
 src/render.mjs         Playwright frame renderer
 src/probe.mjs          layout + caption-collision audit across all three aspects
 src/build.sh           frames -> masters
+src/plates.sh          transparent type-layer frames (for the B-roll variant)
+src/composite.sh       B-roll + type layer -> composited masters
+src/alpha-master.sh    type layer -> ProRes 4444 / VP9 with alpha
 dist/                  built output
 ```
 

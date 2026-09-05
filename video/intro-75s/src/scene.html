@@ -52,6 +52,8 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh}
 #grid{position:absolute;inset:0;pointer-events:none}
 #vig{position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%)}
+#scrim{position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,rgba(6,9,18,.72) 0%,rgba(6,9,18,.46) 38%,rgba(6,9,18,.62) 72%,rgba(6,9,18,.86) 100%)}
 #sheen{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;
   background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.10) 50%,rgba(255,255,255,0) 62%)}
 
@@ -190,6 +192,7 @@ h2{font-size:calc(var(--h2) * var(--s) * 1px)}
   <svg id="grid" preserveAspectRatio="none"></svg>
   <div id="vig"></div>
   <div id="sheen"></div>
+  <div id="scrim"></div>
 
   <div id="topbar">
     <img src="../brand/logo.svg" alt="">
@@ -337,6 +340,9 @@ const Q  = new URLSearchParams(location.search);
 const W  = +(Q.get('w') || 1920);
 const H  = +(Q.get('h') || 1080);
 const CC = Q.get('cc') !== '0';
+/* plate=1 renders the TYPE LAYER ONLY on transparency, so B-roll can be
+   composited underneath in ffmpeg without touching the verified timing. */
+const PLATE = Q.get('plate') === '1';
 const DUR = 75.0;
 
 /* Three aspects, three type scales. A nominal width per aspect is what keeps
@@ -350,6 +356,7 @@ stage.style.width = W + 'px';
 stage.style.height = H + 'px';
 const root = document.documentElement;
 root.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+if (PLATE){ document.documentElement.style.background='transparent'; document.body.style.background='transparent'; }
 if (ASPECT === 'sq'){ stage.classList.add('sq');
   root.style.setProperty('--padb','20'); root.style.setProperty('--h1','5.3'); root.style.setProperty('--h2','4.6'); }
 if (ASPECT === 'pt'){ stage.classList.add('pt');
@@ -444,6 +451,7 @@ const E = {
   glow: document.getElementById('glow'), glow2: document.getElementById('glow2'),
   sheen: document.getElementById('sheen'), spark: document.getElementById('spark'),
   mesh: document.getElementById('mesh'), vig: document.getElementById('vig'),
+  scrim: document.getElementById('scrim'),
   topbar: document.getElementById('topbar'), footrule: document.getElementById('footrule'),
   footl: document.getElementById('footl'), footr: document.getElementById('footr'),
   cc: document.getElementById('cc'), ccbox: document.getElementById('ccbox')
@@ -479,10 +487,18 @@ function seek(t){
   for (const { shot, o } of wts){
     const k = o / norm;
     bg = [bg[0] + shot.bg[0]*k, bg[1] + shot.bg[1]*k, bg[2] + shot.bg[2]*k];
-    light += shot.light * k;
+    light += (PLATE ? 0 : shot.light) * k;
     warm  += shot.warm  * k;
   }
-  stage.style.background = rgb(bg);
+  if (PLATE){
+    /* transparent ground; the scrim carries legibility over the footage */
+    stage.style.background = 'transparent';
+    E.scrim.style.opacity = (0.82 + 0.18 * (1 - light)).toFixed(3);
+    E.glow.style.display = E.glow2.style.display = E.mesh.style.display = 'none';
+    E.vig.style.display = 'none';
+  } else {
+    stage.style.background = rgb(bg);
+  }
 
   const P = {};
   for (const k of ['fg','sub','eyeb','foot','rule','chipbg','chipbd','chipsub','ccbg','ccfg'])

@@ -47,12 +47,14 @@ const W   = +arg('w', 1920);
 const H   = +arg('h', 1080);
 const FPS = +arg('fps', 30);
 const CC  = arg('cc', '1');
+const PLATE = arg('plate', '0');
 const OUT = path.resolve(HERE, arg('out', '../build/frames'));
 
 const scene = pathToFileURL(path.join(HERE, 'scene.html'));
 scene.searchParams.set('w', W);
 scene.searchParams.set('h', H);
 scene.searchParams.set('cc', CC);
+scene.searchParams.set('plate', PLATE);
 
 if (existsSync(OUT)) await rm(OUT, { recursive: true });
 await mkdir(OUT, { recursive: true });
@@ -66,6 +68,7 @@ const page = await browser.newPage({
   viewport: { width: W, height: H },
   deviceScaleFactor: 1
 });
+if (PLATE === '1') await page.emulateMedia({ colorScheme: 'dark' });
 
 await page.goto(scene.href, { waitUntil: 'load' });
 // Webfonts must be resident before frame 0, or the first frames render fallback metrics.
@@ -76,14 +79,16 @@ const DUR = await page.evaluate(() => window.__DUR);
 const total = Math.round(DUR * FPS);
 const stage = page.locator('#stage');
 
-process.stdout.write(`rendering ${total} frames @ ${W}x${H} ${FPS}fps (cc=${CC})\n`);
+process.stdout.write(`rendering ${total} frames @ ${W}x${H} ${FPS}fps (cc=${CC} plate=${PLATE})\n`);
 
 for (let f = 0; f < total; f++) {
   const t = f / FPS;
   await page.evaluate((tt) => window.seek(tt), t);
   await stage.screenshot({
     path: path.join(OUT, String(f).padStart(5, '0') + '.png'),
-    animations: 'disabled'
+    animations: 'disabled',
+    // plate mode keeps the alpha channel so ffmpeg can lay this over footage
+    omitBackground: PLATE === '1'
   });
   if (f % 60 === 0 || f === total - 1) {
     process.stdout.write(`  ${f + 1}/${total}\n`);
