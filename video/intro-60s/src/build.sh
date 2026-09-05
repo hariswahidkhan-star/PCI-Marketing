@@ -19,11 +19,28 @@ DIST=../dist
 FPS=25
 mkdir -p "$BUILD" "$DIST"
 
+# Output size follows the SOURCE PLATES, so a 4K rebuild needs no edits here:
+# drop 3840x2160 plates into ../build and re-run. overlay.html is resolution
+# independent (its scale unit is derived from stage width), so the type,
+# the rule and the lockup hold their proportions at any size.
+
 command -v ffmpeg >/dev/null || { echo "ffmpeg not on PATH"; exit 1; }
 [[ -d node_modules/playwright ]] || npm install --no-audit --no-fund playwright
 
 for n in 01 02 03 04 05 06; do
   [[ -f "$BUILD/shot-$n.mp4" ]] || { echo "missing $BUILD/shot-$n.mp4 — see note above"; exit 1; }
+done
+
+W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width  -of csv=p=0 "$BUILD/shot-01.mp4")
+H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$BUILD/shot-01.mp4")
+echo "==> source is ${W}x${H}"
+# Bitrate ceiling scales with pixel count; 6M is right for 1080p, not for 4K.
+if [[ "$W" -ge 3000 ]]; then MAXRATE=28M; BUFSIZE=56M; else MAXRATE=6M; BUFSIZE=12M; fi
+
+# Every plate must match, or the concat produces a broken stream.
+for n in 02 03 04 05 06; do
+  w=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$BUILD/shot-$n.mp4")
+  [[ "$w" == "$W" ]] || { echo "shot-$n is ${w}px wide, shot-01 is ${W}px — plates must match"; exit 1; }
 done
 
 echo "==> picture (grade each plate to one look, trim to 10.000s, concat)"
@@ -50,8 +67,8 @@ printf "file 'trim-%s.mp4'\n" 01 02 03 04 05 06 > "$BUILD/concat.txt"
 ffmpeg -hide_banner -loglevel error -y -f concat -safe 0 -i "$BUILD/concat.txt" \
   -c copy "$BUILD/picture.mp4"
 
-echo "==> brand overlay (1500 transparent frames)"
-node render-overlay.mjs --w 1920 --h 1080 --fps "$FPS" --out "$BUILD/overlay"
+echo "==> brand overlay (1500 transparent frames at ${W}x${H})"
+node render-overlay.mjs --w "$W" --h "$H" --fps "$FPS" --out "$BUILD/overlay"
 
 echo "==> mix (voice at -16 LUFS, score ducked beneath it)"
 # The score is delayed 2.6s on purpose. eleven_music_v2 wrote its own resolve
@@ -78,12 +95,12 @@ ffmpeg -hide_banner -loglevel error -y \
   -filter_complex "[0:v][1:v]overlay=0:0:format=auto,format=yuv420p[v]" \
   -map "[v]" -map 2:a -t 60 \
   -c:v libx264 -preset slow -crf 20 -profile:v high -level 4.1 \
-  -maxrate 6M -bufsize 12M -movflags +faststart \
+  -maxrate "$MAXRATE" -bufsize "$BUFSIZE" -movflags +faststart \
   -c:a aac -b:a 192k -ar 48000 -ac 2 \
-  "$DIST/pci-intro-60s-1920x1080.mp4"
+  "$DIST/pci-intro-60s-${W}x${H}.mp4"
 
 echo "==> poster"
-ffmpeg -hide_banner -loglevel error -y -ss 45 -i "$DIST/pci-intro-60s-1920x1080.mp4" \
+ffmpeg -hide_banner -loglevel error -y -ss 45 -i "$DIST/pci-intro-60s-${W}x${H}.mp4" \
   -frames:v 1 "$DIST/pci-intro-60s-poster.png"
 
 echo "done -> $DIST"

@@ -64,6 +64,23 @@ ffmpeg -i vo/pci-intro-60s-vo-take-1.mp3 \
 cd src && ./build.sh
 ```
 
+### Rebuilding at 4K
+
+`build.sh` reads its output size from the source plates and needs no edits: drop
+3840×2160 versions of `build/shot-01..06.mp4` in place and re-run. The overlay is
+resolution independent — its scale unit derives from stage width, so the type,
+the crimson→blue rule and the lockup hold their proportions — and the bitrate
+ceiling steps from 6M to 28M automatically. The script refuses to run if the six
+plates are not all the same width, because a mismatched concat produces a broken
+stream rather than an obvious error.
+
+**Getting 4K plates.** Runway's video upscaler does this (its 40 s limit is fine
+— each plate is 10.28 s). Upload and upscale both work from a CLI session, but
+Runway serves finished assets from a CDN this environment's egress policy blocks,
+so the results cannot be pulled back in here. Download them from the Runway
+library and drop them into `build/`, or run the whole step from a machine without
+that restriction.
+
 The overlay is fully reproducible — `overlay.html` computes every style from `t`,
 so frame N is byte-identical on every run. **The footage is not.** The six plates
 in `build/` were generated once and cannot be regenerated identically; keep them.
