@@ -137,6 +137,12 @@ def main():
     # Conform to the brief's window. A factor at or below 1.0 means the read
     # already fits and nothing is touched — the film is simply as long as the
     # narration wants to be, which is always the better outcome.
+    # The voice track is assembled from the UNSCALED scene starts and then
+    # time-stretched as one piece, so the stretch is applied exactly once. Using
+    # the scaled starts here as well scaled every position twice (a/f, then /f
+    # again inside rubberband) and left the narration ~10 s early by the end of
+    # a 4 % conform — the drift that this list exists to prevent.
+    raw_starts = [sc[2] for sc in scenes]
     f = natural / TARGET
     if f > MAX_STRETCH:
         raise SystemExit(
@@ -166,7 +172,7 @@ def main():
     parts, filt = [], []
     for i in range(1, len(VO.SCENES) + 1):
         parts += ['-i', os.path.join(TRIM, f'vo-{i:02d}.wav')]
-    for i, (sid, chap, a, b) in enumerate(scenes):
+    for i, a in enumerate(raw_starts):
         delay = int(round(a * 1000))
         filt.append(f'[{i}:a]adelay={delay}|{delay},apad[a{i}]')
     mix = ''.join(f'[a{i}]' for i in range(len(scenes)))

@@ -220,6 +220,15 @@ the caption band, scene content colliding with the fixed furniture, and **text
 clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **1,916
 samples, zero findings.**
 
+A second check now runs on the sound: the silences in the finished voice
+track are compared with the beats the timeline expects between scenes. That
+check caught a real fault on this cut — when a read is conformed, the voice
+track was being assembled at the already-scaled scene positions and then
+time-stretched again, so the narration ran about ten seconds early by the
+close of a 4 % conform. `sync.py` now places the takes at the unscaled
+positions and stretches once; every one of the twelve beats matches the
+timeline to within 0.1 s.
+
 It earned its keep again on this cut. The first probe of the authority script
 returned findings in six scenes: the new Institute scene and the enlarged
 role and industry lists were taller than their padding box, and cues of up to
