@@ -14,6 +14,16 @@ Once the read exists, sync.py measures it and timings come from timeline.json.
 """
 import json, os, re
 
+# The narration is generated with eleven_v3 — the emotion-capable model — using
+# voice "Jim Executive - Authoritative, British and Warm" (tXxkePQsw0G69D8VeDzp),
+# a stock library voice and not a clone of any real person.
+#
+# Direction is carried in the SPOKEN text, per the v3 prompting guide: an ellipsis
+# is a longer thoughtful pause, an em-dash a short beat, and capitals mark
+# emphasis. At most one capitalised word per scene — for a certification body,
+# restraint reads as credibility and melodrama reads as a sales advert.
+# The per-scene directed text lives in v3-direction.json.
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 CAPDIR = os.path.normpath(os.path.join(HERE, '..', 'captions'))
 LEAD, TAIL, GAP = 0.25, 0.25, 0.24
