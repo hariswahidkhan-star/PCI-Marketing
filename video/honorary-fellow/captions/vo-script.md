@@ -15,206 +15,202 @@ A stock library voice — **not a clone of any real person.**
 
 ## The read
 
-**s1 · The question · 0.30–2.66s**
+**s1 · The question · 0.30–2.80s**
 
 > Some careers deliver projects.
 
-**s1 · The question · 2.66–7.71s**
+**s1 · The question · 2.80–7.88s**
 
 > Others leave behind a standard, a method… and the people who carry it forward.
 
-**s2 · The recognition · 9.21–15.94s**
+**s2 · The recognition · 9.38–15.35s**
 
 > Honorary Fellow, P-C-I… conferred by the Board of an independent professional body —
 
-**s2 · The recognition · 15.94–21.45s**
+**s2 · The recognition · 15.35–20.27s**
 
 > in recognition of distinguished contribution, leadership and service.
 
-**s2 · The recognition · 21.45–27.85s**
+**s2 · The recognition · 20.27–26.52s**
 
 > Your name — on P-C-I's own public registry… checkable at source.
 
-**s3 · The Institute · 29.35–33.48s**
+**s3 · The Institute · 28.02–32.07s**
 
 > The Project Controls Institute is an independent professional body —
 
-**s3 · The Institute · 33.48–35.95s**
+**s3 · The Institute · 32.07–34.39s**
 
 > a Delaware Non-Stock Corporation —
 
-**s3 · The Institute · 35.95–40.50s**
+**s3 · The Institute · 34.39–39.13s**
 
 > built to give the discipline a shared standard, an independent credential…
 
-**s3 · The Institute · 40.50–43.78s**
+**s3 · The Institute · 39.13–42.43s**
 
 > and a professional home for the A-I era.
 
-**s3 · The Institute · 43.78–49.70s**
+**s3 · The Institute · 42.43–47.97s**
 
 > Its published Body of Knowledge sets thirteen domains and sixty-one knowledge areas.
 
-**s3 · The Institute · 49.70–54.25s**
+**s3 · The Institute · 47.97–54.48s**
 
 > Its framework is developed with reference to I-S-O I-E-C 17024 —
 
-**s3 · The Institute · 54.25–68.93s**
+**s3 · The Institute · 54.48–66.74s**
 
 > and P-C-I states plainly that it is not currently accredited by A-N-A-B, I-A-S, or any I-S-O I-E-C 17024 body…
 
-**s3 · The Institute · 68.93–72.45s**
+**s3 · The Institute · 66.74–70.14s**
 
 > What it has, is a registry anyone can check.
 
-**s4 · What it is · 73.95–80.67s**
+**s4 · What it is · 71.64–77.57s**
 
 > It involves no examination. The record is the evidence… and the Board weighs it.
 
-**s4 · What it is · 80.67–91.68s**
+**s4 · What it is · 77.57–87.15s**
 
 > It is separate from P-C-I's examined certifications — P-C-L A-I, P-F-L A-I and P-M-L A-I.
 
-**s4 · What it is · 91.68–94.89s**
+**s4 · What it is · 87.15–90.47s**
 
 > Every application is considered individually…
 
-**s4 · What it is · 94.89–98.59s**
+**s4 · What it is · 90.47–94.79s**
 
 > and recognition is conferred solely at the Board's discretion.
 
-**s5 · Who may apply · 100.09–105.13s**
+**s5 · Who may apply · 96.29–101.60s**
 
 > If you have led teams, shaped standards, taught, published or governed —
 
-**s5 · Who may apply · 105.13–108.51s**
+**s5 · Who may apply · 101.60–105.13s**
 
 > in project controls, cost control, finance, project management,
 
-**s5 · Who may apply · 108.51–112.58s**
+**s5 · Who may apply · 105.13–109.49s**
 
 > or a closely related discipline — you may apply.
 
-**s6 · Industries · 114.08–115.96s**
+**s6 · Industries · 110.99–113.92s**
 
 > From construction and energy…
 
-**s6 · Industries · 115.96–121.00s**
+**s6 · Industries · 113.92–118.12s**
 
 > to technology, aviation, project finance, government and academia.
 
-**s6 · Industries · 121.00–123.70s**
+**s6 · Industries · 118.12–121.10s**
 
 > Wherever leadership shapes OUTCOMES,
 
-**s6 · Industries · 123.70–125.67s**
+**s6 · Industries · 121.10–123.07s**
 
 > your contribution counts.
 
-**s7 · Eligibility · 127.17–132.73s**
+**s7 · Eligibility · 124.57–131.16s**
 
 > The floor is eight years of professional experience… three of them at managerial level —
 
-**s7 · Eligibility · 132.73–136.67s**
+**s7 · Eligibility · 131.16–134.24s**
 
 > leading teams, functions, programmes or budgets.
 
-**s7 · Eligibility · 136.67–141.85s**
+**s7 · Eligibility · 134.24–139.41s**
 
 > The bar is higher — a demonstrable record of distinguished contribution.
 
-**s7 · Eligibility · 141.85–145.41s**
+**s7 · Eligibility · 139.41–142.71s**
 
 > Meeting the criteria does not guarantee recognition.
 
-**s8 · Your application · 146.91–151.44s**
+**s8 · Your application · 144.21–148.54s**
 
 > P-C-I charges no nomination, assessment, or credential fee.
 
-**s8 · Your application · 151.44–155.21s**
+**s8 · Your application · 148.54–155.86s**
 
-> Optional extras — such as attending an awards ceremony —
+> Optional extras — such as attending an awards ceremony — are charged separately, and play no part in the decision.
 
-**s8 · Your application · 155.21–158.96s**
-
-> are charged separately, and play no part in the decision.
-
-**s8 · Your application · 158.96–162.20s**
+**s8 · Your application · 155.86–159.06s**
 
 > Recognition is awarded solely on merit.
 
-**s8 · Your application · 162.20–167.95s**
+**s8 · Your application · 159.06–163.67s**
 
 > One application… your profile, résumé, career history and evidence —
 
-**s8 · Your application · 167.95–170.33s**
+**s8 · Your application · 163.67–165.93s**
 
 > reviewed confidentially by the Board.
 
-**s9 · Putting yourself forward · 171.83–174.40s**
+**s9 · Putting yourself forward · 167.43–170.28s**
 
 > You need no sponsor to be considered.
 
-**s9 · Putting yourself forward · 174.40–176.66s**
+**s9 · Putting yourself forward · 170.28–172.38s**
 
 > You put your own record forward.
 
-**s9 · Putting yourself forward · 176.66–181.54s**
+**s9 · Putting yourself forward · 172.38–177.54s**
 
 > The Board then assesses it against published criteria… on the evidence —
 
-**s9 · Putting yourself forward · 181.54–183.21s**
+**s9 · Putting yourself forward · 177.54–180.02s**
 
 > and does so confidentially.
 
-**s10 · The registry · 184.71–189.27s**
+**s10 · The registry · 181.52–186.27s**
 
 > Those recognised are entered on P-C-I's own public registry…
 
-**s10 · The registry · 189.27–192.06s**
+**s10 · The registry · 186.27–188.72s**
 
 > checkable at source by anyone —
 
-**s10 · The registry · 192.06–195.83s**
+**s10 · The registry · 188.72–192.56s**
 
 > labelled honorary, never a passed examination.
 
-**s11 · What it opens · 197.33–204.60s**
+**s11 · What it opens · 194.06–200.69s**
 
-> If recognised, you may also be given access to the P-C-I student portal,
+> If recognised, you may also be given access to the P-C-I student portal, and the Institute's learning resources —
 
-**s11 · What it opens · 204.60–208.67s**
+**s11 · What it opens · 200.69–204.17s**
 
-> and the Institute's learning resources — video lectures, course material, and the simulation lab.
+> video lectures, course material, and the simulation lab.
 
-**s11 · What it opens · 208.67–215.53s**
+**s11 · What it opens · 204.17–210.22s**
 
 > The same terms may extend to study through Certuvo, P-C-I's official preparation platform…
 
-**s11 · What it opens · 215.53–222.38s**
+**s11 · What it opens · 210.22–217.02s**
 
 > and invitations to selected P-C-I A-I events — all subject to current programme terms.
 
-**s12 · Discipline alignment · 223.88–227.58s**
+**s12 · Discipline alignment · 218.52–223.92s**
 
 > Tell the Board which discipline your contribution aligns to —
 
-**s12 · Discipline alignment · 227.58–232.13s**
+**s12 · Discipline alignment · 223.92–227.43s**
 
 > project controls, project finance, or project management.
 
-**s12 · Discipline alignment · 232.13–235.99s**
+**s12 · Discipline alignment · 227.43–231.52s**
 
 > Optional… and it confers no examined certification.
 
-**s13 · Apply · 237.49–243.79s**
+**s13 · Apply · 233.02–240.19s**
 
 > If your work has outlasted the projects it was done on… it deserves to be recognised.
 
-**s13 · Apply · 243.79–251.04s**
+**s13 · Apply · 240.19–245.68s**
 
 > Apply for the Board's consideration — at P-C-I-A-I dot org.
 
-**s13 · Apply · 251.04–257.73s**
+**s13 · Apply · 245.68–249.34s**
 
 > Questions… to Members, at P-C-I-A-I dot org.
