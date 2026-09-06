@@ -1,7 +1,7 @@
 # PCI AI — the explainer
 
 A chaptered film: why PCI exists, what its objective is, and what each of the
-three credentials is for. Built on the brand system, voiced by Holden, every claim
+three credentials is for. Built on the brand system, voiced by George on ElevenLabs `eleven_v3` with inline emotion direction, every claim
 traced to a live page or the platform's own FAQ seed.
 
 ## Chapters

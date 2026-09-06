@@ -38,6 +38,10 @@ function arg(name, dflt) {
 
 const W = +arg('w', 1920), H = +arg('h', 1080), FPS = +arg('fps', 25);
 const OUT = path.resolve(HERE, arg('out', '../build/frames'));
+// Resumable, chunked rendering: this environment restarts long-running jobs, so
+// render in bounded chunks and skip frames that already exist on disk.
+const FROM = +arg('from', 0);
+const TO   = +arg('to', 0);            // 0 = to the end
 
 const scene = pathToFileURL(path.join(HERE, 'scene.html'));
 scene.searchParams.set('w', W);
@@ -46,7 +50,6 @@ const THEME=arg('theme',''); if (THEME) scene.searchParams.set('theme', THEME);
 const NAME = arg('name', '');
 if (NAME) scene.searchParams.set('name', NAME);
 
-if (existsSync(OUT)) await rm(OUT, { recursive: true });
 await mkdir(OUT, { recursive: true });
 
 const browser = await chromium.launch({
@@ -64,13 +67,17 @@ const total = Math.round(DUR * FPS);
 const stage = page.locator('#stage');
 
 process.stdout.write(`tribute: ${total} frames @ ${W}x${H} ${FPS}fps${NAME ? ` — "${NAME}"` : ''}\n`);
-for (let f = 0; f < total; f++) {
+const last = TO > 0 ? Math.min(TO, total) : total;
+let done = 0;
+for (let f = FROM; f < last; f++) {
+  const out = path.join(OUT, String(f).padStart(5, '0') + '.png');
+  if (existsSync(out)) continue;
   await page.evaluate((tt) => window.seek(tt), f / FPS);
   await stage.screenshot({
-    path: path.join(OUT, String(f).padStart(5, '0') + '.png'),
+    path: out,
     animations: 'disabled'
   });
-  if (f % 250 === 0 || f === total - 1) process.stdout.write(`  ${f + 1}/${total}\n`);
+  if (++done % 250 === 0 || f === last - 1) process.stdout.write(`  ${f + 1}/${total}\n`);
 }
 await browser.close();
 process.stdout.write(`frames -> ${OUT}\n`);
