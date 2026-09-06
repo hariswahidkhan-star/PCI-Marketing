@@ -15,6 +15,8 @@ deploys; nothing here is a second copy of the site.
 | Path | What it is |
 |---|---|
 | `video/launch-15s/` | 15-second post-launch film — sources, script, captions and built masters |
+| `video/honorary-tribute/` | "Honoris Causa" — Honorary Fellowship tribute film: script, narration, score, sound design |
+| `messaging/institutional/` | Approved institutional copy — overview, honorary and founding routes, each with a claims audit |
 
 ---
 

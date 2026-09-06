@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PCI re-voice — brand overlay</title>
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../../launch-15s/brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../../launch-15s/brand/inter-latin.woff2) format('woff2')}
+:root{--magenta:#3B82F6;--display:'Archivo',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--s:1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:transparent;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:transparent;color:#fff;
+  -webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+/* A soft local ground behind the lockup so it holds on bright shots — the
+   source has sunlit skylines — without darkening the whole frame. */
+#pad{position:absolute;left:0;top:calc(4 * var(--s) * 1px);width:calc(32 * var(--s) * 1px);height:calc(16 * var(--s) * 1px);
+  background:radial-gradient(ellipse at 22% 35%,rgba(15,23,42,.72),rgba(15,23,42,.38) 55%,rgba(15,23,42,0) 78%)}
+#topbar{position:absolute;display:flex;align-items:center;gap:calc(.95 * var(--s) * 1px);
+  left:calc(3.4 * var(--s) * 1px);top:calc(8.6 * var(--s) * 1px)}
+#topbar img{width:calc(3.3 * var(--s) * 1px);height:calc(3.3 * var(--s) * 1px);
+  filter:drop-shadow(0 calc(.15*var(--s)*1px) calc(.6*var(--s)*1px) rgba(0,0,0,.6))}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.75 * var(--s) * 1px);
+  letter-spacing:-.02em;line-height:1;
+  text-shadow:0 calc(.2 * var(--s) * 1px) calc(1.4 * var(--s) * 1px) rgba(0,0,0,.8)}
+#topbar .t em{font-style:normal;color:var(--magenta)}
+#topbar .s{font-family:var(--sans);font-weight:600;font-size:calc(.98 * var(--s) * 1px);
+  color:#DCE6F5;letter-spacing:.075em;margin-top:calc(.3 * var(--s) * 1px);text-transform:uppercase;
+  text-shadow:0 calc(.15 * var(--s) * 1px) calc(1.1 * var(--s) * 1px) rgba(0,0,0,.85)}
+#topbar .u{font-family:var(--sans);font-weight:600;font-size:calc(1.02 * var(--s) * 1px);
+  color:#9FC0F0;letter-spacing:.06em;margin-top:calc(.28 * var(--s) * 1px);
+  text-shadow:0 calc(.15 * var(--s) * 1px) calc(1.1 * var(--s) * 1px) rgba(0,0,0,.85)}
+</style></head>
+<body><div id="stage">
+  <div id="pad"></div>
+  <div id="topbar">
+    <img src="../../launch-15s/brand/logo.svg" alt="">
+    <div><div class="t">PCI <em>AI</em></div>
+         <div class="s">Project Controls Institute</div>
+         <div class="u">pciai.org</div></div>
+  </div>
+</div>
+<script>
+const q=new URLSearchParams(location.search);
+const W=+(q.get('w')||1280),H=+(q.get('h')||720);
+const st=document.getElementById('stage');st.style.width=W+'px';st.style.height=H+'px';
+document.documentElement.style.setProperty('--s',(W/100).toFixed(4));
+window.__DUR=+(q.get('dur')||75.0);
+const tb=document.getElementById('topbar'),pad=document.getElementById('pad');
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),ease=p=>1-Math.pow(1-clamp(p,0,1),3);
+window.seek=function(t){
+  // Rises in over the first 0.9s, holds for the whole film, eases out over the last second.
+  const o=Math.min(ease((t-0.25)/0.9),1-ease((t-(window.__DUR-1.1))/0.9));
+  tb.style.opacity=o.toFixed(3);pad.style.opacity=o.toFixed(3);
+  tb.style.transform='translateY('+((1-ease((t-0.25)/0.9))*0.8).toFixed(3)+'vh)';
+};
+window.seek(+(q.get('t')||0));
+</script></body></html>

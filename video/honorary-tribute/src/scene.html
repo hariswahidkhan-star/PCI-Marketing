@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCI — Honoris Causa (48s)</title>
+<!--
+  PCI Honorary Fellowship tribute — deterministic scene, on the brand system.
+  window.seek(t) computes every style from t, so frame N is byte-identical
+  regardless of render speed. Rendered by render.mjs.
+
+  Brand furniture is lifted from ../../launch-15s/src/scene.html and
+  ../../intro-60s/src/overlay.html so the three films are one system: the ink
+  ground and its ambience, the persistent PCI AI lockup, the crimson->blue rule
+  under an uppercase letterspaced eyebrow, Archivo 800 headlines, Inter text.
+
+  Gold appears in exactly one place — the seal — and uses the logo's own gold
+  gradient stops. It is the mark's "AI" treatment, not an invented accent.
+
+  Query params: ?w=1920&h=1080&name=...
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../../launch-15s/brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../../launch-15s/brand/inter-latin.woff2) format('woff2')}
+
+:root{
+  /* Brand tokens, verbatim from backend/wwwroot/assets/styles.css via the launch film */
+  --ink:#0F172A; --noir:#0E1525; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
+  --paper:#FFFFFF; --mist:#94A3B8; --card:#111D33;
+  /* The logo's gold — the only gold this film uses */
+  --gold-hi:#F7EABC; --gold:#E7CB82; --gold-lo:#B8923E;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+
+#stage{position:relative;overflow:hidden;background:var(--ink);
+  font-family:var(--sans);color:#fff;-webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision}
+
+/* ---------- ambience: identical intent to the launch film ---------- */
+#glow{position:absolute;inset:-20%;pointer-events:none;
+  background:radial-gradient(closest-side, rgba(37,99,235,.34), rgba(37,99,235,0) 70%);
+  will-change:transform,opacity}
+#glow2{position:absolute;inset:-20%;pointer-events:none;
+  background:radial-gradient(closest-side, rgba(193,51,41,.20), rgba(193,51,41,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(148,163,184,.075) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(148,163,184,.075) 1px,transparent 1px);
+  background-size:calc(6 * var(--s) * 1px) calc(6 * var(--s) * 1px)}
+#motes{position:absolute;inset:0;pointer-events:none}
+.mote{position:absolute;border-radius:50%;background:#CBD7E8;will-change:transform,opacity}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%)}
+
+/* ---------- persistent lockup, exactly as the intro film ---------- */
+#topbar{position:absolute;z-index:5;display:flex;align-items:center;
+  gap:calc(.85 * var(--s) * 1px);
+  left:calc(5.2 * var(--s) * 1px);top:calc(4.4 * var(--s) * 1px)}
+#topbar img{width:calc(3.05 * var(--s) * 1px);height:calc(3.05 * var(--s) * 1px)}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.62 * var(--s) * 1px);
+  letter-spacing:-.02em;line-height:1}
+#topbar .t em{font-style:normal;color:var(--magenta)}
+#topbar .s{font-family:var(--sans);font-weight:500;font-size:calc(.92 * var(--s) * 1px);
+  color:#9FB2CC;letter-spacing:.055em;margin-top:calc(.25 * var(--s) * 1px)}
+
+/* ---------- shots ---------- */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:calc(12 * var(--s) * 1px) calc(9.5 * var(--s) * 1px) calc(14 * var(--s) * 1px);
+  will-change:opacity}
+
+.eyebrow{font-family:var(--sans);font-weight:600;
+  font-size:calc(1.36 * var(--s) * 1px);letter-spacing:.19em;text-transform:uppercase;
+  color:#E4785F;white-space:nowrap}
+.eyebrow.blue{color:#7FA9E8}
+
+.uline{height:calc(.42 * var(--s) * 1px);width:calc(7.2 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  border-radius:calc(.3 * var(--s) * 1px);transform-origin:center;
+  margin:calc(1.5 * var(--s) * 1px) 0 calc(2.0 * var(--s) * 1px)}
+
+h1{font-family:var(--display);font-weight:800;line-height:1.04;letter-spacing:-.023em;
+  font-size:calc(5.7 * var(--s) * 1px)}
+h1.big{font-size:calc(6.5 * var(--s) * 1px)}
+h1.sm{font-size:calc(4.6 * var(--s) * 1px)}
+/* word-level reveal: each word rides in a clipping mask */
+.ln{display:block;overflow:hidden;padding-bottom:calc(.55 * var(--s) * 1px)}
+.w{display:inline-block;will-change:transform,opacity}
+h1.quiet{color:#8FA6C4;font-weight:700;font-size:calc(4.2 * var(--s) * 1px)}
+.sub{font-family:var(--sans);font-weight:400;color:#B9C6DA;
+  font-size:calc(1.95 * var(--s) * 1px);line-height:1.5;margin-top:calc(1.9 * var(--s) * 1px)}
+.cite{font-family:var(--sans);font-weight:400;color:#B9C6DA;
+  font-size:calc(1.95 * var(--s) * 1px);line-height:1.75;max-width:calc(62 * var(--s) * 1px)}
+.cite b{display:block;font-weight:600;color:#fff}
+
+/* ---------- the seal: the logo, ringed in the logo's own gold ---------- */
+#seal{width:calc(24 * var(--s) * 1px);height:calc(24 * var(--s) * 1px);
+  will-change:transform,opacity;
+  filter:drop-shadow(0 calc(.8*var(--s)*1px) calc(2.6*var(--s)*1px) rgba(0,0,0,.6))}
+
+.name{font-family:var(--display);font-weight:800;letter-spacing:-.023em;
+  font-size:calc(6.2 * var(--s) * 1px);line-height:1.02}
+.desig{font-family:var(--sans);font-weight:600;color:#E4785F;
+  font-size:calc(1.36 * var(--s) * 1px);letter-spacing:.19em;text-transform:uppercase;
+  margin-top:calc(1.9 * var(--s) * 1px)}
+
+/* ---------- end card, same structure as the intro film ---------- */
+#mark{width:calc(9.5 * var(--s) * 1px);height:calc(9.5 * var(--s) * 1px)}
+.wordmark{font-family:var(--display);font-weight:800;letter-spacing:-.022em;
+  font-size:calc(4.5 * var(--s) * 1px);margin-top:calc(1.6 * var(--s) * 1px)}
+.wordmark em{font-style:normal;color:var(--magenta)}
+.recog{font-family:var(--sans);font-weight:600;font-size:calc(1.36 * var(--s) * 1px);
+  letter-spacing:.19em;text-transform:uppercase;color:#7FA9E8;margin-top:calc(1.6 * var(--s) * 1px)}
+.quote{font-family:var(--sans);font-weight:400;font-style:italic;color:#B9C6DA;
+  font-size:calc(1.72 * var(--s) * 1px);margin-top:calc(1.2 * var(--s) * 1px)}
+.url{font-family:var(--sans);font-weight:600;font-size:calc(1.5 * var(--s) * 1px);
+  letter-spacing:.06em;color:#9FC0F0;margin-top:calc(1.5 * var(--s) * 1px)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div><div id="glow2"></div><div id="grid"></div><div id="motes"></div>
+
+  <div id="topbar">
+    <img src="../../launch-15s/brand/logo.svg" alt="">
+    <div><div class="t">PCI <em>AI</em></div>
+         <div class="s">PROJECT CONTROLS INSTITUTE</div></div>
+  </div>
+
+  <!-- 1 · opening -->
+  <div class="shot" id="s1">
+    <div class="eyebrow" data-a>Honoris Causa</div><div class="uline" data-r></div>
+    <h1 class="sm"><span class="ln"><span class="w">Behind</span> <span class="w">every</span>
+      <span class="w">great</span> <span class="w">project</span></span>
+      <span class="ln"><span class="w">stands</span> <span class="w">a</span>
+      <span class="w">professional.</span></span></h1>
+  </div>
+
+  <!-- 2 · the three virtues -->
+  <div class="shot" id="s2"><h1><span class="ln"><span class="w">Planned</span> <span class="w">when</span></span>
+    <span class="ln"><span class="w">others</span> <span class="w">guessed.</span></span></h1></div>
+  <div class="shot" id="s3"><h1><span class="ln"><span class="w">Forecast</span></span>
+    <span class="ln"><span class="w">with</span> <span class="w">honesty.</span></span></h1></div>
+  <div class="shot" id="s4"><h1><span class="ln"><span class="w">Held</span> <span class="w">the</span> <span class="w">line</span></span>
+    <span class="ln"><span class="w">on</span> <span class="w">integrity.</span></span></h1></div>
+
+  <!-- 3 · the doctrine -->
+  <div class="shot" id="s5"><h1 class="quiet"><span class="ln"><span class="w">Technology</span>
+    <span class="w">can</span> <span class="w">propose.</span></span></h1></div>
+  <div class="shot" id="s6"><h1 class="big"><span class="ln"><span class="w">But</span> <span class="w">it</span>
+    <span class="w">takes</span> <span class="w">a</span> <span class="w">professional</span></span>
+    <span class="ln"><span class="w">to</span> <span class="w">decide.</span></span></h1></div>
+
+  <!-- 4 · the recognition -->
+  <div class="shot" id="s7">
+    <div class="eyebrow blue" data-a>Today the Institute recognises</div><div class="uline" data-r></div>
+    <h1 class="sm"><span class="ln"><span class="w">one</span> <span class="w">of</span>
+      <span class="w">those</span> <span class="w">professionals.</span></span></h1>
+  </div>
+
+  <!-- 5 · the citation -->
+  <div class="shot" id="s8">
+    <div class="eyebrow" data-a>The Citation</div><div class="uline" data-r></div>
+    <div class="cite" data-a>
+      <b>For a distinguished career.</b>
+      <b>For advancing the discipline.</b>
+      <b>For elevating the standard of the profession.</b>
+    </div>
+  </div>
+
+  <!-- 6 · seal + name reveal -->
+  <div class="shot" id="s9" style="justify-content:flex-start;padding-top:calc(11.5 * var(--s) * 1px)">
+    <svg id="seal" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#F7EABC"/><stop offset="45%" stop-color="#E7CB82"/>
+          <stop offset="100%" stop-color="#B8923E"/>
+        </linearGradient>
+        <path id="arcTop" d="M100,100 m-70,0 a70,70 0 1,1 140,0" fill="none"/>
+        <path id="arcBot" d="M100,100 m-64,0 a64,64 0 0,0 128,0" fill="none"/>
+        <clipPath id="c"><rect x="64" y="64" width="72" height="72" rx="15.75"/></clipPath>
+      </defs>
+      <circle cx="100" cy="100" r="93" fill="none" stroke="url(#g)" stroke-width="1"   opacity=".5"/>
+      <circle cx="100" cy="100" r="87" fill="none" stroke="url(#g)" stroke-width="2.6"/>
+      <circle cx="100" cy="100" r="56" fill="none" stroke="url(#g)" stroke-width=".9"  opacity=".6"/>
+      <text font-family="Inter" font-size="9.2" font-weight="600" letter-spacing="3.0" fill="url(#g)">
+        <textPath href="#arcTop" startOffset="50%" text-anchor="middle">PROJECT CONTROLS INSTITUTE</textPath>
+      </text>
+      <text font-family="Inter" font-size="9.2" font-weight="600" letter-spacing="3.4" fill="url(#g)">
+        <textPath href="#arcBot" startOffset="50%" text-anchor="middle" side="left">HONORIS CAUSA</textPath>
+      </text>
+      <!-- the actual mark, at the centre -->
+      <image href="../../launch-15s/brand/logo.svg" x="64" y="64" width="72" height="72" clip-path="url(#c)"/>
+    </svg>
+    <div style="margin-top:calc(3.0 * var(--s) * 1px)">
+      <div class="name" data-a id="nm">[ RECIPIENT NAME ]</div>
+      <div class="desig" data-a>Honorary Fellow (PCI)</div>
+    </div>
+  </div>
+
+  <!-- 7 · end card -->
+  <div class="shot" id="s10">
+    <img id="mark" src="../../launch-15s/brand/logo.svg" alt="" data-a>
+    <div class="wordmark" data-a>PCI <em>AI</em></div>
+    <div class="recog" data-a>Honorary Recognition</div>
+    <div class="quote" data-a>In recognition of a distinguished contribution to the profession.</div>
+    <div class="url" data-a>projectcontrolsinstitute.org</div>
+  </div>
+
+  <div id="vig"></div>
+</div>
+
+<script>
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 1920), H = +(q.get('h') || 1080);
+const stage = document.getElementById('stage');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+document.documentElement.style.setProperty('--s', (W / 100).toFixed(4));
+if (q.get('name')) document.getElementById('nm').textContent = q.get('name');
+
+window.__DUR = 48.0;
+
+/* Shot windows follow the measured narration beats (see ../script.md).
+   Voice sits at +2.00s in the bed; the seal lands on the SFX at 35.2s; the
+   window from 36s is where the per-recipient name take drops in. */
+const SHOTS = [
+  ['s1',   0.00,  7.10], ['s2',   7.10,  9.60], ['s3',   9.60, 11.85],
+  ['s4',  11.85, 16.90], ['s5',  16.90, 19.55], ['s6',  19.55, 22.30],
+  ['s7',  22.30, 28.10], ['s8',  28.10, 34.90], ['s9',  34.90, 43.60],
+  ['s10', 43.60, 48.00]
+];
+const XF = 0.34;   // cross-dissolve, as the other two films
+
+const els = SHOTS.map(([id]) => document.getElementById(id));
+const seal = document.getElementById('seal');
+const topbar = document.getElementById('topbar');
+const glow = document.getElementById('glow');
+const clamp = (v,a,b) => Math.min(b, Math.max(a,v));
+const ease  = p => 1 - Math.pow(1 - clamp(p,0,1), 3);
+const easeIO= p => (p=clamp(p,0,1)) < .5 ? 4*p*p*p : 1 - Math.pow(-2*p+2,3)/2;
+
+/* Deterministic motes — seeded LCG, so every render is identical. */
+const motes = [];
+(function(){
+  let seed = 20260905;
+  const rnd = () => (seed = (seed*1664525 + 1013904223) % 4294967296) / 4294967296;
+  const box = document.getElementById('motes');
+  for (let i=0;i<56;i++){
+    const d = document.createElement('div'); d.className='mote';
+    const sz = (0.09 + rnd()*0.22);
+    d.style.width = `calc(${sz} * var(--s) * 1px)`; d.style.height = d.style.width;
+    motes.push({el:d, x:rnd()*100, y:rnd()*100, sp:0.3+rnd()*0.9, ph:rnd()*6.283, amp:0.5+rnd()*2, base:0.08+rnd()*0.34});
+    box.appendChild(d);
+  }
+})();
+
+window.seek = function (t) {
+  SHOTS.forEach(([id,a,b], i) => {
+    const el = els[i];
+    const fin  = ease((t - a) / XF);
+    const fout = 1 - ease((t - (b - XF)) / XF);
+    const vis  = (t >= a - XF && t <= b + XF) ? clamp(Math.min(fin,fout),0,1) : 0;
+    el.style.opacity = vis.toFixed(3);
+    if (vis <= 0) return;
+    const local = t - a;
+
+    // Words rise in a 75ms stagger behind their clipping mask — the house reveal.
+    el.querySelectorAll('.w').forEach((w, k) => {
+      const p = ease((local - (0.16 + k * 0.075)) / 0.52);
+      w.style.transform = 'translateY(' + ((1 - p) * 108).toFixed(2) + '%)';
+      w.style.opacity = p.toFixed(3);
+    });
+    el.querySelectorAll('[data-r]').forEach(n => {
+      const p = ease((local - 0.10) / 0.46);
+      n.style.transform = 'scaleX(' + p.toFixed(3) + ')';
+    });
+    el.querySelectorAll('[data-a]').forEach((n,k) => {
+      const p = ease((local - (0.06 + k*0.13)) / 0.58);
+      n.style.opacity = p.toFixed(3);
+      n.style.transform = 'translateY(' + ((1-p)*1.1).toFixed(3) + 'vh)';
+    });
+  });
+
+  // The seal settles in and turns three degrees over its life.
+  const s9 = SHOTS[8];
+  if (t >= s9[1] - XF && t <= s9[2] + XF) {
+    const p = clamp((t - s9[1]) / (s9[2]-s9[1]), 0, 1);
+    const sc = 0.955 + easeIO(clamp((t - s9[1])/1.9,0,1)) * 0.045;
+    seal.style.transform = `rotate(${(-1.5 + p*3).toFixed(3)}deg) scale(${sc.toFixed(4)})`;
+  }
+
+  // Lockup retires under the end card, where the big mark takes over.
+  topbar.style.opacity = (1 - ease((t - (SHOTS[9][1] - XF)) / XF)).toFixed(3);
+
+  // The blue glow drifts slowly, as it does in the launch film.
+  glow.style.transform = `translate(${(Math.sin(t*0.21)*3).toFixed(2)}%, ${(Math.cos(t*0.17)*2.5).toFixed(2)}%)`;
+
+  motes.forEach(m => {
+    const y = (m.y - t * m.sp * 1.5) % 108, yy = y < -4 ? y + 108 : y;
+    const x = m.x + Math.sin(t * 0.28 + m.ph) * m.amp * 0.34;
+    m.el.style.transform = `translate(${x.toFixed(3)}vw, ${yy.toFixed(3)}vh)`;
+    m.el.style.opacity = (m.base * (0.45 + 0.55*Math.sin(t*0.8 + m.ph))).toFixed(3);
+  });
+};
+window.seek(+(q.get('t') || 0));
+</script>
+</body>
+</html>

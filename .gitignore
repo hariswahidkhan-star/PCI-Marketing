@@ -11,3 +11,6 @@ video/*/build/
 # OS
 .DS_Store
 Thumbs.db
+
+# symlinked installs too, not just real directories
+**/node_modules
