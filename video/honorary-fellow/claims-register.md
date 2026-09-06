@@ -22,7 +22,7 @@ with, but **a DB-side content override could in principle differ from it.**
 
 **Action required before publication:** re-check §2 against the live pages. The
 rows most worth re-reading are the eligibility numbers (E1, E2), the benefits
-(B1–B3) and the fee statement (F1), because those are the ones a change to
+(B1–B4, and the client-asserted C1) and the fee statement (F1), because those are the ones a change to
 programme terms would touch first — and the application page states plainly that
 PCI "may update these terms, the eligibility criteria and the associated benefits
 at any time."
@@ -82,7 +82,16 @@ Pages used, all under `PCI/backend/wwwroot/`:
 | F1 | PCI charges no nomination, assessment or credential fee | HA | *"PCI does not charge a nomination, assessment or credential fee for honorary recognition."* |
 | B1 | Recognition as Honorary Fellow (PCI) | RH | route table: *"Honorary · Free · No exam · Honorary Fellow (PCI)"* |
 | B2 | The award can be verified publicly, and is labelled honorary — never a passed examination | DBR, VER | DBR: *"every honorary award, can be checked on the verification page"*; VER: *"clearly labelled honorary and never a passed examination"* |
-| B3 | Accepted applicants **may** be given access to selected PCI learning resources, subject to current programme terms | HA | *"Accepted applicants may be issued access credentials to the PCI student portal and given access to the Institute's learning resources and study materials… may be varied or withdrawn"* |
+| B3 | Accepted applicants **may** be issued access credentials to the PCI student portal and given access to learning resources and study materials, subject to current programme terms | HA | *"Accepted applicants may be issued access credentials to the PCI student portal and given access to the Institute's learning resources and study materials… may be varied or withdrawn"* |
+| B4 | Certuvo is PCI's official platform for preparation and study — the film calls it PCI's official preparation platform | site-wide footer; `certification.html` | *"Certuvo is PCI's official platform for preparation and study"*; *"Preparation and training are provided separately by Certuvo, our official partner"* |
+
+### Client-asserted, not yet on the site
+
+| # | Claim | Status |
+|---|---|---|
+| C1 | Invitations to selected PCI AI events for accepted applicants | **Instructed by PCI after the first cut; not on any honorary page.** Included as *"invitations to selected PCI AI events, subject to programme terms"*. **The application page's "If your application is successful" paragraph should say this before the film is published**, or the film says more than the terms do. |
+| C2 | "Books and video lectures" at Certuvo | **Not stated on the site.** The site describes Certuvo as *"structured study and realistic scenario practice"*. The film says *"study material through Certuvo"* and the card reads *"PCI's official preparation platform"* — the supported wording. |
+| C3 | "Enhance career" | **Declined.** The brief itself forbids guaranteeing employment, promotion, salary improvement or third-party acceptance, and PCI's own site-wide disclosure says the same. No career-outcome language appears anywhere in the film. |
 
 ### Discipline alignment
 

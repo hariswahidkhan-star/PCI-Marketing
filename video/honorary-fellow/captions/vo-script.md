@@ -15,70 +15,70 @@ A stock library voice — **not a clone of any real person.**
 
 ## The read
 
-**s1 · The question · 0.29–3.10s**
+**s1 · The question · 0.28–2.99s**
 
 > Some professionals deliver successful projects.
 
-**s1 · The question · 3.10–8.21s**
+**s1 · The question · 2.99–7.91s**
 
 > Others leave a lasting mark on the people, standards and industries around them.
 
-**s2 · The recognition · 8.61–18.33s**
+**s2 · The recognition · 8.24–17.61s**
 
 > Honorary Fellow of the Project Controls Institute… is a board-conferred recognition for distinguished professional contribution, leadership and service.
 
-**s3 · What it is · 18.73–24.99s**
+**s3 · What it is · 17.94–23.96s**
 
 > It involves NO examination — and is separate from P-C-I's examined certifications.
 
-**s3 · What it is · 24.99–31.69s**
+**s3 · What it is · 23.96–30.43s**
 
 > Every application is considered individually… and recognition is conferred solely at the Board's discretion.
 
-**s4 · Who may apply · 32.10–41.44s**
+**s4 · Who may apply · 30.76–39.76s**
 
 > It is intended for experienced leaders… whose impact spans project controls, cost engineering, finance, project management, or a closely related discipline.
 
-**s5 · Global industries · 41.84–49.10s**
+**s5 · Global industries · 40.10–47.10s**
 
 > Applicants come from infrastructure, energy, technology, aviation, project finance, government and academia.
 
-**s5 · Global industries · 49.10–53.13s**
+**s5 · Global industries · 47.10–50.97s**
 
 > And every sector where strong professional leadership shapes OUTCOMES.
 
-**s6 · Experience · 53.53–60.73s**
+**s6 · Experience · 51.30–58.24s**
 
 > To be considered, applicants need at least eight years of relevant experience… including three at managerial level.
 
-**s6 · Experience · 60.73–68.15s**
+**s6 · Experience · 58.24–65.40s**
 
 > And a demonstrable record of distinguished contribution. Meeting these criteria does not guarantee recognition.
 
-**s7 · Your evidence · 68.56–76.96s**
+**s7 · Your evidence · 65.73–73.82s**
 
 > Applicants provide a professional profile, résumé, qualifications, career history and evidence of contribution… for confidential review.
 
-**s7 · Your evidence · 76.96–82.25s**
+**s7 · Your evidence · 73.82–78.92s**
 
 > P-C-I charges no nomination, assessment or credential fee.
 
-**s8 · Recognition · 82.65–92.43s**
+**s8 · Recognition · 79.26–88.86s**
 
 > Those selected are recognised as an Honorary Fellow — recorded so anyone can verify it at source… and labelled honorary, never a passed examination.
 
-**s8 · Recognition · 92.43–100.05s**
+**s8 · Recognition · 88.86–101.46s**
 
-> Accepted applicants may also receive access to selected P-C-I learning resources, subject to programme terms.
+> Accepted applicants may also receive access to the P-C-I student portal, study through Certuvo, and invitations to selected P-C-I A-I events, subject to programme terms.
 
-**s9 · Discipline alignment · 100.45–106.94s**
+**s9 · Discipline alignment · 101.79–108.05s**
 
 > You may also indicate whether your contribution aligns with project controls, project finance, or project management.
 
-**s10 · Apply · 107.35–112.16s**
+**s10 · Apply · 108.38–113.02s**
 
 > If your leadership has advanced the profession… your contribution deserves consideration.
 
-**s10 · Apply · 112.16–118.59s**
+**s10 · Apply · 113.02–119.21s**
 
 > Apply for Honorary Fellow P-C-I at… P-C-I-A-I dot org.

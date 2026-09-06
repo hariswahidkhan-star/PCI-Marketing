@@ -21,8 +21,8 @@ AUD = os.path.normpath(os.path.join(HERE, '..', 'audio'))
 TRIM = os.path.join(AUD, 'trimmed')
 FFMPEG = os.environ.get('FFMPEG') or os.path.join(HERE, 'node_modules', 'ffmpeg-static', 'ffmpeg')
 
-LEAD, TAIL = 0.30, 0.95
-GAP_SCENE = 0.42        # the beat between scenes; also where the picture cuts
+LEAD, TAIL = 0.30, 0.85
+GAP_SCENE = 0.36        # the beat between scenes; also where the picture cuts
 
 # The brief specifies a 105-120s master. The read is measured first and the
 # picture follows it, so the only lever left is a uniform time-scale — applied
@@ -31,7 +31,7 @@ GAP_SCENE = 0.42        # the beat between scenes; also where the picture cuts
 # deep and deliberate, and past about 8% the read stops sounding that way, so
 # the build stops and asks for a copy trim rather than quietly shipping a
 # rushed one. Getting here already cost one round of exactly that trim.
-TARGET = 119.50
+TARGET = 120.00
 MAX_STRETCH = 1.08
 SILENCE_DB = '-38dB'
 MIN_SIL = 0.26          # a pause shorter than this is phrasing, not a boundary

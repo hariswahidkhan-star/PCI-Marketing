@@ -18,7 +18,7 @@ const errs=[]; pg.on('pageerror',e=>errs.push('PAGEERROR '+e.message));
 pg.on('console',m=>{if(m.type()==='error')errs.push('CONSOLE '+m.text())});
 await pg.goto(u.href,{waitUntil:'load'}); await pg.evaluate(()=>document.fonts.ready); await pg.waitForTimeout(200);
 // overflow audit across the whole timeline
-const bad = [], collide = [], chrome = [];
+const bad = [], collide = [], chrome = [], clipped = [];
 const DURP = await pg.evaluate(()=>window.__DUR);
 const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
   const TS=[]; for(let t=0.5;t<DURP;t+=0.5) TS.push(+t.toFixed(1));
@@ -110,11 +110,47 @@ const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
     return null;
   });
   if (ch) chrome.push(`t=${t}: ${ch}`);
+
+  // Clipped text: a leaf whose content is wider or taller than the box that
+  // paints it. The stage-overflow check above cannot see this — a card with
+  // overflow:hidden swallows the overrun silently and the film ships with a
+  // word cut in half. Found by a viewer, not by the audit, which is the wrong
+  // way round; hence this check.
+  const clip = await pg.evaluate(() => {
+    for (const el of document.querySelectorAll('#stage .shot *')) {
+      if (el.querySelector('*')) continue;
+      if (!el.textContent.trim()) continue;
+      if (!el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) continue;
+      const host = el.closest('.shot');
+      if (host && +getComputedStyle(host).opacity < 0.35) continue;
+      // walk up to the nearest ancestor that clips, and compare against it
+      let box = el.parentElement, clipper = null;
+      while (box && box.id !== 'stage') {
+        const o = getComputedStyle(box).overflow;
+        // .ln is the reveal mask: it clips its word on purpose while the word
+        // wipes up into view, so a word "past its edge" there is the animation
+        // in flight, not a layout fault. Every other clipper counts.
+        if ((o === 'hidden' || o === 'clip') && !box.classList.contains('ln')) { clipper = box; break; }
+        box = box.parentElement;
+      }
+      const r = el.getBoundingClientRect();
+      if (el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).whiteSpace === 'nowrap')
+        return `"${el.textContent.trim().slice(0, 30)}" wider than its own box by ${el.scrollWidth - el.clientWidth}px`;
+      if (clipper) {
+        const c = clipper.getBoundingClientRect();
+        if (r.right > c.right + 2.5 || r.bottom > c.bottom + 2.5 || r.left < c.left - 2.5)
+          return `"${el.textContent.trim().slice(0, 30)}" clipped by ${clipper.className || clipper.tagName} (${Math.round(r.right - c.right)}px past its edge)`;
+      }
+    }
+    return null;
+  });
+  if (clip) clipped.push(`t=${t}: ${clip}`);
   if ([8,24,38,55,70,86,98,112,125,140,155,170,178,192,210,229].includes(t)) await pg.locator('#stage').screenshot({path:path.join(OUT,`${tag}-t${String(t).padStart(2,'0')}.png`),animations:'disabled'});
 }
 console.log(tag+' errors: '+(errs.length?errs.join('\n  '):'none'));
 console.log(tag+' overflow: '+(bad.length?'\n  '+bad.join('\n  '):'none')+'  (transitions excluded)');
 console.log(tag+' caption collisions: '+(collide.length?'\n  '+collide.join('\n  '):'none')+`  (${TS.length} samples)`);
 console.log(tag+' chrome collisions: '+(chrome.length?'\n  '+chrome.join('\n  '):'none'));
-if (errs.length || bad.length || collide.length || chrome.length) process.exitCode = 1;
+console.log(tag+' clipped text: '+(clipped.length?'\n  '+clipped.join('\n  '):'none'));
+if (errs.length || bad.length || collide.length || chrome.length || clipped.length) process.exitCode = 1;
 await b.close();

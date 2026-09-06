@@ -108,7 +108,12 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 .card b{display:block;font-family:var(--display);font-weight:800;
   font-size:calc(2.85 * var(--s) * 1px);letter-spacing:-.02em;line-height:1;color:var(--fg)}
 .card span{display:block;margin-top:calc(.62 * var(--s) * 1px);font-size:calc(1.08 * var(--s) * 1px);
-  color:var(--cardsub);letter-spacing:.05em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+  color:var(--cardsub);letter-spacing:.05em;text-transform:uppercase;font-weight:600;line-height:1.35}
+/* No white-space:nowrap on a card subtitle, ever. The card is overflow:hidden for
+   its corner radius, so a subtitle wider than the card is not pushed out where
+   the stage-overflow audit would see it — it is cut mid-word, silently. That is
+   how "labelled honorary" shipped as "LABELLED HONORA". probe.mjs now checks for
+   text wider than its own box, and this rule is why it finds nothing. */
 
 /* numbered stat pair */
 .stats{display:flex;gap:calc(3.4 * var(--s) * 1px);justify-content:center;align-items:flex-start}
@@ -225,8 +230,24 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 #stage.sq .cards,#stage.pt .cards{flex-wrap:wrap}
 #stage.sq .card{min-width:calc(13 * var(--s) * 1px);padding:calc(1.3 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
 #stage.sq .card b,#stage.pt .card b{font-size:calc(2.3 * var(--s) * 1px)}
-#stage.sq .card span,#stage.pt .card span{white-space:normal}
 #stage.pt .roles{display:none}
+
+/* ---------- benefits grid ---------- */
+.cards.grid{flex-wrap:wrap;max-width:calc(74 * var(--s) * 1px);gap:calc(1.1 * var(--s) * 1px)}
+.cards.grid .card{width:calc(23.4 * var(--s) * 1px);min-width:0;
+  padding:calc(1.4 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
+.cards.grid .card b{font-size:calc(2.15 * var(--s) * 1px)}
+.cards.grid .card span{font-size:calc(1.0 * var(--s) * 1px)}
+/* The square stage's inner width is ~51 units, so two cards must come in under
+   that with their gap or the grid collapses to one per row and stacks five high
+   — up into the masthead and down under the caption. 24.5 x 2 + 1.1 fits. */
+#stage.sq .cards.grid{max-width:calc(51 * var(--s) * 1px);gap:calc(1.0 * var(--s) * 1px)}
+#stage.sq .cards.grid .card{width:calc(24.5 * var(--s) * 1px);padding:calc(1.1 * var(--s) * 1px) calc(1.3 * var(--s) * 1px)}
+#stage.sq .cards.grid .card b{font-size:calc(1.85 * var(--s) * 1px)}
+#stage.sq .cards.grid .card span{font-size:calc(.92 * var(--s) * 1px)}
+#stage.pt .cards.grid .card{padding:calc(1.1 * var(--s) * 1px) calc(1.4 * var(--s) * 1px)}
+#stage.pt .cards.grid .card b{font-size:calc(2.0 * var(--s) * 1px)}
+#stage.pt .cards.grid .card{width:calc(40 * var(--s) * 1px)}
 
 /* ---------- honorary gold ---------- */
 .eyebrow.gold{color:var(--gold)}
@@ -341,12 +362,14 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
   <!-- 8 · recognition -->
   <section class="shot" id="s8">
     <div class="eyebrow gold" data-a="1">If recognised</div>
-    <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
+    <div class="cards grid" style="margin-top:calc(2.3*var(--s)*1px)">
       <div class="card gold" data-a="1"><b>Honorary Fellow (PCI)</b><span>Board-conferred recognition</span></div>
+      <div class="card" data-a="1"><b>Student portal</b><span>Access credentials to the PCI student portal</span></div>
+      <div class="card" data-a="1"><b>Study via Certuvo</b><span>PCI's official preparation platform</span></div>
+      <div class="card" data-a="1"><b>PCI AI events</b><span>Invitations to selected events</span></div>
       <div class="card" data-a="1"><b>Verifiable at source</b><span>Checkable by anyone, labelled honorary</span></div>
-      <div class="card" data-a="1"><b>Selected resources</b><span>Access to PCI learning material</span></div>
     </div>
-    <div class="note" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">Subject to current programme terms. Honorary recognition is never a passed examination.</div>
+    <div class="note" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Subject to current programme terms. Honorary recognition is never a passed examination.</div>
   </section>
 
   <!-- 9 · discipline alignment -->
@@ -495,7 +518,7 @@ const CUES = {
   s5:[['.eyebrow',.16,0],['.tok',.46,.085],['.sub',2.6,0]],
   s6:[['.eyebrow',.16,0],['.stat',.44,.70],['.sub',2.4,0],['.note',3.6,0]],
   s7:[['.eyebrow',.16,0],['.col',.42,.85],['.sub',3.2,0],['.note',4.2,0]],
-  s8:[['.eyebrow',.18,0],['.card',.44,.90],['.note',3.6,0]],
+  s8:[['.eyebrow',.18,0],['.card',.44,.62],['.note',4.2,0]],
   s9:[['.eyebrow',.16,0],['.card',.40,.85],['.note',3.0,0]],
   s10:[['#markEnd',.20,0],['.eyebrow',.55,0],['h3 ',.95,0],['.url',1.6,0],['.legal',2.3,0]]
 };

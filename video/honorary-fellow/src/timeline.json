@@ -1,159 +1,159 @@
 {
-  "total": 119.5,
+  "total": 120.0,
   "segments": {
     "1": [
-      0.29,
-      3.1
+      0.28,
+      2.99
     ],
     "2": [
-      3.1,
-      8.21
+      2.99,
+      7.91
     ],
     "3": [
-      8.61,
-      18.33
+      8.24,
+      17.61
     ],
     "4": [
-      18.73,
-      24.99
+      17.94,
+      23.96
     ],
     "5": [
-      24.99,
-      31.69
+      23.96,
+      30.43
     ],
     "6": [
-      32.1,
-      41.44
+      30.76,
+      39.76
     ],
     "7": [
-      41.84,
-      49.1
+      40.1,
+      47.1
     ],
     "8": [
-      49.1,
-      53.13
+      47.1,
+      50.97
     ],
     "9": [
-      53.53,
-      60.73
+      51.3,
+      58.24
     ],
     "10": [
-      60.73,
-      68.15
+      58.24,
+      65.4
     ],
     "11": [
-      68.56,
-      76.96
+      65.73,
+      73.82
     ],
     "12": [
-      76.96,
-      82.25
+      73.82,
+      78.92
     ],
     "13": [
-      82.65,
-      92.43
+      79.26,
+      88.86
     ],
     "14": [
-      92.43,
-      100.05
+      88.86,
+      101.46
     ],
     "15": [
-      100.45,
-      106.94
+      101.79,
+      108.05
     ],
     "16": [
-      107.35,
-      112.16
+      108.38,
+      113.02
     ],
     "17": [
-      112.16,
-      118.59
+      113.02,
+      119.21
     ]
   },
   "captions": [
     [
-      0.29,
-      3.1,
+      0.28,
+      2.99,
       "Some professionals deliver\nsuccessful projects."
     ],
     [
-      3.1,
-      8.21,
+      2.99,
+      7.91,
       "Others leave a lasting mark on the people,\nstandards and industries around them."
     ],
     [
-      8.61,
-      18.33,
+      8.24,
+      17.61,
       "Honorary Fellow of the Project Controls\nInstitute is a board-conferred recognition\nfor distinguished professional\ncontribution, leadership and service."
     ],
     [
-      18.73,
-      24.99,
+      17.94,
+      23.96,
       "It involves no examination, and is separate\nfrom PCI's examined certifications."
     ],
     [
-      24.99,
-      31.69,
+      23.96,
+      30.43,
       "Every application is considered\nindividually, and recognition is conferred\nsolely at the Board's discretion."
     ],
     [
-      32.1,
-      41.44,
+      30.76,
+      39.76,
       "It is intended for experienced leaders\nwhose impact spans project controls, cost\nengineering, finance, project management\nor a closely related discipline."
     ],
     [
-      41.84,
-      49.1,
+      40.1,
+      47.1,
       "Applicants come from infrastructure,\nenergy, technology, aviation, project\nfinance, government and academia."
     ],
     [
-      49.1,
-      53.13,
+      47.1,
+      50.97,
       "And every sector where strong\nprofessional leadership shapes outcomes."
     ],
     [
-      53.53,
-      60.73,
+      51.3,
+      58.24,
       "To be considered, applicants need at\nleast eight years of relevant experience,\nincluding three at managerial level."
     ],
     [
-      60.73,
-      68.15,
+      58.24,
+      65.4,
       "And a demonstrable record of\ndistinguished contribution. Meeting these\ncriteria does not guarantee recognition."
     ],
     [
-      68.56,
-      76.96,
+      65.73,
+      73.82,
       "Applicants provide a professional\nprofile, r\u00e9sum\u00e9, qualifications,\ncareer history and evidence of\ncontribution, for confidential review."
     ],
     [
-      76.96,
-      82.25,
+      73.82,
+      78.92,
       "PCI charges no nomination,\nassessment or credential fee."
     ],
     [
-      82.65,
-      92.43,
+      79.26,
+      88.86,
       "Those selected are recognised as an\nHonorary Fellow \u2014 recorded so anyone\ncan verify it at source, and labelled\nhonorary, never a passed examination."
     ],
     [
-      92.43,
-      100.05,
-      "Accepted applicants may also receive\naccess to selected PCI learning\nresources, subject to programme terms."
+      88.86,
+      101.46,
+      "Accepted applicants may also receive access\nto the PCI student portal, study through\nCertuvo, and invitations to selected PCI AI\nevents, subject to programme terms."
     ],
     [
-      100.45,
-      106.94,
+      101.79,
+      108.05,
       "You may also indicate whether your\ncontribution aligns with project controls,\nproject finance or project management."
     ],
     [
-      107.35,
-      112.16,
+      108.38,
+      113.02,
       "If your leadership has advanced\nthe profession, your contribution\ndeserves consideration."
     ],
     [
-      112.16,
-      118.59,
+      113.02,
+      119.21,
       "Apply for Honorary Fellow PCI at pciai.org."
     ]
   ],
@@ -162,61 +162,61 @@
       "s1",
       "The question",
       0.0,
-      8.409
+      8.075
     ],
     [
       "s2",
       "The recognition",
-      8.409,
-      18.53
+      8.075,
+      17.772
     ],
     [
       "s3",
       "What it is",
-      18.53,
-      31.893
+      17.772,
+      30.593
     ],
     [
       "s4",
       "Who may apply",
-      31.893,
-      41.639
+      30.593,
+      39.929
     ],
     [
       "s5",
       "Global industries",
-      41.639,
-      53.328
+      39.929,
+      51.137
     ],
     [
       "s6",
       "Experience",
-      53.328,
-      68.356
+      51.137,
+      65.562
     ],
     [
       "s7",
       "Your evidence",
-      68.356,
-      82.45
+      65.562,
+      79.088
     ],
     [
       "s8",
       "Recognition",
-      82.45,
-      100.249
+      79.088,
+      101.626
     ],
     [
       "s9",
       "Discipline alignment",
-      100.249,
-      107.147
+      101.626,
+      108.217
     ],
     [
       "s10",
       "Apply",
-      107.147,
-      119.5
+      108.217,
+      120.0
     ]
   ]
 }

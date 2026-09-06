@@ -83,8 +83,8 @@ SCENES = [
  ('s8', 'Recognition', [
    ("Those selected are recognised as an Honorary Fellow — recorded so anyone can verify it at source, and labelled honorary, never a passed examination.",
     "Those selected are recognised as an Honorary Fellow — recorded so anyone can verify it at source… and labelled honorary, never a passed examination."),
-   ("Accepted applicants may also receive access to selected PCI learning resources, subject to programme terms.",
-    "Accepted applicants may also receive access to selected P-C-I learning resources, subject to programme terms."),
+   ("Accepted applicants may also receive access to the PCI student portal, study through Certuvo, and invitations to selected PCI AI events, subject to programme terms.",
+    "Accepted applicants may also receive access to the P-C-I student portal, study through Certuvo, and invitations to selected P-C-I A-I events, subject to programme terms."),
  ]),
  ('s9', 'Discipline alignment', [
    ("You may also indicate whether your contribution aligns with project controls, project finance or project management.",
