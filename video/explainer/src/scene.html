@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PCI AI — the explainer</title>
+<!-- Chaptered explainer on the brand system. Deterministic: window.seek(t).
+     SHOTS is injected by build.py from the measured narration cues. -->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;src:url(../../launch-15s/brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;src:url(../../launch-15s/brand/inter-latin.woff2) format('woff2')}
+:root{--ink:#0F172A;--crimson:#C13329;--blue:#1D4ED8;--magenta:#3B82F6;--mist:#94A3B8;--card:#111D33;
+  --display:'Archivo',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--s:1}
+*{box-sizing:border-box;margin:0;padding:0}html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:var(--ink);font-family:var(--sans);color:#fff;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+#glow{position:absolute;inset:-20%;background:radial-gradient(closest-side,rgba(37,99,235,.34),rgba(37,99,235,0) 70%)}
+#glow2{position:absolute;inset:-20%;background:radial-gradient(closest-side,rgba(193,51,41,.20),rgba(193,51,41,0) 70%)}
+#grid{position:absolute;inset:0;opacity:.5;background-image:linear-gradient(rgba(148,163,184,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.075) 1px,transparent 1px);background-size:calc(6*var(--s)*1px) calc(6*var(--s)*1px)}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 100%)}
+#topbar{position:absolute;z-index:5;display:flex;align-items:center;gap:calc(.85*var(--s)*1px);left:calc(5.2*var(--s)*1px);top:calc(4.4*var(--s)*1px)}
+#topbar img{width:calc(3.05*var(--s)*1px);height:calc(3.05*var(--s)*1px)}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.62*var(--s)*1px);letter-spacing:-.02em;line-height:1}
+#topbar .t em{font-style:normal;color:var(--magenta)}
+#topbar .s{font-family:var(--sans);font-weight:500;font-size:calc(.92*var(--s)*1px);color:#9FB2CC;letter-spacing:.055em;margin-top:calc(.25*var(--s)*1px)}
+/* chapter marker, top-right: "02 / 07 · THE OBJECTIVE" — the organising device */
+#chap{position:absolute;z-index:5;right:calc(5.2*var(--s)*1px);top:calc(4.9*var(--s)*1px);text-align:right;
+  font-family:var(--sans);font-weight:600;font-size:calc(1.05*var(--s)*1px);letter-spacing:.19em;text-transform:uppercase;color:#7FA9E8}
+#chap b{color:#fff;font-weight:700;margin-right:calc(.9*var(--s)*1px)}
+#prog{position:absolute;z-index:5;left:0;bottom:0;height:calc(.32*var(--s)*1px);background:linear-gradient(90deg,var(--crimson),var(--magenta));transform-origin:left}
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(12*var(--s)*1px) calc(9.5*var(--s)*1px) calc(14*var(--s)*1px);will-change:opacity}
+.shot.left{align-items:flex-start;text-align:left}
+.eyebrow{font-family:var(--sans);font-weight:600;font-size:calc(1.36*var(--s)*1px);letter-spacing:.19em;text-transform:uppercase;color:#E4785F;white-space:nowrap}
+.eyebrow.blue{color:#7FA9E8}
+.uline{height:calc(.42*var(--s)*1px);width:calc(7.2*var(--s)*1px);background:linear-gradient(90deg,var(--crimson),var(--magenta));border-radius:calc(.3*var(--s)*1px);transform-origin:center;margin:calc(1.5*var(--s)*1px) 0 calc(2*var(--s)*1px)}
+.shot.left .uline{transform-origin:left}
+h1{font-family:var(--display);font-weight:800;line-height:1.04;letter-spacing:-.023em;font-size:calc(5.2*var(--s)*1px)}
+h1.big{font-size:calc(6.3*var(--s)*1px)}h1.sm{font-size:calc(4.2*var(--s)*1px)}
+.ln{display:block;overflow:hidden;padding-bottom:calc(.55*var(--s)*1px)}.w{display:inline-block;will-change:transform,opacity}
+.sub{font-family:var(--sans);font-weight:400;color:#B9C6DA;font-size:calc(1.95*var(--s)*1px);line-height:1.5;margin-top:calc(1.9*var(--s)*1px);max-width:calc(66*var(--s)*1px)}
+.shot.left .sub{max-width:calc(58*var(--s)*1px)}
+/* credential cards */
+.chips{display:flex;gap:calc(1.55*var(--s)*1px);justify-content:center;margin-top:calc(.6*var(--s)*1px)}
+.chip{background:var(--card);border:calc(.115*var(--s)*1px) solid rgba(59,130,246,.42);padding:calc(1.75*var(--s)*1px) calc(2.35*var(--s)*1px);min-width:calc(15.4*var(--s)*1px);text-align:left;will-change:transform,opacity}
+.chip b{display:block;font-family:var(--display);font-weight:800;font-size:calc(3.05*var(--s)*1px);letter-spacing:-.02em;line-height:1}
+.chip span{display:block;margin-top:calc(.72*var(--s)*1px);font-size:calc(1.16*var(--s)*1px);color:#8FA6C4;letter-spacing:.055em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+.chip.on{border-color:var(--magenta);box-shadow:0 0 0 calc(.115*var(--s)*1px) rgba(59,130,246,.35)}
+.card{display:flex;gap:calc(4*var(--s)*1px);align-items:flex-start;width:100%;max-width:calc(78*var(--s)*1px)}
+.card .code{flex:0 0 calc(24*var(--s)*1px);background:var(--card);border:calc(.115*var(--s)*1px) solid var(--magenta);padding:calc(2.4*var(--s)*1px) calc(2.2*var(--s)*1px)}
+.card .code b{display:block;font-family:var(--display);font-weight:800;font-size:calc(4.6*var(--s)*1px);letter-spacing:-.025em;line-height:1}
+.card .code i{display:block;font-style:normal;margin-top:calc(1*var(--s)*1px);font-size:calc(1.05*var(--s)*1px);color:#8FA6C4;letter-spacing:.055em;text-transform:uppercase;font-weight:600;line-height:1.45}
+.card .code em{display:inline-block;margin-top:calc(1.2*var(--s)*1px);font-style:normal;font-size:calc(.95*var(--s)*1px);color:#E4785F;letter-spacing:.19em;text-transform:uppercase;font-weight:600}
+.card .body h2{font-family:var(--display);font-weight:800;font-size:calc(2.9*var(--s)*1px);letter-spacing:-.02em;line-height:1.12}
+.card .body .who{font-family:var(--sans);color:#B9C6DA;font-size:calc(1.75*var(--s)*1px);line-height:1.55;margin-top:calc(1.4*var(--s)*1px)}
+.card .body ul{list-style:none;margin-top:calc(1.6*var(--s)*1px);display:grid;grid-template-columns:1fr 1fr;gap:calc(.5*var(--s)*1px) calc(2*var(--s)*1px)}
+.card .body li{font-size:calc(1.35*var(--s)*1px);color:#DCE6F5;padding-left:calc(1.4*var(--s)*1px);position:relative;line-height:1.45}
+.card .body li::before{content:"";position:absolute;left:0;top:calc(.62*var(--s)*1px);width:calc(.55*var(--s)*1px);height:calc(.55*var(--s)*1px);background:var(--magenta);border-radius:50%}
+/* weighting bar */
+.bar{display:flex;width:calc(60*var(--s)*1px);height:calc(2.6*var(--s)*1px);margin-top:calc(2.4*var(--s)*1px);border-radius:calc(.4*var(--s)*1px);overflow:hidden}
+.bar div{display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:calc(1.25*var(--s)*1px);color:#fff;transform-origin:left}
+.legend{display:flex;gap:calc(3*var(--s)*1px);margin-top:calc(1.2*var(--s)*1px);font-size:calc(1.15*var(--s)*1px);color:#B9C6DA;letter-spacing:.03em}
+.legend i{display:inline-block;width:calc(.9*var(--s)*1px);height:calc(.9*var(--s)*1px);margin-right:calc(.6*var(--s)*1px);border-radius:2px;vertical-align:middle}
+.facts{display:flex;gap:calc(2.6*var(--s)*1px);margin-top:calc(2.2*var(--s)*1px)}
+.fact{background:var(--card);border:calc(.115*var(--s)*1px) solid rgba(59,130,246,.35);padding:calc(1.5*var(--s)*1px) calc(2.2*var(--s)*1px);text-align:left}
+.fact b{display:block;font-family:var(--display);font-weight:800;font-size:calc(3.2*var(--s)*1px);line-height:1}
+.fact span{display:block;margin-top:calc(.6*var(--s)*1px);font-size:calc(1.05*var(--s)*1px);color:#8FA6C4;letter-spacing:.055em;text-transform:uppercase;font-weight:600}
+#mark{width:calc(9.5*var(--s)*1px);height:calc(9.5*var(--s)*1px)}
+.wordmark{font-family:var(--display);font-weight:800;letter-spacing:-.022em;font-size:calc(4.5*var(--s)*1px);margin-top:calc(1.6*var(--s)*1px)}.wordmark em{font-style:normal;color:var(--magenta)}
+.url{font-family:var(--sans);font-weight:600;font-size:calc(1.5*var(--s)*1px);letter-spacing:.06em;color:#9FC0F0;margin-top:calc(1.5*var(--s)*1px)}
+.legal{font-family:var(--sans);font-size:calc(1.05*var(--s)*1px);color:#C3D2E6;line-height:1.6;max-width:calc(66*var(--s)*1px);margin-top:calc(2.2*var(--s)*1px)}
+.quote{font-family:var(--sans);font-style:italic;color:#B9C6DA;font-size:calc(1.72*var(--s)*1px);margin-top:calc(1.2*var(--s)*1px)}
+</style></head>
+<body><div id="stage">
+<div id="glow"></div><div id="glow2"></div><div id="grid"></div>
+<div id="topbar"><img src="../../launch-15s/brand/logo.svg" alt=""><div><div class="t">PCI <em>AI</em></div><div class="s">PROJECT CONTROLS INSTITUTE</div></div></div>
+<div id="chap"></div>
+
+<div class="shot" id="s0"><img id="mark" src="../../launch-15s/brand/logo.svg" alt="" data-a><div class="wordmark" data-a>PCI <em>AI</em></div><div class="url" data-a style="color:#B9C6DA;letter-spacing:.19em;text-transform:uppercase;font-size:calc(1.2*var(--s)*1px)">The Project Controls Institute</div></div>
+
+<div class="shot left" id="s1"><div class="eyebrow" data-a>01 · Why PCI exists</div><div class="uline" data-r></div>
+<h1><span class="ln"><span class="w">Numbers</span> <span class="w">someone</span> <span class="w">has</span> <span class="w">to</span></span><span class="ln"><span class="w">be</span> <span class="w">accountable</span> <span class="w">for.</span></span></h1>
+<div class="sub" data-a>AI can produce them in seconds — and be confidently wrong. Project controls needed a standard, a credential and a professional home, built for the AI era.</div></div>
+
+<div class="shot left" id="s2"><div class="eyebrow blue" data-a>02 · The objective</div><div class="uline" data-r></div>
+<h1 class="sm"><span class="ln"><span class="w">One</span> <span class="w">integrated</span> <span class="w">discipline.</span></span><span class="ln"><span class="w">One</span> <span class="w">AI-ready</span> <span class="w">standard.</span></span></h1>
+<div class="sub" data-a>Certify project controls, cost engineering and project finance to a single, modern standard — and become the global professional institute for project controls and AI-enabled project delivery.</div></div>
+
+<div class="shot" id="s3"><div class="eyebrow blue" data-a>03 · The principle</div><div class="uline" data-r></div>
+<h1 class="big"><span class="ln"><span class="w">AI</span> <span class="w">proposes.</span></span><span class="ln"><span class="w">The</span> <span class="w">professional</span> <span class="w">disposes.</span></span></h1>
+<div class="sub" data-a>Accountability, judgement and integrity remain human.</div></div>
+
+<div class="shot" id="s4"><div class="eyebrow" data-a>04 · The credentials</div><div class="uline" data-r></div>
+<div class="chips"><div class="chip" data-a><b>PCL-AI</b><span>Project Controls</span></div><div class="chip" data-a><b>PFL-AI</b><span>Project Finance</span></div><div class="chip" data-a><b>PML-AI</b><span>Project Management</span></div></div>
+<div class="sub" data-a>Three credentials. One suite. One standard.</div></div>
+
+<div class="shot left" id="s5"><div class="eyebrow" data-a>04 · The credentials — 1 of 3</div><div class="uline" data-r></div>
+<div class="card" data-a><div class="code"><b>PCL-AI</b><i>PCI AI Project<br>Controls Leader</i><em>Flagship</em></div>
+<div class="body"><h2>Project controls, cost and planning leaders</h2><div class="who">Those who govern schedule, cost, risk, forecasting and performance — with the governed use of AI.</div>
+<ul><li>Schedule &amp; planning</li><li>Cost control</li><li>Forecasting &amp; EVM</li><li>Risk</li><li>Performance</li><li>Governed AI</li></ul></div></div></div>
+
+<div class="shot left" id="s6"><div class="eyebrow" data-a>04 · The credentials — 2 of 3</div><div class="uline" data-r></div>
+<div class="card" data-a><div class="code"><b>PFL-AI</b><i>PCI AI Project<br>Finance Leader</i></div>
+<div class="body"><h2>Those who structure, model, finance or advise</h2><div class="who">Analysts, lenders, developers and advisers on infrastructure and capital projects.</div>
+<ul><li>Investment appraisal</li><li>Financial modelling</li><li>Capital structure</li><li>Coverage ratios · DSCR / LLCR / PLCR</li><li>Bankability · PPP &amp; concessions</li><li>Financial close · AI-enabled analysis</li></ul></div></div></div>
+
+<div class="shot left" id="s7"><div class="eyebrow" data-a>04 · The credentials — 3 of 3</div><div class="uline" data-r></div>
+<div class="card" data-a><div class="code"><b>PML-AI</b><i>PCI Project Management<br>Leader – AI</i></div>
+<div class="body"><h2>Project and delivery leaders, end to end</h2><div class="who">Initiation, governance, planning, execution and closure — across predictive, agile and hybrid approaches.</div>
+<ul><li>Initiation &amp; governance</li><li>Planning</li><li>Execution</li><li>Closure</li><li>Predictive · agile · hybrid</li><li>Leadership &amp; delivery</li></ul></div></div></div>
+
+<div class="shot" id="s8"><div class="eyebrow blue" data-a>05 · The standard</div><div class="uline" data-r></div>
+<div class="facts" data-a><div class="fact"><b>13</b><span>Domains</span></div><div class="fact"><b>61</b><span>Knowledge areas</span></div><div class="fact"><b>1</b><span>Standard</span></div></div>
+<div class="bar" data-a><div style="flex:40;background:#1D4ED8">40%</div><div style="flex:40;background:#3B82F6">40%</div><div style="flex:20;background:#C13329">20%</div></div>
+<div class="legend" data-a><span><i style="background:#1D4ED8"></i>Project accounting &amp; finance</span><span><i style="background:#3B82F6"></i>Project management principles</span><span><i style="background:#C13329"></i>AI knowledge &amp; practice</span></div>
+<div class="sub" data-a>Scenario-based examination · judgement, not recall</div></div>
+
+<div class="shot" id="s9"><div class="eyebrow" data-a>06 · Open by design</div><div class="uline" data-r></div>
+<h1><span class="ln"><span class="w">Three</span> <span class="w">years'</span> <span class="w">experience.</span></span><span class="ln"><span class="w">Any</span> <span class="w">field.</span></span></h1>
+<div class="sub" data-a>No degree barrier · assessed on capability</div></div>
+
+<div class="shot" id="s10"><div class="eyebrow" data-a>07 · Where we stand</div><div class="uline" data-r></div>
+<h1 class="sm"><span class="ln"><span class="w">Founding</span> <span class="w">stage.</span></span><span class="ln"><span class="w">Not</span> <span class="w">yet</span> <span class="w">accredited.</span></span></h1>
+<div class="sub" data-a>Developed with reference to ISO/IEC 17024 principles · building toward formal accreditation · enrolment open, examinations forthcoming</div></div>
+
+<div class="shot" id="s11"><img id="mark2" src="../../launch-15s/brand/logo.svg" alt="" data-a style="width:calc(9.5*var(--s)*1px);height:calc(9.5*var(--s)*1px)"><div class="wordmark" data-a>PCI <em>AI</em></div>
+<div class="quote" data-a>"AI proposes. The professional disposes."</div><div class="url" data-a>pciai.org &nbsp;|&nbsp; projectcontrolsinstitute.org</div>
+<div class="legal" data-a>Project Controls Institute Global, Inc. · A Delaware Non-Stock Corporation. Intends to seek 501(c)(3) recognition; not yet granted. Not accredited by ANAB, IAS or any ISO/IEC 17024 accreditation body.</div></div>
+
+<div id="prog"></div><div id="vig"></div>
+</div>
+<script>
+const q=new URLSearchParams(location.search);const W=+(q.get('w')||1920),H=+(q.get('h')||1080);
+const st=document.getElementById('stage');st.style.width=W+'px';st.style.height=H+'px';
+document.documentElement.style.setProperty('--s',(W/100).toFixed(4));
+const SHOTS=/*SHOTS*/[["s0", 0.0, 5.29], ["s1", 5.29, 25.41], ["s2", 25.41, 42.12], ["s3", 42.12, 53.01], ["s4", 53.01, 58.34], ["s5", 58.34, 75.42], ["s6", 75.42, 95.25], ["s7", 95.25, 111.88], ["s8", 111.88, 132.08], ["s9", 132.08, 139.38], ["s10", 139.38, 157.34], ["s11", 157.34, 167.84]];const DUR=/*DUR*/167.84;window.__DUR=DUR;
+const CH={s1:['01','WHY PCI EXISTS'],s2:['02','THE OBJECTIVE'],s3:['03','THE PRINCIPLE'],s4:['04','THE CREDENTIALS'],s5:['04','PCL-AI'],s6:['04','PFL-AI'],s7:['04','PML-AI'],s8:['05','THE STANDARD'],s9:['06','OPEN BY DESIGN'],s10:['07','WHERE WE STAND']};
+const XF=0.34,els=SHOTS.map(([id])=>document.getElementById(id));
+const chap=document.getElementById('chap'),prog=document.getElementById('prog'),topbar=document.getElementById('topbar'),glow=document.getElementById('glow');
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),ease=p=>1-Math.pow(1-clamp(p,0,1),3);
+window.seek=function(t){
+  let cur=null;
+  SHOTS.forEach(([id,a,b],i)=>{const el=els[i];const fin=ease((t-a)/XF),fout=1-ease((t-(b-XF))/XF);
+    const vis=(t>=a-XF&&t<=b+XF)?clamp(Math.min(fin,fout),0,1):0;el.style.opacity=vis.toFixed(3);if(vis<=0)return;if(t>=a&&t<b)cur=id;const l=t-a;
+    el.querySelectorAll('.w').forEach((w,k)=>{const p=ease((l-(0.16+k*0.075))/0.52);w.style.transform='translateY('+((1-p)*108).toFixed(2)+'%)';w.style.opacity=p.toFixed(3);});
+    el.querySelectorAll('[data-r]').forEach(n=>{n.style.transform='scaleX('+ease((l-0.10)/0.46).toFixed(3)+')';});
+    el.querySelectorAll('[data-a]').forEach((n,k)=>{const p=ease((l-(0.06+k*0.13))/0.58);n.style.opacity=p.toFixed(3);n.style.transform='translateY('+((1-p)*1.1).toFixed(3)+'vh)';});
+    el.querySelectorAll('.bar div').forEach((n,k)=>{n.style.transform='scaleX('+ease((l-(0.5+k*0.25))/0.9).toFixed(3)+')';});
+  });
+  const c=cur&&CH[cur];chap.innerHTML=c?`<b>${c[0]} / 07</b>${c[1]}`:'';
+  chap.style.opacity=c?1:0;
+  const endA=SHOTS[SHOTS.length-1][1],startB=SHOTS[0][2];
+  const furn=Math.min(ease((t-(startB-XF))/XF),1-ease((t-(endA-XF))/XF));
+  topbar.style.opacity=furn.toFixed(3);prog.style.opacity=furn.toFixed(3);
+  prog.style.width=(100*clamp(t/DUR,0,1)).toFixed(2)+'%';
+  glow.style.transform=`translate(${(Math.sin(t*0.21)*3).toFixed(2)}%, ${(Math.cos(t*0.17)*2.5).toFixed(2)}%)`;
+};window.seek(+(q.get('t')||0));
+</script></body></html>
