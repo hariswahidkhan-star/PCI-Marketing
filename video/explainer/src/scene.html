@@ -65,6 +65,27 @@ h1.big{font-size:calc(6.3*var(--s)*1px)}h1.sm{font-size:calc(4.2*var(--s)*1px)}
 .url{font-family:var(--sans);font-weight:600;font-size:calc(1.5*var(--s)*1px);letter-spacing:.06em;color:#9FC0F0;margin-top:calc(1.5*var(--s)*1px)}
 .legal{font-family:var(--sans);font-size:calc(1.05*var(--s)*1px);color:#C3D2E6;line-height:1.6;max-width:calc(66*var(--s)*1px);margin-top:calc(2.2*var(--s)*1px)}
 .quote{font-family:var(--sans);font-style:italic;color:#B9C6DA;font-size:calc(1.72*var(--s)*1px);margin-top:calc(1.2*var(--s)*1px)}
+
+/* ---------- light theme: the site's own ground. --paper #FFFFFF, --ink #0F172A, --line #E3E8EF ---------- */
+[data-theme=light] #stage{background:#FFFFFF;color:#0F172A}
+[data-theme=light] #glow{background:radial-gradient(closest-side,rgba(37,99,235,.13),rgba(37,99,235,0) 70%)}
+[data-theme=light] #glow2{background:radial-gradient(closest-side,rgba(193,51,41,.07),rgba(193,51,41,0) 70%)}
+[data-theme=light] #grid{opacity:1;background-image:linear-gradient(rgba(15,23,42,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.055) 1px,transparent 1px)}
+[data-theme=light] #vig{background:radial-gradient(ellipse at 50% 45%,rgba(15,23,42,0) 55%,rgba(15,23,42,.07) 100%)}
+[data-theme=light] #topbar .t{color:#0F172A}[data-theme=light] #topbar .s{color:#64748B}
+[data-theme=light] #chap{color:#1D4ED8}[data-theme=light] #chap b{color:#0F172A}
+[data-theme=light] .eyebrow{color:#C13329}[data-theme=light] .eyebrow.blue{color:#1D4ED8}
+[data-theme=light] h1{color:#0F172A}[data-theme=light] .sub{color:#475569}
+[data-theme=light] .chip,[data-theme=light] .fact,[data-theme=light] .card .code{background:#F8FAFC;border-color:#E3E8EF}
+[data-theme=light] .chip.on,[data-theme=light] .card .code{border-color:#3B82F6}
+[data-theme=light] .chip b,[data-theme=light] .fact b,[data-theme=light] .card .code b,[data-theme=light] .card .body h2{color:#0F172A}
+[data-theme=light] .chip span,[data-theme=light] .fact span,[data-theme=light] .card .code i{color:#64748B}
+[data-theme=light] .card .code em{color:#C13329}
+[data-theme=light] .card .body .who{color:#475569}[data-theme=light] .card .body li{color:#0F172A}
+[data-theme=light] .legend{color:#475569}[data-theme=light] .bar div{color:#fff}
+[data-theme=light] .wordmark{color:#0F172A}[data-theme=light] .url{color:#1D4ED8}
+[data-theme=light] .legal{color:#64748B}[data-theme=light] .quote{color:#475569}
+[data-theme=light] #s0 .url{color:#475569}
 </style></head>
 <body><div id="stage">
 <div id="glow"></div><div id="glow2"></div><div id="grid"></div>
@@ -126,6 +147,7 @@ h1.big{font-size:calc(6.3*var(--s)*1px)}h1.sm{font-size:calc(4.2*var(--s)*1px)}
 </div>
 <script>
 const q=new URLSearchParams(location.search);const W=+(q.get('w')||1920),H=+(q.get('h')||1080);
+if(q.get('theme'))document.documentElement.dataset.theme=q.get('theme');
 const st=document.getElementById('stage');st.style.width=W+'px';st.style.height=H+'px';
 document.documentElement.style.setProperty('--s',(W/100).toFixed(4));
 const SHOTS=/*SHOTS*/[["s0", 0.0, 5.29], ["s1", 5.29, 25.41], ["s2", 25.41, 42.12], ["s3", 42.12, 53.01], ["s4", 53.01, 58.34], ["s5", 58.34, 75.42], ["s6", 75.42, 95.25], ["s7", 95.25, 111.88], ["s8", 111.88, 132.08], ["s9", 132.08, 139.38], ["s10", 139.38, 157.34], ["s11", 157.34, 167.84]];const DUR=/*DUR*/167.84;window.__DUR=DUR;

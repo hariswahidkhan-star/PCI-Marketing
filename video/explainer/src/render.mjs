@@ -42,6 +42,7 @@ const OUT = path.resolve(HERE, arg('out', '../build/frames'));
 const scene = pathToFileURL(path.join(HERE, 'scene.html'));
 scene.searchParams.set('w', W);
 scene.searchParams.set('h', H);
+const THEME=arg('theme',''); if (THEME) scene.searchParams.set('theme', THEME);
 const NAME = arg('name', '');
 if (NAME) scene.searchParams.set('name', NAME);
 

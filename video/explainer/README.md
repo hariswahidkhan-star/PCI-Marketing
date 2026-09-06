@@ -1,7 +1,10 @@
 # PCI AI — the explainer
 
 A chaptered film: why PCI exists, what its objective is, and what each of the
-three credentials is for. 2:48, 1920×1080, on the brand system.
+three credentials is for. 2:48, 1920×1080, on the brand system — **light**, on
+the site's own ground (`--paper #FFFFFF`, `--ink #0F172A`, `--line #E3E8EF`),
+because that is what the public site is. The navy treatment the other films use
+is the alternate: render without `--theme light`.
 
 | | |
 |---|---|
@@ -48,7 +51,7 @@ same numbers as the voice. Change a take and the whole film re-times itself.
 ## Rebuilding
 
 ```bash
-cd src && node render.mjs --w 1920 --h 1080 --fps 25 --out ../build/frames
+cd src && node render.mjs --w 1920 --h 1080 --fps 25 --theme light --out ../build/frames
 ```
 
 then mix `build/voice-bed.wav` with `vo/score.mp3` (voice at −16 LUFS, score at
