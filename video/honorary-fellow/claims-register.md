@@ -93,7 +93,26 @@ Pages used, all under `PCI/backend/wwwroot/`:
 |---|---|---|
 | C1 | Invitations to selected PCI AI events for accepted applicants | **Instructed by PCI after the first cut; not on any honorary page.** Included as *"invitations to selected PCI AI events, subject to programme terms"*. **The application page's "If your application is successful" paragraph should say this before the film is published**, or the film says more than the terms do. |
 | C2 | "Books and video lectures" at Certuvo | **Not stated on the site.** The site describes Certuvo as *"structured study and realistic scenario practice"*. The film says *"study material through Certuvo"* and the card reads *"PCI's official preparation platform"* — the supported wording. |
+| C4 | "Video lectures" as a learning resource for accepted applicants | **Instructed by PCI; not on any page.** The site says *"the Institute's learning resources and study materials"* and *"official study materials aligned to each certification's body of knowledge"*. Included as instructed, subject to programme terms; the application page should name it before publication. |
+| C5 | A "simulation lab" | **Instructed by PCI; not on any page.** The nearest supported wording is Certuvo's *"structured study and realistic scenario practice"*; "simulation" appears on the site only as the Monte Carlo technique inside the Body of Knowledge. Included as instructed, subject to programme terms; same publication condition as C4. |
+| C6 | "Course material" | **Supported as a plain-language rendering** of *"study materials"* (HA, and the downloads centre). |
 | C3 | "Enhance career" | **Declined.** The brief itself forbids guaranteeing employment, promotion, salary improvement or third-party acceptance, and PCI's own site-wide disclosure says the same. No career-outcome language appears anywhere in the film. |
+
+### The institution (for the authority scene)
+
+All from `PCI/backend/wwwroot/` — `mission-vision.html`, `certification-integrity.html`, the site-wide footer, and the rows already verified in `../explainer/claims-register.md`.
+
+| # | Claim | Source | Quote |
+|---|---|---|---|
+| I1 | PCI exists to give project controls a standard, a credential and a professional home, built for the AI era | mission-vision | *"PCI exists to give project controls a standard, a credential and a professional home — built for the AI era."* |
+| I2 | An independent certifying body; a Delaware Non-Stock Corporation | site-wide footer (219 pages) | *"An independent professional body — a Delaware Non-Stock Corporation"* |
+| I3 | Its integrity safeguards: secure proctored exams, verified identity, impartial decisions, enforced ethics, a verifiable registry | certification-integrity | *"secure exams, verified identity, impartial decisions, enforced ethics and a verifiable registry"* |
+| I4 | Preparation is separated from assessment | certification-integrity; footer | *"separate training from assessment"*; *"PCI sets and owns the standard and examination; Certuvo provides preparation"* |
+| I5 | A Code of Ethics, an impartiality policy and a conflict-of-interest policy | 26 / 217 / 217 pages | policy pages linked site-wide |
+| I6 | A published Body of Knowledge: thirteen domains, sixty-one knowledge areas, weighted 40/40/20 | body-of-knowledge (see explainer register) | *"thirteen domains, sixty-one Knowledge Areas, weighted 40/40/20"* |
+| I7 | Framework developed **with reference to** ISO/IEC 17024 — and **not accredited** by ANAB, IAS or any ISO/IEC 17024 body | site-wide footer (218 pages) | *"PCI is not currently accredited by ANAB, IAS, or any ISO/IEC 17024 accreditation body — its certification framework is being developed with reference to ISO/IEC 17024 personnel-certification principles."* — **if the film mentions 17024 it must say both halves** |
+| I8 | Registry-first: every credential and every honorary award can be checked at source | DBR | *"built registry-first deliberately… Every PCL-AI credential, and every honorary award, can be checked on the verification page"* |
+| I9 | "AI proposes. The professional disposes." | site-wide slogan (216 pages) | schema `slogan` |
 
 ### Discipline alignment
 
