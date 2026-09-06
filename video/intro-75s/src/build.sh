@@ -34,6 +34,23 @@ mkdir -p "$BUILD" "$DIST"
 echo "==> score"
 python3 music.py "$BUILD/score.wav"
 
+# Mix: the score sits under the voice, side-chained so it steps back only while
+# the voice is actually speaking rather than being flatly attenuated throughout.
+VO="../audio/vo-track.wav"
+AUDIO="$BUILD/score.wav"
+if [[ -f "$VO" ]]; then
+  echo "==> mix voiceover + score"
+  "$FFMPEG" -hide_banner -loglevel error -y -i "$BUILD/score.wav" -i "$VO" \
+    -filter_complex "[0:a]volume=0.62[bed];\
+[bed][1:a]sidechaincompress=threshold=0.045:ratio=7:attack=12:release=300[duck];\
+[duck][1:a]amix=inputs=2:normalize=0:duration=longest,\
+loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.95[mix]" \
+    -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
+  AUDIO="$BUILD/mixed.wav"
+else
+  echo "==> no voice track at $VO — encoding with score only"
+fi
+
 echo "==> captions (single source: vo.py -> srt + vtt + burned-in)"
 python3 vo.py
 
@@ -53,7 +70,7 @@ done
 
 # $1 frame dir  $2 output  $3 crf  $4 audio(1/0)
 encode () {
-  local a=(); [[ "$4" == 1 ]] && a=(-i "$BUILD/score.wav" -map 0:v -map 1:a -c:a aac -b:a 192k -ar 48000 -ac 2 -shortest) || a=(-map 0:v -an)
+  local a=(); [[ "$4" == 1 ]] && a=(-i "$AUDIO" -map 0:v -map 1:a -c:a aac -b:a 192k -ar 48000 -ac 2 -shortest) || a=(-map 0:v -an)
   "$FFMPEG" -hide_banner -loglevel error -y -framerate "$FPS" -i "$BUILD/$1/%05d.png" "${a[@]}" \
     -c:v libx264 -preset slow -crf "$3" -pix_fmt yuv420p -profile:v high -level 4.1 \
     -movflags +faststart "$DIST/$2"
@@ -79,5 +96,7 @@ cp "$BUILD/f-16x9-clean/$thumb.png"  "$DIST/$NAME-thumbnail-1920x1080.png"
 
 cp ../captions/*.srt ../captions/*.vtt "$DIST/" 2>/dev/null || true
 cp "$BUILD/score.wav" "$DIST/$NAME-score.wav"
+[[ -f "$VO" ]] && cp "$VO" "$DIST/$NAME-voiceover.wav"
+[[ -f "$BUILD/mixed.wav" ]] && cp "$BUILD/mixed.wav" "$DIST/$NAME-mixed-soundtrack.wav"
 
 echo; ls -la "$DIST"

@@ -1,76 +1,76 @@
 1
-00:00:00,250 --> 00:00:02,580
+00:00:00,250 --> 00:00:02,210
 Every major project begins with ambition.
 
 2
-00:00:02,820 --> 00:00:08,250
+00:00:02,390 --> 00:00:07,550
 Turning that ambition into a
 controlled, financeable and deliverable
 outcome requires more than information.
 
 3
-00:00:08,750 --> 00:00:13,010
+00:00:07,950 --> 00:00:12,300
 Project professionals must connect scope,
 schedule, cost, finance, risk and performance
 
 4
-00:00:13,250 --> 00:00:16,350
+00:00:12,480 --> 00:00:15,740
 while making accountable decisions in
 increasingly complex environments.
 
 5
-00:00:16,850 --> 00:00:21,590
+00:00:16,140 --> 00:00:21,810
 Artificial intelligence can accelerate
 analysis, identify patterns, compare
 scenarios and support forecasting.
 
 6
-00:00:21,830 --> 00:00:26,650
+00:00:21,990 --> 00:00:26,310
 But a convincing AI output is not
 automatically a reliable project decision.
 
 7
-00:00:27,150 --> 00:00:31,090
+00:00:26,710 --> 00:00:31,970
 Responsible adoption requires verified data,
 transparent assumptions, meaningful human review,
 
 8
-00:00:31,330 --> 00:00:36,050
+00:00:32,150 --> 00:00:35,650
 clear decision rights and an evidence trail
 that can withstand professional challenge.
 
 9
-00:00:36,550 --> 00:00:41,300
+00:00:36,050 --> 00:00:43,240
 PCI AI — Project Controls Institute Global
 — focuses on the professional competence
 
 10
-00:00:41,540 --> 00:00:47,150
+00:00:43,420 --> 00:00:49,790
 needed to govern AI-supported work across project
 controls, project finance and project management.
 
 11
-00:00:47,650 --> 00:00:51,990
+00:00:50,190 --> 00:00:55,220
 Its professional credential framework
 includes PCL-AI for project controls,
 
 12
-00:00:52,230 --> 00:00:57,350
+00:00:55,400 --> 00:01:01,460
 PFL-AI for project finance and
 PML-AI for project management.
 
 13
-00:00:57,850 --> 00:01:02,670
+00:01:01,860 --> 00:01:05,240
 The future of project delivery will
 not be defined by technology alone.
 
 14
-00:01:02,910 --> 00:01:10,550
+00:01:05,420 --> 00:01:10,730
 It will be shaped by professionals who
 know when to trust, when to challenge
 and how to remain accountable.
 
 15
-00:01:11,050 --> 00:01:14,750
+00:01:11,130 --> 00:01:14,400
 Discover PCI AI at pciai.org
 

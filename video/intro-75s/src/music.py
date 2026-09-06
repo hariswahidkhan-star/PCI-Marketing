@@ -30,9 +30,9 @@ DUR = 75.0
 N = int(SR * DUR)
 
 # Cut list — must stay in step with SHOTS in scene.html.
-CUTS = [0.00, 8.50, 16.60, 26.90, 36.30, 47.40, 57.60, 70.80]
-LIGHT_IN = 57.60   # the harmonic lift, with the visual inversion
-ENDCARD = 70.80
+CUTS = [0.00, 7.75, 15.94, 26.51, 35.85, 49.99, 61.66, 70.93]
+LIGHT_IN = 61.66   # the harmonic lift, with the visual inversion
+ENDCARD = 70.93
 
 
 def hz(semitones_from_a4: float) -> float:
@@ -109,7 +109,7 @@ def render():
 
         # ---- upper voice: enters on the identity shot ---------------------
         upper = (0.16 * math.sin(tau * D5 * t + 0.3) + 0.10 * math.sin(tau * A4 * t))
-        upper *= swell(t, 36.30, 2.4, 999.0, 0.0) * (0.55 + 0.45 * math.sin(tau * 0.075 * t))
+        upper *= swell(t, 35.85, 2.4, 999.0, 0.0) * (0.55 + 0.45 * math.sin(tau * 0.075 * t))
         upper *= (1.0 - 0.45 * lift)   # step back so the light scene stays open
 
         # ---- bells on the cuts --------------------------------------------
@@ -125,7 +125,7 @@ def render():
                            + 0.05 * math.sin(tau * f * 3.01 * t))
 
         # ---- a single low swell under the closing statement ---------------
-        close = 0.20 * math.sin(tau * A2 * t + 0.9) * swell(t, 57.20, 1.8, 8.0, 3.0)
+        close = 0.20 * math.sin(tau * A2 * t + 0.9) * swell(t, 61.26, 1.8, 8.0, 3.0)
 
         # ---- sum, shape, place --------------------------------------------
         env_master = fade(t / 2.5) * (1.0 - fade((t - (DUR - 2.2)) / 2.2))

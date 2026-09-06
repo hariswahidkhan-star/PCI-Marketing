@@ -10,7 +10,7 @@ I would actually recommend.
 
 ---
 
-### A. Synthesise the voiceover — **recommended**
+### A. Synthesise the voiceover — ✅ **DONE** (approved and delivered)
 
 | | |
 |---|---|
@@ -19,6 +19,7 @@ I would actually recommend.
 | **Expected cost** | **1,227 characters.** On most ElevenLabs tiers 1 character = 1 credit, so ≈ **1,227 credits**. Your workspace quota was not exposed by the API, so this is the character count — accurate — and the credit conversion — tier-dependent. |
 | **Files affected** | **Creates only.** New: `audio/vo-*.wav`, `dist/…-voiceover.wav`, `dist/…-1920x1080-final.mp4`. No existing file is modified or replaced. |
 | **Reversible?** | **The files, yes** — delete and rebuild. **The credits, no.** |
+| **Actual outcome** | 15 segments generated (plus 4 for the 15-second film). **~1,402 ElevenLabs credits, about $0.25.** The read came back at ~130 wpm against a 75 s film cut for 153 wpm, so `src/sync.py` derived a uniform **1.175x** `librubberband` conform and rebuilt the whole timeline from the recorded audio. Verified: speech in all 15 caption windows, silence in every gap, 15/15. Final mix −15.5 LUFS. |
 | **Why** | It is the one thing the pipeline genuinely cannot make for itself, and it completes deliverable #10 ("clean voice-over audio") and #11 ("mixed soundtrack"). The read is timed to the hundredth of a second, so it drops straight in. |
 | **Safety** | This is a **stock library voice, not a clone.** No real person's voice is cloned, consistent with the brief. |
 
@@ -77,9 +78,8 @@ I would actually recommend.
 
 ## My recommendation in one line
 
-**D is done.** Still outstanding: **approve A** (the voiceover, ~1,227
-ElevenLabs characters) — that is the one remaining gap in the deliverable. **B,
-C and E remain worth holding.**
+**A and D are done.** Every video now carries narration. **B, C and E remain
+worth holding** — none of them changes the deliverable materially.
 
 If you want the B-roll variant finished end-to-end rather than handed over as a
 composite script, the cleanest fix is to allow `dnznrvs05pmza.cloudfront.net`

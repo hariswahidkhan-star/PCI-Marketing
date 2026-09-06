@@ -412,14 +412,14 @@ const rgba = (c,a) => `rgba(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed
    `warm` 0..1 weight of the crimson ambient glow over the blue one.
    `light` 1 = inverted (dark type on a pale ground).                        */
 const SHOTS = [
-  { el:'s1', in: 0.00, out: 8.50, bg:[20,18,26], warm:0.75, light:0 },
-  { el:'s2', in: 8.50, out:16.60, bg:[16,25,35], warm:0.25, light:0 },
-  { el:'s3', in:16.60, out:26.90, bg:[30,21,18], warm:0.90, light:0 },
-  { el:'s4', in:26.90, out:36.30, bg:[15,23,42], warm:0.15, light:0 },
-  { el:'s5', in:36.30, out:47.40, bg:[10,15,28], warm:0.20, light:0 },
-  { el:'s6', in:47.40, out:57.60, bg:[24,20,29], warm:0.55, light:0 },
-  { el:'s7', in:57.60, out:70.80, bg:[233,237,244], warm:0.35, light:1 },
-  { el:'s8', in:70.80, out:75.00, bg:[15,23,42], warm:0.25, light:0 }
+  { el:'s1', in:  0.00, out:  7.75, bg:[20,18,26], warm:0.75, light:0 },
+  { el:'s2', in:  7.75, out: 15.94, bg:[16,25,35], warm:0.25, light:0 },
+  { el:'s3', in: 15.94, out: 26.51, bg:[30,21,18], warm:0.90, light:0 },
+  { el:'s4', in: 26.51, out: 35.85, bg:[15,23,42], warm:0.15, light:0 },
+  { el:'s5', in: 35.85, out: 49.99, bg:[10,15,28], warm:0.20, light:0 },
+  { el:'s6', in: 49.99, out: 61.66, bg:[24,20,29], warm:0.55, light:0 },
+  { el:'s7', in: 61.66, out: 70.93, bg:[233,237,244], warm:0.35, light:1 },
+  { el:'s8', in: 70.93, out: 75.00, bg:[15,23,42], warm:0.25, light:0 }
 ];
 const XF = 0.42; /* cross-dissolve length — restrained, no wipes or spins */
 
@@ -535,7 +535,7 @@ function seek(t){
   /* --- furniture: retires for the identity shot and the end card, which
          carry the mark at full size themselves --- */
   const furn = seg(t, 0.10, 0.95)
-             * (1 - seg(t, 36.30, 36.72)) + seg(t, 47.40, 47.82) * (1 - seg(t, 70.80, 71.22));
+             * (1 - seg(t, 35.85, 36.27)) + seg(t, 49.99, 50.41) * (1 - seg(t, 70.93, 71.35));
   const f = clamp(furn, 0, 1).toFixed(3);
   E.topbar.style.opacity = f; E.footrule.style.opacity = f;
   E.footl.style.opacity = f;  E.footr.style.opacity = f;
@@ -561,12 +561,12 @@ function seek(t){
   });
   for (const id of ['mark','mark8']){
     const mk = document.getElementById(id);
-    const p = seg(t, id === 'mark' ? 36.46 : 70.94, id === 'mark' ? 37.30 : 71.70, outExpo);
+    const p = seg(t, id === 'mark' ? 36.01 : 71.07, id === 'mark' ? 36.85 : 71.83, outExpo);
     mk.style.transform = `translateY(0) scale(${(0.88 + 0.12 * p).toFixed(4)})`;
   }
 
   /* --- one sheen sweep, over the credential chips only --- */
-  const sh = seg(t, 48.60, 50.00, inOut);
+  const sh = seg(t, 51.19, 52.59, inOut);
   E.sheen.style.opacity = (sh > 0 && sh < 1 ? Math.sin(sh * Math.PI) * 0.9 : 0).toFixed(3);
   E.sheen.style.transform = `translateX(${(-60 + sh * 120).toFixed(2)}%)`;
 

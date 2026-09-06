@@ -17,8 +17,12 @@ because it removes an entire class of licensing and disclosure risk.
 | Archivo (800) | `brand/archivo-latin.woff2` — the site's own display face | SIL Open Font Licence 1.1 | ✅ All headlines |
 | Inter (400/600) | `brand/inter-latin.woff2` — the site's own text face | SIL Open Font Licence 1.1 | ✅ All body, captions, furniture |
 
-**AI-generated media disclosure: none required.** No generative model produced
-any pixel or sample in the delivered masters.
+**AI-generated media disclosure — required for the audio only.** No generative
+model produced any *pixel* in the delivered masters; the picture is entirely
+computed from source. The **voice is synthetic** and must be disclosed wherever
+the film's provenance is stated. It is a stock library voice: no real person's
+voice was cloned, and the narrator is not presented as a PCI employee, examiner
+or named individual.
 
 ## 2. Sourced but NOT used — Unsplash reference set
 

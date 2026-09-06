@@ -31,6 +31,8 @@ cd src && ./build.sh
 | `pci-ai-intro-75s-1920x1080-clean.mp4` | No burned-in captions, for platforms where you upload the `.srt`. |
 | `pci-ai-intro-75s-1920x1080-MASTER.mp4` | **High-quality master**, CRF 12, near-visually-lossless. Archive and re-encode from this. |
 | `pci-ai-intro-75s-1920x1080-silent.mp4` | Picture only. Hand this to a studio laying their own VO and music. |
+| `pci-ai-intro-75s-voiceover.wav` | **Clean voice only**, 48 kHz, no music. |
+| `pci-ai-intro-75s-mixed-soundtrack.wav` | **The final mix** — voice over the side-chained score, −15.5 LUFS. |
 | `pci-ai-intro-75s-score.wav` | The music bed alone, 48 kHz stereo. |
 | `pci-intro-75s.srt` / `.vtt` | Caption files. Timings are identical to the burned-in text **by construction** — see below. |
 | `pci-ai-intro-75s-poster.png` | Poster frame (41.0 s — the identity shot). |
@@ -41,23 +43,42 @@ within LinkedIn, YouTube and Vimeo specs without re-encoding.
 
 ---
 
-## The one thing this pipeline cannot produce
+## The voiceover
 
-**The voiceover.** A synthesised read is available and a voice has been selected
-— ElevenLabs *"Jim Executive — Authoritative, British and Warm"* — but generating
-it spends credits, so it is held behind `approval-request.md`. Shipping a
-robotic scratch track labelled "professional voiceover" would be worse than
-shipping none, so the delivered masters carry **picture, captions and the music
-bed**.
+**Delivered.** The narration is ElevenLabs *"Jim Executive — Authoritative,
+British and Warm"* (`tXxkePQsw0G69D8VeDzp`) — a stock library voice, **not a
+clone of any real person**. It is a **synthetic voice** and the asset manifest
+records it as such.
+
+Fifteen segments were generated separately rather than as one read, so each line
+could be placed against its own timecode. That surfaced a real problem worth
+recording: **the read came back at ~130 wpm — 82.4 s of speech for a 75 s film.**
+The film had been cut for 153 wpm.
+
+Rather than stretch the picture or re-record, `src/sync.py` derives the single
+uniform time-scale that lands the film exactly on 75.00 s — here **1.175x** — and
+applies it with `librubberband`, which preserves formants (plain `atempo` thins
+the voice at this ratio). The result runs at the pace the film was designed for,
+not a rushed one. The whole timeline is then recomputed from where the words
+actually fall, and propagated to the cut list, the caption set and the score.
+
+**Everything is derived, nothing is hand-nudged.** Verified after the build:
+speech present in all 15 caption windows (−16 to −21 dB RMS), silence in every
+gap (−99 dB), 15/15.
 
 `captions/vo-script.md` has the read: 15 segments, timed to the hundredth of a
 second, with the mandatory pronunciation table and casting direction. It is
 written so a voice artist can record to time on the first take.
 
-### Laying the voiceover in
+### Replacing it with a human read
 
-Record to the timings in `captions/vo-script.md`, export a 48 kHz WAV with the
-first word starting at **0.25 s**, then:
+If a voice artist records the script, drop the WAVs into `audio/trimmed/` as
+`vo-01.wav` … `vo-15.wav`, then `python3 src/sync.py && ./src/build.sh`. The
+timeline re-derives itself around the new performance — no manual re-timing.
+`sync.py` refuses rather than shipping a rushed read if the recording would need
+more than 1.25x compression; raise `TARGET` in that case.
+
+To mix a full-length read against the existing picture instead:
 
 ```bash
 FF=src/node_modules/ffmpeg-static/ffmpeg
@@ -134,6 +155,8 @@ captions/              .srt, .vtt and the timed read — all generated, never ha
 brand/                 Archivo + Inter (the site's own faces) and the PCI mark
 src/scene.html         the film itself — deterministic, seek-driven
 src/vo.py              THE source of truth for the read and all three caption forms
+src/sync.py            conforms the timeline to the recorded voice; writes timeline.json
+src/timeline.json      generated — the measured segment placements and scene bounds
 src/music.py           the score, synthesised from scratch (stdlib only)
 src/render.mjs         Playwright frame renderer
 src/probe.mjs          layout + caption-collision audit across all three aspects

@@ -27,49 +27,49 @@ LEAD, TAIL, GAP = 0.25, 0.25, 0.24
 
 # (scene_id, in, out, [(caption, spoken), ...])
 SCENES = [
-    ('s1', 0.00, 8.50, [
+    ('s1', 0.00, 7.75, [
         ("Every major project begins with ambition.",
          "Every major project begins with ambition."),
         ("Turning that ambition into a controlled, financeable and deliverable outcome requires more than information.",
          "Turning that ambition into a controlled, financeable and deliverable outcome requires more than information."),
     ]),
-    ('s2', 8.50, 16.60, [
+    ('s2', 7.75, 15.94, [
         ("Project professionals must connect scope, schedule, cost, finance, risk and performance",
          "Project professionals must connect scope, schedule, cost, finance, risk and performance"),
         ("while making accountable decisions in increasingly complex environments.",
          "while making accountable decisions in increasingly complex environments."),
     ]),
-    ('s3', 16.60, 26.90, [
+    ('s3', 15.94, 26.51, [
         ("Artificial intelligence can accelerate analysis, identify patterns, compare scenarios and support forecasting.",
          "Artificial intelligence can accelerate analysis, identify patterns, compare scenarios and support forecasting."),
         ("But a convincing AI output is not automatically a reliable project decision.",
          "But a convincing A-I output is not automatically a reliable project decision."),
     ]),
-    ('s4', 26.90, 36.30, [
+    ('s4', 26.51, 35.85, [
         ("Responsible adoption requires verified data, transparent assumptions, meaningful human review,",
          "Responsible adoption requires verified data, transparent assumptions, meaningful human review,"),
         ("clear decision rights and an evidence trail that can withstand professional challenge.",
          "clear decision rights and an evidence trail that can withstand professional challenge."),
     ]),
-    ('s5', 36.30, 47.40, [
+    ('s5', 35.85, 49.99, [
         ("PCI AI — Project Controls Institute Global — focuses on the professional competence",
-         "P-C-I  A-I. Project Controls Institute Global. focuses on the professional competence"),
+         "P-C-I  A-I — Project Controls Institute Global — focuses on the professional competence"),
         ("needed to govern AI-supported work across project controls, project finance and project management.",
          "needed to govern A-I supported work across project controls, project finance and project management."),
     ]),
-    ('s6', 47.40, 57.60, [
+    ('s6', 49.99, 61.66, [
         ("Its professional credential framework includes PCL-AI for project controls,",
          "Its professional credential framework includes P-C-L  A-I for project controls,"),
         ("PFL-AI for project finance and PML-AI for project management.",
          "P-F-L  A-I for project finance and P-M-L  A-I for project management."),
     ]),
-    ('s7', 57.60, 70.80, [
+    ('s7', 61.66, 70.93, [
         ("The future of project delivery will not be defined by technology alone.",
          "The future of project delivery will not be defined by technology alone."),
         ("It will be shaped by professionals who know when to trust, when to challenge and how to remain accountable.",
          "It will be shaped by professionals who know when to trust, when to challenge and how to remain accountable."),
     ]),
-    ('s8', 70.80, 75.00, [
+    ('s8', 70.93, 75.00, [
         ("Discover PCI AI at pciai.org",
          "Discover P-C-I  A-I at P-C-I-A-I dot org."),
     ]),
@@ -136,8 +136,24 @@ def wrap(text, width=54, maxlines=3):
     return '\n'.join(best)
 
 
+def _measured():
+    """Caption timings taken from timeline.json when it exists.
+
+    Once the voiceover is generated, the captions must follow the words that
+    were actually spoken rather than the pace the film was planned at. sync.py
+    writes the real placements; this reads them so all three caption forms and
+    the burned-in track stay locked to the audio.
+    """
+    import json, os
+    f = os.path.join(HERE, 'timeline.json')
+    if not os.path.exists(f):
+        return None
+    return json.load(open(f))['segments']
+
+
 def build():
-    caps, rows = [], []
+    measured = _measured()
+    caps, rows, idx = [], [], 0
     for sid, s_in, s_out, segs in SCENES:
         win_a, win_b = s_in + LEAD, s_out - TAIL
         span = (win_b - win_a) - GAP * (len(segs) - 1)
@@ -147,6 +163,10 @@ def build():
             w = weight(spoken)
             dur = span * (w / tot)
             a, b = round(t, 2), round(t + dur, 2)
+            idx += 1
+            if measured:
+                a, b = round(measured[str(idx)][0], 2), round(measured[str(idx)][1], 2)
+                dur = b - a
             caps.append([a, b, wrap(cap)])
             wpm = w / (dur / 60.0)
             rows.append((sid, a, b, round(b - a, 2), cap, spoken, round(wpm)))
@@ -203,8 +223,12 @@ def main():
 
     avg=sum(weight(r[5]) for r in rows)/sum(r[3] for r in rows)*60
     print(f"captions: {len(caps)} segments | mean pace {avg:.0f} wpm")
-    slow = [r for r in rows if r[6] > 170]
-    fast = [r for r in rows if r[6] < 105]
+    if _measured():
+        print('  timings taken from timeline.json (locked to the recorded audio)')
+        slow = fast = []
+    else:
+        slow = [r for r in rows if r[6] > 170]
+        fast = [r for r in rows if r[6] < 105]
     for r in slow:
         print(f"  WARN fast {r[0]} {r[6]} wpm: {r[4][:52]}")
     for r in fast:
