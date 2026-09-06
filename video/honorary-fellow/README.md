@@ -176,12 +176,12 @@ reminder that meeting them guarantees nothing.
 The kit lives below ~120 Hz and above ~6 kHz. A piano cannot make that claim, so
 it is voiced an octave above its natural register with its harmonics almost
 suppressed, and the level is set from measurement: in the finished mix, during
-the loudest scene the narration sits **8.0 dB** above the music in the voice
+the loudest scene the narration sits **7.6 dB** above the music in the voice
 band, measured in the finished mix (speech against the music-only beat that
 follows it). PCI asked for a louder film, so the
 mix now targets **−14 LUFS** — what YouTube and LinkedIn normalise to, so it
 arrives as loud as the platform allows and no quieter than the video before it.
-Measured: **−14.4 LUFS integrated, −1.5 dBTP.** The `alimiter` `level=disabled` note in
+Measured: **−14.3 LUFS integrated, −1.5 dBTP.** The `alimiter` `level=disabled` note in
 `build.sh` explains why that ceiling is real.
 
 The kit is shared with the other three films via `video/lib/score_kit.py`; this
