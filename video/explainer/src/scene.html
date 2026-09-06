@@ -25,6 +25,7 @@
   --s:19.2; --padb:19; --h1:5.6; --h2:4.3; --h3:3.1;
   --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
   --rule:rgba(148,180,230,.20); --card:#111D33; --cardbd:rgba(59,130,246,.42); --cardsub:#8FA6C4;
+  --ccbg:rgba(6,12,24,.82); --ccfg:#FFFFFF; --track:rgba(148,180,230,.13);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#000;overflow:hidden}
@@ -112,7 +113,7 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
   padding-bottom:calc(.42 * var(--s) * 1px)}
 .bar .val{font-family:var(--display);font-weight:800;font-size:calc(1.95 * var(--s) * 1px);
   color:var(--fg);text-align:right;font-variant-numeric:tabular-nums}
-.bar .track{grid-column:1 / -1;height:calc(.92 * var(--s) * 1px);background:rgba(148,180,230,.13);
+.bar .track{grid-column:1 / -1;height:calc(.92 * var(--s) * 1px);background:var(--track);
   border-radius:calc(.46 * var(--s) * 1px);overflow:hidden}
 .bar .fill{height:100%;border-radius:calc(.46 * var(--s) * 1px);transform-origin:left center;
   background:var(--magenta)}
@@ -174,8 +175,8 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 
 #cc{position:absolute;left:0;right:0;display:flex;justify-content:center;
   padding:0 calc(10 * var(--s) * 1px);pointer-events:none}
-#ccbox{background:rgba(6,12,24,.82);border-bottom:calc(.26 * var(--s) * 1px) solid var(--crimson);
-  padding:calc(.85 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);font-weight:600;color:#fff;
+#ccbox{background:var(--ccbg);border-bottom:calc(.26 * var(--s) * 1px) solid var(--crimson);
+  padding:calc(.85 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);font-weight:600;color:var(--ccfg);
   text-align:center;white-space:pre-line;font-size:calc(1.7 * var(--s) * 1px);line-height:1.35;max-width:100%}
 
 /* ---------- vertical ---------- */
@@ -268,7 +269,7 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
   <section class="shot" id="s6">
     <div class="eyebrow" data-a="1">The position</div>
     <div class="quote" data-a="1" style="margin-top:calc(2.6*var(--s)*1px);max-width:calc(52*var(--s)*1px)">
-      It certifies professionals who <em style="font-style:normal;color:#3B82F6">govern</em> AI —<br>not who defer to it.</div>
+      It certifies professionals who <em style="font-style:normal;color:var(--magenta)">govern</em> AI —<br>not who defer to it.</div>
     <div class="uline" data-a="1" style="margin-top:calc(2.8*var(--s)*1px)"></div>
   </section>
 
@@ -397,6 +398,9 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 const Q = new URLSearchParams(location.search);
 const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
 const CC = Q.get('cc') !== '0';
+/* theme=light is the default: the film is a bright piece. theme=dark renders
+   the original ink treatment from the same source — nothing else changes. */
+const THEME = (Q.get('theme') || 'light') === 'dark' ? 'dark' : 'light';
 const DUR = window.__DURATION;
 const RAW = window.__SHOTS, CAPS = window.__CAPS || [];
 
@@ -411,14 +415,57 @@ if (ASPECT === 'pt'){ stage.classList.add('pt');
   root.style.setProperty('--padb','30'); root.style.setProperty('--h1','5.0');
   root.style.setProperty('--h2','3.9'); root.style.setProperty('--h3','2.8'); }
 
-/* grounds: the film moves through warmth rather than sitting in one blue wash */
-const GROUND = {
-  s1:[20,18,26], s2:[26,20,24], s3:[30,21,18], s4:[15,23,42], s5:[13,20,34], s6:[10,15,28],
-  s7:[16,22,38], s8:[10,15,28], s9:[22,19,28], s10:[15,23,42], s11:[28,21,19], s12:[16,25,35],
-  s13:[12,20,32], s14:[20,18,26], s15:[26,20,23], s16:[15,23,42]
+/* Grounds. The film still moves through warmth rather than sitting in one flat
+   wash — the light set is a sequence of papers (warm, cool, cream) rather than
+   a single white, which is what stops four minutes of bright frames going
+   clinical. Both sets are graded the same way; only the register changes. */
+const GROUNDS = {
+  dark: {
+    s1:[20,18,26], s2:[26,20,24], s3:[30,21,18], s4:[15,23,42], s5:[13,20,34], s6:[10,15,28],
+    s7:[16,22,38], s8:[10,15,28], s9:[22,19,28], s10:[15,23,42], s11:[28,21,19], s12:[16,25,35],
+    s13:[12,20,32], s14:[20,18,26], s15:[26,20,23], s16:[15,23,42]
+  },
+  light: {
+    s1:[247,243,238], s2:[246,242,243], s3:[251,245,236], s4:[239,244,251], s5:[242,246,252],
+    s6:[244,247,252], s7:[240,244,251], s8:[243,247,253], s9:[248,244,240], s10:[239,243,250],
+    s11:[251,245,237], s12:[241,245,251], s13:[242,246,252], s14:[247,243,240], s15:[249,244,240],
+    s16:[236,241,249]
+  }
 };
+const GROUND = GROUNDS[THEME];
 const WARM = { s1:.75, s2:.6, s3:.9, s4:.15, s5:.3, s6:.2, s7:.25, s8:.2,
                s9:.55, s10:.15, s11:.85, s12:.25, s13:.3, s14:.6, s15:.7, s16:.25 };
+
+const PALETTE = {
+  dark: { fg:'#FFFFFF', sub:'#B9C6DA', eyeb:'#E4785F', foot:'#7E90AC',
+          accent:'#3B82F6', rule:'rgba(148,180,230,.20)', card:'#111D33',
+          cardbd:'rgba(59,130,246,.42)', cardsub:'#8FA6C4',
+          ccbg:'rgba(6,12,24,.82)', ccfg:'#FFFFFF',
+          mesh:'rgba(148,180,230,.07)', spark:'rgba(59,130,246,.42)',
+          vig:'rgba(0,0,0,.55)', track:'rgba(148,180,230,.13)',
+          glowA:'rgba(37,99,235,.32)', glowB:'rgba(193,51,41,.22)' },
+  light:{ fg:'#0F172A', sub:'#475569', eyeb:'#C13329', foot:'#64748B',
+          /* the deeper brand blue: it is the step that holds contrast on paper,
+             and it is the one validated against a light surface */
+          accent:'#1D4ED8', rule:'rgba(15,23,42,.14)', card:'#FFFFFF',
+          cardbd:'rgba(29,78,216,.26)', cardsub:'#64748B',
+          ccbg:'rgba(255,255,255,.93)', ccfg:'#0F172A',
+          mesh:'rgba(15,23,42,.055)', spark:'rgba(29,78,216,.30)',
+          vig:'rgba(15,23,42,.10)', track:'rgba(15,23,42,.10)',
+          glowA:'rgba(29,78,216,.13)', glowB:'rgba(193,51,41,.10)' }
+}[THEME];
+for (const [k, v] of Object.entries({
+  '--fg':PALETTE.fg, '--sub':PALETTE.sub, '--eyeb':PALETTE.eyeb, '--foot':PALETTE.foot,
+  '--magenta':PALETTE.accent, '--rule':PALETTE.rule, '--card':PALETTE.card,
+  '--cardbd':PALETTE.cardbd, '--cardsub':PALETTE.cardsub, '--track':PALETTE.track,
+  '--ccbg':PALETTE.ccbg, '--ccfg':PALETTE.ccfg
+})) root.style.setProperty(k, v);
+document.getElementById('vig').style.background =
+  `radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 42%, ${PALETTE.vig} 100%)`;
+document.getElementById('glow').style.background =
+  `radial-gradient(closest-side, ${PALETTE.glowA}, rgba(0,0,0,0) 70%)`;
+document.getElementById('glow2').style.background =
+  `radial-gradient(closest-side, ${PALETTE.glowB}, rgba(0,0,0,0) 70%)`;
 
 const SHOTS = RAW.map(([el, chap, a, b]) =>
   ({ el, chap, in: a, out: b, bg: GROUND[el], warm: WARM[el] }));
@@ -431,8 +478,8 @@ const CHAPTERS = [...new Set(RAW.map(r => r[1]))];
   let d = '';
   for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
   for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
-  g.innerHTML = `<path id="mesh" d="${d}" stroke="rgba(148,180,230,.07)" stroke-width="1" fill="none"/>`
-    + `<path id="spark" d="" stroke="rgba(59,130,246,.42)" stroke-width="${(W/700).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
+  g.innerHTML = `<path id="mesh" d="${d}" stroke="${PALETTE.mesh}" stroke-width="1" fill="none"/>`
+    + `<path id="spark" d="" stroke="${PALETTE.spark}" stroke-width="${(W/700).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
   const pts = [], n = 120;
   for (let i = 0; i <= n; i++){
     const p = i / n, x = p * W;
@@ -514,10 +561,11 @@ function seek(t){
   const drift = t / DUR;
   E.glow.style.transform =
     `translate(${(-10+drift*30).toFixed(2)}%, ${(-14+Math.sin(drift*7.5)*9).toFixed(2)}%) scale(${(1.05+drift*.2).toFixed(3)})`;
-  E.glow.style.opacity = (0.28 + 0.40*(1-warm)).toFixed(3);
+  const amb = THEME === 'light' ? 0.55 : 1.0;
+  E.glow.style.opacity = ((0.28 + 0.40*(1-warm)) * amb).toFixed(3);
   E.glow2.style.transform =
     `translate(${(28-drift*24).toFixed(2)}%, ${(20-Math.cos(drift*6.1)*11).toFixed(2)}%) scale(${(1.15-drift*.1).toFixed(3)})`;
-  E.glow2.style.opacity = (0.16 + 0.48*warm).toFixed(3);
+  E.glow2.style.opacity = ((0.16 + 0.48*warm) * amb).toFixed(3);
 
   const sp = E.spark;
   sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 1.0, DUR-14, inOut))).toFixed(1);

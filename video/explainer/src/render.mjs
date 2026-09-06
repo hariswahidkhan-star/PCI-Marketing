@@ -47,6 +47,7 @@ const W   = +arg('w', 1920);
 const H   = +arg('h', 1080);
 const FPS = +arg('fps', 30);
 const CC  = arg('cc', '1');
+const THEME = arg('theme', 'light');
 const PLATE = arg('plate', '0');
 const OUT = path.resolve(HERE, arg('out', '../build/frames'));
 
@@ -54,6 +55,7 @@ const scene = pathToFileURL(path.join(HERE, 'scene.html'));
 scene.searchParams.set('w', W);
 scene.searchParams.set('h', H);
 scene.searchParams.set('cc', CC);
+scene.searchParams.set('theme', THEME);
 scene.searchParams.set('plate', PLATE);
 
 if (existsSync(OUT)) await rm(OUT, { recursive: true });

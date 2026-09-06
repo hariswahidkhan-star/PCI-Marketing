@@ -11,6 +11,9 @@ cd "$(dirname "$0")"
 BUILD=../build; DIST=../dist
 FPS=30; [[ "${1:-}" == "--fast" ]] && FPS=15
 NAME="pci-ai-explainer"
+# theme=light is the film's look; THEME=dark renders the ink variant from the
+# same source, no other change required.
+THEME="${THEME:-light}"
 
 if [[ -z "${FFMPEG:-}" ]]; then
   if command -v ffmpeg >/dev/null; then FFMPEG=ffmpeg
@@ -36,8 +39,8 @@ echo "==> mix (score side-chained under the voice)"
 loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.95[mix]" \
   -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
 
-echo "==> frames @ ${FPS} fps"
-render(){ node render.mjs --w "$1" --h "$2" --fps "$FPS" --cc "$3" --out "$BUILD/$4" >"$BUILD/$4.log" 2>&1; }
+echo "==> frames @ ${FPS} fps, theme=${THEME}"
+render(){ node render.mjs --w "$1" --h "$2" --fps "$FPS" --cc "$3" --theme "$THEME" --out "$BUILD/$4" >"$BUILD/$4.log" 2>&1; }
 pids=()
 render 1920 1080 1 f-16x9-cc    & pids+=($!)
 render 1920 1080 0 f-16x9-clean & pids+=($!)

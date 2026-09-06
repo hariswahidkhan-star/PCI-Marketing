@@ -11,7 +11,7 @@ function findChrome(){
 const [W,H,tag] = [+process.argv[2], +process.argv[3], process.argv[4]];
 const OUT = '../build/probe'; mkdirSync(OUT,{recursive:true});
 const u = pathToFileURL(path.resolve('scene.html'));
-u.searchParams.set('w',W); u.searchParams.set('h',H); u.searchParams.set('cc','1');
+u.searchParams.set('w',W); u.searchParams.set('h',H); u.searchParams.set('cc','1');u.searchParams.set('theme',process.env.THEME||'light');
 const b = await chromium.launch({executablePath:findChrome(),args:['--force-color-profile=srgb','--font-render-hinting=none','--hide-scrollbars']});
 const pg = await b.newPage({viewport:{width:W,height:H},deviceScaleFactor:1});
 const errs=[]; pg.on('pageerror',e=>errs.push('PAGEERROR '+e.message));

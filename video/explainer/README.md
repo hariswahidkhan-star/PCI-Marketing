@@ -10,6 +10,15 @@ It is organised into **seven chapters across sixteen scenes**, with a chapter
 rail and a progress bar on screen throughout — four minutes is long enough that
 a viewer needs to know where they are.
 
+**The film is bright.** It runs on a light ground: ink type on paper, with the
+brand blue and crimson doing the accent work. Both themes come from one source —
+`?theme=light` (the default) and `?theme=dark` — so the ink treatment is a flag,
+not a fork:
+
+```bash
+THEME=dark ./build.sh      # the original dark-ground cut, same everything else
+```
+
 ```bash
 cd src && ./build.sh
 ```
@@ -58,6 +67,18 @@ runs at the pace the read wants — 233.14 s.
 sixteen scenes. Scene 16 fell back to a proportional split by word weight, and
 `sync.py` prints which scenes did so rather than hiding it.
 
+## Why bright is not just "the dark one inverted"
+
+A light ground is easy to get wrong across four minutes: a single flat white
+goes clinical fast. So the light set is a **sequence of papers** — warm, cool,
+cream — graded exactly the way the dark set moves through warmth. The ambient
+glows are damped to 55 %, because on paper they shift the ground far more than
+they do on ink.
+
+The accent also changes step. On the dark ground the film uses `#3B82F6`; on
+paper it uses **`#1D4ED8`**, the deeper brand blue, which is the step that holds
+contrast against white — and the one validated against a light surface.
+
 ## The examination-weighting chart
 
 Scene 10 shows the 40/40/20 split as **three separate direct-labelled bars, not
@@ -67,7 +88,11 @@ validator returned a normal-vision ΔE of 13.9, below the floor of 15. Rather th
 introduce an off-brand fourth colour, the form changed: with each bar named in
 place, identity comes from the label and colour is only reinforcement. Brand blue
 carries the two 40 % discipline groups; crimson marks governed AI as the distinct
-third (ΔE 29.8 deutan, 34.3 normal — comfortably clear).
+third.
+
+The pair was re-validated against the **light** surface when the film went
+bright — it is a different check, not the same one — and passes: ΔE 27.7 protan,
+35.6 normal vision, both marks above 3:1 contrast against the ground.
 
 ## Files
 
