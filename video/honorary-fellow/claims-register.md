@@ -190,7 +190,7 @@ The panel's consensus, and what was done with it:
 | Say what a contribution looks like; set a test the right applicant recognises | Scene 1: *a standard, a method, and the people who carry it forward*; close: *"If your work has outlasted the projects it was done on, it deserves to be recognised."* |
 | **Scene 11 ships C1, C4 and C5 — events, video lectures, the simulation lab — which are on no PCI page. All four judges called this a publication blocker.** | **Kept, on PCI's explicit instruction**, with one *"may"* governing every item and *"all subject to current programme terms"*. The condition stands: **the application page must name these before the film is published**, or the scene must be re-recorded without them. |
 | Who sits on the Board, who already holds the recognition, how old PCI is — the facts that would most persuade a sceptic | **Not added.** None is on any PCI page, and the film makes no claim it cannot source. PCI can supply them for a future cut. |
-| Too long for the audience (the project-controls director) | PCI's instruction was *"don't worry about time"*; the cut runs 4:19 unscaled, with a 1.5 s beat between topics |
+| Too long for the audience (the project-controls director) | PCI's instruction was *"don't worry about time"*; the cut runs 4:11 unscaled, with a 1.5 s beat between topics |
 
 ## 4. Claims deliberately not made
 
@@ -223,12 +223,12 @@ film.** The only URL shown is `pciai.org`, and the only address shown is
   mode a photoreal treatment of this subject would risk.
 - **The industry and applicant sequences are typographic**, naming the sectors and
   the roles rather than illustrating them with stand-in imagery.
-- **The narration is synthetic** — ElevenLabs *"Jim Executive — Authoritative,
-  British and Warm"* (`tXxkePQsw0G69D8VeDzp`) on `eleven_v3`, a stock library
-  voice chosen after a three-voice test when PCI asked for a more authoritative
-  read (`audio/voice-test-authority/`). Earlier cuts used *"Holden Pro Voice"*
-  (`UudLhsL2DlHkDK0vGwl3`), the voice the brief names. **Neither is a clone of
-  any real person**, and no real person's voice was used.
+- **The narration is synthetic** — ElevenLabs *"Holden Pro Voice"*
+  (`UudLhsL2DlHkDK0vGwl3`) on `eleven_v3`, the stock library voice the brief
+  names, directed `[deep, slow, commanding]` after PCI heard a three-voice test
+  and chose it (`audio/voice-test-authority/`). **It is not a clone of any real
+  person**, and no real person's voice was used. Every take was transcribed
+  back and matched to the script word for word before use.
 - **The score is original**, written from scratch in `src/music.py` and
   `video/lib/score_kit.py` using the Python standard library only — no samples, no
   loops, no third-party audio library, and therefore no licence obligation.

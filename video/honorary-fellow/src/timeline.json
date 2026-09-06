@@ -1,465 +1,456 @@
 {
-  "total": 258.93,
+  "total": 250.54,
   "segments": {
     "1": [
       0.3,
-      2.66
+      2.8
     ],
     "2": [
-      2.66,
-      7.71
+      2.8,
+      7.88
     ],
     "3": [
-      9.21,
-      15.94
+      9.38,
+      15.35
     ],
     "4": [
-      15.94,
-      21.45
+      15.35,
+      20.27
     ],
     "5": [
-      21.45,
-      27.85
+      20.27,
+      26.52
     ],
     "6": [
-      29.35,
-      33.48
+      28.02,
+      32.07
     ],
     "7": [
-      33.48,
-      35.95
+      32.07,
+      34.39
     ],
     "8": [
-      35.95,
-      40.5
+      34.39,
+      39.13
     ],
     "9": [
-      40.5,
-      43.78
+      39.13,
+      42.43
     ],
     "10": [
-      43.78,
-      49.7
+      42.43,
+      47.97
     ],
     "11": [
-      49.7,
-      54.25
+      47.97,
+      54.48
     ],
     "12": [
-      54.25,
-      68.93
+      54.48,
+      66.74
     ],
     "13": [
-      68.93,
-      72.45
+      66.74,
+      70.14
     ],
     "14": [
-      73.95,
-      80.67
+      71.64,
+      77.57
     ],
     "15": [
-      80.67,
-      91.68
+      77.57,
+      87.15
     ],
     "16": [
-      91.68,
-      94.89
+      87.15,
+      90.47
     ],
     "17": [
-      94.89,
-      98.59
+      90.47,
+      94.79
     ],
     "18": [
-      100.09,
-      105.13
+      96.29,
+      101.6
     ],
     "19": [
-      105.13,
-      108.51
+      101.6,
+      105.13
     ],
     "20": [
-      108.51,
-      112.58
+      105.13,
+      109.49
     ],
     "21": [
-      114.08,
-      115.96
+      110.99,
+      113.92
     ],
     "22": [
-      115.96,
-      121.0
+      113.92,
+      118.12
     ],
     "23": [
-      121.0,
-      123.7
+      118.12,
+      121.1
     ],
     "24": [
-      123.7,
-      125.67
+      121.1,
+      123.07
     ],
     "25": [
-      127.17,
-      132.73
+      124.57,
+      131.16
     ],
     "26": [
-      132.73,
-      136.67
+      131.16,
+      134.24
     ],
     "27": [
-      136.67,
-      141.85
+      134.24,
+      139.41
     ],
     "28": [
-      141.85,
-      145.41
+      139.41,
+      142.71
     ],
     "29": [
-      146.91,
-      151.44
+      144.21,
+      148.54
     ],
     "30": [
-      151.44,
-      155.21
+      148.54,
+      155.86
     ],
     "31": [
-      155.21,
-      158.96
+      155.86,
+      159.06
     ],
     "32": [
-      158.96,
-      162.2
+      159.06,
+      163.67
     ],
     "33": [
-      162.2,
-      167.95
+      163.67,
+      165.93
     ],
     "34": [
-      167.95,
-      170.33
+      167.43,
+      170.28
     ],
     "35": [
-      171.83,
-      174.4
+      170.28,
+      172.38
     ],
     "36": [
-      174.4,
-      176.66
+      172.38,
+      177.54
     ],
     "37": [
-      176.66,
-      181.54
+      177.54,
+      180.02
     ],
     "38": [
-      181.54,
-      183.21
+      181.52,
+      186.27
     ],
     "39": [
-      184.71,
-      189.27
+      186.27,
+      188.72
     ],
     "40": [
-      189.27,
-      192.06
+      188.72,
+      192.56
     ],
     "41": [
-      192.06,
-      195.83
+      194.06,
+      200.69
     ],
     "42": [
-      197.33,
-      204.6
+      200.69,
+      204.17
     ],
     "43": [
-      204.6,
-      208.67
+      204.17,
+      210.22
     ],
     "44": [
-      208.67,
-      215.53
+      210.22,
+      217.02
     ],
     "45": [
-      215.53,
-      222.38
+      218.52,
+      223.92
     ],
     "46": [
-      223.88,
-      227.58
+      223.92,
+      227.43
     ],
     "47": [
-      227.58,
-      232.13
+      227.43,
+      231.52
     ],
     "48": [
-      232.13,
-      235.99
+      233.02,
+      240.19
     ],
     "49": [
-      237.49,
-      243.79
+      240.19,
+      245.68
     ],
     "50": [
-      243.79,
-      251.04
-    ],
-    "51": [
-      251.04,
-      257.73
+      245.68,
+      249.34
     ]
   },
   "captions": [
     [
       0.3,
-      2.66,
+      2.8,
       "Some careers deliver projects."
     ],
     [
-      2.66,
-      7.71,
+      2.8,
+      7.88,
       "Others leave behind a standard, a method\n\u2014 and the people who carry it forward."
     ],
     [
-      9.21,
-      15.94,
+      9.38,
+      15.35,
       "Honorary Fellow (PCI): conferred by the\nBoard of an independent professional body,"
     ],
     [
-      15.94,
-      21.45,
+      15.35,
+      20.27,
       "in recognition of distinguished\ncontribution, leadership and service."
     ],
     [
-      21.45,
-      27.85,
+      20.27,
+      26.52,
       "Your name, on PCI's own public\nregistry \u2014 checkable at source."
     ],
     [
-      29.35,
-      33.48,
+      28.02,
+      32.07,
       "The Project Controls Institute is\nan independent professional body \u2014"
     ],
     [
-      33.48,
-      35.95,
+      32.07,
+      34.39,
       "a Delaware Non-Stock Corporation \u2014"
     ],
     [
-      35.95,
-      40.5,
+      34.39,
+      39.13,
       "built to give the discipline a shared\nstandard, an independent credential"
     ],
     [
-      40.5,
-      43.78,
+      39.13,
+      42.43,
       "and a professional home for the AI era."
     ],
     [
-      43.78,
-      49.7,
+      42.43,
+      47.97,
       "Its published Body of Knowledge sets thirteen\ndomains and sixty-one knowledge areas."
     ],
     [
-      49.7,
-      54.25,
+      47.97,
+      54.48,
       "Its framework is developed with\nreference to ISO/IEC 17024,"
     ],
     [
-      54.25,
-      68.93,
+      54.48,
+      66.74,
       "and PCI states plainly that it is\nnot currently accredited by ANAB,\nIAS or any ISO/IEC 17024 body."
     ],
     [
-      68.93,
-      72.45,
+      66.74,
+      70.14,
       "What it has is a registry anyone can check."
     ],
     [
-      73.95,
-      80.67,
+      71.64,
+      77.57,
       "It involves no examination. The record is\nthe evidence, and the Board weighs it."
     ],
     [
-      80.67,
-      91.68,
+      77.57,
+      87.15,
       "It is separate from PCI's examined\ncertifications \u2014 PCL-AI, PFL-AI and PML-AI."
     ],
     [
-      91.68,
-      94.89,
+      87.15,
+      90.47,
       "Every application is considered individually,"
     ],
     [
-      94.89,
-      98.59,
+      90.47,
+      94.79,
       "and recognition is conferred\nsolely at the Board's discretion."
     ],
     [
-      100.09,
-      105.13,
+      96.29,
+      101.6,
       "If you have led teams, shaped standards,\ntaught, published or governed \u2014"
     ],
     [
+      101.6,
       105.13,
-      108.51,
       "in project controls, cost control,\nfinance, project management"
     ],
     [
-      108.51,
-      112.58,
+      105.13,
+      109.49,
       "or a closely related\ndiscipline \u2014 you may apply."
     ],
     [
-      114.08,
-      115.96,
+      110.99,
+      113.92,
       "From construction and energy"
     ],
     [
-      115.96,
-      121.0,
+      113.92,
+      118.12,
       "to technology, aviation, project\nfinance, government and academia:"
     ],
     [
-      121.0,
-      123.7,
+      118.12,
+      121.1,
       "wherever leadership shapes outcomes,"
     ],
     [
-      123.7,
-      125.67,
+      121.1,
+      123.07,
       "your contribution counts."
     ],
     [
-      127.17,
-      132.73,
-      "The floor is eight years of\nprofessional experience, three\nof them at managerial level \u2014"
+      124.57,
+      131.16,
+      "The floor is eight years' experience,\nthree of them at managerial level \u2014"
     ],
     [
-      132.73,
-      136.67,
+      131.16,
+      134.24,
       "leading teams, functions,\nprogrammes or budgets."
     ],
     [
-      136.67,
-      141.85,
+      134.24,
+      139.41,
       "The bar is higher: a demonstrable\nrecord of distinguished contribution."
     ],
     [
-      141.85,
-      145.41,
+      139.41,
+      142.71,
       "Meeting the criteria does\nnot guarantee recognition."
     ],
     [
-      146.91,
-      151.44,
+      144.21,
+      148.54,
       "PCI charges no nomination,\nassessment or credential fee."
     ],
     [
-      151.44,
-      155.21,
-      "Optional extras, such as\nattending an awards ceremony,"
+      148.54,
+      155.86,
+      "Optional extras, such as attending an\nawards ceremony, are charged separately\nand play no part in the decision."
     ],
     [
-      155.21,
-      158.96,
-      "are charged separately and\nplay no part in the decision."
-    ],
-    [
-      158.96,
-      162.2,
+      155.86,
+      159.06,
       "Recognition is awarded solely on merit."
     ],
     [
-      162.2,
-      167.95,
+      159.06,
+      163.67,
       "One application: your profile,\nr\u00e9sum\u00e9, career history and evidence,"
     ],
     [
-      167.95,
-      170.33,
+      163.67,
+      165.93,
       "reviewed confidentially by the Board."
     ],
     [
-      171.83,
-      174.4,
+      167.43,
+      170.28,
       "You need no sponsor to be considered."
     ],
     [
-      174.4,
-      176.66,
+      170.28,
+      172.38,
       "You put your own record forward."
     ],
     [
-      176.66,
-      181.54,
+      172.38,
+      177.54,
       "The Board then assesses it against\npublished criteria, on the evidence \u2014"
     ],
     [
-      181.54,
-      183.21,
+      177.54,
+      180.02,
       "and does so confidentially."
     ],
     [
-      184.71,
-      189.27,
+      181.52,
+      186.27,
       "Those recognised are entered\non PCI's own public registry:"
     ],
     [
-      189.27,
-      192.06,
+      186.27,
+      188.72,
       "checkable at source by anyone,"
     ],
     [
-      192.06,
-      195.83,
+      188.72,
+      192.56,
       "labelled honorary, never a passed examination."
     ],
     [
-      197.33,
-      204.6,
-      "If recognised, you may also be given\naccess to the PCI student portal"
+      194.06,
+      200.69,
+      "If recognised, you may also be given\naccess to the PCI student portal and\nthe Institute's learning resources \u2014"
     ],
     [
-      204.6,
-      208.67,
-      "and the Institute's learning\nresources \u2014 video lectures, course\nmaterial and the simulation lab."
+      200.69,
+      204.17,
+      "video lectures, course material\nand the simulation lab."
     ],
     [
-      208.67,
-      215.53,
+      204.17,
+      210.22,
       "The same terms may extend to study through\nCertuvo, PCI's official preparation platform,"
     ],
     [
-      215.53,
-      222.38,
+      210.22,
+      217.02,
       "and invitations to selected PCI AI events\n\u2014 all subject to current programme terms."
     ],
     [
-      223.88,
-      227.58,
+      218.52,
+      223.92,
       "Tell the Board which discipline\nyour contribution aligns to:"
     ],
     [
-      227.58,
-      232.13,
+      223.92,
+      227.43,
       "project controls, project\nfinance or project management."
     ],
     [
-      232.13,
-      235.99,
+      227.43,
+      231.52,
       "Optional, and it confers\nno examined certification."
     ],
     [
-      237.49,
-      243.79,
+      233.02,
+      240.19,
       "If your work has outlasted the projects it\nwas done on, it deserves to be recognised."
     ],
     [
-      243.79,
-      251.04,
+      240.19,
+      245.68,
       "Apply for the Board's\nconsideration at pciai.org."
     ],
     [
-      251.04,
-      257.73,
+      245.68,
+      249.34,
       "Questions to Members@pciai.org."
     ]
   ],
@@ -468,79 +459,79 @@
       "s1",
       "The question",
       0.0,
-      8.46
+      8.63
     ],
     [
       "s2",
       "The recognition",
-      8.46,
-      28.6
+      8.63,
+      27.27
     ],
     [
       "s3",
       "The Institute",
-      28.6,
-      73.2
+      27.27,
+      70.89
     ],
     [
       "s4",
       "What it is",
-      73.2,
-      99.34
+      70.89,
+      95.54
     ],
     [
       "s5",
       "Who may apply",
-      99.34,
-      113.33
+      95.54,
+      110.24
     ],
     [
       "s6",
       "Industries",
-      113.33,
-      126.42
+      110.24,
+      123.82
     ],
     [
       "s7",
       "Eligibility",
-      126.42,
-      146.16
+      123.82,
+      143.46
     ],
     [
       "s8",
       "Your application",
-      146.16,
-      171.08
+      143.46,
+      166.68
     ],
     [
       "s9",
       "Putting yourself forward",
-      171.08,
-      183.96
+      166.68,
+      180.77
     ],
     [
       "s10",
       "The registry",
-      183.96,
-      196.58
+      180.77,
+      193.31
     ],
     [
       "s11",
       "What it opens",
-      196.58,
-      223.13
+      193.31,
+      217.77
     ],
     [
       "s12",
       "Discipline alignment",
-      223.13,
-      236.74
+      217.77,
+      232.27
     ],
     [
       "s13",
       "Apply",
-      236.74,
-      258.93
+      232.27,
+      250.54
     ]
   ]
 }
