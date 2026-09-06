@@ -251,6 +251,12 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
    "profession." alone on a line. A slightly smaller heading there keeps the
    two lines the copy was written as. */
 #stage.sq #s10 h3{font-size:calc(2.55 * var(--s) * 1px)}
+/* In the narrow aspects the close headline is broken by hand into three even
+   lines. Shrinking it was tried first and still left "profession." orphaned;
+   a balanced break reads better than a smaller heading. */
+.sqbr{display:none}
+#stage.sq .sqbr,#stage.pt .sqbr{display:inline}
+#stage.sq .nbr,#stage.pt .nbr{display:none}
 #stage.pt .cards.grid .card{width:calc(40 * var(--s) * 1px)}
 
 /* ---------- honorary gold ---------- */
@@ -394,7 +400,7 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
   <section class="shot" id="s10">
     <img id="markEnd" src="../brand/logo.svg" alt="" data-a="1">
     <div class="eyebrow gold" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">Honorary Fellow (PCI)</div>
-    <h3 style="margin-top:calc(1.5*var(--s)*1px)">Your contribution has shaped the profession.<br>Now let it be recognised.</h3>
+    <h3 style="margin-top:calc(1.5*var(--s)*1px)">Your contribution has shaped<span class="nbr"> </span><span class="sqbr"><br></span>the profession.<br>Now let it be recognised.</h3>
     <div class="tokens" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">
       <div class="tok">APPLY TODAY</div><div class="tok">NO FEE</div><div class="tok">BOARD-REVIEWED</div><div class="tok">PUBLICLY VERIFIABLE</div>
     </div>
