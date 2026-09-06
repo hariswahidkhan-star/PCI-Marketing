@@ -27,7 +27,7 @@ LEAD, TAIL = 0.30, 1.20
 # to 0.36 s to fit a 120-second cap. With the cap lifted, each topic gets a real
 # pause: the caption clears, a moment of silence, the picture changes, and only
 # then does the next topic begin with the voice.
-GAP_SCENE = 1.50
+GAP_SCENE = 1.10
 
 # The brief specifies a 105-120s master. The read is measured first and the
 # picture follows it, so the only lever left is a uniform time-scale — applied
@@ -39,7 +39,7 @@ GAP_SCENE = 1.50
 # The brief's 120 s cap was lifted by PCI in favour of proper pauses, so the
 # film now runs at the narrator's natural pace and this is only a sanity
 # ceiling: no conform is applied unless the read somehow exceeds it.
-TARGET = 300.00
+TARGET = 225.00
 MAX_STRETCH = 1.08
 SILENCE_DB = '-38dB'
 MIN_SIL = 0.26          # a pause shorter than this is phrasing, not a boundary

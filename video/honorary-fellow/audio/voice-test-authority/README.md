@@ -18,7 +18,9 @@ B unless PCI says otherwise; switching is one re-generation (~$0.60).
 Cost of this test: ~820 credits (~$0.15), one take each.
 
 **Outcome:** PCI listened to all three and chose **A — Holden**. The authority
-cut is produced on Holden, every scene directed `[deep, slow, commanding]`
-(`../vo-01.mp3` … `../vo-13.mp3`). The full Jim Executive read of the same
+cut is produced on Holden. PCI then asked for it a little faster and more
+human, so the shipped takes (`../vo-01.mp3` … `../vo-13.mp3`) are directed
+`[warm, confident, natural pace]`; the `[deep, slow, commanding]` read is in
+`../holden-commanding/`. The full Jim Executive read of the same
 script, made before PCI's choice, is kept in `../jim-executive-authority/`; the
 previous cut's Holden takes are in `../old-paced-holden/`.

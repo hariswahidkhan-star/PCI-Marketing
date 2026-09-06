@@ -1,4 +1,4 @@
-# Honorary Fellow (PCI) — lead-generation film (4:11)
+# Honorary Fellow (PCI) — lead-generation film (3:45)
 
 A bright, premium institutional film for **PCI AI — Project Controls Institute
 Global, Inc.**, inviting distinguished professionals to apply for **Honorary
@@ -114,17 +114,18 @@ how old PCI is — is absent because no PCI page states it.
 
 ## Pacing
 
-Thirteen scenes, no time-scaling, a **1.5-second beat** between every topic: the
-caption clears, a moment of silence, the picture changes, and only then does
-the next topic begin with the voice. Running time **250.54 s**. `sync.py`'s
-cap is 300 s and it still refuses anything past 8 %, so a rushed read cannot be
-shipped by accident.
+Thirteen scenes with a **1.1-second beat** between every topic: the caption
+clears, a moment of silence, the picture changes, and only then does the next
+topic begin with the voice. PCI asked for the film a little faster, so the
+warm read (234.6 s natural) is conformed by **4.3 %**, formant-preserved, to
+**225.00 s** — under the threshold at which a time-stretch is audible on
+speech, and well inside `sync.py`'s 8 % refusal.
 
 Captions are cut to the breath. The v3 read spells out P-C-I and I-S-O I-E-C
 slowly, so proportional caption splits drifted by a phrase; `vo.py` now carries
 the measured end of each cue — the midpoint of the silence it ends on, from
 `silencedetect` at −38 dB, chosen from the candidates so that the implied
-speaking rate stays level across the scene — and `sync.py` uses those directly. Fifty cues,
+speaking rate stays level across the scene — and `sync.py` uses those directly. Forty-eight cues,
 two lines each, three at most — which is also what lets the caption band sit
 higher and gives the three densest scenes their room.
 
@@ -135,8 +136,10 @@ Narration is ElevenLabs **"Holden Pro Voice"** (`UudLhsL2DlHkDK0vGwl3`) on
 of any real person**. When PCI asked for a more authoritative read, three
 candidates were tested on the same two scenes (`audio/voice-test-authority/`):
 Holden directed harder, Jim Executive (the narrator of PCI's other three
-films) and Leo. **PCI chose Holden**, so every scene is directed `[deep, slow,
-commanding]`, with punctuation carrying the rest per the v3 guide: an ellipsis
+films) and Leo. **PCI chose Holden**, then asked for the read to be a little quicker and more
+human, so every scene is directed `[warm, confident, natural pace]` (the
+`[deep, slow, commanding]` read is kept in `audio/holden-commanding/`), with
+punctuation carrying the rest per the v3 guide: an ellipsis
 is a longer pause, an em-dash a short beat, capitals mark emphasis. The full
 Jim Executive read of the same script is kept in `audio/jim-executive-authority/`
 and the previous cut's Holden takes in `audio/old-paced-holden/`; switching is
@@ -207,7 +210,7 @@ The industry and applicant sequences are typographic.
 `src/probe.mjs` runs five checks on every aspect, sampled every 0.5 s: page
 errors, horizontal overflow (transitions excluded), scene content colliding with
 the caption band, scene content colliding with the fixed furniture, and **text
-clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **2,004
+clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **1,796
 samples, zero findings.**
 
 It earned its keep again on this cut. The first probe of the authority script

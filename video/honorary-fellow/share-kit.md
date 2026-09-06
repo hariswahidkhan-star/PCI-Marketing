@@ -70,20 +70,20 @@ consideration.** No urgency line: the site publishes no deadline.
 >
 > Chapters
 > 0:00 The question
-> 0:08 The recognition
-> 0:27 The Institute
-> 1:10 What it is
-> 1:35 Who may apply
-> 1:50 Industries
-> 2:03 Eligibility
-> 2:23 Your application
-> 2:46 Putting yourself forward
-> 3:00 The registry
-> 3:13 What it opens
-> 3:37 Discipline alignment
-> 3:52 Apply
+> 0:07 The recognition
+> 0:23 The Institute
+> 1:04 What it is
+> 1:26 Who may apply
+> 1:39 Industries
+> 1:50 Eligibility
+> 2:07 Your application
+> 2:29 Putting yourself forward
+> 2:40 The registry
+> 2:51 What it opens
+> 3:15 Discipline alignment
+> 3:27 Apply
 
-*(Chapter timestamps are exact, taken from the measured timeline. Running time 4:10.)*
+*(Chapter timestamps are exact, taken from the measured timeline. Running time 3:45.)*
 
 **Tags:** project controls, cost engineering, project finance, project management, PMO, honorary fellow, PCI AI, Project Controls Institute, professional recognition
 

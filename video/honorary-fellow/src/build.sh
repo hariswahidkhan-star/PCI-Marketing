@@ -66,6 +66,7 @@ STILLS_ARGS=()
 # Wave 1 — the 4K master pair. Run alone: two 3840x2160 renders plus their
 # encodes already saturate four cores, and adding the HD passes here makes all
 # five slower than running them in two waves.
+wave1(){
 echo "==> wave 1: 4K master (captioned + clean) @ ${FPS} fps"
 ( STILLS_ARGS=(--stills "$POSTER_F,$THUMB_F" --stillsdir ../build/stills)
   pipe 3840 2160 0 f-4k-clean -- \
@@ -77,6 +78,8 @@ echo "==> wave 1: 4K master (captioned + clean) @ ${FPS} fps"
 fail=0; for p in $p1 $p2; do wait "$p" || fail=1; done
 (( fail )) && { echo "4K render failed — see $BUILD/*.log" >&2; tail -20 "$BUILD"/f-4k-*.log >&2; exit 1; }
 
+}
+wave2(){
 echo "==> wave 2: 1080 landscape, 9:16 vertical, 1:1 square"
 ( pipe 1920 1080 1 f-16x9-cc -- \
     -map 0:v -map 1:a "${V[@]}" -profile:v high -level 4.1 -crf 18 "${A[@]}" -shortest \
@@ -91,6 +94,11 @@ echo "==> wave 2: 1080 landscape, 9:16 vertical, 1:1 square"
     "$DIST/$NAME-1080x1080-captions.mp4" ) & q3=$!
 fail=0; for p in $q1 $q2 $q3; do wait "$p" || fail=1; done
 (( fail )) && { echo "HD render failed — see $BUILD/*.log" >&2; tail -20 "$BUILD"/f-*.log >&2; exit 1; }
+
+}
+# HD_FIRST=1 runs the three HD cuts before the 4K pair, so the files PCI
+# actually shares arrive first; the 1080 clean downscale still waits for 4K.
+if [[ "${HD_FIRST:-0}" == "1" ]]; then wave2; wave1; else wave1; wave2; fi
 
 # The 1080 clean master is a downscale of the 4K clean master rather than a
 # sixth render: same picture, and a Lanczos downscale of 4K is sharper than a
