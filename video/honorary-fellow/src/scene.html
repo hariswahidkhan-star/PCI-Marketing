@@ -349,7 +349,10 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
   <!-- 7 · application evidence -->
   <section class="shot" id="s7">
     <div class="eyebrow" data-a="1">Your application</div>
-    <div class="cols" style="margin-top:calc(2.8*var(--s)*1px)">
+    <div class="tokens" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="tok hero">No fee</div><div class="tok hero">No examination</div><div class="tok hero">One application</div>
+    </div>
+    <div class="cols" style="margin-top:calc(2.2*var(--s)*1px)">
       <div class="col" data-a="1"><b>Profile</b><span>Role, employer, country and industry</span></div>
       <div class="col" data-a="1"><b>Résumé or CV</b><span>With academic and professional evidence</span></div>
       <div class="col" data-a="1"><b>Career history</b><span>The roles most relevant to this recognition</span></div>
@@ -387,8 +390,11 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
   <section class="shot" id="s10">
     <img id="markEnd" src="../brand/logo.svg" alt="" data-a="1">
     <div class="eyebrow gold" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">Honorary Fellow (PCI)</div>
-    <h3 style="margin-top:calc(1.5*var(--s)*1px)">Your contribution has shaped the profession.<br>Now let it be considered for recognition.</h3>
-    <div class="url" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">pciai.org<em>·</em>Members@pciai.org</div>
+    <h3 style="margin-top:calc(1.5*var(--s)*1px)">Your contribution has shaped the profession.<br>Now let it be recognised.</h3>
+    <div class="tokens" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">
+      <div class="tok">APPLY TODAY</div><div class="tok">NO FEE</div><div class="tok">BOARD-REVIEWED</div><div class="tok">PUBLICLY VERIFIABLE</div>
+    </div>
+    <div class="url" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">pciai.org<em>·</em>Members@pciai.org</div>
     <div class="legal" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
       Honorary Fellow (PCI) is a discretionary, board-conferred recognition involving no examination.
       It is not an examined certification, licence or accreditation. Meeting the eligibility criteria
@@ -517,10 +523,10 @@ const CUES = {
   s4:[['.eyebrow',.16,0],['.tok.hero',.40,.30],['.roles .tok',1.9,.07],['.note',3.6,0]],
   s5:[['.eyebrow',.16,0],['.tok',.46,.085],['.sub',2.6,0]],
   s6:[['.eyebrow',.16,0],['.stat',.44,.70],['.sub',2.4,0],['.note',3.6,0]],
-  s7:[['.eyebrow',.16,0],['.col',.42,.85],['.sub',3.2,0],['.note',4.2,0]],
+  s7:[['.eyebrow',.16,0],['.tok.hero',.36,.28],['.col',1.4,.60],['.sub',4.0,0],['.note',4.8,0]],
   s8:[['.eyebrow',.18,0],['.card',.44,.62],['.note',4.2,0]],
   s9:[['.eyebrow',.16,0],['.card',.40,.85],['.note',3.0,0]],
-  s10:[['#markEnd',.20,0],['.eyebrow',.55,0],['h3 ',.95,0],['.url',1.6,0],['.legal',2.3,0]]
+  s10:[['#markEnd',.20,0],['.eyebrow',.55,0],['h3 ',.95,0],['.tok',1.5,.18],['.url',2.3,0],['.legal',2.9,0]]
 };
 const ANIM = [];
 for (const shot of SHOTS){

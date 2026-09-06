@@ -83,6 +83,8 @@ Pages used, all under `PCI/backend/wwwroot/`:
 | B1 | Recognition as Honorary Fellow (PCI) | RH | route table: *"Honorary · Free · No exam · Honorary Fellow (PCI)"* |
 | B2 | The award can be verified publicly, and is labelled honorary — never a passed examination | DBR, VER | DBR: *"every honorary award, can be checked on the verification page"*; VER: *"clearly labelled honorary and never a passed examination"* |
 | B3 | Accepted applicants **may** be issued access credentials to the PCI student portal and given access to learning resources and study materials, subject to current programme terms | HA | *"Accepted applicants may be issued access credentials to the PCI student portal and given access to the Institute's learning resources and study materials… may be varied or withdrawn"* |
+| B2a | "Your name, on the profession's public register" — the pitch's phrasing of B2 | DBR | *"the credential registry is live from the programme's founding cohort onwards… every honorary award, can be checked on the verification page"* — a public register the award is entered on, not a promise of who else is on it |
+| A6 | "One application" | HA | The application is a single form on one page, submitted once: *"Submit your application below for the board's consideration; we will email you a reference"* |
 | B4 | Certuvo is PCI's official platform for preparation and study — the film calls it PCI's official preparation platform | site-wide footer; `certification.html` | *"Certuvo is PCI's official platform for preparation and study"*; *"Preparation and training are provided separately by Certuvo, our official partner"* |
 
 ### Client-asserted, not yet on the site
@@ -131,6 +133,18 @@ Two further corrections:
   accept applicants.
 
 ---
+
+## 3a. The pitch cut
+
+PCI asked for the film to sell, to maximise applications. The pitch is built
+from the levers that are true — no fee (F1), no examination (N2), a public
+register (B2a), one application (A6), individual Board review (N5) — in
+second-person address with an "apply today" close. What the pitch does **not**
+do, on PCI's own rules: it never calls fellows "members" (the honorary route is
+a recognition, not a membership grade), never implies scarcity or a deadline,
+never promises a career outcome, and keeps every qualifying sentence — board
+discretion, no guarantee, no entitlement, not an examined certification —
+spoken and on screen. `share-kit.md` carries the same rules into the posts.
 
 ## 4. Claims deliberately not made
 
