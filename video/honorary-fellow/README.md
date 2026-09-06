@@ -1,4 +1,4 @@
-# Honorary Fellow (PCI) — lead-generation film (3:45)
+# Honorary Fellow (PCI) — lead-generation film (4:00)
 
 A bright, premium institutional film for **PCI AI — Project Controls Institute
 Global, Inc.**, inviting distinguished professionals to apply for **Honorary
@@ -117,8 +117,8 @@ how old PCI is — is absent because no PCI page states it.
 Thirteen scenes with a **1.1-second beat** between every topic: the caption
 clears, a moment of silence, the picture changes, and only then does the next
 topic begin with the voice. PCI asked for the film a little faster, so the
-warm read (234.6 s natural) is conformed by **4.3 %**, formant-preserved, to
-**225.00 s** — under the threshold at which a time-stretch is audible on
+emotional read (250.7 s natural) is conformed by **4.5 %**, formant-preserved,
+to **240.00 s** — under the threshold at which a time-stretch is audible on
 speech, and well inside `sync.py`'s 8 % refusal.
 
 Captions are cut to the breath. The v3 read spells out P-C-I and I-S-O I-E-C
@@ -136,10 +136,17 @@ Narration is ElevenLabs **"Holden Pro Voice"** (`UudLhsL2DlHkDK0vGwl3`) on
 of any real person**. When PCI asked for a more authoritative read, three
 candidates were tested on the same two scenes (`audio/voice-test-authority/`):
 Holden directed harder, Jim Executive (the narrator of PCI's other three
-films) and Leo. **PCI chose Holden**, then asked for the read to be a little quicker and more
-human, so every scene is directed `[warm, confident, natural pace]` (the
-`[deep, slow, commanding]` read is kept in `audio/holden-commanding/`), with
-punctuation carrying the rest per the v3 guide: an ellipsis
+films) and Leo. **PCI chose Holden**, asked for the read to be a little quicker and more human,
+and then for *maximum emotion*. The shipped takes are therefore directed
+phrase by phrase — every clause carries its own emotional cue, from
+`[quiet, reflective]` on the first line through `[reverent]`, `[inspired]`,
+`[candid, sincere]` on the accreditation disclosure, `[empowering]` on
+self-nomination, to `[moved, heartfelt]` and `[inspiring, strong, resolute]`
+at the close. The full direction is in `src/v3-emotion.json`; **not one word
+differs from the register script** (a check strips the tags and compares).
+Earlier reads are kept for comparison: `audio/holden-commanding/` (deep, slow,
+commanding) and `audio/holden-warm/` (warm, natural pace). Punctuation carries
+the rest per the v3 guide: an ellipsis
 is a longer pause, an em-dash a short beat, capitals mark emphasis. The full
 Jim Executive read of the same script is kept in `audio/jim-executive-authority/`
 and the previous cut's Holden takes in `audio/old-paced-holden/`; switching is
@@ -210,7 +217,7 @@ The industry and applicant sequences are typographic.
 `src/probe.mjs` runs five checks on every aspect, sampled every 0.5 s: page
 errors, horizontal overflow (transitions excluded), scene content colliding with
 the caption band, scene content colliding with the fixed furniture, and **text
-clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **1,796
+clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **1,916
 samples, zero findings.**
 
 It earned its keep again on this cut. The first probe of the authority script

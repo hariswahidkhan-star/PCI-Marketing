@@ -39,7 +39,7 @@ GAP_SCENE = 1.10
 # The brief's 120 s cap was lifted by PCI in favour of proper pauses, so the
 # film now runs at the narrator's natural pace and this is only a sanity
 # ceiling: no conform is applied unless the read somehow exceeds it.
-TARGET = 225.00
+TARGET = 240.00
 MAX_STRETCH = 1.08
 SILENCE_DB = '-38dB'
 MIN_SIL = 0.26          # a pause shorter than this is phrasing, not a boundary

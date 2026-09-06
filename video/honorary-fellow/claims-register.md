@@ -190,7 +190,7 @@ The panel's consensus, and what was done with it:
 | Say what a contribution looks like; set a test the right applicant recognises | Scene 1: *a standard, a method, and the people who carry it forward*; close: *"If your work has outlasted the projects it was done on, it deserves to be recognised."* |
 | **Scene 11 ships C1, C4 and C5 — events, video lectures, the simulation lab — which are on no PCI page. All four judges called this a publication blocker.** | **Kept, on PCI's explicit instruction**, with one *"may"* governing every item and *"all subject to current programme terms"*. The condition stands: **the application page must name these before the film is published**, or the scene must be re-recorded without them. |
 | Who sits on the Board, who already holds the recognition, how old PCI is — the facts that would most persuade a sceptic | **Not added.** None is on any PCI page, and the film makes no claim it cannot source. PCI can supply them for a future cut. |
-| Too long for the audience (the project-controls director) | PCI's instruction was *"don't worry about time"*; the cut runs 3:45, with a 1.1 s beat between topics and a 4.3 % formant-preserved conform PCI asked for ("a little fast and more human") |
+| Too long for the audience (the project-controls director) | PCI's instruction was *"don't worry about time"*; the cut runs 4:00, with a 1.1 s beat between topics and a 4.5 % formant-preserved conform PCI asked for ("a little fast and more human", then "add emotions maximum") |
 
 ## 4. Claims deliberately not made
 
@@ -225,8 +225,9 @@ film.** The only URL shown is `pciai.org`, and the only address shown is
   the roles rather than illustrating them with stand-in imagery.
 - **The narration is synthetic** — ElevenLabs *"Holden Pro Voice"*
   (`UudLhsL2DlHkDK0vGwl3`) on `eleven_v3`, the stock library voice the brief
-  names, chosen by PCI after a three-voice test and directed `[warm, confident,
-  natural pace]` at PCI's request for a quicker, more human read (`audio/voice-test-authority/`). **It is not a clone of any real
+  names, chosen by PCI after a three-voice test and directed phrase by phrase with
+  emotional cues (`src/v3-emotion.json`) at PCI's request for a quicker, more
+  human and maximally emotional read — the words are unchanged (`audio/voice-test-authority/`). **It is not a clone of any real
   person**, and no real person's voice was used. Every take was transcribed
   back and matched to the script word for word before use.
 - **The score is original**, written from scratch in `src/music.py` and

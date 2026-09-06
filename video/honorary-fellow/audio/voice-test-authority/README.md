@@ -19,8 +19,9 @@ Cost of this test: ~820 credits (~$0.15), one take each.
 
 **Outcome:** PCI listened to all three and chose **A — Holden**. The authority
 cut is produced on Holden. PCI then asked for it a little faster and more
-human, so the shipped takes (`../vo-01.mp3` … `../vo-13.mp3`) are directed
-`[warm, confident, natural pace]`; the `[deep, slow, commanding]` read is in
-`../holden-commanding/`. The full Jim Executive read of the same
+human, then for maximum emotion, so the shipped takes (`../vo-01.mp3` … `../vo-13.mp3`)
+carry phrase-level emotional direction (`../../src/v3-emotion.json`). The
+`[deep, slow, commanding]` read is in `../holden-commanding/` and the
+`[warm, confident, natural pace]` read in `../holden-warm/`. The full Jim Executive read of the same
 script, made before PCI's choice, is kept in `../jim-executive-authority/`; the
 previous cut's Holden takes are in `../old-paced-holden/`.
