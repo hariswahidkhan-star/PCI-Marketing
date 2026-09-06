@@ -15,3 +15,6 @@ Thumbs.db
 # Python
 __pycache__/
 *.pyc
+
+# Explainer render intermediates
+video/explainer/build/

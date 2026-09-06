@@ -101,12 +101,17 @@ Those same three figures are listed as **"Substantiated numbers"** in
 `PCI-Marketing/README.md`. So two internal sources disagree. This was checked
 directly against the 235-page site source:
 
+> **CORRECTION, made after a second pass.** The first version of this table
+> reported the 13-domain figure as unfound. That was a **false negative**: the
+> search covered only numeral forms (`13-domain`, `13 domains`) and the site
+> spells the number in words. Re-run against word forms, the picture is:
+
 | Figure | In `PCI-Marketing/README.md` | Found in the live-site source? |
 |---|---|---|
-| "1 September 2026" launch | Listed as fact | **No — 0 of 235 pages** |
-| "25 country chapters" | Listed as substantiated | **No — 0 of 235 pages.** 25 `chapter-*.html` pages do exist, but a published page is not an operating chapter, and the site never makes the claim |
-| "7 launch languages" | Listed as substantiated | **No — 0 of 235 pages** |
-| "13-domain body of knowledge" | Listed as substantiated | **No — 0 of 235 pages.** `body-of-knowledge.html` does publish **"61 Knowledge Areas"** |
+| "13-domain body of knowledge" | Listed as substantiated | ✅ **VERIFIED — 15 pages** say "thirteen domains". `body-of-knowledge.html`: *"thirteen domains, sixty-one Knowledge Areas, weighted 40/40/20"* |
+| "1 September 2026" launch | Listed as fact | ❌ **Not found** — 0 pages, in numerals or words |
+| "25 country chapters" | Listed as substantiated | ❌ **Not found** — 0 pages for "twenty-five" or "25 chapters". 25 `chapter-*.html` pages exist, but `chapters.html` states **"Chapters are in formation; PCI does not overstate local presence."** Claiming 25 operating chapters would contradict the site's own caution. |
+| "7 launch languages" | Listed as substantiated | ❌ **Not found** — 0 pages |
 
 **Effect on this film: none.** It uses none of the four. That was not luck in
 hindsight — the film was built to carry no statistics — but it does mean this
@@ -114,13 +119,19 @@ production needed no correction.
 
 **Two things for the Institute to note, outside this film's scope:**
 
-1. `PCI-Marketing/README.md`'s "Substantiated numbers" table is not supported by
-   the live-site source and should be reconciled or sourced.
-2. **The existing 15-second launch film carries two of these on screen** —
-   `NOW LIVE · 1 SEPTEMBER 2026` in shot 1, and `13-domain body of knowledge ·
-   25 country chapters` in shot 3. If they cannot be substantiated, that film
-   needs a re-cut before further distribution. It has not been touched here:
-   it is a separate deliverable and the call belongs to the Institute.
+1. `PCI-Marketing/README.md`'s "Substantiated numbers" table is **partly**
+   supported: the 13-domain figure is solid, the other three are not.
+2. **The existing 15-second launch film carries two unverified figures on
+   screen** — `NOW LIVE · 1 SEPTEMBER 2026` in shot 1, and `25 country chapters`
+   in shot 3. (`13-domain body of knowledge`, also in shot 3, is fine.) The
+   chapters claim is the more serious of the two, because the site explicitly
+   declines to overstate local presence. That film needs a decision before
+   further distribution. It has not been re-cut here — that call belongs to the
+   Institute.
+
+**Lesson recorded for future verification:** search word forms as well as
+numerals. A single-form grep produced a confident false negative that was
+reported before it was caught.
 
 ---
 

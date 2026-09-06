@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCI AI — Explainer</title>
+<!--
+  PCI AI explainer — deterministic scene, same contract as the other two films:
+  window.seek(t) computes every style from t, so a frame is identical however
+  long the renderer takes to grab it.
+
+  Unlike those films this one does NOT carry its own cut list. sync.py measures
+  the recorded narration and writes shots.data.js and captions.data.js; this
+  page reads both. Picture is cut to voice, not the other way round.
+
+  ?w=1920&h=1080&cc=1&plate=0&t=0&play=1
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+:root{
+  --ink:#0F172A; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:19.2; --padb:19; --h1:5.6; --h2:4.3; --h3:3.1;
+  --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
+  --rule:rgba(148,180,230,.20); --card:#111D33; --cardbd:rgba(59,130,246,.42); --cardsub:#8FA6C4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:#0F172A;font-family:var(--sans);
+  color:var(--fg);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+#glow,#glow2{position:absolute;inset:-25%;pointer-events:none;will-change:transform,opacity}
+#glow{background:radial-gradient(closest-side, rgba(37,99,235,.32), rgba(37,99,235,0) 70%)}
+#glow2{background:radial-gradient(closest-side, rgba(193,51,41,.22), rgba(193,51,41,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%)}
+
+/* ---------- shots ---------- */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;
+  padding:calc(13 * var(--s) * 1px) calc(9.5 * var(--s) * 1px) calc(var(--padb) * var(--s) * 1px);
+  will-change:opacity,transform}
+.shot.left{align-items:flex-start;text-align:left}
+.eyebrow{font-weight:600;font-size:calc(1.28 * var(--s) * 1px);letter-spacing:.19em;
+  text-transform:uppercase;color:var(--eyeb);white-space:nowrap}
+.uline{height:calc(.4 * var(--s) * 1px);width:calc(7 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  border-radius:calc(.3 * var(--s) * 1px);transform-origin:center;will-change:transform}
+.shot.left .uline{transform-origin:left center}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.05;letter-spacing:-.023em;color:var(--fg)}
+h1{font-size:calc(var(--h1) * var(--s) * 1px)}
+h2{font-size:calc(var(--h2) * var(--s) * 1px)}
+h3{font-size:calc(var(--h3) * var(--s) * 1px)}
+.sub{font-weight:400;color:var(--sub);font-size:calc(1.82 * var(--s) * 1px);line-height:1.5;
+  max-width:calc(56 * var(--s) * 1px)}
+.ln{display:block;overflow:hidden;padding-bottom:calc(.5 * var(--s) * 1px)}
+.w{display:inline-block;will-change:transform,opacity}
+
+/* rows of tokens (disciplines, industries) */
+.tokens{display:flex;gap:calc(.9 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;
+  max-width:calc(62 * var(--s) * 1px)}
+.tok{font-family:var(--display);font-weight:800;letter-spacing:.02em;
+  font-size:calc(1.62 * var(--s) * 1px);
+  padding:calc(.72 * var(--s) * 1px) calc(1.25 * var(--s) * 1px);
+  border:calc(.11 * var(--s) * 1px) solid var(--cardbd);color:var(--fg);white-space:nowrap;
+  border-radius:calc(.2 * var(--s) * 1px);will-change:transform,opacity}
+.tok.on{border-color:rgba(193,51,41,.55)}
+
+/* comparison rows (PMI / ACCA / CFA) */
+.cmp{display:flex;flex-direction:column;gap:calc(1.0 * var(--s) * 1px);
+  width:calc(46 * var(--s) * 1px)}
+.cmp .row{display:flex;align-items:baseline;justify-content:space-between;
+  border-bottom:1px solid var(--rule);padding-bottom:calc(.75 * var(--s) * 1px);
+  will-change:transform,opacity}
+.cmp .row b{font-family:var(--display);font-weight:800;font-size:calc(2.35 * var(--s) * 1px);color:var(--fg)}
+.cmp .row span{font-size:calc(1.5 * var(--s) * 1px);color:var(--sub)}
+.cmp .row.gap b{color:var(--magenta)}
+.cmp .row.gap span{color:var(--eyeb)}
+
+/* credential cards */
+.cards{display:flex;gap:calc(1.3 * var(--s) * 1px);justify-content:center}
+.card{background:var(--card);border:calc(.11 * var(--s) * 1px) solid var(--cardbd);
+  padding:calc(1.7 * var(--s) * 1px) calc(1.9 * var(--s) * 1px);text-align:left;
+  border-radius:calc(.2 * var(--s) * 1px);min-width:calc(15.6 * var(--s) * 1px);
+  will-change:transform,opacity}
+.card b{display:block;font-family:var(--display);font-weight:800;
+  font-size:calc(2.85 * var(--s) * 1px);letter-spacing:-.02em;line-height:1;color:var(--fg)}
+.card span{display:block;margin-top:calc(.62 * var(--s) * 1px);font-size:calc(1.08 * var(--s) * 1px);
+  color:var(--cardsub);letter-spacing:.05em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+
+/* numbered stat pair */
+.stats{display:flex;gap:calc(3.4 * var(--s) * 1px);justify-content:center;align-items:flex-start}
+.stat{text-align:center;will-change:transform,opacity}
+.stat b{display:block;font-family:var(--display);font-weight:800;
+  font-size:calc(5.6 * var(--s) * 1px);line-height:1;color:var(--fg);letter-spacing:-.03em}
+.stat span{display:block;margin-top:calc(.6 * var(--s) * 1px);font-size:calc(1.32 * var(--s) * 1px);
+  color:var(--sub);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+
+/* weighting bars — three DIRECT-LABELLED bars, not one stacked bar.
+   Identity comes from the label beside each bar, never from colour alone, so
+   the two 40% groups can share the brand blue without ambiguity. Crimson marks
+   governed AI as the distinct third. Palette validated: blue/crimson ΔE 29.8
+   (deutan), 34.3 (normal vision). */
+.bars{display:flex;flex-direction:column;gap:calc(1.25 * var(--s) * 1px);width:calc(50 * var(--s) * 1px)}
+.bar{display:grid;grid-template-columns:1fr calc(4.6 * var(--s) * 1px);align-items:center;
+  gap:calc(1.1 * var(--s) * 1px);will-change:transform,opacity}
+.bar .lbl{font-size:calc(1.46 * var(--s) * 1px);color:var(--sub);font-weight:500;text-align:left;
+  padding-bottom:calc(.42 * var(--s) * 1px)}
+.bar .val{font-family:var(--display);font-weight:800;font-size:calc(1.95 * var(--s) * 1px);
+  color:var(--fg);text-align:right;font-variant-numeric:tabular-nums}
+.bar .track{grid-column:1 / -1;height:calc(.92 * var(--s) * 1px);background:rgba(148,180,230,.13);
+  border-radius:calc(.46 * var(--s) * 1px);overflow:hidden}
+.bar .fill{height:100%;border-radius:calc(.46 * var(--s) * 1px);transform-origin:left center;
+  background:var(--magenta)}
+.bar.ai .fill{background:var(--crimson)}
+
+/* three-up detail columns */
+.cols{display:flex;gap:calc(1.5 * var(--s) * 1px);justify-content:center;align-items:stretch}
+.col{border-left:calc(.17 * var(--s) * 1px) solid var(--cardbd);
+  padding:calc(.2 * var(--s) * 1px) 0 calc(.2 * var(--s) * 1px) calc(1.0 * var(--s) * 1px);
+  width:calc(15.5 * var(--s) * 1px);text-align:left;will-change:transform,opacity}
+.col b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.62 * var(--s) * 1px);
+  color:var(--fg);margin-bottom:calc(.42 * var(--s) * 1px)}
+.col span{font-size:calc(1.28 * var(--s) * 1px);color:var(--sub);line-height:1.42}
+
+.note{font-size:calc(1.16 * var(--s) * 1px);color:var(--foot);line-height:1.5;
+  max-width:calc(58 * var(--s) * 1px)}
+.quote{font-family:var(--display);font-weight:800;font-size:calc(2.9 * var(--s) * 1px);
+  letter-spacing:-.02em;color:var(--fg);line-height:1.15}
+
+/* identity + end card */
+#mark,#markEnd{width:calc(8.2 * var(--s) * 1px);height:calc(8.2 * var(--s) * 1px);display:block}
+.wordmark{display:flex;align-items:center;gap:calc(1.0 * var(--s) * 1px);justify-content:center}
+.wordmark .wm-t{font-family:var(--display);font-weight:800;letter-spacing:-.01em;
+  font-size:calc(3.1 * var(--s) * 1px);line-height:1;color:var(--fg)}
+.wordmark .wm-t em{font-style:normal;color:var(--magenta)}
+.wordmark .wm-s{font-weight:500;color:var(--sub);font-size:calc(1.12 * var(--s) * 1px);
+  line-height:1.3;text-align:left;border-left:calc(.11 * var(--s) * 1px) solid var(--rule);
+  padding-left:calc(.9 * var(--s) * 1px)}
+.url{font-weight:600;font-size:calc(1.8 * var(--s) * 1px);color:var(--fg)}
+.url em{font-style:normal;color:var(--sub);padding:0 calc(.65 * var(--s) * 1px)}
+.legal{font-weight:400;font-size:calc(.98 * var(--s) * 1px);color:var(--foot);line-height:1.55;
+  max-width:calc(60 * var(--s) * 1px)}
+
+/* ---------- persistent furniture ---------- */
+#topbar{position:absolute;display:flex;align-items:center;gap:calc(.8 * var(--s) * 1px);
+  left:calc(9.5 * var(--s) * 1px);top:calc(6 * var(--s) * 1px);will-change:opacity}
+#topbar img{width:calc(2.9 * var(--s) * 1px);height:calc(2.9 * var(--s) * 1px)}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.55 * var(--s) * 1px);color:var(--fg)}
+#topbar .t em{font-style:normal;color:var(--magenta)}
+#topbar .s{font-weight:500;font-size:calc(.88 * var(--s) * 1px);color:var(--foot);line-height:1.28;
+  text-align:left;border-left:calc(.1 * var(--s) * 1px) solid var(--rule);padding-left:calc(.66 * var(--s) * 1px)}
+/* chapter rail — a 4-minute film needs to say where you are */
+#chapter{position:absolute;right:calc(9.5 * var(--s) * 1px);top:calc(6.6 * var(--s) * 1px);
+  text-align:right;will-change:opacity}
+#chapter .n{font-family:var(--display);font-weight:800;font-size:calc(1.05 * var(--s) * 1px);
+  color:var(--magenta);letter-spacing:.16em}
+#chapter .c{font-weight:600;font-size:calc(1.22 * var(--s) * 1px);color:var(--fg);
+  letter-spacing:.03em;margin-top:calc(.2 * var(--s) * 1px)}
+#footrule{position:absolute;left:calc(9.5 * var(--s) * 1px);right:calc(9.5 * var(--s) * 1px);
+  bottom:calc(4.6 * var(--s) * 1px);height:calc(.16 * var(--s) * 1px);background:var(--rule);
+  border-radius:calc(.08 * var(--s) * 1px);overflow:hidden}
+#progress{height:100%;width:100%;background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  transform-origin:left center}
+#footl{position:absolute;left:calc(9.5 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);
+  font-size:calc(.98 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;
+  color:var(--foot);font-weight:600}
+#footr{position:absolute;right:calc(9.5 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);
+  font-size:calc(.98 * var(--s) * 1px);color:var(--foot);font-weight:500}
+
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;
+  padding:0 calc(10 * var(--s) * 1px);pointer-events:none}
+#ccbox{background:rgba(6,12,24,.82);border-bottom:calc(.26 * var(--s) * 1px) solid var(--crimson);
+  padding:calc(.85 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);font-weight:600;color:#fff;
+  text-align:center;white-space:pre-line;font-size:calc(1.7 * var(--s) * 1px);line-height:1.35;max-width:100%}
+
+/* ---------- vertical ---------- */
+#stage.pt .shot{padding-left:calc(5.5 * var(--s) * 1px);padding-right:calc(5.5 * var(--s) * 1px)}
+#stage.pt .cards,#stage.pt .cols,#stage.pt .stats{flex-direction:column;align-items:stretch;
+  gap:calc(1.1 * var(--s) * 1px);width:calc(40 * var(--s) * 1px)}
+#stage.pt .card{min-width:0}
+#stage.pt .col{width:auto}
+#stage.pt .cmp,#stage.pt .bars{width:calc(40 * var(--s) * 1px)}
+#stage.pt .tokens{max-width:calc(41 * var(--s) * 1px)}
+#stage.pt .tok{font-size:calc(1.5 * var(--s) * 1px)}
+#stage.pt .sub,#stage.pt .note,#stage.pt .legal{max-width:calc(41 * var(--s) * 1px)}
+#stage.pt #chapter{display:none}
+#stage.pt #cc{padding:0 calc(4.5 * var(--s) * 1px)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div><div id="glow2"></div>
+  <svg id="grid" preserveAspectRatio="none"></svg>
+  <div id="vig"></div>
+
+  <div id="topbar"><img src="../brand/logo.svg" alt="">
+    <div class="t">PCI <em>AI</em></div>
+    <div class="s">Project Controls<br>Institute Global, Inc.</div></div>
+  <div id="chapter"><div class="n">CHAPTER 1</div><div class="c">Why PCI AI exists</div></div>
+  <div id="footrule"><div id="progress"></div></div>
+  <div id="footl">Project Controls Institute</div>
+  <div id="footr">pciai.org</div>
+
+  <!-- 1 · what the discipline is -->
+  <section class="shot left" id="s1">
+    <div class="eyebrow" data-a="1">The discipline</div>
+    <div class="uline" data-a="1" style="margin:calc(1.4*var(--s)*1px) 0 calc(2.7*var(--s)*1px)"></div>
+    <h1><span class="ln"><span class="w">Turning intent</span></span><span class="ln"><span class="w">into delivery.</span></span></h1>
+    <div class="tokens" data-a="1" style="margin-top:calc(2.6*var(--s)*1px);justify-content:flex-start">
+      <div class="tok">PLANNING</div><div class="tok">COST</div><div class="tok">EARNED VALUE</div>
+      <div class="tok">FORECASTING</div><div class="tok">RISK</div><div class="tok">PROJECT FINANCE</div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">One integrated whole — not separate techniques.</div>
+  </section>
+
+  <!-- 2 · the gap -->
+  <section class="shot" id="s2">
+    <div class="eyebrow" data-a="1">The gap</div>
+    <div class="cmp" style="margin-top:calc(2.6*var(--s)*1px)">
+      <div class="row" data-a="1"><b>PMI</b><span>Project management</span></div>
+      <div class="row" data-a="1"><b>ACCA</b><span>Accountancy</span></div>
+      <div class="row" data-a="1"><b>CFA</b><span>Finance</span></div>
+      <div class="row gap" data-a="1"><b>Project controls</b><span>No equivalent</span></div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">No shared standard. No professional home.</div>
+  </section>
+
+  <!-- 3 · what AI changes -->
+  <section class="shot" id="s3">
+    <div class="eyebrow" data-a="1">What is changing</div>
+    <div class="tokens" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      <div class="tok">SCHEDULES</div><div class="tok">FORECASTS</div><div class="tok">COST REPORTS</div>
+    </div>
+    <h2 style="margin-top:calc(3.0*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">AI</span> <span class="w" data-a="1">accelerates</span> <span class="w" data-a="1">analysis.</span></span>
+      <span class="ln"><span class="w" data-a="1">It</span> <span class="w" data-a="1">can</span> <span class="w" data-a="1">also</span> <span class="w" data-a="1">create</span> <span class="w" data-a="1">false</span> <span class="w" data-a="1">confidence.</span></span></h2>
+    <div class="uline" data-a="1" style="margin:calc(2.4*var(--s)*1px) 0 calc(2.0*var(--s)*1px)"></div>
+    <div class="sub" data-a="1">Technology does not remove accountability.</div>
+  </section>
+
+  <!-- 4 · why PCI AI exists -->
+  <section class="shot" id="s4">
+    <div class="eyebrow" data-a="1">Why PCI AI exists</div>
+    <h2 style="margin-top:calc(2.4*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">A</span> <span class="w" data-a="1">shared</span> <span class="w" data-a="1">standard.</span></span>
+      <span class="ln"><span class="w" data-a="1">An</span> <span class="w" data-a="1">independent</span> <span class="w" data-a="1">credential.</span></span>
+      <span class="ln"><span class="w" data-a="1">A</span> <span class="w" data-a="1">professional</span> <span class="w" data-a="1">home.</span></span></h2>
+    <div class="uline" data-a="1" style="margin:calc(2.6*var(--s)*1px) 0 calc(2.2*var(--s)*1px)"></div>
+    <div class="sub" data-a="1">Built for how the discipline is practised now, with AI governance at its core.</div>
+  </section>
+
+  <!-- 5 · the mission -->
+  <section class="shot" id="s5">
+    <div class="eyebrow" data-a="1">The mission</div>
+    <div class="tokens" data-a="1" style="margin-top:calc(2.6*var(--s)*1px)">
+      <div class="tok">CERTIFICATION</div><div class="tok">RESEARCH</div><div class="tok">DEVELOPMENT</div>
+      <div class="tok">STANDARDS</div><div class="tok">PUBLICATIONS</div><div class="tok on">RESPONSIBLE AI</div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.8*var(--s)*1px)">To advance the profession of project controls.</div>
+  </section>
+
+  <!-- 6 · the governing position -->
+  <section class="shot" id="s6">
+    <div class="eyebrow" data-a="1">The position</div>
+    <div class="quote" data-a="1" style="margin-top:calc(2.6*var(--s)*1px);max-width:calc(52*var(--s)*1px)">
+      It certifies professionals who <em style="font-style:normal;color:#3B82F6">govern</em> AI —<br>not who defer to it.</div>
+    <div class="uline" data-a="1" style="margin-top:calc(2.8*var(--s)*1px)"></div>
+  </section>
+
+  <!-- 7 · the suite -->
+  <section class="shot" id="s7">
+    <div class="eyebrow" data-a="1">The framework</div>
+    <h2 style="margin-top:calc(2.3*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">PCI</span> <span class="w" data-a="1">AI</span> <span class="w" data-a="1">Project</span> <span class="w" data-a="1">Leadership</span></span>
+      <span class="ln"><span class="w" data-a="1">Certification</span> <span class="w" data-a="1">Suite</span></span></h2>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">Three AI-era leadership credentials.</div>
+  </section>
+
+  <!-- 8 · the three credentials -->
+  <section class="shot" id="s8">
+    <div class="eyebrow" data-a="1">The credentials</div>
+    <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="card" data-a="1"><b>PCL-AI</b><span>Project Controls</span></div>
+      <div class="card" data-a="1"><b>PFL-AI</b><span>Project Finance</span></div>
+      <div class="card" data-a="1"><b>PML-AI</b><span>Project Management</span></div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.9*var(--s)*1px)">Finance intelligently. Control predictively. Deliver successfully.</div>
+  </section>
+
+  <!-- 9 · the body of knowledge -->
+  <section class="shot" id="s9">
+    <div class="eyebrow" data-a="1">The Body of Knowledge · First Edition</div>
+    <div class="stats" style="margin-top:calc(3.0*var(--s)*1px)">
+      <div class="stat" data-a="1"><b>13</b><span>Domains</span></div>
+      <div class="stat" data-a="1"><b>61</b><span>Knowledge Areas</span></div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(3.0*var(--s)*1px)">The competencies each credential is designed to assess.</div>
+  </section>
+
+  <!-- 10 · the weighting -->
+  <section class="shot" id="s10">
+    <div class="eyebrow" data-a="1">Examination weighting</div>
+    <div class="bars" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="bar" data-a="1"><div class="lbl">Project accounting &amp; finance</div><div class="val">40%</div>
+        <div class="track"><div class="fill" data-w="1.00"></div></div></div>
+      <div class="bar" data-a="1"><div class="lbl">Project management principles</div><div class="val">40%</div>
+        <div class="track"><div class="fill" data-w="1.00"></div></div></div>
+      <div class="bar ai" data-a="1"><div class="lbl">Governed AI</div><div class="val">20%</div>
+        <div class="track"><div class="fill" data-w="0.50"></div></div></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.6*var(--s)*1px)">
+      AI is a domain in its own right — and embedded through the other twelve.</div>
+  </section>
+
+  <!-- 11 · the examination -->
+  <section class="shot" id="s11">
+    <div class="eyebrow" data-a="1">The examination</div>
+    <h3 style="margin-top:calc(2.2*var(--s)*1px)">Scenario-based. Criterion-referenced.</h3>
+    <div class="cols" style="margin-top:calc(2.8*var(--s)*1px)">
+      <div class="col" data-a="1"><b>Read</b><span>a cost position</span></div>
+      <div class="col" data-a="1"><b>Interpret</b><span>an earned-value index</span></div>
+      <div class="col" data-a="1"><b>Judge</b><span>a risk response</span></div>
+      <div class="col" data-a="1"><b>Decide</b><span>whether an AI forecast can be trusted</span></div>
+    </div>
+  </section>
+
+  <!-- 12 · routes, renewal, verification -->
+  <section class="shot" id="s12">
+    <div class="eyebrow" data-a="1">Routes, renewal and proof</div>
+    <div class="cols" style="margin-top:calc(2.8*var(--s)*1px)">
+      <div class="col" data-a="1"><b>Two routes in</b><span>An experience route for practitioners, and a Foundation route.</span></div>
+      <div class="col" data-a="1"><b>Three-year cycle</b><span>CPD renewal with a mandatory AI-currency component.</span></div>
+      <div class="col" data-a="1"><b>Publicly verifiable</b><span>Every credential can be checked by anyone.</span></div>
+    </div>
+  </section>
+
+  <!-- 13 · industries -->
+  <section class="shot" id="s13">
+    <div class="eyebrow" data-a="1">Industries supported</div>
+    <div class="tokens" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="tok" data-a="1">ENERGY &amp; UTILITIES</div><div class="tok" data-a="1">RAIL &amp; TRANSPORTATION</div>
+      <div class="tok" data-a="1">AEROSPACE &amp; DEFENCE</div><div class="tok" data-a="1">OIL &amp; GAS</div>
+      <div class="tok" data-a="1">CONSTRUCTION &amp; INFRASTRUCTURE</div><div class="tok" data-a="1">AVIATION</div>
+      <div class="tok" data-a="1">MANUFACTURING</div><div class="tok" data-a="1">DATA CENTRES</div>
+      <div class="tok" data-a="1">SMART CITIES</div><div class="tok" data-a="1">GOVERNMENT PROGRAMMES</div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.7*var(--s)*1px)">The same discipline, wherever capital is deployed at scale.</div>
+  </section>
+
+  <!-- 14 · organisations -->
+  <section class="shot" id="s14">
+    <div class="eyebrow" data-a="1">For organisations</div>
+    <div class="cols" style="margin-top:calc(2.8*var(--s)*1px)">
+      <div class="col" data-a="1"><b>Corporate programmes</b><span>Team enrolment at scale, against one recognised standard.</span></div>
+      <div class="col" data-a="1"><b>University partnerships</b><span>Curriculum alignment and a student pathway.</span></div>
+    </div>
+  </section>
+
+  <!-- 15 · candour -->
+  <section class="shot" id="s15">
+    <div class="eyebrow" data-a="1">What PCI does not claim</div>
+    <h3 style="margin-top:calc(2.2*var(--s)*1px);max-width:calc(56*var(--s)*1px)">
+      Not accredited by ANAB, IAS, or any ISO/IEC 17024 accreditation body.</h3>
+    <div class="uline" data-a="1" style="margin:calc(2.4*var(--s)*1px) 0 calc(2.0*var(--s)*1px)"></div>
+    <div class="sub" data-a="1">Developed with reference to those personnel-certification principles — and it says so plainly.</div>
+    <div class="note" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">
+      For a body whose value rests on trust, that restraint is the foundation — not a weakness.</div>
+  </section>
+
+  <!-- 16 · close -->
+  <section class="shot" id="s16">
+    <img id="markEnd" src="../brand/logo.svg" alt="" data-a="1">
+    <div class="wordmark" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="wm-t">PCI <em>AI</em></div>
+      <div class="wm-s">Project Controls<br>Institute Global, Inc.</div></div>
+    <div class="quote" data-a="1" style="margin-top:calc(2.3*var(--s)*1px);font-size:calc(2.2*var(--s)*1px)">
+      “AI proposes. The professional disposes.”</div>
+    <div class="url" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">pciai.org<em>·</em>projectcontrolsinstitute.org</div>
+    <div class="legal" data-a="1" style="margin-top:calc(2.1*var(--s)*1px)">
+      Project Controls Institute Global, Inc. — a Delaware Non-Stock Corporation.
+      Not accredited by ANAB, IAS or any ISO/IEC 17024 accreditation body;
+      framework developed with reference to ISO/IEC 17024 principles.</div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+</div>
+
+<script src="captions.data.js"></script>
+<script src="shots.data.js"></script>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
+const CC = Q.get('cc') !== '0';
+const DUR = window.__DURATION;
+const RAW = window.__SHOTS, CAPS = window.__CAPS || [];
+
+const R = W / H;
+const ASPECT = R >= 1.40 ? '169' : (R >= 0.85 ? 'sq' : 'pt');
+const NOMINAL = ASPECT === '169' ? 1920 : ASPECT === 'sq' ? 1350 : 1180;
+const stage = document.getElementById('stage'), root = document.documentElement;
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+root.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+if (ASPECT === 'sq'){ stage.classList.add('sq'); root.style.setProperty('--padb','20'); }
+if (ASPECT === 'pt'){ stage.classList.add('pt');
+  root.style.setProperty('--padb','30'); root.style.setProperty('--h1','5.0');
+  root.style.setProperty('--h2','3.9'); root.style.setProperty('--h3','2.8'); }
+
+/* grounds: the film moves through warmth rather than sitting in one blue wash */
+const GROUND = {
+  s1:[20,18,26], s2:[26,20,24], s3:[30,21,18], s4:[15,23,42], s5:[13,20,34], s6:[10,15,28],
+  s7:[16,22,38], s8:[10,15,28], s9:[22,19,28], s10:[15,23,42], s11:[28,21,19], s12:[16,25,35],
+  s13:[12,20,32], s14:[20,18,26], s15:[26,20,23], s16:[15,23,42]
+};
+const WARM = { s1:.75, s2:.6, s3:.9, s4:.15, s5:.3, s6:.2, s7:.25, s8:.2,
+               s9:.55, s10:.15, s11:.85, s12:.25, s13:.3, s14:.6, s15:.7, s16:.25 };
+
+const SHOTS = RAW.map(([el, chap, a, b]) =>
+  ({ el, chap, in: a, out: b, bg: GROUND[el], warm: WARM[el] }));
+const CHAPTERS = [...new Set(RAW.map(r => r[1]))];
+
+(function grid(){
+  const g = document.getElementById('grid');
+  g.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const step = W / (ASPECT === 'pt' ? 14 : 26);
+  let d = '';
+  for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
+  for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
+  g.innerHTML = `<path id="mesh" d="${d}" stroke="rgba(148,180,230,.07)" stroke-width="1" fill="none"/>`
+    + `<path id="spark" d="" stroke="rgba(59,130,246,.42)" stroke-width="${(W/700).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
+  const pts = [], n = 120;
+  for (let i = 0; i <= n; i++){
+    const p = i / n, x = p * W;
+    const y = H * (0.80 - 0.52 * (1 / (1 + Math.exp(-(p - 0.5) * 9)))) + Math.sin(p * 7.1) * H * 0.012;
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const sp = g.querySelector('#spark');
+  sp.setAttribute('d', 'M' + pts.join('L'));
+  sp.__len = sp.getTotalLength(); sp.style.strokeDasharray = sp.__len;
+})();
+
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const outCubic=x=>1-Math.pow(1-x,3), outExpo=x=>x>=1?1:1-Math.pow(2,-10*x);
+const inOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const seg=(t,a,b,e)=>{const p=clamp((t-a)/(b-a),0,1);return (e||outCubic)(p);};
+const rgb=c=>`rgb(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)})`;
+const XF = 0.45;
+
+/* cue sheet: which elements rise, and when, relative to the shot's in-point */
+const CUES = {
+  s1:[['.eyebrow',.18,0],['.uline',.34,0],['h1 .w',.48,.10],['.tok',1.5,.10],['.sub',2.6,0]],
+  s2:[['.eyebrow',.16,0],['.row',.40,.55],['.sub',3.0,0]],
+  s3:[['.eyebrow',.16,0],['.tok',.36,.14],['h2 .w',1.5,.075],['.uline',3.4,0],['.sub',3.6,0]],
+  s4:[['.eyebrow',.16,0],['h2 .w',.36,.11],['.uline',2.5,0],['.sub',2.7,0]],
+  s5:[['.eyebrow',.16,0],['.tok',.40,.28],['.sub',2.6,0]],
+  s6:[['.eyebrow',.18,0],['.quote',.45,0],['.uline',1.6,0]],
+  s7:[['.eyebrow',.16,0],['h2 .w',.36,.10],['.sub',1.9,0]],
+  s8:[['.eyebrow',.16,0],['.card',.40,.90],['.sub',3.6,0]],
+  s9:[['.eyebrow',.16,0],['.stat',.45,.95],['.sub',2.7,0]],
+  s10:[['.eyebrow',.16,0],['.bar',.42,.75],['.note',3.2,0]],
+  s11:[['.eyebrow',.16,0],['h3 ',.34,0],['.col',1.1,.70],['.sub',4.2,0]],
+  s12:[['.eyebrow',.16,0],['.col',.45,1.05],['.sub',4.0,0]],
+  s13:[['.eyebrow',.16,0],['.tok',.55,.62],['.sub',7.6,0]],
+  s14:[['.eyebrow',.16,0],['.col',.45,1.10],['.sub',3.0,0]],
+  s15:[['.eyebrow',.16,0],['h3 ',.36,0],['.uline',2.4,0],['.sub',2.6,0],['.note',5.2,0]],
+  s16:[['#markEnd',.20,0],['.wordmark',.50,0],['.quote',.90,0],['.url',1.5,0],['.legal',2.0,0]]
+};
+const ANIM = [];
+for (const shot of SHOTS){
+  const rootEl = document.getElementById(shot.el);
+  for (const [sel, delay, stagger] of (CUES[shot.el] || [])){
+    rootEl.querySelectorAll(sel.trim()).forEach((el, i) =>
+      ANIM.push({ el, start: shot.in + delay + i * stagger }));
+  }
+}
+
+const E = {
+  glow:document.getElementById('glow'), glow2:document.getElementById('glow2'),
+  spark:document.getElementById('spark'), topbar:document.getElementById('topbar'),
+  chapter:document.getElementById('chapter'), progress:document.getElementById('progress'),
+  footrule:document.getElementById('footrule'), footl:document.getElementById('footl'),
+  footr:document.getElementById('footr'), cc:document.getElementById('cc'),
+  ccbox:document.getElementById('ccbox'),
+  chN:document.querySelector('#chapter .n'), chC:document.querySelector('#chapter .c')
+};
+E.cc.style.bottom = (ASPECT === 'pt' ? H*0.175 : H*0.140) + 'px';
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+
+  let wsum = 0;
+  const wts = SHOTS.map(shot => {
+    const fi = shot.in <= 0 ? 1 : seg(t, shot.in, shot.in + XF);
+    const fo = shot.out >= DUR ? 1 : 1 - seg(t, shot.out - XF, shot.out);
+    const o = fi * fo; wsum += o; return { shot, o, fi, fo };
+  });
+  const norm = wsum > 0.0001 ? wsum : 1;
+
+  let bg=[0,0,0], warm=0, cur=SHOTS[0];
+  let best=-1;
+  for (const {shot,o} of wts){
+    const k=o/norm;
+    bg=[bg[0]+shot.bg[0]*k, bg[1]+shot.bg[1]*k, bg[2]+shot.bg[2]*k];
+    warm+=shot.warm*k;
+    if (o>best){ best=o; cur=shot; }
+  }
+  stage.style.background = rgb(bg);
+
+  const drift = t / DUR;
+  E.glow.style.transform =
+    `translate(${(-10+drift*30).toFixed(2)}%, ${(-14+Math.sin(drift*7.5)*9).toFixed(2)}%) scale(${(1.05+drift*.2).toFixed(3)})`;
+  E.glow.style.opacity = (0.28 + 0.40*(1-warm)).toFixed(3);
+  E.glow2.style.transform =
+    `translate(${(28-drift*24).toFixed(2)}%, ${(20-Math.cos(drift*6.1)*11).toFixed(2)}%) scale(${(1.15-drift*.1).toFixed(3)})`;
+  E.glow2.style.opacity = (0.16 + 0.48*warm).toFixed(3);
+
+  const sp = E.spark;
+  sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 1.0, DUR-14, inOut))).toFixed(1);
+
+  /* furniture retires only for the end card */
+  const furn = seg(t, 0.15, 1.0) * (1 - seg(t, SHOTS[15].in, SHOTS[15].in + XF));
+  const f = clamp(furn,0,1).toFixed(3);
+  E.topbar.style.opacity=f; E.footrule.style.opacity=f; E.footl.style.opacity=f;
+  E.footr.style.opacity=f; E.chapter.style.opacity=f;
+
+  E.progress.style.transform = `scaleX(${(t/DUR).toFixed(4)})`;
+  const ci = CHAPTERS.indexOf(cur.chap);
+  E.chN.textContent = 'CHAPTER ' + (ci+1) + ' / ' + CHAPTERS.length;
+  E.chC.textContent = cur.chap;
+
+  for (const { shot, o, fi, fo } of wts){
+    const el = document.getElementById(shot.el);
+    el.style.opacity = o.toFixed(3);
+    el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    const push = (1-fi)*1.4 - (shot.out >= DUR ? 0 : (1-fo)*1.4);
+    el.style.transform = `translateX(${push.toFixed(3)}%)`;
+  }
+
+  const RISE = 0.68;
+  for (const a of ANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*1.1).toFixed(3)}em)`;
+  }
+  document.querySelectorAll('.uline').forEach(u => {
+    u.style.transform = `scaleX(${u.style.opacity || 0})`;
+  });
+  /* bars grow from the baseline, each to its own share */
+  document.querySelectorAll('.bar').forEach((bar) => {
+    const p = +bar.style.opacity || 0;
+    bar.querySelector('.fill').style.transform = `scaleX(${(p * +bar.querySelector('.fill').dataset.w).toFixed(4)})`;
+  });
+  const mk = document.getElementById('markEnd');
+  const mp = seg(t, SHOTS[15].in + 0.2, SHOTS[15].in + 1.1, outExpo);
+  mk.style.transform = `translateY(0) scale(${(0.88 + 0.12*mp).toFixed(4)})`;
+
+  if (!CC){ E.cc.style.opacity = '0'; }
+  else {
+    const cue = CAPS.find(c => t >= c[0] - 0.14 && t <= c[1] + 0.14);
+    if (!cue){ E.cc.style.opacity = '0'; }
+    else {
+      E.ccbox.textContent = cue[2];
+      const fi2 = seg(t, cue[0]-0.14, cue[0]+0.06);
+      const fo2 = 1 - seg(t, cue[1]-0.02, cue[1]+0.14);
+      E.cc.style.opacity = (fi2*fo2).toFixed(3);
+    }
+  }
+}
+window.seek = seek; window.__DUR = DUR;
+seek(+(Q.get('t') || 0));
+if (Q.get('play') === '1'){
+  const t0 = performance.now();
+  (function loop(){ seek(((performance.now()-t0)/1000) % DUR); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
