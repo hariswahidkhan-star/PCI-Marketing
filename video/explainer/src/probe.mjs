@@ -18,7 +18,7 @@ const errs=[]; pg.on('pageerror',e=>errs.push('PAGEERROR '+e.message));
 pg.on('console',m=>{if(m.type()==='error')errs.push('CONSOLE '+m.text())});
 await pg.goto(u.href,{waitUntil:'load'}); await pg.evaluate(()=>document.fonts.ready); await pg.waitForTimeout(200);
 // overflow audit across the whole timeline
-const bad = [], collide = [];
+const bad = [], collide = [], chrome = [];
 const DURP = await pg.evaluate(()=>window.__DUR);
 const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
   const TS=[]; for(let t=0.5;t<DURP;t+=0.5) TS.push(+t.toFixed(1));
@@ -84,10 +84,37 @@ const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
     return null;
   });
   if (hit) collide.push(`t=${t}: ${hit}`);
+
+  // Chrome collision: the masthead, the chapter rail and the footer are fixed
+  // furniture. Scene content overrunning into them is the failure mode that a
+  // caption-only check misses — and the one that actually looks broken, because
+  // two pieces of type land on top of each other.
+  const ch = await pg.evaluate(() => {
+    const chrome = ['topbar', 'chapter', 'footl', 'footr', 'footrule']
+      .map(id => document.getElementById(id)).filter(Boolean)
+      .filter(e => e.checkVisibility({ opacityProperty: true }) && +getComputedStyle(e).opacity > 0.05)
+      .map(e => ({ id: e.id, r: e.getBoundingClientRect() }));
+    for (const el of document.querySelectorAll('#stage .shot *')) {
+      if (el.querySelector('*')) continue;
+      if (!el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) continue;
+      const host = el.closest('.shot');
+      if (host && +getComputedStyle(host).opacity < 0.35) continue;
+      if (!el.textContent.trim()) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) continue;
+      for (const c of chrome) {
+        if (r.left < c.r.right && r.right > c.r.left && r.top < c.r.bottom && r.bottom > c.r.top)
+          return `"${el.textContent.trim().slice(0, 24)}" overruns #${c.id}`;
+      }
+    }
+    return null;
+  });
+  if (ch) chrome.push(`t=${t}: ${ch}`);
   if ([8,24,38,55,70,86,98,112,125,140,155,170,178,192,210,229].includes(t)) await pg.locator('#stage').screenshot({path:path.join(OUT,`${tag}-t${String(t).padStart(2,'0')}.png`),animations:'disabled'});
 }
 console.log(tag+' errors: '+(errs.length?errs.join('\n  '):'none'));
 console.log(tag+' overflow: '+(bad.length?'\n  '+bad.join('\n  '):'none')+'  (transitions excluded)');
 console.log(tag+' caption collisions: '+(collide.length?'\n  '+collide.join('\n  '):'none')+`  (${TS.length} samples)`);
-if (errs.length || bad.length || collide.length) process.exitCode = 1;
+console.log(tag+' chrome collisions: '+(chrome.length?'\n  '+chrome.join('\n  '):'none'));
+if (errs.length || bad.length || collide.length || chrome.length) process.exitCode = 1;
 await b.close();

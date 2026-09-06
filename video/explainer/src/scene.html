@@ -25,8 +25,10 @@
   /* --padb is the gap the caption band lives in. 23 (not 19) because the v3
      narration produced longer caption segments: three-line cues make the box
      169px tall against 125 before, and at 19 the sub-headline in scenes 1, 4
-     and 13 ran into it. src/probe.mjs asserts this stays clear. */
-  --s:19.2; --padb:23; --h1:5.6; --h2:4.3; --h3:3.1;
+     and 13 ran into it. 21 rather than 23: past that the box gets short enough
+     that tall scenes spill upward into the masthead instead. src/probe.mjs
+     asserts both ends stay clear. */
+  --s:19.2; --padb:21; --h1:5.6; --h2:4.3; --h3:3.1;
   --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
   --rule:rgba(148,180,230,.20); --card:#111D33; --cardbd:rgba(59,130,246,.42); --cardsub:#8FA6C4;
   --ccbg:rgba(6,12,24,.82); --ccfg:#FFFFFF; --track:rgba(148,180,230,.13);
@@ -67,10 +69,16 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 
 /* rows of tokens (disciplines, industries) */
 .tokens{display:flex;gap:calc(.9 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;
-  max-width:calc(62 * var(--s) * 1px)}
+  max-width:calc(80 * var(--s) * 1px)}
+/* 1.42/1.05 rather than 1.62/1.25, and the row allowed to run to 80 units: at
+   the old size scene 1's six pills wrapped to a second row, which made that
+   scene taller than its padding box. An overflowing flex column centres by
+   spilling BOTH ways, so the extra row pushed the eyebrow up into the masthead
+   as well as the sub-headline down into the caption. Losing the row fixes both
+   ends at once. src/probe.mjs asserts it. */
 .tok{font-family:var(--display);font-weight:800;letter-spacing:.02em;
-  font-size:calc(1.62 * var(--s) * 1px);
-  padding:calc(.72 * var(--s) * 1px) calc(1.25 * var(--s) * 1px);
+  font-size:calc(1.42 * var(--s) * 1px);
+  padding:calc(.72 * var(--s) * 1px) calc(1.05 * var(--s) * 1px);
   border:calc(.11 * var(--s) * 1px) solid var(--cardbd);color:var(--fg);white-space:nowrap;
   border-radius:calc(.2 * var(--s) * 1px);will-change:transform,opacity}
 .tok.on{border-color:rgba(193,51,41,.55)}
