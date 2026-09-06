@@ -1,7 +1,7 @@
 # PCI AI — the explainer
 
 A chaptered film: why PCI exists, what its objective is, and what each of the
-three credentials is for. 3:24, 1920×1080, on the brand system — **light**, on
+three credentials is for. 3:21, 1920×1080, on the brand system — **light**, on
 the site's own ground (`--paper #FFFFFF`, `--ink #0F172A`, `--line #E3E8EF`),
 because that is what the public site is. The navy treatment the other films use
 is the alternate: render without `--theme light`.
@@ -9,8 +9,8 @@ is the alternate: render without `--theme light`.
 | | |
 |---|---|
 | Structure | Ident · 01 Why PCI exists · 02 The objective · 03 The principle · 04 The credentials (suite, then PCL-AI, PFL-AI, PML-AI) · 05 The standard · 06 Open by design · 07 Where we stand · close |
-| Voice | George (`JBFqnCBsd6RMkjVDRZzb`) on `eleven_v3`, twelve chapter takes with inline emotion direction — the expressive read. The earlier Holden `eleven_multilingual_v2` takes (`vo/ch00..ch11.mp3`) are kept as the alternate |
-| Score | `eleven_music_v2`, 150 s, looped once with a 4 s crossfade to reach 204 s (no time-stretch, so tempo and pitch stay natural) |
+| Voice | Jim Executive (`tXxkePQsw0G69D8VeDzp`, British baritone built for corporate and institutional narration) on `eleven_v3`, twelve chapter takes with inline emotion direction. `eleven_v3` is the most expressive model this workspace can run (`eleven_v4` is not authorised for the account). Alternates kept: George `eleven_v3` (`vo/george-*`) and Holden `eleven_multilingual_v2` (`vo/ch*`) |
+| Score | `eleven_music_v2`, 150 s, looped once with a 4 s crossfade to the film's length (no time-stretch, so tempo and pitch stay natural) |
 | Facts | Every claim traces to a live page or the platform's own FAQ seed — see `script.md` |
 
 ## Organising devices
@@ -33,7 +33,9 @@ The brief was "properly organised", so the organisation is visible on screen:
 | `script.md` | Chapter narration and the claims audit |
 | `src/scene.html` | The film — deterministic in `t`; shot windows injected from `vo/cues.json` |
 | `src/render.mjs` | Frame renderer (Playwright + Chromium) |
-| `vo/george-ch00..ch11.mp3` | The twelve chapter takes in the master (George, `eleven_v3`) |
+| `vo/jim-ch00..ch11.mp3` | The twelve chapter takes in the master (Jim Executive, `eleven_v3`) |
+| `vo/prompts-v3.json` | The directed prompts, one per chapter |
+| `vo/george-ch00..ch11.mp3` | Alternate takes (George, `eleven_v3`) |
 | `vo/ch00..ch11.mp3` | Alternate takes (Holden, `eleven_multilingual_v2`) |
 | `vo/score.mp3` | The score |
 | `vo/cues.json` | Measured chapter timings and derived shot windows |
@@ -48,6 +50,10 @@ slightly longer breath before the credentials, the standard and the status
 chapter, and a 3 s tail under the end card. Shot windows are the midpoints of
 those beats, injected into `scene.html` by the build, so the type cuts on the
 same numbers as the voice. Change a take and the whole film re-times itself.
+
+## Verification
+
+Every take is checked by transcribing the delivered audio independently with Scribe (uploaded as a plain asset, not read back from the speech node): the transcript contains only the narration, none of the bracketed direction. The master is checked for duration, stream layout, −16 LUFS loudness, faststart and full decode.
 
 ## Rebuilding
 

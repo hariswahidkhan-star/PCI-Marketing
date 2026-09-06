@@ -150,7 +150,7 @@ const q=new URLSearchParams(location.search);const W=+(q.get('w')||1920),H=+(q.g
 if(q.get('theme'))document.documentElement.dataset.theme=q.get('theme');
 const st=document.getElementById('stage');st.style.width=W+'px';st.style.height=H+'px';
 document.documentElement.style.setProperty('--s',(W/100).toFixed(4));
-const SHOTS=/*SHOTS*/[["s0", 0.0, 6.7], ["s1", 6.7, 30.46], ["s2", 30.46, 51.55], ["s3", 51.55, 65.24], ["s4", 65.24, 71.78], ["s5", 71.78, 90.97], ["s6", 90.97, 114.94], ["s7", 114.94, 136.35], ["s8", 136.35, 158.5], ["s9", 158.5, 168.12], ["s10", 168.12, 192.05], ["s11", 192.05, 204.0]];const DUR=/*DUR*/204.0;window.__DUR=DUR;
+const SHOTS=/*SHOTS*/[["s0", 0.0, 5.97], ["s1", 5.97, 31.19], ["s2", 31.19, 52.47], ["s3", 52.47, 68.04], ["s4", 68.04, 73.66], ["s5", 73.66, 90.84], ["s6", 90.84, 114.78], ["s7", 114.78, 135.64], ["s8", 135.64, 157.29], ["s9", 157.29, 166.74], ["s10", 166.74, 188.89], ["s11", 188.89, 200.7]];const DUR=/*DUR*/200.7;window.__DUR=DUR;
 const CH={s1:['01','WHY PCI EXISTS'],s2:['02','THE OBJECTIVE'],s3:['03','THE PRINCIPLE'],s4:['04','THE CREDENTIALS'],s5:['04','PCL-AI'],s6:['04','PFL-AI'],s7:['04','PML-AI'],s8:['05','THE STANDARD'],s9:['06','OPEN BY DESIGN'],s10:['07','WHERE WE STAND']};
 const XF=0.34,els=SHOTS.map(([id])=>document.getElementById(id));
 const chap=document.getElementById('chap'),prog=document.getElementById('prog'),topbar=document.getElementById('topbar'),glow=document.getElementById('glow');
