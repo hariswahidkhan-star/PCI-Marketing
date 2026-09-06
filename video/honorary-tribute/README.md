@@ -8,7 +8,7 @@ Built to be reused: only one short narration take is regenerated per person.
 | Duration | 48.000 s |
 | Format | 1920×1080, 25 fps |
 | Audio | −16.6 LUFS · narration, orchestral score, seal sound design |
-| Palette | Obsidian `#08090C` · champagne gold `#C9A24B` · PCI crimson `#C13329` |
+| Palette | Brand: ink `#0F172A` · crimson `#C13329` · magenta `#3B82F6` · the logo's gold, in the seal only |
 
 ---
 
@@ -28,6 +28,17 @@ Built to be reused: only one short narration take is regenerated per person.
 
 ---
 
+## On the brand system
+
+The first cut followed the brief — serif, gold foil, obsidian, no mark until the
+end card. It looked expensive and it looked like a different institution. This
+cut is on the system the other two films use: ink ground with the launch film's
+ambience, the PCI AI lockup on every frame, the crimson→blue rule under each
+eyebrow, Archivo 800 headlines. Gold survives in one place — the seal — and only
+as the logo's own gradient, because that gold is the mark's "AI" treatment rather
+than an invented accent. The seal rings the real mark, so the emblem of the honour
+is the brand mark itself.
+
 ## Why type and vector, not generated footage
 
 The production brief called for generated hero shots — a dignified silhouette, a
@@ -41,16 +52,16 @@ where AI video looks cheapest, and a tribute is the worst place to look cheap.
 Restrained typography on obsidian reads as more expensive, not less — and it
 costs nothing to revise when a name changes.
 
-The seal is drawn as SVG: concentric gold rings, the Institute's name on the
-upper arc, `HONORIS CAUSA` on the lower, `PCI` at the centre over the crimson
-rule. It stays sharp at any size and can be lifted straight out for print.
+The seal is drawn as SVG: concentric rings in the logo's gold, the Institute's
+name on the upper arc, `HONORIS CAUSA` on the lower, and the PCI AI mark itself
+at the centre. It stays sharp at any size and can be lifted straight out for print.
 
 **Two things caught by looking at rendered frames rather than trusting the
 markup.** The seal's lower arc initially rendered upside-down — a `textPath`
 sweeping clockwise puts its glyphs inverted, so the arc had to run the other way.
-And the end card first used the PCI AI app icon, which is blue and fought the
-palette; tinting it with a CSS filter flattened its lettering into a solid gold
-blob, so it became a compact version of the vector seal instead.
+And the end card first used the mark against a gold palette it fought; a CSS
+tint flattened its lettering into a solid blob. On the brand ground the mark
+needs no treatment at all, which is the point of a brand ground.
 
 ---
 

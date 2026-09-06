@@ -72,14 +72,29 @@ pause before the name. The name is said twice; the second time is quieter.
 
 ## On-screen typography
 
-Elegant serif, gold foil on obsidian.
+**On the brand system, not the brief's.** The brief asked for an elegant serif in
+gold foil on obsidian. That would make this the one PCI film in a different
+typeface, a different palette and without the mark — a second identity for the
+ceremonial pieces. Instead the film uses the tokens the other two films use:
+
+| | |
+|---|---|
+| Ground | `--ink #0F172A`, with the launch film's blue and crimson glow, grid and vignette |
+| Lockup | PCI AI mark + wordmark, top-left on every shot, retiring under the end card |
+| Eyebrow | Inter 600, `.19em`, uppercase, `#E4785F` (or `#7FA9E8`) |
+| Rule | crimson → blue, the signature device |
+| Headlines | Archivo 800, `-.023em`, white |
+| Gold | **only in the seal**, and only the logo's own gradient `#F7EABC → #E7CB82 → #B8923E` |
+
+The gold is not an invented accent: it is the mark's "AI" treatment. The seal
+rings the actual logo in it, so the emblem of the honour *is* the brand mark.
 
 | Moment | Type |
 |---|---|
-| Name reveal, lower third | **[FULL NAME]** / *Honorary Fellow (PCI)* |
-| Under the seal | *Honoris Causa* |
+| Name reveal | **[FULL NAME]** in Archivo 800 / `HONORARY FELLOW (PCI)` as eyebrow |
+| The seal | `PROJECT CONTROLS INSTITUTE` upper arc · `HONORIS CAUSA` lower arc · the mark at centre |
 | Certificate | *Honorary Certificate* — see note below |
-| End card | PCI monogram · Project Controls Institute · *In recognition of a distinguished contribution to the profession.* |
+| End card | Mark · **PCI AI** · `HONORARY RECOGNITION` · *In recognition of a distinguished contribution to the profession.* · projectcontrolsinstitute.org |
 
 **The certificate wording is not a style choice.** PCI's published honorary policy
 requires it: *"Every honorary document, page, application, letter, certificate,
