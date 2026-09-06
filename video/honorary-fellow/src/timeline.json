@@ -1,168 +1,168 @@
 {
-  "total": 120.0,
+  "total": 137.96,
   "segments": {
     "1": [
-      0.28,
-      2.99
+      0.3,
+      3.17
     ],
     "2": [
-      2.99,
-      9.63
+      3.17,
+      10.22
     ],
     "3": [
-      9.97,
-      17.89
+      11.72,
+      20.13
     ],
     "4": [
-      17.89,
-      21.22
+      20.13,
+      23.66
     ],
     "5": [
-      21.56,
-      26.09
+      25.16,
+      29.97
     ],
     "6": [
-      26.09,
-      31.96
+      29.97,
+      36.2
     ],
     "7": [
-      32.3,
-      43.42
+      37.7,
+      49.5
     ],
     "8": [
-      43.76,
-      49.42
+      51.0,
+      57.01
     ],
     "9": [
-      49.42,
-      53.33
+      57.01,
+      61.16
     ],
     "10": [
-      53.67,
-      63.95
+      62.66,
+      73.57
     ],
     "11": [
-      63.95,
-      67.12
+      73.57,
+      76.93
     ],
     "12": [
-      67.46,
-      72.07
+      78.43,
+      83.32
     ],
     "13": [
-      72.07,
-      78.21
+      83.32,
+      89.84
     ],
     "14": [
-      78.55,
-      88.3
+      91.34,
+      101.69
     ],
     "15": [
-      88.3,
-      101.12
+      101.69,
+      115.29
     ],
     "16": [
-      101.46,
-      107.71
+      116.79,
+      123.43
     ],
     "17": [
-      108.05,
-      112.71
+      124.93,
+      129.87
     ],
     "18": [
-      112.71,
-      119.2
+      129.87,
+      136.76
     ]
   },
   "captions": [
     [
-      0.28,
-      2.99,
+      0.3,
+      3.17,
       "Some professionals deliver\nsuccessful projects."
     ],
     [
-      2.99,
-      9.63,
+      3.17,
+      10.22,
       "Others leave a lasting mark on the\npeople, standards and industries around\nthem. If that is you, keep watching."
     ],
     [
-      9.97,
-      17.89,
+      11.72,
+      20.13,
       "Honorary Fellow of the Project\nControls Institute: a board-conferred\nrecognition of distinguished\ncontribution, leadership and service."
     ],
     [
-      17.89,
-      21.22,
+      20.13,
+      23.66,
       "Your name, on the\nprofession's public register."
     ],
     [
-      21.56,
-      26.09,
+      25.16,
+      29.97,
       "No examination. Separate from\nPCI's examined certifications."
     ],
     [
-      26.09,
-      31.96,
+      29.97,
+      36.2,
       "Every application is considered\nindividually, and recognition is conferred\nsolely at the Board's discretion."
     ],
     [
-      32.3,
-      43.42,
+      37.7,
+      49.5,
       "If you have led teams, shaped standards,\ntaught, published or governed \u2014 in\nproject controls, cost engineering,\nfinance, project management or a closely\nrelated discipline \u2014 you may apply."
     ],
     [
-      43.76,
-      49.42,
+      51.0,
+      57.01,
       "From infrastructure to energy,\ntechnology to aviation, project\nfinance to government and academia."
     ],
     [
-      49.42,
-      53.33,
+      57.01,
+      61.16,
       "Wherever leadership shapes\noutcomes, your contribution counts."
     ],
     [
-      53.67,
-      63.95,
+      62.66,
+      73.57,
       "To be considered, you need at least eight\nyears of relevant experience, including three\nat managerial level, and a demonstrable\nrecord of distinguished contribution."
     ],
     [
-      63.95,
-      67.12,
+      73.57,
+      76.93,
       "Meeting these criteria does\nnot guarantee recognition."
     ],
     [
-      67.46,
-      72.07,
+      78.43,
+      83.32,
       "There is no fee. No nomination,\nassessment or credential charge."
     ],
     [
-      72.07,
-      78.21,
+      83.32,
+      89.84,
       "One application \u2014 your profile,\nr\u00e9sum\u00e9, career history and evidence \u2014\nreviewed confidentially by the Board."
     ],
     [
-      78.55,
-      88.3,
+      91.34,
+      101.69,
       "Those selected are recognised as an\nHonorary Fellow \u2014 recorded so anyone\ncan verify it at source, and labelled\nhonorary, never a passed examination."
     ],
     [
-      88.3,
-      101.12,
+      101.69,
+      115.29,
       "Accepted applicants may also receive access\nto the PCI student portal, study through\nCertuvo, and invitations to selected PCI AI\nevents, subject to programme terms."
     ],
     [
-      101.46,
-      107.71,
+      116.79,
+      123.43,
       "Tell the Board whether your contribution\naligns with project controls, project\nfinance or project management."
     ],
     [
-      108.05,
-      112.71,
+      124.93,
+      129.87,
       "Your contribution has shaped the\nprofession. Now let it be recognised."
     ],
     [
-      112.71,
-      119.2,
+      129.87,
+      136.76,
       "Apply today for the Board's\nconsideration, at pciai.org."
     ]
   ],
@@ -171,61 +171,61 @@
       "s1",
       "The question",
       0.0,
-      9.8
+      10.97
     ],
     [
       "s2",
       "The recognition",
-      9.8,
-      21.389
+      10.97,
+      24.41
     ],
     [
       "s3",
       "What it is",
-      21.389,
-      32.132
+      24.41,
+      36.95
     ],
     [
       "s4",
       "Who may apply",
-      32.132,
-      43.59
+      36.95,
+      50.25
     ],
     [
       "s5",
       "Global industries",
-      43.59,
-      53.503
+      50.25,
+      61.91
     ],
     [
       "s6",
       "Experience",
-      53.503,
-      67.288
+      61.91,
+      77.68
     ],
     [
       "s7",
       "Your application",
-      67.288,
-      78.38
+      77.68,
+      90.59
     ],
     [
       "s8",
       "Recognition",
-      78.38,
-      101.287
+      90.59,
+      116.04
     ],
     [
       "s9",
       "Discipline alignment",
-      101.287,
-      107.882
+      116.04,
+      124.18
     ],
     [
       "s10",
       "Apply",
-      107.882,
-      120.0
+      124.18,
+      137.96
     ]
   ]
 }

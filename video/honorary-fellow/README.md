@@ -1,4 +1,4 @@
-# Honorary Fellow (PCI) — lead-generation film (2:00)
+# Honorary Fellow (PCI) — lead-generation film (2:17)
 
 A bright, premium institutional film for **PCI AI — Project Controls Institute
 Global, Inc.**, inviting distinguished professionals to apply for **Honorary
@@ -94,6 +94,16 @@ application page needs to say the same before publication. "Enhance career"
 was declined outright: the brief and PCI's site-wide disclosure both forbid
 career-outcome claims.
 
+## Pacing: the cap gave way to the pauses
+
+PCI's note on the first pitch cut was that the topics ran into each other.
+They did — the gap between scenes had been squeezed to 0.36 s and the read
+conformed by 6 % to fit the brief's 120-second cap. PCI lifted the cap in
+favour of proper pauses, so the film now runs at Holden's natural pace with no
+time-scaling at all, and every topic gets a **1.5-second beat**: the caption
+clears, a moment of silence, the picture changes, and only then does the next
+topic begin with the voice. Running time **137.96 s**.
+
 ## The voice, and the duration it forced
 
 Narration is ElevenLabs **"Holden Pro Voice"** (`UudLhsL2DlHkDK0vGwl3`) on
@@ -111,8 +121,8 @@ rushed — the one delivery the brief rules out — so six scenes were tightened
 and their detail moved on screen, with every mandated statement kept word for
 word: eight years, three managerial, no examination, board discretion, no
 guarantee, no entitlement, separate from PCL-AI/PFL-AI/PML-AI, and the
-discipline-alignment clarification. The pitch read measures 127.4 s; a
-**6.1 % formant-preserved conform** lands it at exactly **120.00 s**. `sync.py`
+discipline-alignment clarification. The pitch read measures 127.4 s; it was conformed by 6.1 % to 120.00 s
+until PCI lifted the cap (see *Pacing* above), and now runs unscaled. `sync.py`
 refuses anything past 8 % and asks for a copy trim instead, so a rushed read
 cannot be shipped by accident — and that refusal fired once on this film, when
 the first benefits retake came back nine seconds longer than the line it

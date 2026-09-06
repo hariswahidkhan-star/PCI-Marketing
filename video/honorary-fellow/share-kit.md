@@ -69,17 +69,17 @@ examination → a public register → one application → apply today.**
 >
 > Chapters
 > 0:00 The question
-> 0:08 The recognition
-> 0:19 What it is
-> 0:32 Who may apply
-> 0:42 Industries
-> 0:53 Eligibility
-> 1:08 Your application
-> 1:20 If recognised
-> 1:42 Discipline alignment
-> 1:48 Apply
+> 0:10 The recognition
+> 0:24 What it is
+> 0:36 Who may apply
+> 0:50 Industries
+> 1:01 Eligibility
+> 1:17 Your application
+> 1:30 If recognised
+> 1:56 Discipline alignment
+> 2:04 Apply
 
-*(Chapter timestamps are approximate; take the exact ones from `dist/pci-honorary-fellow.srt` after the final render.)*
+*(Chapter timestamps are exact, taken from the measured timeline. Running time 2:17.)*
 
 **Tags:** project controls, cost engineering, project finance, project management, PMO, honorary fellow, PCI AI, Project Controls Institute, professional recognition
 

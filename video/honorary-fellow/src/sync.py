@@ -21,8 +21,13 @@ AUD = os.path.normpath(os.path.join(HERE, '..', 'audio'))
 TRIM = os.path.join(AUD, 'trimmed')
 FFMPEG = os.environ.get('FFMPEG') or os.path.join(HERE, 'node_modules', 'ffmpeg-static', 'ffmpeg')
 
-LEAD, TAIL = 0.30, 0.85
-GAP_SCENE = 0.36        # the beat between scenes; also where the picture cuts
+LEAD, TAIL = 0.30, 1.20
+# The beat between topics. PCI's note on the first pitch cut was that the
+# scenes ran into each other — which they did, because this had been squeezed
+# to 0.36 s to fit a 120-second cap. With the cap lifted, each topic gets a real
+# pause: the caption clears, a moment of silence, the picture changes, and only
+# then does the next topic begin with the voice.
+GAP_SCENE = 1.50
 
 # The brief specifies a 105-120s master. The read is measured first and the
 # picture follows it, so the only lever left is a uniform time-scale — applied
@@ -31,7 +36,10 @@ GAP_SCENE = 0.36        # the beat between scenes; also where the picture cuts
 # deep and deliberate, and past about 8% the read stops sounding that way, so
 # the build stops and asks for a copy trim rather than quietly shipping a
 # rushed one. Getting here already cost one round of exactly that trim.
-TARGET = 120.00
+# The brief's 120 s cap was lifted by PCI in favour of proper pauses, so the
+# film now runs at the narrator's natural pace and this is only a sanity
+# ceiling: no conform is applied unless the read somehow exceeds it.
+TARGET = 150.00
 MAX_STRETCH = 1.08
 SILENCE_DB = '-38dB'
 MIN_SIL = 0.26          # a pause shorter than this is phrasing, not a boundary
