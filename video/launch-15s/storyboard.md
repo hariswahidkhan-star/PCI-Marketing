@@ -105,8 +105,14 @@ the one thing a certification body cannot buy back.
 
 ## Score map
 
-D minor, 66 bpm, original (`src/music.py` — synthesised from scratch, no samples,
-no licence obligation).
+D minor, 104 bpm, original (`src/music.py` — synthesised from scratch, no
+samples, no licence obligation). The kit itself comes from `video/lib/score_kit.py`,
+shared with the other two films so all three sit on one tempo and one drum voice.
+
+Fifteen seconds has no room to build, so the kit is in from the first bar and
+tightens rather than arrives: eighths to sixteenths under the ask at 9.90, then
+out of the way for the resolve. Its energy sits below ~120 Hz and above ~6 kHz,
+leaving the mid-range clear for the read.
 
 | t | Musical event |
 |---|---|
