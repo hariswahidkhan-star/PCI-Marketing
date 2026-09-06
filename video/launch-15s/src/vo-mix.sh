@@ -47,10 +47,18 @@ echo "==> voice track"
   -map "[out]" -ar 48000 -ac 1 -c:a pcm_s16le "$DIST/pci-launch-15s-voiceover.wav"
 
 echo "==> mixed soundtrack (score side-chained under the voice)"
+# `level=disabled` matters more than the ceiling. alimiter auto-levels its output
+# back to 0 dB by default, so `limit` sets where limiting starts and then the
+# result is renormalised — which is why the driven score came back at -0.7 dBTP
+# under the old limit=0.95, over the -1.0 dBTP EBU R128 and the social platforms
+# expect, and why merely lowering the number made the mix *louder* rather than
+# quieter. With auto-level off, 0.79 is a real ceiling at -2.1 dBFS, leaving room
+# for the inter-sample peaks AAC reconstructs above it. Loudness is unaffected:
+# loudnorm sets the integrated level and the limiter only catches transients.
 "$FFMPEG" -hide_banner -loglevel error -y \
   -i "$DIST/pci-launch-15s-score.wav" -i "$DIST/pci-launch-15s-voiceover.wav" \
   -filter_complex "[0:a]volume=0.62[bed];[bed][1:a]sidechaincompress=threshold=0.045:ratio=7:attack=12:release=300[duck];\
-[duck][1:a]amix=inputs=2:normalize=0:duration=longest,loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.95[mix]" \
+[duck][1:a]amix=inputs=2:normalize=0:duration=longest,loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.79:level=disabled[mix]" \
   -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$DIST/pci-launch-15s-mixed-soundtrack.wav"
 
 echo "==> re-mux (video stream copied, not re-encoded)"

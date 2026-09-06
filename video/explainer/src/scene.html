@@ -22,7 +22,11 @@
 :root{
   --ink:#0F172A; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
   --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
-  --s:19.2; --padb:19; --h1:5.6; --h2:4.3; --h3:3.1;
+  /* --padb is the gap the caption band lives in. 23 (not 19) because the v3
+     narration produced longer caption segments: three-line cues make the box
+     169px tall against 125 before, and at 19 the sub-headline in scenes 1, 4
+     and 13 ran into it. src/probe.mjs asserts this stays clear. */
+  --s:19.2; --padb:23; --h1:5.6; --h2:4.3; --h3:3.1;
   --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
   --rule:rgba(148,180,230,.20); --card:#111D33; --cardbd:rgba(59,130,246,.42); --cardsub:#8FA6C4;
   --ccbg:rgba(6,12,24,.82); --ccfg:#FFFFFF; --track:rgba(148,180,230,.13);
@@ -535,7 +539,11 @@ const E = {
   ccbox:document.getElementById('ccbox'),
   chN:document.querySelector('#chapter .n'), chC:document.querySelector('#chapter .c')
 };
-E.cc.style.bottom = (ASPECT === 'pt' ? H*0.175 : H*0.140) + 'px';
+// Landscape sits the caption band at 11.5% rather than 14%: the three-line cues
+// the v3 read produces are 169px tall against 125 before, and scene 1 is taller
+// than its padding box, so raising --padb alone just re-centres it. Still clear
+// of the footer rule by ~36px, and well inside the action-safe area.
+E.cc.style.bottom = (ASPECT === 'pt' ? H*0.175 : H*0.115) + 'px';
 
 function seek(t){
   t = clamp(t, 0, DUR);
