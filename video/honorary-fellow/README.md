@@ -1,4 +1,4 @@
-# Honorary Fellow (PCI) — lead-generation film (1:59)
+# Honorary Fellow (PCI) — lead-generation film (2:00)
 
 A bright, premium institutional film for **PCI AI — Project Controls Institute
 Global, Inc.**, inviting distinguished professionals to apply for **Honorary
@@ -56,8 +56,8 @@ PCI page and were **replaced or cut, not softened**: a LinkedIn-shareable badge
 invitations, community connection, and community visibility. In their place the
 film says what the site does support — that the award is recorded so anyone can
 verify it at source, clearly labelled honorary and never a passed examination,
-and that accepted applicants *may* receive access to selected learning resources,
-subject to programme terms. Detail in `claims-register.md` §3.
+and what accepted applicants *may* receive, subject to programme terms. Detail
+in `claims-register.md` §3 and §3a.
 
 One page was deliberately **not** used: `fellowship-policy.html` describes the
 *membership* Fellow grade, whose criteria are "in development" and whose
@@ -66,6 +66,33 @@ applications; quoting the membership policy would have described a programme
 that does not exist yet.
 
 ---
+
+## The pitch cut
+
+After the first cut PCI asked for the film to *sell* — maximum applications,
+and they will share it. The copy was rewritten as a pitch without changing a
+single fact: second-person address throughout, the true levers in the order
+that converts (**no fee → no examination → a public register → one application
+→ individual Board review**), a hero line on the application scene, and an
+"apply today" close. Scene 8 is a five-card benefits grid: recognition, the
+student portal, study via Certuvo, PCI AI events, verifiable at source.
+
+What the pitch does **not** do, on PCI's own rules: it never calls fellows
+"members" — the honorary route is a recognition, not a membership grade — never
+implies scarcity or a deadline, never promises a career outcome, and keeps every
+qualifying sentence spoken and on screen. `share-kit.md` carries the same rules
+into the LinkedIn post, YouTube description and short caption, with a "do not
+add" list for the lines that read well and are all prohibited.
+
+Two of the added benefits needed care. **Certuvo** is on the site as "PCI's
+official platform for preparation and study", so it is named that way; "books
+and video lectures" is not on the site, so the film says "study through
+Certuvo". **PCI AI events** appear on no honorary page — PCI instructed them, so
+they are in, phrased "invitations to selected PCI AI events, subject to
+programme terms", recorded in the register as client-asserted, and the
+application page needs to say the same before publication. "Enhance career"
+was declined outright: the brief and PCI's site-wide disclosure both forbid
+career-outcome claims.
 
 ## The voice, and the duration it forced
 
@@ -84,10 +111,12 @@ rushed — the one delivery the brief rules out — so six scenes were tightened
 and their detail moved on screen, with every mandated statement kept word for
 word: eight years, three managerial, no examination, board discretion, no
 guarantee, no entitlement, separate from PCL-AI/PFL-AI/PML-AI, and the
-discipline-alignment clarification. The tightened read measures 124.2 s; a
-**3.9 % formant-preserved conform** lands it at **119.50 s**. `sync.py` refuses
-anything past 8 % and asks for a copy trim instead, so a rushed read cannot be
-shipped by accident.
+discipline-alignment clarification. The pitch read measures 127.4 s; a
+**6.1 % formant-preserved conform** lands it at exactly **120.00 s**. `sync.py`
+refuses anything past 8 % and asks for a copy trim instead, so a rushed read
+cannot be shipped by accident — and that refusal fired once on this film, when
+the first benefits retake came back nine seconds longer than the line it
+replaced. The aside it carried was already on screen, so the aside went.
 
 Everything downstream reads that measurement. `scene.html` carries no timings;
 `vo.py` takes caption windows from `timeline.json`; `music.py` places its scene
@@ -143,10 +172,19 @@ The industry and applicant sequences are typographic.
 
 ## Verified after build
 
-`src/probe.mjs` runs four checks on every aspect, sampled every 0.5 s: page
+`src/probe.mjs` runs five checks on every aspect, sampled every 0.5 s: page
 errors, horizontal overflow (transitions excluded), scene content colliding with
-the caption band, and scene content colliding with the fixed furniture. Clean on
-16:9, 9:16, 1:1 and 3840×2160 — **952 samples, zero findings.**
+the caption band, scene content colliding with the fixed furniture, and **text
+clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **952
+samples, zero findings.**
+
+The fifth check exists because PCI found what the other four could not: a card
+subtitle cut off mid-word ("LABELLED HONORA"). The card is `overflow:hidden`
+for its corner radius, so a `white-space:nowrap` subtitle wider than the card
+was swallowed silently rather than pushed out where the stage-overflow check
+would see it. The `nowrap` is gone, the check now compares every text leaf
+against the nearest clipping ancestor, and it found the same fault in scene 3
+on its first run. The `.ln` reveal mask is excluded — it clips on purpose.
 
 Two faults it caught before render are worth recording. The brand assets were
 missing from this film's directory, so the first audit measured fallback fonts
@@ -162,5 +200,6 @@ src/sync.py          measures the voice, conforms to 119.50s, refuses past 8%
 src/scene.html       the film — deterministic, reads its cut list from data
 src/music.py         piano -> strings -> kit, F major, from the shared kit
 src/build.sh         sync -> captions -> score -> mix -> 4K pair -> HD trio
-src/probe.mjs        four-check layout audit
+src/probe.mjs        five-check layout audit
+share-kit.md         LinkedIn, YouTube and short-form copy, same rules as the film
 ```

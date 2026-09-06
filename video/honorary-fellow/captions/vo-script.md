@@ -19,66 +19,70 @@ A stock library voice — **not a clone of any real person.**
 
 > Some professionals deliver successful projects.
 
-**s1 · The question · 2.99–7.91s**
+**s1 · The question · 2.99–9.63s**
 
-> Others leave a lasting mark on the people, standards and industries around them.
+> Others leave a lasting mark on the people, standards and industries around them. If that is you… keep watching.
 
-**s2 · The recognition · 8.24–17.61s**
+**s2 · The recognition · 9.97–17.89s**
 
-> Honorary Fellow of the Project Controls Institute… is a board-conferred recognition for distinguished professional contribution, leadership and service.
+> Honorary Fellow of the Project Controls Institute… a board-conferred recognition of distinguished contribution, leadership and service.
 
-**s3 · What it is · 17.94–23.96s**
+**s2 · The recognition · 17.89–21.22s**
 
-> It involves NO examination — and is separate from P-C-I's examined certifications.
+> Your name — on the profession's public register.
 
-**s3 · What it is · 23.96–30.43s**
+**s3 · What it is · 21.56–26.09s**
+
+> NO examination. Separate from P-C-I's examined certifications.
+
+**s3 · What it is · 26.09–31.96s**
 
 > Every application is considered individually… and recognition is conferred solely at the Board's discretion.
 
-**s4 · Who may apply · 30.76–39.76s**
+**s4 · Who may apply · 32.30–43.42s**
 
-> It is intended for experienced leaders… whose impact spans project controls, cost engineering, finance, project management, or a closely related discipline.
+> If you have led teams, shaped standards, taught, published or governed — in project controls, cost engineering, finance, project management, or a closely related discipline — you may apply.
 
-**s5 · Global industries · 40.10–47.10s**
+**s5 · Global industries · 43.76–49.42s**
 
-> Applicants come from infrastructure, energy, technology, aviation, project finance, government and academia.
+> From infrastructure to energy, technology to aviation, project finance to government and academia.
 
-**s5 · Global industries · 47.10–50.97s**
+**s5 · Global industries · 49.42–53.33s**
 
-> And every sector where strong professional leadership shapes OUTCOMES.
+> Wherever leadership shapes OUTCOMES… your contribution counts.
 
-**s6 · Experience · 51.30–58.24s**
+**s6 · Experience · 53.67–63.95s**
 
-> To be considered, applicants need at least eight years of relevant experience… including three at managerial level.
+> To be considered, you need at least eight years of relevant experience… including three at managerial level, and a demonstrable record of distinguished contribution.
 
-**s6 · Experience · 58.24–65.40s**
+**s6 · Experience · 63.95–67.12s**
 
-> And a demonstrable record of distinguished contribution. Meeting these criteria does not guarantee recognition.
+> Meeting these criteria does not guarantee recognition.
 
-**s7 · Your evidence · 65.73–73.82s**
+**s7 · Your application · 67.46–72.07s**
 
-> Applicants provide a professional profile, résumé, qualifications, career history and evidence of contribution… for confidential review.
+> There is NO fee. No nomination, assessment or credential charge.
 
-**s7 · Your evidence · 73.82–78.92s**
+**s7 · Your application · 72.07–78.21s**
 
-> P-C-I charges no nomination, assessment or credential fee.
+> One application — your profile, résumé, career history and evidence — reviewed confidentially by the Board.
 
-**s8 · Recognition · 79.26–88.86s**
+**s8 · Recognition · 78.55–88.30s**
 
 > Those selected are recognised as an Honorary Fellow — recorded so anyone can verify it at source… and labelled honorary, never a passed examination.
 
-**s8 · Recognition · 88.86–101.46s**
+**s8 · Recognition · 88.30–101.12s**
 
 > Accepted applicants may also receive access to the P-C-I student portal, study through Certuvo, and invitations to selected P-C-I A-I events, subject to programme terms.
 
-**s9 · Discipline alignment · 101.79–108.05s**
+**s9 · Discipline alignment · 101.46–107.71s**
 
-> You may also indicate whether your contribution aligns with project controls, project finance, or project management.
+> Tell the Board whether your contribution aligns with project controls, project finance, or project management.
 
-**s10 · Apply · 108.38–113.02s**
+**s10 · Apply · 108.05–112.71s**
 
-> If your leadership has advanced the profession… your contribution deserves consideration.
+> Your contribution has shaped the profession… Now let it be recognised.
 
-**s10 · Apply · 113.02–119.21s**
+**s10 · Apply · 112.71–119.20s**
 
-> Apply for Honorary Fellow P-C-I at… P-C-I-A-I dot org.
+> Apply today for the Board's consideration — at P-C-I-A-I dot org.
