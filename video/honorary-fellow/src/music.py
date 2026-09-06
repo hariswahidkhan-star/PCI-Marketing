@@ -59,20 +59,22 @@ F1, C2, F2, C3, F3, A3, Bb3, C4, D4, E4, F4, G4, A4, Bb4, C5, D5, E5, F5, G5, A5
     hz(10), hz(12), hz(13), hz(15))
 
 # One triad per scene, over an F/C drone. Minor only where the copy qualifies.
-VOICINGS = [(F3, A3, C4), (Bb3, D4, F4), (D4, F3, A3), (F3, A3, C4), (C4, E4, G4),
-            (D4, F4, A3), (Bb3, D4, F4), (F3, A3, F4), (C4, E4, G4), (F3, C4, F4)]
+VOICINGS = [(F3, A3, C4), (Bb3, D4, F4), (F3, C4, F4), (D4, F3, A3), (F3, A3, C4),
+            (C4, E4, G4), (D4, F4, A3), (Bb3, D4, F4), (F3, A3, C4), (F3, A3, F4),
+            (C4, E4, G4), (Bb3, D4, F4), (F3, C4, F4)]
 
 # The piano figure per scene — four notes on the eighths, from that voicing.
 # Voiced high on purpose. A piano's fundamentals land in the 300-3500 Hz band
 # the narration needs, so the right hand is written an octave above where it
 # would naturally sit: same figure, same harmony, out of the voice's way.
-FIGURES = [(F5, C5, A4, C5), (F5, D5, Bb4, D5), (F5, D5, A4, D5), (A5, F5, C5, F5),
-           (G5, E5, C5, E5), (A5, F5, D5, F5), (Bb5, F5, D5, F5), (C6, A5, F5, A5),
-           (G5, E5, C5, E5), (C6, A5, F5, A5)]
+FIGURES = [(F5, C5, A4, C5), (F5, D5, Bb4, D5), (C6, A5, F5, A5), (F5, D5, A4, D5),
+           (A5, F5, C5, F5), (G5, E5, C5, E5), (A5, F5, D5, F5), (Bb5, F5, D5, F5),
+           (A5, F5, C5, F5), (C6, A5, F5, A5), (G5, E5, C5, E5), (Bb5, F5, D5, F5),
+           (C6, A5, F5, A5)]
 
 # The arc: quiet open, warmth on the recognition, restraint on the two
 # qualifying scenes, peak on what recognition actually brings, strong close.
-INTENSITY = [0.16, 0.44, 0.28, 0.58, 0.80, 0.52, 0.60, 0.94, 0.54, 0.84]
+INTENSITY = [0.18, 0.46, 0.62, 0.30, 0.58, 0.80, 0.50, 0.60, 0.44, 0.72, 0.94, 0.52, 0.88]
 
 BPM = 88.0
 BEAT = 60.0 / BPM

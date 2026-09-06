@@ -80,10 +80,11 @@ Pages used, all under `PCI/backend/wwwroot/`:
 | # | Claim | Source | Quote |
 |---|---|---|---|
 | F1 | PCI charges no nomination, assessment or credential fee | HA | *"PCI does not charge a nomination, assessment or credential fee for honorary recognition."* |
+| F1a | Optional extras, such as attending an awards ceremony, are charged separately and play no part in the decision | HA | *"Optional charges may apply only for printed certificates, international delivery, replacement documents, or attendance at an awards ceremony; payment does not influence the selection or approval decision and creates no entitlement to recognition."* — spoken in the same breath as F1 because a "free" claim followed by an invoice is the complaint a review panel predicted (see §3b) |
 | B1 | Recognition as Honorary Fellow (PCI) | RH | route table: *"Honorary · Free · No exam · Honorary Fellow (PCI)"* |
 | B2 | The award can be verified publicly, and is labelled honorary — never a passed examination | DBR, VER | DBR: *"every honorary award, can be checked on the verification page"*; VER: *"clearly labelled honorary and never a passed examination"* |
 | B3 | Accepted applicants **may** be issued access credentials to the PCI student portal and given access to learning resources and study materials, subject to current programme terms | HA | *"Accepted applicants may be issued access credentials to the PCI student portal and given access to the Institute's learning resources and study materials… may be varied or withdrawn"* |
-| B2a | "Your name, on the profession's public register" — the pitch's phrasing of B2 | DBR | *"the credential registry is live from the programme's founding cohort onwards… every honorary award, can be checked on the verification page"* — a public register the award is entered on, not a promise of who else is on it |
+| B2a | "Your name, on PCI's own public registry — checkable at source" — the pitch's phrasing of B2 (earlier cuts said "the profession's public register"; changed on the review panel's advice because "public register" borrows a statutory ring PCI's self-operated registry does not have) | DBR | *"the credential registry is live from the programme's founding cohort onwards… every honorary award, can be checked on the verification page"* — a public register the award is entered on, not a promise of who else is on it |
 | A6 | "One application" | HA | The application is a single form on one page, submitted once: *"Submit your application below for the board's consideration; we will email you a reference"* |
 | B4 | Certuvo is PCI's official platform for preparation and study — the film calls it PCI's official preparation platform | site-wide footer; `certification.html` | *"Certuvo is PCI's official platform for preparation and study"*; *"Preparation and training are provided separately by Certuvo, our official partner"* |
 
@@ -165,6 +166,32 @@ never promises a career outcome, and keeps every qualifying sentence — board
 discretion, no guarantee, no entitlement, not an examined certification —
 spoken and on screen. `share-kit.md` carries the same rules into the posts.
 
+## 3b. The authority cut — psychologist, copywriter and a four-judge review
+
+PCI asked for the film to sell harder, to say more about the Institute and its
+value, to name the resources a recognised fellow may use, to be louder and more
+authoritative, and to have the script judged by a panel — an ACCA member, a PMP
+PMO director, a CFA charterholder and a senior project-controls director — with
+no time limit. That produced the 13-scene cut. Two scenes are new (the Institute,
+I1–I9; putting yourself forward) and one grew (what it opens).
+
+The panel's consensus, and what was done with it:
+
+| Finding | Action |
+|---|---|
+| "Not **yet** accredited" implies accreditation is in train; the site says *not currently* | Narration now says *"not currently accredited by ANAB, IAS or any ISO/IEC 17024 body"* — the site's own words (I7) |
+| "PCI charges no fee" is true but incomplete — the site carries an optional paid awards ceremony | F1a added and **spoken** in the same sentence as F1 |
+| "Public register" borrows statutory authority; a self-nominated award with an unnamed board reads as a vanity award | *"PCI's own public registry — checkable at source"*; scene 9 now says you need no sponsor **and** that the Board assesses the record against published criteria, on the evidence |
+| The film never says what PCI legally is | I2 spoken: *an independent professional body — a Delaware Non-Stock Corporation* |
+| Scene 5 said "cost engineering"; E1 says "cost control" | Corrected in narration and on screen |
+| "Apply today" is urgency the site does not support | Dropped; the close is *"Apply for the Board's consideration at pciai.org"* |
+| Don't say the discipline "lacked" a standard — it insults AACE, ICEC, RICS | Dropped; scene 3 says what PCI is built to give, not what others lacked |
+| Lead the eligibility with the standard, not the floor | *"The floor is eight years… The bar is higher: a demonstrable record of distinguished contribution."* |
+| Say what a contribution looks like; set a test the right applicant recognises | Scene 1: *a standard, a method, and the people who carry it forward*; close: *"If your work has outlasted the projects it was done on, it deserves to be recognised."* |
+| **Scene 11 ships C1, C4 and C5 — events, video lectures, the simulation lab — which are on no PCI page. All four judges called this a publication blocker.** | **Kept, on PCI's explicit instruction**, with one *"may"* governing every item and *"all subject to current programme terms"*. The condition stands: **the application page must name these before the film is published**, or the scene must be re-recorded without them. |
+| Who sits on the Board, who already holds the recognition, how old PCI is — the facts that would most persuade a sceptic | **Not added.** None is on any PCI page, and the film makes no claim it cannot source. PCI can supply them for a future cut. |
+| Too long for the audience (the project-controls director) | PCI's instruction was *"don't worry about time"*; the cut runs 4:19 unscaled, with a 1.5 s beat between topics |
+
 ## 4. Claims deliberately not made
 
 Per the brief and PCI's own site-wide disclosure, the film never states or implies:
@@ -196,9 +223,12 @@ film.** The only URL shown is `pciai.org`, and the only address shown is
   mode a photoreal treatment of this subject would risk.
 - **The industry and applicant sequences are typographic**, naming the sectors and
   the roles rather than illustrating them with stand-in imagery.
-- **The narration is synthetic** — ElevenLabs *"Holden Pro Voice"*
-  (`UudLhsL2DlHkDK0vGwl3`) on `eleven_v3`, a stock library voice. **It is not a
-  clone of any real person**, and no real person's voice was used.
+- **The narration is synthetic** — ElevenLabs *"Jim Executive — Authoritative,
+  British and Warm"* (`tXxkePQsw0G69D8VeDzp`) on `eleven_v3`, a stock library
+  voice chosen after a three-voice test when PCI asked for a more authoritative
+  read (`audio/voice-test-authority/`). Earlier cuts used *"Holden Pro Voice"*
+  (`UudLhsL2DlHkDK0vGwl3`), the voice the brief names. **Neither is a clone of
+  any real person**, and no real person's voice was used.
 - **The score is original**, written from scratch in `src/music.py` and
   `video/lib/score_kit.py` using the Python standard library only — no samples, no
   loops, no third-party audio library, and therefore no licence obligation.

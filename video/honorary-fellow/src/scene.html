@@ -22,13 +22,13 @@
 :root{
   --ink:#0F172A; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
   --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
-  /* --padb is the gap the caption band lives in. 23 (not 19) because the v3
-     narration produced longer caption segments: three-line cues make the box
-     169px tall against 125 before, and at 19 the sub-headline in scenes 1, 4
-     and 13 ran into it. 21 rather than 23: past that the box gets short enough
-     that tall scenes spill upward into the masthead instead. src/probe.mjs
-     asserts both ends stay clear. */
-  --s:19.2; --padb:21; --h1:5.6; --h2:4.3; --h3:3.1;
+  /* --padb is the gap the caption band lives in. 17: vo.py now breaks the
+     narration into breath-sized cues (two lines, three at the very most), so
+     the box is 121-165 px tall and its top sits 12.8-15.1 units above the
+     bottom edge. 17 leaves ~2 units clear of a three-line cue and gives the
+     tall scenes (3, 5, 6) 26 units of height. src/probe.mjs asserts both ends
+     stay clear at every size. */
+  --s:19.2; --padb:17; --h1:5.6; --h2:4.3; --h3:3.1;
   --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
   --rule:rgba(148,180,230,.20); --card:#111D33; --cardbd:rgba(59,130,246,.42); --cardsub:#8FA6C4;
   --ccbg:rgba(6,12,24,.82); --ccfg:#FFFFFF; --track:rgba(148,180,230,.13);
@@ -231,6 +231,15 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 #stage.sq .card{min-width:calc(13 * var(--s) * 1px);padding:calc(1.3 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
 #stage.sq .card b,#stage.pt .card b{font-size:calc(2.3 * var(--s) * 1px)}
 #stage.pt .roles{display:none}
+/* Compact stats: the institute's three figures and the four qualities in
+   scene 5 at 3.4 units rather than 5.6, and allowed to wrap. The full-size
+   figure is for "8+" / "3+" where there is nothing else on the frame. */
+.stats.compact{gap:calc(2.4 * var(--s) * 1px);flex-wrap:wrap}
+.stats.compact .stat b{font-size:calc(3.4 * var(--s) * 1px)}
+.stats.compact .stat span{font-size:calc(1.08 * var(--s) * 1px);margin-top:calc(.45 * var(--s) * 1px)}
+#stage.pt .stats.compact{flex-direction:row;justify-content:center;align-items:flex-start;gap:calc(1.8 * var(--s) * 1px)}
+#stage.pt .tokens.dense .tok{font-size:calc(1.2 * var(--s) * 1px)}
+#s3 h3{font-size:calc(2.5 * var(--s) * 1px)}
 
 /* ---------- benefits grid ---------- */
 .cards.grid{flex-wrap:wrap;max-width:calc(74 * var(--s) * 1px);gap:calc(1.1 * var(--s) * 1px)}
@@ -250,7 +259,7 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
 /* The close's two-line headline wraps to three in the square and leaves
    "profession." alone on a line. A slightly smaller heading there keeps the
    two lines the copy was written as. */
-#stage.sq #s10 h3{font-size:calc(2.55 * var(--s) * 1px)}
+#stage.sq #s13 h3{font-size:calc(2.55 * var(--s) * 1px)}
 /* In the narrow aspects the close headline is broken by hand into three even
    lines. Shrinking it was tried first and still left "profession." orphaned;
    a balanced break reads better than a smaller heading. */
@@ -297,39 +306,58 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
     <div class="eyebrow gold" data-a="1">Honorary Fellow (PCI)</div>
     <div class="rule-gold" data-a="1" style="margin:calc(1.6*var(--s)*1px) auto calc(2.6*var(--s)*1px)"></div>
     <h2><span class="ln"><span class="w">Recognition of distinguished</span></span><span class="ln"><span class="w">contribution.</span></span></h2>
-    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">A board-conferred recognition for leadership, contribution and service to the profession.</div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">Conferred by the Board of an independent professional body. Your name, on PCI's own public registry — checkable at source.</div>
   </section>
 
-  <!-- 3 · what it is -->
+  <!-- 3 · the institute -->
   <section class="shot" id="s3">
+    <div class="eyebrow" data-a="1">The Institute</div>
+    <h3 style="margin-top:calc(1.4*var(--s)*1px)">An independent professional body, built for the AI era.</h3>
+    <div class="stats compact" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="stat" data-a="1"><b>13</b><span>domains</span></div>
+      <div class="stat" data-a="1"><b>61</b><span>knowledge areas</span></div>
+      <div class="stat" data-a="1"><b>40·40·20</b><span>finance · management · governed AI</span></div>
+    </div>
+    <div class="tokens dense" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">
+      <div class="tok">SECURE, PROCTORED EXAMS</div><div class="tok">VERIFIED IDENTITY</div><div class="tok">IMPARTIAL DECISIONS</div>
+      <div class="tok">ENFORCED ETHICS</div><div class="tok">VERIFIABLE REGISTRY</div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(1.4*var(--s)*1px)">Project Controls Institute Global, Inc. — a Delaware Non-Stock Corporation. Framework developed with reference to ISO/IEC 17024; not currently accredited by ANAB, IAS or any ISO/IEC 17024 body.</div>
+  </section>
+
+  <!-- 4 · what it is -->
+  <section class="shot" id="s4">
     <div class="eyebrow" data-a="1">What it is</div>
     <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
-      <div class="card" data-a="1"><b>Board-conferred</b><span>Granted at the Board's discretion</span></div>
-      <div class="card" data-a="1"><b>No examination</b><span>Not an examined certification</span></div>
+      <div class="card" data-a="1"><b>No examination</b><span>The record is the evidence</span></div>
+      <div class="card" data-a="1"><b>Board-conferred</b><span>Solely at the Board's discretion</span></div>
       <div class="card" data-a="1"><b>Individually reviewed</b><span>Considered on its own merits</span></div>
     </div>
-    <div class="sub" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">Separate from PCI's examined certifications — PCL-AI, PFL-AI and PML-AI.</div>
-    <div class="note" data-a="1" style="margin-top:calc(1.4*var(--s)*1px)">Meeting the criteria, or applying, creates no entitlement to recognition.</div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.6*var(--s)*1px)">Separate from PCI's examined certifications — PCL-AI, PFL-AI and PML-AI.</div>
+    <div class="note" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">Meeting the eligibility criteria, or submitting an application, creates no entitlement to recognition.</div>
   </section>
 
-  <!-- 4 · who may apply -->
-  <section class="shot" id="s4">
+  <!-- 5 · who may apply -->
+  <section class="shot" id="s5">
     <div class="eyebrow" data-a="1">Who may apply</div>
     <div class="tokens" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
       <div class="tok hero">Leadership</div><div class="tok hero">Contribution</div>
-      <div class="tok hero">Professional impact</div><div class="tok hero">Service</div>
+      <div class="tok hero">Impact</div><div class="tok hero">Service</div>
     </div>
     <div class="tokens dense roles" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">
       <div class="tok">PROJECT &amp; PROGRAMME DIRECTORS</div><div class="tok">PROJECT CONTROLS LEADERS</div>
-      <div class="tok">COST &amp; PLANNING</div><div class="tok">COMMERCIAL &amp; RISK</div>
-      <div class="tok">PMO &amp; FINANCE</div><div class="tok">ENGINEERS &amp; TECHNICAL EXECUTIVES</div>
-      <div class="tok">ACADEMICS</div><div class="tok">PUBLIC SECTOR</div><div class="tok">CONSULTANTS</div>
+      <div class="tok">PLANNING &amp; SCHEDULING</div><div class="tok">COST CONTROL</div>
+      <div class="tok">COMMERCIAL &amp; CONTRACTS</div><div class="tok">RISK &amp; GOVERNANCE</div>
+      <div class="tok">PMO DIRECTORS</div><div class="tok">FINANCE &amp; CFO</div>
+      <div class="tok">PROJECT FINANCE</div><div class="tok">TECHNICAL EXECUTIVES</div>
+      <div class="tok">DIGITAL &amp; AI LEADERS</div><div class="tok">ACADEMICS &amp; RESEARCHERS</div>
+      <div class="tok">PUBLIC SECTOR</div><div class="tok">CONSULTANTS</div>
     </div>
     <div class="note" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Job title alone establishes nothing. It is the sustained record of contribution that is assessed.</div>
   </section>
 
-  <!-- 5 · global industries -->
-  <section class="shot" id="s5">
+  <!-- 6 · industries -->
+  <section class="shot" id="s6">
     <div class="eyebrow" data-a="1">Industries supported</div>
     <div class="tokens dense" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
       <div class="tok">CONSTRUCTION &amp; INFRASTRUCTURE</div><div class="tok">EPC</div>
@@ -342,25 +370,25 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
       <div class="tok">HEALTHCARE PROJECTS</div><div class="tok">TELECOMMUNICATIONS</div>
       <div class="tok">MINING &amp; RESOURCES</div><div class="tok">CONSULTING</div>
     </div>
-    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">One recognition. Many professions. Global impact.</div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">Wherever leadership shapes outcomes.</div>
   </section>
 
-  <!-- 6 · experience requirements -->
-  <section class="shot" id="s6">
-    <div class="eyebrow" data-a="1">Eligibility</div>
-    <div class="stats" style="margin-top:calc(2.5*var(--s)*1px)">
-      <div class="stat" data-a="1"><b>8+</b><span>years of professional<br>experience</span></div>
-      <div class="stat" data-a="1"><b>3+</b><span>years at managerial level —<br>teams, functions, programmes or budgets</span></div>
-    </div>
-    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">In project controls, cost control, finance, project management or a closely related field, with a demonstrable record of distinguished contribution.</div>
-    <div class="note" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">Meeting the criteria does not guarantee recognition.</div>
-  </section>
-
-  <!-- 7 · application evidence -->
+  <!-- 7 · eligibility -->
   <section class="shot" id="s7">
+    <div class="eyebrow" data-a="1">Eligibility</div>
+    <div class="stats" style="margin-top:calc(2.4*var(--s)*1px)">
+      <div class="stat" data-a="1"><b>8+</b><span>years of professional<br>experience</span></div>
+      <div class="stat" data-a="1"><b>3+</b><span>years at managerial<br>level</span></div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">In project controls, cost control, finance, project management or a closely related field — with a demonstrable record of distinguished contribution.</div>
+    <div class="note" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">Managerial responsibility may include leading teams, functions, programmes or budgets. Meeting the criteria does not guarantee recognition.</div>
+  </section>
+
+  <!-- 8 · your application -->
+  <section class="shot" id="s8">
     <div class="eyebrow" data-a="1">Your application</div>
     <div class="tokens" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
-      <div class="tok hero">No fee</div><div class="tok hero">No examination</div><div class="tok hero">One application</div>
+      <div class="tok hero">No fee</div><div class="tok hero">Merit alone</div><div class="tok hero">One application</div>
     </div>
     <div class="cols" style="margin-top:calc(2.2*var(--s)*1px)">
       <div class="col" data-a="1"><b>Profile</b><span>Role, employer, country and industry</span></div>
@@ -368,25 +396,43 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
       <div class="col" data-a="1"><b>Career history</b><span>The roles most relevant to this recognition</span></div>
       <div class="col" data-a="1"><b>Contribution</b><span>Leadership, publications, mentoring, service</span></div>
     </div>
-    <div class="sub" data-a="1" style="margin-top:calc(2.3*var(--s)*1px)">Reviewed confidentially. No nomination, assessment or credential fee.</div>
-    <div class="note" data-a="1" style="margin-top:calc(1.5*var(--s)*1px)">Identity documents only if shortlisted — via a secure link, deleted after the decision.</div>
+    <div class="note" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">No nomination, assessment or credential fee — optional extras, such as awards-ceremony attendance, are charged separately and play no part in the decision. Reviewed confidentially; identity documents only if shortlisted, via a secure link, deleted after the decision.</div>
   </section>
 
-  <!-- 8 · recognition -->
-  <section class="shot" id="s8">
+  <!-- 9 · putting yourself forward -->
+  <section class="shot" id="s9">
+    <div class="eyebrow" data-a="1">Putting yourself forward</div>
+    <h2 style="margin-top:calc(2.2*var(--s)*1px)"><span class="ln"><span class="w">No sponsor needed.</span></span><span class="ln"><span class="w">You put the record forward.</span></span></h2>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">The Board assesses it against published criteria, on the evidence — and does so confidentially.</div>
+  </section>
+
+  <!-- 10 · the register -->
+  <section class="shot" id="s10">
     <div class="eyebrow gold" data-a="1">If recognised</div>
-    <div class="cards grid" style="margin-top:calc(2.3*var(--s)*1px)">
+    <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
       <div class="card gold" data-a="1"><b>Honorary Fellow (PCI)</b><span>Board-conferred recognition</span></div>
+      <div class="card" data-a="1"><b>On PCI's own registry</b><span>Checkable at source, by anyone</span></div>
+      <div class="card" data-a="1"><b>Labelled honorary</b><span>Never a passed examination</span></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.6*var(--s)*1px)">Every honorary award can be checked on PCI's verification page, answered from the same registry as every credential.</div>
+  </section>
+
+  <!-- 11 · what it opens -->
+  <section class="shot" id="s11">
+    <div class="eyebrow gold" data-a="1">What it opens</div>
+    <div class="cards grid" style="margin-top:calc(2.3*var(--s)*1px)">
       <div class="card" data-a="1"><b>Student portal</b><span>Access credentials to the PCI student portal</span></div>
+      <div class="card" data-a="1"><b>Video lectures</b><span>The Institute's learning resources</span></div>
+      <div class="card" data-a="1"><b>Course material</b><span>Study materials aligned to the Body of Knowledge</span></div>
+      <div class="card" data-a="1"><b>Simulation lab</b><span>Realistic scenario practice</span></div>
       <div class="card" data-a="1"><b>Study via Certuvo</b><span>PCI's official preparation platform</span></div>
       <div class="card" data-a="1"><b>PCI AI events</b><span>Invitations to selected events</span></div>
-      <div class="card" data-a="1"><b>Verifiable at source</b><span>Checkable by anyone, labelled honorary</span></div>
     </div>
-    <div class="note" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Subject to current programme terms. Honorary recognition is never a passed examination.</div>
+    <div class="note" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">All subject to current programme terms, which may be varied or withdrawn.</div>
   </section>
 
-  <!-- 9 · discipline alignment -->
-  <section class="shot" id="s9">
+  <!-- 12 · discipline alignment -->
+  <section class="shot" id="s12">
     <div class="eyebrow" data-a="1">Discipline alignment</div>
     <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
       <div class="card" data-a="1"><b>PCL-AI</b><span>Project Controls</span></div>
@@ -396,13 +442,13 @@ h3{font-size:calc(var(--h3) * var(--s) * 1px)}
     <div class="note" data-a="1" style="margin-top:calc(2.8*var(--s)*1px)">Optional, and for disciplinary alignment only. It does not confer an examined PCI certification — PCL-AI, PFL-AI and PML-AI are earned only by passing their examination.</div>
   </section>
 
-  <!-- 10 · apply -->
-  <section class="shot" id="s10">
+  <!-- 13 · apply -->
+  <section class="shot" id="s13">
     <img id="markEnd" src="../brand/logo.svg" alt="" data-a="1">
     <div class="eyebrow gold" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">Honorary Fellow (PCI)</div>
-    <h3 style="margin-top:calc(1.5*var(--s)*1px)">Your contribution has shaped<span class="nbr"> </span><span class="sqbr"><br></span>the profession.<br>Now let it be recognised.</h3>
+    <h3 style="margin-top:calc(1.5*var(--s)*1px)">If your work outlasted<span class="sqbr"><br></span> the projects,<br>let it be recognised.</h3>
     <div class="tokens" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">
-      <div class="tok">APPLY TODAY</div><div class="tok">NO FEE</div><div class="tok">BOARD-REVIEWED</div><div class="tok">PUBLICLY VERIFIABLE</div>
+      <div class="tok">APPLICATIONS OPEN</div><div class="tok">NO FEE</div><div class="tok">BOARD-REVIEWED</div><div class="tok">PUBLICLY VERIFIABLE</div>
     </div>
     <div class="url" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">pciai.org<em>·</em>Members@pciai.org</div>
     <div class="legal" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
@@ -443,22 +489,18 @@ if (ASPECT === 'pt'){ stage.classList.add('pt');
    a single white, which is what stops four minutes of bright frames going
    clinical. Both sets are graded the same way; only the register changes. */
 const GROUNDS = {
-  // Bright throughout, as the brief requires: white and light architectural
-  // space rather than a dark corporate ground. The steps are papers, not one
-  // flat white, so four minutes of bright never goes clinical — and the two
-  // honorary beats (s2, s8) sit on the warmest, most golden of them.
   light: {
-    s1:[244,247,252], s2:[251,247,238], s3:[241,245,251], s4:[243,246,252],
-    s5:[240,244,251], s6:[244,247,252], s7:[242,246,252], s8:[251,246,236],
-    s9:[241,245,251], s10:[247,244,238]
+    s1:[244,247,252], s2:[251,247,238], s3:[242,246,252], s4:[241,245,251], s5:[243,246,252],
+    s6:[240,244,251], s7:[244,247,252], s8:[242,246,252], s9:[246,244,240], s10:[251,246,236],
+    s11:[250,246,238], s12:[241,245,251], s13:[247,244,238]
   },
   dark: {
-    s1:[15,23,42], s2:[28,22,14], s3:[13,20,34], s4:[15,23,42], s5:[12,19,32],
-    s6:[15,23,42], s7:[13,20,34], s8:[28,22,14], s9:[13,20,34], s10:[20,17,12]
+    s1:[15,23,42], s2:[28,22,14], s3:[13,20,34], s4:[13,20,34], s5:[15,23,42], s6:[12,19,32],
+    s7:[15,23,42], s8:[13,20,34], s9:[20,18,16], s10:[28,22,14], s11:[26,21,14], s12:[13,20,34], s13:[20,17,12]
   }
 };
 const GROUND = GROUNDS[THEME];
-const WARM = { s1:.2, s2:.85, s3:.15, s4:.2, s5:.15, s6:.2, s7:.2, s8:.85, s9:.15, s10:.8 };
+const WARM = { s1:.2, s2:.85, s3:.2, s4:.15, s5:.2, s6:.15, s7:.2, s8:.2, s9:.5, s10:.85, s11:.8, s12:.15, s13:.8 };
 
 const PALETTE = {
   dark: { fg:'#FFFFFF', sub:'#B9C6DA', eyeb:'#E4785F', foot:'#7E90AC',
@@ -529,14 +571,17 @@ const XF = 0.45;
 const CUES = {
   s1:[['#markOpen',.18,0],['.wordmark',.52,0],['h2 .w',1.05,.30]],
   s2:[['.eyebrow',.18,0],['.rule-gold',.46,0],['h2 .w',.72,.14],['.sub',2.1,0]],
-  s3:[['.eyebrow',.16,0],['.card',.40,.85],['.sub',3.1,0],['.note',4.0,0]],
-  s4:[['.eyebrow',.16,0],['.tok.hero',.40,.30],['.roles .tok',1.9,.07],['.note',3.6,0]],
-  s5:[['.eyebrow',.16,0],['.tok',.46,.085],['.sub',2.6,0]],
-  s6:[['.eyebrow',.16,0],['.stat',.44,.70],['.sub',2.4,0],['.note',3.6,0]],
-  s7:[['.eyebrow',.16,0],['.tok.hero',.36,.28],['.col',1.4,.60],['.sub',4.0,0],['.note',4.8,0]],
-  s8:[['.eyebrow',.18,0],['.card',.44,.62],['.note',4.2,0]],
-  s9:[['.eyebrow',.16,0],['.card',.40,.85],['.note',3.0,0]],
-  s10:[['#markEnd',.20,0],['.eyebrow',.55,0],['h3 ',.95,0],['.tok',1.5,.18],['.url',2.3,0],['.legal',2.9,0]]
+  s3:[['.eyebrow',.16,0],['h3 ',.40,0],['.stat',1.3,.50],['.tok',2.8,.14],['.note',4.6,0]],
+  s4:[['.eyebrow',.16,0],['.card',.40,.85],['.sub',3.1,0],['.note',4.0,0]],
+  s5:[['.eyebrow',.16,0],['.tok.hero',.42,.30],['.roles .tok',1.9,.075],['.note',4.2,0]],
+  s6:[['.eyebrow',.16,0],['.tok',.46,.085],['.sub',2.6,0]],
+  s7:[['.eyebrow',.16,0],['.stat',.44,.70],['.sub',2.4,0],['.note',3.6,0]],
+  s8:[['.eyebrow',.16,0],['.tok.hero',.36,.28],['.col',1.4,.60],['.note',4.2,0]],
+  s9:[['.eyebrow',.16,0],['h2 .w',.55,.16],['.sub',2.2,0]],
+  s10:[['.eyebrow',.18,0],['.card',.44,.85],['.note',3.6,0]],
+  s11:[['.eyebrow',.18,0],['.card',.44,.55],['.note',4.4,0]],
+  s12:[['.eyebrow',.16,0],['.card',.40,.85],['.note',3.0,0]],
+  s13:[['#markEnd',.20,0],['.eyebrow',.55,0],['h3 ',.95,0],['.tok',1.5,.18],['.url',2.3,0],['.legal',2.9,0]]
 };
 const ANIM = [];
 for (const shot of SHOTS){

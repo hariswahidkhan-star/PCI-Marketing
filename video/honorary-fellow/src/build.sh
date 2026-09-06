@@ -30,14 +30,21 @@ echo "==> score"
 python3 music.py "$BUILD/score.wav"
 
 echo "==> mix (score side-chained under the voice)"
-# level=disabled matters more than the ceiling: alimiter auto-levels back to 0 dB
-# by default, so `limit` only sets where limiting starts and the result is then
-# renormalised — which pushes true peak over the -1.0 dBTP the platforms expect.
+# -14 LUFS, not -16: PCI asked for a louder film, and -14 is what YouTube and
+# LinkedIn normalise to, so anything hotter is turned back down on upload and
+# anything quieter arrives quieter than the video before it. LRA 9 keeps the
+# quiet open from being lost at that level. The bed is up too (0.58 -> 0.66),
+# with the side-chain still putting the voice in front — the margin is measured
+# after every build. level=disabled matters more than the ceiling: alimiter
+# auto-levels back to 0 dB by default, so `limit` only sets where limiting
+# starts and the result is then renormalised — which pushes true peak over the
+# -1.0 dBTP the platforms expect. 0.85 (-1.4 dBFS) leaves room for the
+# inter-sample peaks AAC reconstructs.
 "$FFMPEG" -hide_banner -loglevel error -y -i "$BUILD/score.wav" -i ../audio/vo-track.wav \
-  -filter_complex "[0:a]volume=0.58[bed];\
+  -filter_complex "[0:a]volume=0.66[bed];\
 [bed][1:a]sidechaincompress=threshold=0.040:ratio=8:attack=10:release=300[duck];\
 [duck][1:a]amix=inputs=2:normalize=0:duration=longest,\
-loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.79:level=disabled[mix]" \
+loudnorm=I=-14:TP=-1.5:LRA=9,alimiter=limit=0.85:level=disabled[mix]" \
   -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
 
 # Frames stream straight from the renderer into ffmpeg. A 4K frame is ~3 MB of

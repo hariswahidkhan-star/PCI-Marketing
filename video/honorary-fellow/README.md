@@ -1,10 +1,11 @@
-# Honorary Fellow (PCI) — lead-generation film (2:17)
+# Honorary Fellow (PCI) — lead-generation film (4:19)
 
 A bright, premium institutional film for **PCI AI — Project Controls Institute
 Global, Inc.**, inviting distinguished professionals to apply for **Honorary
-Fellow (PCI)**. Ten scenes: the question, the recognition, what it is, who may
-apply, the industries, the eligibility requirements, the application evidence,
-what recognition brings, discipline alignment, and the invitation to apply.
+Fellow (PCI)**. Thirteen scenes: the question, the recognition, the Institute,
+what it is, who may apply, the industries, the eligibility requirements, the
+application, putting yourself forward, the registry, what recognition opens,
+discipline alignment, and the invitation to apply.
 
 **The one thing this film must never do** is describe Honorary Fellow (PCI) as an
 examined certification, licence or accreditation. It is a board-conferred
@@ -72,65 +73,76 @@ that does not exist yet.
 After the first cut PCI asked for the film to *sell* — maximum applications,
 and they will share it. The copy was rewritten as a pitch without changing a
 single fact: second-person address throughout, the true levers in the order
-that converts (**no fee → no examination → a public register → one application
-→ individual Board review**), a hero line on the application scene, and an
-"apply today" close. Scene 8 is a five-card benefits grid: recognition, the
-student portal, study via Certuvo, PCI AI events, verifiable at source.
+that converts (**no fee → no examination → PCI's own registry → one application
+→ individual Board review**), a hero line on the application scene, and a
+benefits grid. What the pitch does **not** do, on PCI's own rules: it never
+calls fellows "members" — the honorary route is a recognition, not a
+membership grade — never implies scarcity or a deadline, never promises a
+career outcome, and keeps every qualifying sentence spoken and on screen.
+`share-kit.md` carries the same rules into the LinkedIn post, YouTube
+description and short caption, with a "do not add" list for the lines that
+read well and are all prohibited. "Enhance career" was declined outright: the
+brief and PCI's site-wide disclosure both forbid career-outcome claims.
 
-What the pitch does **not** do, on PCI's own rules: it never calls fellows
-"members" — the honorary route is a recognition, not a membership grade — never
-implies scarcity or a deadline, never promises a career outcome, and keeps every
-qualifying sentence spoken and on screen. `share-kit.md` carries the same rules
-into the LinkedIn post, YouTube description and short caption, with a "do not
-add" list for the lines that read well and are all prohibited.
+## The authority cut
 
-Two of the added benefits needed care. **Certuvo** is on the site as "PCI's
-official platform for preparation and study", so it is named that way; "books
-and video lectures" is not on the site, so the film says "study through
-Certuvo". **PCI AI events** appear on no honorary page — PCI instructed them, so
-they are in, phrased "invitations to selected PCI AI events, subject to
-programme terms", recorded in the register as client-asserted, and the
-application page needs to say the same before publication. "Enhance career"
-was declined outright: the brief and PCI's site-wide disclosure both forbid
-career-outcome claims.
+PCI's next round asked for more: a harder sell built with a psychologist and a
+professional copywriter, more about the Institute and its value, the resources
+a recognised fellow may use (video lectures, course material, the simulation
+lab), a louder mix, a more authoritative voice, no time limit — and the script
+judged by a panel of an ACCA member, a PMP PMO director, a CFA charterholder and
+a senior project-controls director.
 
-## Pacing: the cap gave way to the pauses
+The panel's verdicts and every edit they produced are in `claims-register.md`
+§3b. The ones that changed the film: *"not yet accredited"* became the site's
+own *"not currently accredited by ANAB, IAS or any ISO/IEC 17024 body"*; the
+optional awards-ceremony charge is now spoken in the same breath as "no fee";
+"public register" became *"PCI's own public registry — checkable at source"*;
+the self-nomination scene now pairs *no sponsor needed* with the Board's
+scrutiny against published criteria; the narration says what PCI legally is;
+"cost engineering" was corrected to the site's "cost control"; "apply today"
+went; and the close sets a test rather than paying a compliment.
 
-PCI's note on the first pitch cut was that the topics ran into each other.
-They did — the gap between scenes had been squeezed to 0.36 s and the read
-conformed by 6 % to fit the brief's 120-second cap. PCI lifted the cap in
-favour of proper pauses, so the film now runs at Holden's natural pace with no
-time-scaling at all, and every topic gets a **1.5-second beat**: the caption
-clears, a moment of silence, the picture changes, and only then does the next
-topic begin with the voice. Running time **137.96 s**.
+**One thing the panel flagged that PCI overruled.** All four judges called the
+benefits scene a publication blocker: video lectures, the simulation lab and
+PCI AI events are on no PCI page. They are in the film on PCI's explicit
+instruction, with one "may" governing every item and "all subject to current
+programme terms" — and the register's condition stands: **the application page
+must name them before the film is published.** What the panel asked for and
+could not be given — who sits on the Board, who already holds the recognition,
+how old PCI is — is absent because no PCI page states it.
 
-## The voice, and the duration it forced
+## Pacing
 
-Narration is ElevenLabs **"Holden Pro Voice"** (`UudLhsL2DlHkDK0vGwl3`) on
-`eleven_v3` — the voice the brief names, a stock library voice, **not a clone of
-any real person**. Direction is carried as punctuation per the v3 guide: an
-ellipsis is a longer pause, an em-dash a short beat, capitals mark emphasis. The
-brief's arc — quiet confidence, building through industries and leadership,
-warmth on contribution, strength at the close — is in the density of that
-direction, which rises and then resolves.
+Thirteen scenes, no time-scaling, a **1.5-second beat** between every topic: the
+caption clears, a moment of silence, the picture changes, and only then does
+the next topic begin with the voice. Running time **258.93 s**. `sync.py`'s
+cap is 300 s and it still refuses anything past 8 %, so a rushed read cannot be
+shipped by accident.
 
-**The brief's script did not fit its own duration.** Read at the deliberate pace
-the brief also asks for, the full narration ran **146 s** against a 105–120 s
-cap. Speeding the narrator up 16% would have made a deep, mature read sound
-rushed — the one delivery the brief rules out — so six scenes were tightened
-and their detail moved on screen, with every mandated statement kept word for
-word: eight years, three managerial, no examination, board discretion, no
-guarantee, no entitlement, separate from PCL-AI/PFL-AI/PML-AI, and the
-discipline-alignment clarification. The pitch read measures 127.4 s; it was conformed by 6.1 % to 120.00 s
-until PCI lifted the cap (see *Pacing* above), and now runs unscaled. `sync.py`
-refuses anything past 8 % and asks for a copy trim instead, so a rushed read
-cannot be shipped by accident — and that refusal fired once on this film, when
-the first benefits retake came back nine seconds longer than the line it
-replaced. The aside it carried was already on screen, so the aside went.
+Captions are cut to the breath. The v3 read spells out P-C-I and I-S-O I-E-C
+slowly, so proportional caption splits drifted by a phrase; `vo.py` now carries
+the measured end of each cue (the midpoint of the silence it ends on, from
+`silencedetect` at −38 dB) and `sync.py` uses those directly. Fifty-one cues,
+two lines each, three at most — which is also what lets the caption band sit
+higher and gives the three densest scenes their room.
 
-Everything downstream reads that measurement. `scene.html` carries no timings;
-`vo.py` takes caption windows from `timeline.json`; `music.py` places its scene
-markers from the same list. Nothing is hand-nudged.
+## The voice
+
+Narration is ElevenLabs **"Jim Executive — Authoritative, British and Warm"**
+(`tXxkePQsw0G69D8VeDzp`) on `eleven_v3` — a stock library voice, **not a clone
+of any real person**, and the narrator of PCI's other three films. PCI asked
+for a more authoritative read than the brief's named Holden voice; three
+candidates were tested on the same two scenes (`audio/voice-test-authority/`)
+and this one is the only one whose library descriptor *is* "authoritative".
+Every scene is directed `[deep, measured, commanding]`, with punctuation
+carrying the rest per the v3 guide: an ellipsis is a longer pause, an em-dash a
+short beat, capitals mark emphasis. The earlier Holden takes are kept in
+`audio/old-paced-holden/` for comparison; switching back is one re-generation.
+
+Everything downstream reads the measured audio. `scene.html` carries no
+timings; `vo.py` takes caption windows from `timeline.json`; `music.py` places
+its scene markers from the same list. Nothing is hand-nudged.
 
 ---
 
@@ -148,9 +160,13 @@ reminder that meeting them guarantees nothing.
 The kit lives below ~120 Hz and above ~6 kHz. A piano cannot make that claim, so
 it is voiced an octave above its natural register with its harmonics almost
 suppressed, and the level is set from measurement: in the finished mix, during
-the loudest scene, the music adds **−0.3 dB** to the voice band — the narration
-is effectively alone where speech lives. Mix: −16.2 LUFS, −2.0 dBTP. The
-`alimiter` `level=disabled` note in `build.sh` explains why that ceiling is real.
+the loudest scene the narration sits **5.3 dB** above the music in the voice
+band, measured in the finished mix (speech against the music-only beat that
+follows it). PCI asked for a louder film, so the
+mix now targets **−14 LUFS** — what YouTube and LinkedIn normalise to, so it
+arrives as loud as the platform allows and no quieter than the video before it.
+Measured: **−14.7 LUFS integrated, −1.4 dBTP.** The `alimiter` `level=disabled` note in
+`build.sh` explains why that ceiling is real.
 
 The kit is shared with the other three films via `video/lib/score_kit.py`; this
 file holds only what should differ — tempo (88 bpm), harmony, arrangement, the
@@ -161,7 +177,7 @@ curve.
 ## Look
 
 Bright, as the brief requires: a sequence of papers rather than one flat white,
-so two minutes of bright never goes clinical. Brand navy, PCI blue and controlled
+so four minutes of bright never goes clinical. Brand navy, PCI blue and controlled
 red accents. **Gold is reserved.** It appears on exactly three honorary beats —
 the name of the recognition, what recognition brings, and the close — and never
 near the PCL-AI/PFL-AI/PML-AI cards, so it reads as distinction rather than
@@ -185,8 +201,16 @@ The industry and applicant sequences are typographic.
 `src/probe.mjs` runs five checks on every aspect, sampled every 0.5 s: page
 errors, horizontal overflow (transitions excluded), scene content colliding with
 the caption band, scene content colliding with the fixed furniture, and **text
-clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **952
+clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **2,068
 samples, zero findings.**
+
+It earned its keep again on this cut. The first probe of the authority script
+returned findings in six scenes: the new Institute scene and the enlarged
+role and industry lists were taller than their padding box, and cues of up to
+seven lines were rising into everything above them. The fix was structural —
+compact stats, the dense pill size for the two long lists, one note in place of
+a sub-headline and a note on the application scene, and captions cut to the
+breath — and the probe was re-run on all four sizes until it returned nothing.
 
 The fifth check exists because PCI found what the other four could not: a card
 subtitle cut off mid-word ("LABELLED HONORA"). The card is `overflow:hidden`
@@ -206,7 +230,7 @@ prevent. That is now an error, not a fallback.
 ```
 claims-register.md   every statement traced to a PCI page; what was cut, and why
 src/vo.py            the read + all three caption forms; measured windows only
-src/sync.py          measures the voice, conforms to 119.50s, refuses past 8%
+src/sync.py          measures the voice; explicit cue ends; refuses past 8%
 src/scene.html       the film — deterministic, reads its cut list from data
 src/music.py         piano -> strings -> kit, F major, from the shared kit
 src/build.sh         sync -> captions -> score -> mix -> 4K pair -> HD trio

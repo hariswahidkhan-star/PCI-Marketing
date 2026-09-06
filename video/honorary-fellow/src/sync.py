@@ -39,7 +39,7 @@ GAP_SCENE = 1.50
 # The brief's 120 s cap was lifted by PCI in favour of proper pauses, so the
 # film now runs at the narrator's natural pace and this is only a sanity
 # ceiling: no conform is applied unless the read somehow exceeds it.
-TARGET = 150.00
+TARGET = 300.00
 MAX_STRETCH = 1.08
 SILENCE_DB = '-38dB'
 MIN_SIL = 0.26          # a pause shorter than this is phrasing, not a boundary
@@ -92,8 +92,14 @@ def main():
     for idx, (sid, chap, segs) in enumerate(VO.SCENES):
         p = os.path.join(TRIM, f'vo-{idx+1:02d}.wav')
         d = dur(p)
+        ends = [seg[2] for seg in segs[:-1] if len(seg) > 2]
+        segs = [seg[:2] for seg in segs]
         need = len(segs) - 1
-        if need:
+        if need and len(ends) == need:
+            # explicit boundaries from vo.py, measured on this take
+            br = sorted(ends)
+            assert all(0.0 < b < d for b in br), f'{sid}: an explicit end lies outside the {d:.2f}s take'
+        elif need:
             br = internal_breaks(p)
             if len(br) > need:
                 # keep the longest silences when the reader breathed more than expected
