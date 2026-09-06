@@ -1,4 +1,4 @@
-# Verified-claims register — PCI AI explainer (3:53)
+# Verified-claims register — PCI AI explainer (4:16)
 
 Every factual statement the film makes, and where it comes from. This film is
 denser than the other two: it names the credentials, the Body of Knowledge, the

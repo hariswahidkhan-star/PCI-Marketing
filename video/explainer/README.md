@@ -1,4 +1,4 @@
-# PCI AI — explainer film (3:53)
+# PCI AI — explainer film (4:16)
 
 A structured explainer for **PCI AI — Project Controls Institute Global, Inc.**
 answering four questions in order: **why the Institute exists**, **what its
@@ -61,11 +61,38 @@ list. So the cut, the captions and the score cannot drift from the voice, becaus
 none of them is written by hand.
 
 Nothing is time-stretched. There is no fixed duration to hit, so the film simply
-runs at the pace the read wants — 233.14 s.
+runs at the pace the read wants — **256.24 s**.
 
-**One honest note:** silence detection found the segment boundaries in fifteen of
-sixteen scenes. Scene 16 fell back to a proportional split by word weight, and
-`sync.py` prints which scenes did so rather than hiding it.
+Silence detection found the segment boundaries in all sixteen scenes on this
+read, so every one of the thirty caption windows is placed on a measured pause
+rather than an estimate. `sync.py` prints any scene that falls back to a
+proportional split by word weight, rather than hiding it.
+
+## The voice
+
+The narration is ElevenLabs *"Jim Executive — Authoritative, British and Warm"*
+(`tXxkePQsw0G69D8VeDzp`) on **`eleven_v3`** — a stock library voice, **not a
+clone of any real person**, and recorded as synthetic in the asset manifest. It
+is the same narrator as the 75-second film and the 15-second launch cut.
+
+`eleven_v3` was chosen over `eleven_multilingual_v2` because v2 has no emotional
+direction: every line lands at the same weight, which across four minutes reads
+as a machine rather than a lecturer. v3 takes direction inline from the text, so
+the performance lives in `src/v3-direction.json` and is reproducible rather than
+a lucky generation.
+
+Direction is punctuation, per the v3 prompting guide — an ellipsis is a longer
+thoughtful pause, an em-dash a short beat, capitals mark emphasis. **At most one
+capitalised word per scene.** For a certification body, restraint reads as
+credibility and melodrama reads as a sales advert, so the direction is
+deliberately sparing:
+
+> Its position on that adoption is explicit. It certifies professionals who
+> GOVERN A-I… not who defer to it.
+
+The v3 read is slower and better phrased than the v2 one, which is why the film
+grew from 233.14 s to 256.24 s. Nothing was re-cut to accommodate it: `sync.py`
+measured the new audio and the whole timeline followed.
 
 ## Why bright is not just "the dark one inverted"
 
@@ -103,8 +130,33 @@ src/sync.py          measures the voice; writes timeline.json + shots.data.js
 src/scene.html       the film — deterministic, reads its cut list from data
 src/music.py         chapter-aware score, from scratch, stdlib only
 src/build.sh         sync -> captions -> score -> mix -> frames -> masters
+src/render.mjs       drives scene.html frame by frame, streams PNG to ffmpeg
 src/probe.mjs        layout + caption-collision audit (0 collisions, 0 errors)
 ```
+
+### Frames are never written to disk
+
+A 256 s film at 30 fps is 7,687 frames per aspect, and three aspects of
+lossless PNG come to about **22 GB** of scratch — more than the build host has.
+So `render.mjs --pipe 1` writes frames to stdout and `build.sh` pipes them
+straight into ffmpeg. Nothing is staged, and a half-written frame is no longer a
+failure mode the build can have.
+
+Two changes make that fast enough to be the default:
+
+- Frames are captured through CDP with `optimizeForSpeed`, which picks a faster
+  PNG compression level. **PNG is lossless at every level**, so the pixels are
+  byte-identical — verified against the previous capture path by decoding both
+  to raw RGBA and hashing: identical on 8 of 8 frames sampled across the film.
+  Per-frame cost falls from 254 ms to 98 ms.
+- With the cheaper capture, the three aspects finally scale across cores:
+  **1.1 fps aggregate before, 25.3 fps after.**
+
+The clean pass feeds two encodes from one pipe (CRF 18 delivery and the CRF 14
+master), and the silent master is a stream copy of the clean one rather than a
+third encode — so the picture in all three is the same bits. The poster and
+thumbnail are written out of that same pass as lossless PNGs, so the stills are
+the rendered pixels and not a frame decoded back out of h264.
 
 Verified after build: **zero page errors and zero caption collisions** across all
 three aspects, sampled every 0.5 s.

@@ -1,8 +1,13 @@
 # Narrator A/B — `eleven_v3`
 
 Four candidates reading the same line, generated to let the Institute choose by
-ear rather than from voice descriptions. **Awaiting a decision; none of these is
-in a delivered film yet.**
+ear rather than from voice descriptions.
+
+> **Decision taken: A — Jim Executive on `eleven_v3`.** It is the narrator in the
+> delivered explainer. This was the standing recommendation below, and it keeps
+> one voice across all three films. The other three samples are kept because the
+> comparison is the evidence for the choice, and because reversing it is a
+> re-generation, not a re-edit.
 
 ## Why this test exists
 
@@ -47,9 +52,19 @@ credibility rests on restraint. v3 is used for warmth and conviction, not drama.
 ## What changing the voice costs
 
 Switching model or voice re-times the narration, so the picture is re-cut to the
-new read — the timeline is derived from the audio, never hand-set. Roughly 45
-minutes of render, and about **$0.54** to regenerate the explainer's narration.
-The 75-second film (~1,230 credits) and the 15-second film (~173) would need the
-same treatment if all three are to share one narrator.
+new read — the timeline is derived from the audio, never hand-set.
+
+**What the v3 move actually cost on the explainer:** 16 takes, ~3,300 credits
+(about **$0.60**), and the film lengthened from 233.14 s to 256.24 s because the
+v3 read is slower and better phrased. No picture was re-cut by hand.
+
+**Still on `eleven_multilingual_v2`:** the 75-second film and the 15-second launch
+cut. Both already use *this same voice* — Jim Executive — so all three films share
+one narrator today; only the model differs, which affects phrasing and emphasis
+rather than who is speaking. Re-recording them on v3 would cost roughly **1,230**
+and **173** credits respectively (about $0.26 together) plus a re-render, and the
+75-second film would need its conform re-derived because it is cut to an exact
+75.00 s. **That spend has not been made**, since it consumes paid credits on
+films that are already delivered and signed off.
 
 All four voices are **stock library voices — none is a clone of any real person.**
