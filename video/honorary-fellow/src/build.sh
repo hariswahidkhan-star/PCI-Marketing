@@ -29,6 +29,32 @@ python3 vo.py
 echo "==> score"
 python3 music.py "$BUILD/score.wav"
 
+# MUSIC selects the bed under the narration. Default: the ElevenLabs Music v2
+# track PCI asked for (see ../music/README.md), trimmed to the film and faded
+# out over its last five seconds. MUSIC= (empty) uses the standard-library
+# score instead. A produced track is far denser than the synthesised score,
+# so it sits lower (BED) before the side-chain; the margin is measured after
+# every build, not assumed.
+MUSIC="${MUSIC-../music/eleven-music-bed.mp3}"
+if [[ -n "$MUSIC" ]]; then
+  TOTAL="$(python3 -c "import json;print(json.load(open('timeline.json'))['total'])")"
+  FADE_AT="$(python3 -c "print(max(0.0, $TOTAL - 5.0))")"
+  "$FFMPEG" -hide_banner -loglevel error -y -i "$MUSIC" \
+    -af "atrim=0:$TOTAL,afade=t=in:st=0:d=1.5,afade=t=out:st=$FADE_AT:d=5" \
+    -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/bed.wav"
+  # A produced track is dense exactly where speech lives, so under the
+  # narration it gets a wide 4 dB dip around 1.5 kHz and a deeper, slower
+  # side-chain than the synthesised score needed. Measured on this film:
+  # 0.20 + dip = narration 6.0 dB (median) / 3.0 dB (worst) above the music
+  # in the voice band at every scene beat, with the music itself still at
+  # about -26 dBFS between scenes. 0.24 halved that margin; 0.30 lost it.
+  BED="${BED:-0.20}"; BEDFX="equalizer=f=1500:t=q:w=0.8:g=-4,"
+  DUCK="threshold=0.035:ratio=10:attack=8:release=400"
+else
+  cp "$BUILD/score.wav" "$BUILD/bed.wav"; BED="${BED:-0.66}"; BEDFX=""
+  DUCK="threshold=0.040:ratio=8:attack=10:release=300"
+fi
+
 echo "==> mix (score side-chained under the voice)"
 # -14 LUFS, not -16: PCI asked for a louder film, and -14 is what YouTube and
 # LinkedIn normalise to, so anything hotter is turned back down on upload and
@@ -40,9 +66,9 @@ echo "==> mix (score side-chained under the voice)"
 # starts and the result is then renormalised — which pushes true peak over the
 # -1.0 dBTP the platforms expect. 0.85 (-1.4 dBFS) leaves room for the
 # inter-sample peaks AAC reconstructs.
-"$FFMPEG" -hide_banner -loglevel error -y -i "$BUILD/score.wav" -i ../audio/vo-track.wav \
-  -filter_complex "[0:a]volume=0.66[bed];\
-[bed][1:a]sidechaincompress=threshold=0.040:ratio=8:attack=10:release=300[duck];\
+"$FFMPEG" -hide_banner -loglevel error -y -i "$BUILD/bed.wav" -i ../audio/vo-track.wav \
+  -filter_complex "[0:a]${BEDFX}volume=$BED[bed];\
+[bed][1:a]sidechaincompress=$DUCK[duck];\
 [duck][1:a]amix=inputs=2:normalize=0:duration=longest,\
 loudnorm=I=-14:TP=-1.5:LRA=9,alimiter=limit=0.85:level=disabled[mix]" \
   -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
@@ -123,6 +149,7 @@ cp "$BUILD/stills/$(printf '%05d' "$THUMB_F").png" "$DIST/$NAME-thumbnail-3840x2
   -vf scale=1280:720:flags=lanczos "$DIST/$NAME-thumbnail-1280x720.png"
 cp ../captions/*.srt ../captions/*.vtt "$DIST/" 2>/dev/null || true
 cp "$BUILD/score.wav" "$DIST/$NAME-score.wav"
+cp "$BUILD/bed.wav" "$DIST/$NAME-music-bed.wav"
 cp ../audio/vo-track.wav "$DIST/$NAME-voiceover.wav"
 cp "$BUILD/mixed.wav" "$DIST/$NAME-mixed-soundtrack.wav"
 echo; ls -la "$DIST"

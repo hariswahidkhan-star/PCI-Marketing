@@ -117,7 +117,7 @@ how old PCI is — is absent because no PCI page states it.
 Thirteen scenes with a **1.1-second beat** between every topic: the caption
 clears, a moment of silence, the picture changes, and only then does the next
 topic begin with the voice. PCI asked for the film a little faster, so the
-emotional read (250.7 s natural) is conformed by **4.5 %**, formant-preserved,
+Nassim read (247.7 s natural) is conformed by **3.2 %**, formant-preserved,
 to **240.00 s** — under the threshold at which a time-stretch is audible on
 speech, and well inside `sync.py`'s 8 % refusal.
 
@@ -125,36 +125,31 @@ Captions are cut to the breath. The v3 read spells out P-C-I and I-S-O I-E-C
 slowly, so proportional caption splits drifted by a phrase; `vo.py` now carries
 the measured end of each cue — the midpoint of the silence it ends on, from
 `silencedetect` at −38 dB, chosen from the candidates so that the implied
-speaking rate stays level across the scene — and `sync.py` uses those directly. Forty-eight cues,
+speaking rate stays level across the scene — and `sync.py` uses those directly. Forty-six cues,
 two lines each, three at most — which is also what lets the caption band sit
 higher and gives the three densest scenes their room.
 
 ## The voice
 
-Narration is ElevenLabs **"Holden Pro Voice"** (`UudLhsL2DlHkDK0vGwl3`) on
-`eleven_v3` — the voice the brief names, a stock library voice, **not a clone
-of any real person**. When PCI asked for a more authoritative read, three
-candidates were tested on the same two scenes (`audio/voice-test-authority/`):
-Holden directed harder, Jim Executive (the narrator of PCI's other three
-films) and Leo. **PCI chose Holden**, asked for the read to be a little quicker and more human,
-and then for *maximum emotion*. The shipped takes are therefore directed
-phrase by phrase — every clause carries its own emotional cue, from
-`[quiet, reflective]` on the first line through `[reverent]`, `[inspired]`,
-`[candid, sincere]` on the accreditation disclosure, `[empowering]` on
+Narration is ElevenLabs **"Nassim — Corporate Narration"**
+(`repzAAjoKlgcT2oOAIWt`) on `eleven_v3` — the voice PCI named for this cut, a
+stock library voice, **not a clone of any real person**. It reads the same
+phrase-by-phrase emotional direction PCI asked for on the previous cut
+(`src/v3-emotion.json`): every clause carries its own cue, from `[quiet,
+reflective]` on the first line through `[reverent]`, `[inspired]`, `[candid,
+sincere]` on the accreditation disclosure and `[empowering]` on
 self-nomination, to `[moved, heartfelt]` and `[inspiring, strong, resolute]`
-at the close. The full direction is in `src/v3-emotion.json`; **not one word
-differs from the register script** (a check strips the tags and compares).
-Earlier reads are kept for comparison: `audio/holden-commanding/` (deep, slow,
-commanding) and `audio/holden-warm/` (warm, natural pace). Punctuation carries
-the rest per the v3 guide: an ellipsis
-is a longer pause, an em-dash a short beat, capitals mark emphasis. The full
-Jim Executive read of the same script is kept in `audio/jim-executive-authority/`
-and the previous cut's Holden takes in `audio/old-paced-holden/`; switching is
-one re-generation.
+at the close. **Not one word differs from the register script** — a check
+strips the tags and compares — and every take was transcribed back
+(ElevenLabs Scribe) and matched word for word before use.
 
-Every take was transcribed back (ElevenLabs Scribe) and matched against its
-script word for word before it was used — v3 can improvise, and a narration
-that drifts from the register would be a claim nobody checked.
+The earlier narrators are kept for comparison: Holden in three directions
+(`audio/holden-commanding/`, `audio/holden-warm/`, `audio/holden-emotion/`),
+Jim Executive (`audio/jim-executive-authority/`) and the first Holden cut
+(`audio/old-paced-holden/`). Switching is one re-generation. Nassim runs
+phrases together where Holden breathed, so two cues were merged (the
+application evidence line and the registry line) to keep every caption change
+on an actual pause.
 
 Everything downstream reads the measured audio. `scene.html` carries no
 timings; `vo.py` takes caption windows from `timeline.json`; `music.py` places
@@ -162,31 +157,28 @@ its scene markers from the same list. Nothing is hand-nudged.
 
 ---
 
-## The score
+## The music
 
-Original, standard-library-only, no samples and no licence obligation. The brief
-asks for restrained piano and atmospheric tones rising into confident orchestral
-and modern electronic elements — an arc, so the score is built as one: felt piano
-alone for the first three scenes, a detuned string stack arriving where the film
-turns to *who it is for*, and a kit only above the midpoint of the curve. F major
-throughout, with the relative minor used only under the two scenes that carry
-qualification — no examination and board discretion; the criteria and the
-reminder that meeting them guarantees nothing.
+PCI asked for professional background music, so the bed under the narration is
+now a 250-second instrumental generated with **ElevenLabs Music v2** in PCI's
+own workspace (`music/eleven-music-bed.mp3`, provenance in `music/README.md`):
+corporate cinematic, restrained piano and pads into strings, a subtle
+electronic pulse from the second minute, a proud crescendo near the end,
+resolving warm. It is trimmed to the film and faded over its last five
+seconds.
 
-The kit lives below ~120 Hz and above ~6 kHz. A piano cannot make that claim, so
-it is voiced an octave above its natural register with its harmonics almost
-suppressed, and the level is set from measurement: in the finished mix, during
-the loudest scene the narration sits **7.6 dB** above the music in the voice
-band, measured in the finished mix (speech against the music-only beat that
-follows it). PCI asked for a louder film, so the
-mix now targets **−14 LUFS** — what YouTube and LinkedIn normalise to, so it
-arrives as loud as the platform allows and no quieter than the video before it.
-Measured: **−14.3 LUFS integrated, −1.5 dBTP.** The `alimiter` `level=disabled` note in
-`build.sh` explains why that ceiling is real.
+A produced track is dense exactly where speech lives, so it is treated
+differently from the synthesised score it replaces: a wide 4 dB dip around
+1.5 kHz, a deeper and slower side-chain, and a lower level (0.20). Those
+numbers were set from measurement, not taste — at every one of the twelve
+beats between scenes the narration sits **6.0 dB (median) and 3.0 dB (worst
+case)** above the music in the voice band, with the music itself still
+clearly present at about −26 dBFS between scenes. The mix targets **−14
+LUFS** (what YouTube and LinkedIn normalise to) with a −1.5 dBTP ceiling.
 
-The kit is shared with the other three films via `video/lib/score_kit.py`; this
-file holds only what should differ — tempo (88 bpm), harmony, arrangement, the
-curve.
+The original standard-library score (`src/music.py`, shared kit in
+`video/lib/score_kit.py`) is still built on every run and delivered as a stem;
+`MUSIC=` (empty) on the build command puts it back under the narration.
 
 ---
 
@@ -218,7 +210,7 @@ The industry and applicant sequences are typographic.
 errors, horizontal overflow (transitions excluded), scene content colliding with
 the caption band, scene content colliding with the fixed furniture, and **text
 clipped inside its own box**. Clean on 16:9, 9:16, 1:1 and 3840×2160 — **1,916
-samples, zero findings.**
+samples, zero findings** (re-run for this cut: same result).
 
 A second check now runs on the sound: the silences in the finished voice
 track are compared with the beats the timeline expects between scenes. That

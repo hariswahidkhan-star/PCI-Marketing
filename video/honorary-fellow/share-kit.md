@@ -70,18 +70,18 @@ consideration.** No urgency line: the site publishes no deadline.
 >
 > Chapters
 > 0:00 The question
-> 0:08 The recognition
-> 0:29 The Institute
-> 1:12 What it is
-> 1:37 Who may apply
-> 1:50 Industries
-> 2:03 Eligibility
-> 2:22 Your application
-> 2:44 Putting yourself forward
-> 2:56 The registry
-> 3:07 What it opens
-> 3:31 Discipline alignment
-> 3:43 Apply
+> 0:09 The recognition
+> 0:26 The Institute
+> 1:09 What it is
+> 1:35 Who may apply
+> 1:49 Industries
+> 2:01 Eligibility
+> 2:20 Your application
+> 2:41 Putting yourself forward
+> 2:54 The registry
+> 3:05 What it opens
+> 3:29 Discipline alignment
+> 3:42 Apply
 
 *(Chapter timestamps are exact, taken from the measured timeline. Running time 4:00.)*
 
