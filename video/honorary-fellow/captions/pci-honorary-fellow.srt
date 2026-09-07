@@ -1,229 +1,223 @@
 1
-00:00:00,290 --> 00:00:02,500
+00:00:00,290 --> 00:00:03,200
 Some careers deliver projects.
 
 2
-00:00:02,500 --> 00:00:07,720
+00:00:03,200 --> 00:00:09,280
 Others leave behind a standard, a method
 — and the people who carry it forward.
 
 3
-00:00:08,770 --> 00:00:16,330
+00:00:10,350 --> 00:00:15,860
 Honorary Fellow (PCI): conferred by the
 Board of an independent professional body,
 
 4
-00:00:16,330 --> 00:00:21,850
+00:00:15,860 --> 00:00:20,510
 in recognition of distinguished
 contribution, leadership and service.
 
 5
-00:00:21,850 --> 00:00:28,930
+00:00:20,510 --> 00:00:25,540
 Your name, on PCI's own public
 registry — checkable at source.
 
 6
-00:00:29,990 --> 00:00:33,600
+00:00:26,600 --> 00:00:30,880
 The Project Controls Institute is
 an independent professional body —
 
 7
-00:00:33,600 --> 00:00:36,110
+00:00:30,880 --> 00:00:33,620
 a Delaware Non-Stock Corporation —
 
 8
-00:00:36,110 --> 00:00:40,610
+00:00:33,620 --> 00:00:38,500
 built to give the discipline a shared
 standard, an independent credential
 
 9
-00:00:40,610 --> 00:00:44,360
+00:00:38,500 --> 00:00:41,800
 and a professional home for the AI era.
 
 10
-00:00:44,360 --> 00:00:50,080
+00:00:41,800 --> 00:00:47,460
 Its published Body of Knowledge sets thirteen
 domains and sixty-one knowledge areas.
 
 11
-00:00:50,080 --> 00:00:56,560
+00:00:47,460 --> 00:00:54,080
 Its framework is developed with
 reference to ISO/IEC 17024,
 
 12
-00:00:56,560 --> 00:01:08,300
+00:00:54,080 --> 00:01:05,850
 and PCI states plainly that it is
 not currently accredited by ANAB,
 IAS or any ISO/IEC 17024 body.
 
 13
-00:01:08,300 --> 00:01:12,210
+00:01:05,850 --> 00:01:09,390
 What it has is a registry anyone can check.
 
 14
-00:01:13,260 --> 00:01:19,180
+00:01:10,450 --> 00:01:16,520
 It involves no examination. The record is
 the evidence, and the Board weighs it.
 
 15
-00:01:19,180 --> 00:01:30,010
+00:01:16,520 --> 00:01:27,710
 It is separate from PCI's examined
 certifications — PCL-AI, PFL-AI and PML-AI.
 
 16
-00:01:30,010 --> 00:01:33,270
+00:01:27,710 --> 00:01:31,150
 Every application is considered individually,
 
 17
-00:01:33,270 --> 00:01:36,930
+00:01:31,150 --> 00:01:35,000
 and recognition is conferred
 solely at the Board's discretion.
 
 18
-00:01:37,980 --> 00:01:42,750
+00:01:36,070 --> 00:01:41,170
 If you have led teams, shaped standards,
 taught, published or governed —
 
 19
-00:01:42,750 --> 00:01:50,280
+00:01:41,170 --> 00:01:49,300
 in project controls, cost control,
 finance, project management or a closely
 related discipline — you may apply.
 
 20
-00:01:51,340 --> 00:01:58,090
+00:01:50,370 --> 00:01:56,940
 From construction and energy to
 technology, aviation, project
 finance, government and academia:
 
 21
-00:01:58,090 --> 00:02:01,150
+00:01:56,940 --> 00:01:59,370
 wherever leadership shapes outcomes,
 
 22
-00:02:01,150 --> 00:02:03,280
+00:01:59,370 --> 00:02:01,060
 your contribution counts.
 
 23
-00:02:04,340 --> 00:02:09,100
+00:02:02,120 --> 00:02:07,380
 The floor is eight years' experience,
 three of them at managerial level —
 
 24
-00:02:09,100 --> 00:02:12,700
+00:02:07,380 --> 00:02:11,040
 leading teams, functions,
 programmes or budgets.
 
 25
-00:02:12,700 --> 00:02:18,090
+00:02:11,040 --> 00:02:16,320
 The bar is higher: a demonstrable
 record of distinguished contribution.
 
 26
-00:02:18,090 --> 00:02:21,720
+00:02:16,320 --> 00:02:19,610
 Meeting the criteria does
 not guarantee recognition.
 
 27
-00:02:22,780 --> 00:02:26,550
+00:02:20,670 --> 00:02:24,600
 PCI charges no nomination,
 assessment or credential fee.
 
 28
-00:02:26,550 --> 00:02:33,530
+00:02:24,600 --> 00:02:31,630
 Optional extras, such as attending an
 awards ceremony, are charged separately
 and play no part in the decision.
 
 29
-00:02:33,530 --> 00:02:37,000
+00:02:31,630 --> 00:02:34,560
 Recognition is awarded solely on merit.
 
 30
-00:02:37,000 --> 00:02:41,890
+00:02:34,560 --> 00:02:40,850
 One application: your profile,
 résumé, career history and evidence,
-
-31
-00:02:41,890 --> 00:02:43,840
 reviewed confidentially by the Board.
 
-32
-00:02:44,890 --> 00:02:47,110
+31
+00:02:41,910 --> 00:02:44,380
 You need no sponsor to be considered.
 
-33
-00:02:47,110 --> 00:02:49,250
+32
+00:02:44,380 --> 00:02:46,810
 You put your own record forward.
 
-34
-00:02:49,250 --> 00:02:54,090
+33
+00:02:46,810 --> 00:02:51,870
 The Board then assesses it against
 published criteria, on the evidence —
 
-35
-00:02:54,090 --> 00:02:55,810
+34
+00:02:51,870 --> 00:02:54,200
 and does so confidentially.
 
-36
-00:02:56,860 --> 00:03:01,130
+35
+00:02:55,260 --> 00:03:01,440
 Those recognised are entered
 on PCI's own public registry:
-
-37
-00:03:01,130 --> 00:03:03,290
 checkable at source by anyone,
 
-38
-00:03:03,290 --> 00:03:07,130
+36
+00:03:01,440 --> 00:03:04,850
 labelled honorary, never a passed examination.
 
-39
-00:03:08,190 --> 00:03:14,720
+37
+00:03:05,920 --> 00:03:12,730
 If recognised, you may also be given
 access to the PCI student portal and
 the Institute's learning resources —
 
-40
-00:03:14,720 --> 00:03:18,320
+38
+00:03:12,730 --> 00:03:16,710
 video lectures, course material
 and the simulation lab.
 
-41
-00:03:18,320 --> 00:03:24,320
+39
+00:03:16,710 --> 00:03:22,850
 The same terms may extend to study through
 Certuvo, PCI's official preparation platform,
 
-42
-00:03:24,320 --> 00:03:30,630
+40
+00:03:22,850 --> 00:03:29,170
 and invitations to selected PCI AI events
 — all subject to current programme terms.
 
-43
-00:03:31,680 --> 00:03:36,340
+41
+00:03:30,240 --> 00:03:34,780
 Tell the Board which discipline
 your contribution aligns to:
 
-44
-00:03:36,340 --> 00:03:39,170
+42
+00:03:34,780 --> 00:03:37,750
 project controls, project
 finance or project management.
 
-45
-00:03:39,170 --> 00:03:42,860
+43
+00:03:37,750 --> 00:03:41,890
 Optional, and it confers
 no examined certification.
 
-46
-00:03:43,920 --> 00:03:49,850
+44
+00:03:42,960 --> 00:03:48,770
 If your work has outlasted the projects it
 was done on, it deserves to be recognised.
 
-47
-00:03:49,850 --> 00:03:54,600
+45
+00:03:48,770 --> 00:03:54,130
 Apply for the Board's
 consideration at pciai.org.
 
-48
-00:03:54,600 --> 00:03:58,850
+46
+00:03:54,130 --> 00:03:58,840
 Questions to Members@pciai.org.
