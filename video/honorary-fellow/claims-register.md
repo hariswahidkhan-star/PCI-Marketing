@@ -111,7 +111,7 @@ All from `PCI/backend/wwwroot/` — `mission-vision.html`, `certification-integr
 | I4 | Preparation is separated from assessment | certification-integrity; footer | *"separate training from assessment"*; *"PCI sets and owns the standard and examination; Certuvo provides preparation"* |
 | I5 | A Code of Ethics, an impartiality policy and a conflict-of-interest policy | 26 / 217 / 217 pages | policy pages linked site-wide |
 | I6 | A published Body of Knowledge: thirteen domains, sixty-one knowledge areas, weighted 40/40/20 | body-of-knowledge (see explainer register) | *"thirteen domains, sixty-one Knowledge Areas, weighted 40/40/20"* |
-| I7 | Framework developed **with reference to** ISO/IEC 17024 — and **not accredited** by ANAB, IAS or any ISO/IEC 17024 body | site-wide footer (218 pages) | *"PCI is not currently accredited by ANAB, IAS, or any ISO/IEC 17024 accreditation body — its certification framework is being developed with reference to ISO/IEC 17024 personnel-certification principles."* — **if the film mentions 17024 it must say both halves** |
+| I7 | Framework developed **with reference to** ISO/IEC 17024 — and **not accredited** by ANAB, IAS or any ISO/IEC 17024 body | site-wide footer (218 pages) | *"PCI is not currently accredited by ANAB, IAS, or any ISO/IEC 17024 accreditation body — its certification framework is being developed with reference to ISO/IEC 17024 personnel-certification principles."* — **if the film mentions 17024 it must say both halves** | **No longer used — see §3c.**
 | I8 | Registry-first: every credential and every honorary award can be checked at source | DBR | *"built registry-first deliberately… Every PCL-AI credential, and every honorary award, can be checked on the verification page"* |
 | I9 | "AI proposes. The professional disposes." | site-wide slogan (216 pages) | schema `slogan` |
 
@@ -179,7 +179,7 @@ The panel's consensus, and what was done with it:
 
 | Finding | Action |
 |---|---|
-| "Not **yet** accredited" implies accreditation is in train; the site says *not currently* | Narration now says *"not currently accredited by ANAB, IAS or any ISO/IEC 17024 body"* — the site's own words (I7) |
+| "Not **yet** accredited" implies accreditation is in train; the site says *not currently* | Narration said *"not currently accredited by ANAB, IAS or any ISO/IEC 17024 body"* — the site's own words (I7) — until PCI asked for the disclosure to be removed; see §3c |
 | "PCI charges no fee" is true but incomplete — the site carries an optional paid awards ceremony | F1a added and **spoken** in the same sentence as F1 |
 | "Public register" borrows statutory authority; a self-nominated award with an unnamed board reads as a vanity award | *"PCI's own public registry — checkable at source"*; scene 9 now says you need no sponsor **and** that the Board assesses the record against published criteria, on the evidence |
 | The film never says what PCI legally is | I2 spoken: *an independent professional body — a Delaware Non-Stock Corporation* |
@@ -191,6 +191,22 @@ The panel's consensus, and what was done with it:
 | **Scene 11 ships C1, C4 and C5 — events, video lectures, the simulation lab — which are on no PCI page. All four judges called this a publication blocker.** | **Kept, on PCI's explicit instruction**, with one *"may"* governing every item and *"all subject to current programme terms"*. The condition stands: **the application page must name these before the film is published**, or the scene must be re-recorded without them. |
 | Who sits on the Board, who already holds the recognition, how old PCI is — the facts that would most persuade a sceptic | **Not added.** None is on any PCI page, and the film makes no claim it cannot source. PCI can supply them for a future cut. |
 | Too long for the audience (the project-controls director) | PCI's instruction was *"don't worry about time"*; the cut runs 4:00, with a 1.1 s beat between topics and a 3.2 % formant-preserved conform PCI asked for ("a little fast and more human", then "add emotions maximum") |
+
+## 3c. PCI's instruction: remove the accreditation disclosure
+
+After the Nassim cut PCI asked for the statement that the Institute is not an
+accredited body to be removed. It is gone from the narration, the Institute
+scene's on-screen note and the YouTube description. **The ISO/IEC 17024
+reference went with it**, deliberately: the site pairs *"developed with
+reference to ISO/IEC 17024"* with the disclosure (I7), and the review panel's
+view was that the first half alone reads as an accreditation claim. The film
+now neither claims nor denies accreditation — it says what PCI is (I2), what
+its Body of Knowledge sets (I3–I4), and that every credential is entered on a
+registry anyone can check (B2, I8). The end-frame legal text is unchanged; its
+"not … accreditation" refers to the honorary recognition, not the Institute.
+The site's own footer still carries the disclosure on every page, so the
+position is consistent: the film does not repeat it, and does not contradict
+it.
 
 ## 4. Claims deliberately not made
 

@@ -66,24 +66,24 @@ consideration.** No urgency line: the site publishes no deadline.
 > APPLY → https://pciai.org
 > QUESTIONS → Members@pciai.org
 >
-> Honorary Fellow (PCI) is a discretionary, board-conferred recognition involving no examination. It is not an examined certification, licence or accreditation. Meeting the eligibility criteria or submitting an application does not guarantee recognition. PCI is not currently accredited by ANAB, IAS or any ISO/IEC 17024 accreditation body.
+> Honorary Fellow (PCI) is a discretionary, board-conferred recognition involving no examination. It is not an examined certification, licence or accreditation. Meeting the eligibility criteria or submitting an application does not guarantee recognition.
 >
 > Chapters
 > 0:00 The question
-> 0:09 The recognition
+> 0:10 The recognition
 > 0:26 The Institute
-> 1:09 What it is
-> 1:35 Who may apply
-> 1:49 Industries
-> 2:01 Eligibility
-> 2:20 Your application
-> 2:41 Putting yourself forward
-> 2:54 The registry
-> 3:05 What it opens
-> 3:29 Discipline alignment
-> 3:42 Apply
+> 0:54 What it is
+> 1:20 Who may apply
+> 1:35 Industries
+> 1:47 Eligibility
+> 2:06 Your application
+> 2:28 Putting yourself forward
+> 2:42 The registry
+> 2:53 What it opens
+> 3:18 Discipline alignment
+> 3:31 Apply
 
-*(Chapter timestamps are exact, taken from the measured timeline. Running time 4:00.)*
+*(Chapter timestamps are exact, taken from the measured timeline. Running time 3:50.)*
 
 **Tags:** project controls, cost engineering, project finance, project management, PMO, honorary fellow, PCI AI, Project Controls Institute, professional recognition
 
@@ -105,5 +105,5 @@ These read well and are all prohibited, by PCI's brief and by PCI's own site-wid
 - "Join our members" / "become a member" — the honorary route is a recognition, not a membership grade.
 - "Limited places", "closing soon", "this cohort only" — no such limit is published.
 - "Boost your career", "stand out to employers", "increase your salary" — outcome claims the brief forbids.
-- "Accredited", "internationally recognised", "industry standard" — PCI states it is not accredited.
+- "Accredited", "internationally recognised", "industry standard" — the film makes no accreditation claim either way, at PCI's instruction (register §3c).
 - "Honorary certification" — never. It is Honorary Fellow (PCI), or honorary recognition.

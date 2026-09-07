@@ -1,4 +1,4 @@
-# Honorary Fellow (PCI) — lead-generation film (4:00)
+# Honorary Fellow (PCI) — lead-generation film (3:50)
 
 A bright, premium institutional film for **PCI AI — Project Controls Institute
 Global, Inc.**, inviting distinguished professionals to apply for **Honorary
@@ -103,6 +103,12 @@ scrutiny against published criteria; the narration says what PCI legally is;
 "cost engineering" was corrected to the site's "cost control"; "apply today"
 went; and the close sets a test rather than paying a compliment.
 
+**The accreditation disclosure is out, at PCI's instruction.** The line
+saying PCI is not an accredited body was removed after the Nassim cut, and the
+ISO/IEC 17024 reference went with it so that nothing in the film reads as an
+accreditation claim; the Institute scene now closes on the registry. Detail
+and reasoning in the register, §3c.
+
 **One thing the panel flagged that PCI overruled.** All four judges called the
 benefits scene a publication blocker: video lectures, the simulation lab and
 PCI AI events are on no PCI page. They are in the film on PCI's explicit
@@ -116,10 +122,12 @@ how old PCI is — is absent because no PCI page states it.
 
 Thirteen scenes with a **1.1-second beat** between every topic: the caption
 clears, a moment of silence, the picture changes, and only then does the next
-topic begin with the voice. PCI asked for the film a little faster, so the
-Nassim read (247.7 s natural) is conformed by **3.2 %**, formant-preserved,
-to **240.00 s** — under the threshold at which a time-stretch is audible on
-speech, and well inside `sync.py`'s 8 % refusal.
+topic begin with the voice. PCI asked for the film a little faster; the
+first Nassim read (247.7 s natural) was conformed by 3.2 %, formant-preserved,
+to 240 s. Removing the accreditation line then shortened the Institute scene
+by fourteen seconds, so the final cut runs at the narrator's **natural pace
+(229.8 s, no time-stretch)** — `sync.py` applies a conform only above its
+240 s target, and its 8 % refusal is untouched.
 
 Captions are cut to the breath. The v3 read spells out P-C-I and I-S-O I-E-C
 slowly, so proportional caption splits drifted by a phrase; `vo.py` now carries
@@ -136,8 +144,7 @@ Narration is ElevenLabs **"Nassim — Corporate Narration"**
 stock library voice, **not a clone of any real person**. It reads the same
 phrase-by-phrase emotional direction PCI asked for on the previous cut
 (`src/v3-emotion.json`): every clause carries its own cue, from `[quiet,
-reflective]` on the first line through `[reverent]`, `[inspired]`, `[candid,
-sincere]` on the accreditation disclosure and `[empowering]` on
+reflective]` on the first line through `[reverent]`, `[inspired]`, `[assured, precise]` on the Body of Knowledge and `[empowering]` on
 self-nomination, to `[moved, heartfelt]` and `[inspiring, strong, resolute]`
 at the close. **Not one word differs from the register script** — a check
 strips the tags and compares — and every take was transcribed back
