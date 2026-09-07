@@ -22,6 +22,14 @@ ENC="$("$FFMPEG" -hide_banner -encoders 2>/dev/null || true)"
 case "$ENC" in *libx264*) ;; *) echo "ffmpeg has no libx264" >&2; exit 1 ;; esac
 mkdir -p "$BUILD" "$DIST"
 
+# RESUME_4K=1 re-runs only the 4K wave and the steps after it, against the
+# mixed.wav already in $BUILD — for when the 4K pair was interrupted after the
+# HD cuts had already been rendered and verified from that same mix.
+RESUME_4K="${RESUME_4K:-0}"
+if [[ "$RESUME_4K" == "1" ]]; then
+  [[ -s "$BUILD/mixed.wav" ]] || { echo "RESUME_4K=1 but no $BUILD/mixed.wav" >&2; exit 1; }
+  echo "==> resuming: 4K wave only, against the existing mix"
+else
 echo "==> conform timeline to the recorded voice"
 python3 sync.py
 echo "==> captions"
@@ -72,6 +80,7 @@ echo "==> mix (score side-chained under the voice)"
 [duck][1:a]amix=inputs=2:normalize=0:duration=longest,\
 loudnorm=I=-14:TP=-1.5:LRA=9,alimiter=limit=0.85:level=disabled[mix]" \
   -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
+fi
 
 # Frames stream straight from the renderer into ffmpeg. A 4K frame is ~3 MB of
 # lossless PNG, so staging even one pass would want ~11 GB of scratch; piping
@@ -124,7 +133,8 @@ fail=0; for p in $q1 $q2 $q3; do wait "$p" || fail=1; done
 }
 # HD_FIRST=1 runs the three HD cuts before the 4K pair, so the files PCI
 # actually shares arrive first; the 1080 clean downscale still waits for 4K.
-if [[ "${HD_FIRST:-0}" == "1" ]]; then wave2; wave1; else wave1; wave2; fi
+if [[ "$RESUME_4K" == "1" ]]; then wave1
+elif [[ "${HD_FIRST:-0}" == "1" ]]; then wave2; wave1; else wave1; wave2; fi
 
 # The 1080 clean master is a downscale of the 4K clean master rather than a
 # sixth render: same picture, and a Lanczos downscale of 4K is sharper than a
