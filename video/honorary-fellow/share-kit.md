@@ -98,6 +98,82 @@ consideration.** No urgency line: the site publishes no deadline.
 
 ---
 
+## Invitation email (one professional, sent personally)
+
+Sent one at a time, from a named person, never from a no-reply address. The first
+sentence is the whole email: it names the specific thing the recipient did that led
+PCI to write. If that sentence cannot be filled in from real knowledge of their
+work, the email is not ready to send. PCI's term is **Honorary Fellow (PCI)** — a
+recognition, not a membership tier and not a certification — and the email uses
+only that term.
+
+**Subject (pick one):**
+
+- An invitation to be considered — Honorary Fellow (PCI)
+- [First name], about the work you left behind
+- Your record, before the Board — Honorary Fellow (PCI)
+
+**Body:**
+
+> Dear [Dr / Mr / Ms Surname],
+>
+> [One sentence stating the specific thing that brought you to their name — the
+> programme they set the controls for, the standard they wrote, the team they built,
+> the paper or method others now use. A fact, not a compliment.]
+>
+> Some careers deliver projects. Fewer leave behind a standard, a method, or the
+> people who carry it forward. Yours appears to be one of the fewer, and that is why
+> I am writing.
+>
+> The Project Controls Institute confers Honorary Fellow (PCI) on practitioners whose
+> contribution to the discipline is distinguished, and whose record speaks for
+> itself. It involves no examination. Your record is the evidence; the Board weighs
+> it, individually and in confidence, against published criteria. Recognition is
+> conferred solely at the Board's discretion.
+>
+> I would like to invite you to put your record forward.
+>
+> What that involves is one application — your profile, career history and the
+> evidence you choose to include — reviewed confidentially by the Board. You need no
+> sponsor. PCI charges no nomination, assessment or credential fee. If recognised,
+> your name is entered on PCI's own public registry, checkable at source by anyone
+> and marked as honorary. You may also be given access to the Institute's learning
+> resources and invitations to selected PCI AI events, subject to current programme
+> terms.
+>
+> I should be plain about one thing, because it is what makes the recognition worth
+> having: meeting the criteria does not guarantee it. Not every application is
+> recognised, and I cannot tell you in advance how the Board will decide.
+>
+> If you would like to be considered, the application is at pciai.org. Any question
+> comes to me directly at Members@pciai.org. There is no obligation in this
+> invitation; if now is the wrong time, keep it.
+>
+> With respect,
+>
+> [Full name]
+> [Role], Project Controls Institute Global, Inc.
+> pciai.org · Members@pciai.org
+>
+> ---
+> Honorary Fellow (PCI) is a discretionary, board-conferred recognition involving no examination. It is not an examined certification, licence or accreditation. Meeting the eligibility criteria or submitting an application does not guarantee recognition.
+
+**Why it is written this way.** The premium is in what the email refuses to do. It
+opens on the recipient's own work, stated as fact, so it cannot be mistaken for a
+mailshot. It is short, and every paragraph is one idea. It does not flatter, does not
+sell, uses no exclamation mark and sets no artificial deadline. It says out loud that
+the Board declines people, which is the single strongest signal that the recognition
+means something. And it closes on the recipient's freedom to decline, which is what a
+person of standing expects to be given. Every claim in it is a claim the film makes,
+traced in `claims-register.md`; nothing has been added for the email.
+
+**Before sending:** fill the first sentence from real knowledge of their work; use
+the recipient's correct title; send from a personal PCI address with a real
+signature; one recipient per message, never a list; and do not attach the film — link
+it only if they reply.
+
+---
+
 ## Do not add
 
 These read well and are all prohibited, by PCI's brief and by PCI's own site-wide disclosure:
