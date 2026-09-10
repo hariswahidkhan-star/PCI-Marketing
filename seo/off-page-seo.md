@@ -46,6 +46,7 @@ counted as link-building.
 | Short name / brand | PCI · PCI AI |
 | Canonical URL | https://pciai.org/ |
 | Legacy domain | projectcontrolsinstitute.org, to 301 to pciai.org (see developer change list, Part A) |
+| Student portal | mypci.org. Login surface only, noindex by design. Never linked from a profile, listing or post except as a "Sign in" link; never submitted anywhere as a website |
 | Entity type | Independent certifying body; Delaware Non-Stock Corporation; registered nonprofit pursuing 501(c)(3) recognition (not yet granted) |
 | Founded | 2025 |
 | Country | United States (no street address is published; do not invent one) |

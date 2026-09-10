@@ -2,7 +2,7 @@
 
 **For:** the PCI Platform developer (repo `PCI`, branch from `main`).
 **From:** the SEO audit of `backend/wwwroot` (235 pages) and the backend's SEO code, 10 Sep 2026.
-**Decision that drives this document:** PCI's website is **pciai.org**. The codebase currently treats
+**Decisions that drive this document:** PCI's website is **pciai.org**; the student portal is **mypci.org**. The codebase currently treats
 `projectcontrolsinstitute.org` as canonical everywhere. This document lists every change needed to make
 pciai.org primary without losing the old domain's indexing, then the on-page fixes the audit found.
 
@@ -31,7 +31,11 @@ Confirm it in one minute, from any machine:
 curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'
 curl -s https://pciai.org/sitemap.xml | head -5
 curl -sI https://projectcontrolsinstitute.org/ | head -3
+curl -sI https://mypci.org/about.html | grep -iE '^(HTTP|location|x-robots)'   # expect 308 to pciai.org
 ```
+
+If the fourth command returns 200 with a page instead of a 308, the student-portal domain is not
+configured either (A10), and mypci.org is serving a second full copy of the marketing site.
 
 If the first two commands print `projectcontrolsinstitute.org`, Part A is not a tidy-up; it is the
 first release to ship, and every day it waits is a day the live domain is telling search engines to look
@@ -160,6 +164,54 @@ in `PCI.SecureExam.Core.RunnableChecks` and the expectations in `PCI.SecureExam.
 and `RunnableChecks/SecurityChecks.cs`, publish a new client build, and only move the exam host once the
 old client population has updated. Do not move the exam API and the website on the same day.
 
+### A10. The student portal on mypci.org
+
+The logged-in student portal is live on **mypci.org**. The code has a module for exactly this
+(`Core/PortalDomain.cs`, "RES-013 domain separation"), switched on by two variables. With them unset,
+mypci.org is an *unknown host* to both `Redirects` and `PortalDomain`: it serves every marketing page
+as a second live copy, with canonicals pointing at the old domain and no noindex header.
+
+| Variable | Value | Effect |
+|---|---|---|
+| `PORTAL_BASE_URL` | `https://mypci.org` | `/app`, `/student.html` and `/reset-password.html` requested on pciai.org get a 308 to mypci.org; every *other* path requested on mypci.org gets a 308 back to `APP_BASE_URL`; the portal host gets `X-Robots-Tag: noindex, nofollow`; portal links in rendered pages and in password-reset emails become absolute to mypci.org; CORS allowlists the portal origin as a second origin |
+| `PORTAL_HOSTS` | `www.mypci.org` | Extra hostnames that serve the portal |
+
+Three consequences the developer must handle:
+
+1. **A10 depends on A2.** Marketing paths on mypci.org redirect to `APP_BASE_URL`. If that still
+   reads `https://projectcontrolsinstitute.org` (or the Render URL) when `PORTAL_BASE_URL` is set, the
+   portal host bounces marketing traffic to the wrong domain. Set `APP_BASE_URL=https://pciai.org`
+   in the same deploy, never before or after.
+2. **`/robots.txt` and `/sitemap.xml` are "shared paths"** (`PortalDomain.IsSharedPath`), so mypci.org
+   serves the marketing robots.txt (Allow: /) and the full marketing sitemap. The `X-Robots-Tag` header
+   keeps pages out of the index, but a sitemap advertised from a noindex host is a contradiction
+   crawlers report as an error. In the robots/sitemap handlers (`Program.cs` around line 2096 and
+   the robots branch below it), check `PortalDomain.IsPortalHost(ctx.Request.Host.Host)` and answer
+   with `User-agent: *\nDisallow: /` for robots.txt and a 404 for sitemap.xml and sitemap-index.xml.
+   `/llms.txt` is not a shared path, so it already 308s to pciai.org; leave it.
+3. **Pages that fall through to static files keep relative `/app` links.** Only pages rendered by the
+   content injector get `PortalDomain.RewriteLinks`; a page with no DB overrides is served as a static
+   file, so its "Sign in" link goes to `pciai.org/app`, which then 308s to mypci.org. That works, at the
+   cost of one hop. If the hop is unwanted, run the rewrite in the static-file path as well, or make
+   the sign-in links absolute in the footer injection.
+
+What does **not** change: the secure-exam client. Its launch URI carries only a code
+(`Endpoints/StudentExam.cs:858`), and the API host is compiled into the client, so mypci.org never
+needs to be in `AllowedApiHosts`.
+
+Search Console: add a `mypci.org` property too, only so that "Excluded by noindex" is visible there and
+nothing on it is ever submitted. No sitemap for the portal host, ever.
+
+Verification, after deploy:
+
+```bash
+curl -sI https://mypci.org/about.html | grep -iE '^(HTTP|location)'          # 308 → https://pciai.org/about.html
+curl -sI https://pciai.org/app/ | grep -iE '^(HTTP|location)'                 # 308 → https://mypci.org/app/
+curl -sI https://mypci.org/app/ | grep -iE '^(HTTP|x-robots)'                  # 200, noindex, nofollow
+curl -s  https://mypci.org/robots.txt                                          # Disallow: / (after fix 2)
+curl -s -o /dev/null -w '%{http_code}\n' https://mypci.org/sitemap.xml         # 404 (after fix 2)
+```
+
 ### A7. Tests that assert the old host
 
 `tests/PCI.Backend.Tests/RedirectTests.cs`, `PortalDomainTests.cs`, `IndexNowTests.cs`,
@@ -196,6 +248,8 @@ for f in robots.txt sitemap.xml sitemap-index.xml llms.txt blog-sitemap.xml news
 curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'
 # no POST is redirected (exam client safety)
 curl -s -o /dev/null -w '%{http_code}\n' -X POST https://projectcontrolsinstitute.org/api/health   # not 301
+# portal host (see A10)
+curl -sI https://mypci.org/about.html | grep -iE '^(HTTP|location)'
 # boot validator and suites
 cd backend && python3 tests/settings_test.py && python3 tests/integration_test.py && ./smoke-test.sh
 ```
@@ -382,3 +436,4 @@ Members@pciai.org and careers@pciai.org appear on **no page**; every page uses h
 4. `Contact: Members@ and careers@ on contact page, footer and schema` — I.
 5. `llms.txt: key facts block, feeds section, bucket keywords` — D.
 6. `secureexam: trust pciai.org` — A6, its own PR with the security reviewer.
+7. `Portal host: robots and sitemap on mypci.org` — A10 item 2; the env variables in A10 ship with commit 1.
