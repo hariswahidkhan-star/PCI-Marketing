@@ -9,8 +9,36 @@ pciai.org primary without losing the old domain's indexing, then the on-page fix
 Nothing in this document has been applied to the repo. Reference files ready to drop in are beside it in
 `seo/site-files/`: `sitemap.xml`, `sitemap-index.xml`, `robots.txt`, `llms.txt`.
 
+## Read this first — the site is already live on pciai.org
+
+The plan changed from projectcontrolsinstitute.org to pciai.org after the code was written, and the site
+went live on pciai.org with the code unchanged. That means, right now:
+
+- Every page served from pciai.org carries `<link rel="canonical">` and `og:url` pointing at
+  **projectcontrolsinstitute.org**. Search engines read that as "index the other domain, not this one".
+- The live `/sitemap.xml`, `/robots.txt` and `/llms.txt` are generated with `projectcontrolsinstitute.org`
+  as the host unless `CANONICAL_HOST` was set at deploy. A sitemap on pciai.org that lists another
+  domain's URLs is ignored at best.
+- The redirect logic treats pciai.org as an *unknown* host, so it passes through with no canonical
+  enforcement; `www.pciai.org` and `http://pciai.org` are not being folded into one URL.
+- If projectcontrolsinstitute.org no longer serves the site, the canonicals point at URLs that do not
+  resolve. Search Console will show the pciai.org pages as "Duplicate, Google chose different canonical"
+  or "Alternate page with proper canonical tag", and ranking cannot start until that is fixed.
+
+Confirm it in one minute, from any machine:
+
+```bash
+curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'
+curl -s https://pciai.org/sitemap.xml | head -5
+curl -sI https://projectcontrolsinstitute.org/ | head -3
+```
+
+If the first two commands print `projectcontrolsinstitute.org`, Part A is not a tidy-up; it is the
+first release to ship, and every day it waits is a day the live domain is telling search engines to look
+elsewhere. Nothing else in this document matters until it is done.
+
 Order of work matters: **Part A first, as one release.** A half-moved domain (canonicals on one host,
-redirects on another) is worse than either state.
+redirects on another) is worse than either state, and that is the state the site is in today.
 
 ---
 
@@ -143,7 +171,9 @@ loudly the moment A3 lands, which is the point.
 ### A8. Search engines and profiles (after deploy, same day)
 
 1. Google Search Console: add the `pciai.org` domain property (DNS TXT verification). Submit
-   `https://pciai.org/sitemap-index.xml`. In the **old** property, run **Change of Address** to pciai.org.
+   `https://pciai.org/sitemap-index.xml`. If a property exists for the old domain and it ever had
+   impressions, run **Change of Address** in it to pciai.org; if the old domain never ranked, skip that
+   step and simply keep its redirect in place.
 2. Bing Webmaster Tools: add pciai.org, submit the sitemap index, use Site Move.
 3. IndexNow: the key file is served at `/{key}.txt` on whatever `CanonicalBase` is; re-submit the key on
    the new host once (the service handles URLs after that).
