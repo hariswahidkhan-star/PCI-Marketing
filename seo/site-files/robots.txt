@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+
+# Private / authenticated surfaces — kept out of search and AI indexes. Defence in
+# depth: also protected by authentication, noindex meta tags and an X-Robots-Tag header.
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin.html
+Disallow: /world-admin
+Disallow: /world-admin/
+Disallow: /app
+Disallow: /app/
+Disallow: /api/
+Disallow: /student.html
+Disallow: /student-login.html
+Disallow: /student-dashboard.html
+Disallow: /exam-ui.html
+
+# --- AI / LLM crawlers ---------------------------------------------------------
+# Answer engines are allowed by default (they inherit the rules above) so PCI
+# content can be cited in AI assistants. Block a crawler in Admin -> AI Visibility;
+# the live /robots.txt is generated and reflects that setting.
+# (no AI crawlers are currently blocked)
+
+# Curated map for language models: https://pciai.org/llms.txt
+Sitemap: https://pciai.org/sitemap-index.xml
+Sitemap: https://pciai.org/sitemap.xml
+Sitemap: https://pciai.org/blog-sitemap.xml
+Sitemap: https://pciai.org/news-sitemap.xml
+Sitemap: https://pciai.org/world-sitemap.xml
