@@ -13,13 +13,11 @@ from this environment (no open-web access), it is marked **verify**.
 
 ## 0. Ground rules that override everything below
 
-**One canonical domain.** Every canonical tag, all 201 sitemap URLs and the organisation
-schema point at `https://projectcontrolsinstitute.org/`. The string `pciai.org` appears on
-no page. Until PCI decides which domain is primary and sets a 301 from the other, **every
-external link, profile URL and citation points at `projectcontrolsinstitute.org`**. Splitting
-links across two live domains halves the authority of both. If PCI chooses pciai.org as
-primary, the whole site's canonicals must move first, then this document's URLs change in one
-find-and-replace.
+**One canonical domain.** The website is **pciai.org**. The codebase still declares
+`projectcontrolsinstitute.org` as canonical in every tag, sitemap and schema entry, and the developer
+change list (`developer-changes.md`, Part A) moves that to pciai.org. **Every external link, profile
+URL and citation points at `https://pciai.org/`** from day one, and projectcontrolsinstitute.org is kept
+attached only as a 301 to it. Do not create any listing on the old domain.
 
 **Never claim, anywhere off-site:**
 
@@ -46,18 +44,18 @@ counted as link-building.
 | Legal name | Project Controls Institute Global, Inc. |
 | Display name | Project Controls Institute |
 | Short name / brand | PCI · PCI AI |
-| Canonical URL | https://projectcontrolsinstitute.org/ |
-| Brand domain | pciai.org (**verify** redirect; see §0) |
+| Canonical URL | https://pciai.org/ |
+| Legacy domain | projectcontrolsinstitute.org, to 301 to pciai.org (see developer change list, Part A) |
 | Entity type | Independent certifying body; Delaware Non-Stock Corporation; registered nonprofit pursuing 501(c)(3) recognition (not yet granted) |
 | Founded | 2025 |
 | Country | United States (no street address is published; do not invent one) |
-| General email | hello@projectcontrolsinstitute.org |
+| General email | hello@projectcontrolsinstitute.org (mail domain is a separate decision; see developer change list, A3) |
 | Members / honorary enquiries | Members@pciai.org |
 | Careers | careers@pciai.org (**verify** mailbox exists before publishing) |
 | Slogan | AI proposes. The professional disposes. |
 | Credentials | PCI AI Project Controls Leader (PCL-AI) · PCI AI Project Finance Leader (PFL-AI) · PCI Project Management Leader – AI (PML-AI) · Honorary Fellow (PCI) |
 | Existing profiles | LinkedIn: linkedin.com/company/project-control-institute · X: x.com/projectcontrolinstitute |
-| Logo | https://projectcontrolsinstitute.org/assets/logo.png (use the same file everywhere) |
+| Logo | https://pciai.org/assets/logo.png (use the same file everywhere) |
 
 ### Boilerplates (copy verbatim; do not paraphrase per platform)
 
@@ -186,7 +184,7 @@ and `news-sitemap.xml`, so syndication is a matter of pointing platforms at them
 - Submit `feed.xml` to Feedly, Flipboard and Inoreader as a publication.
 - Republish selected blog articles on **LinkedIn Articles** and **Medium** with the
   canonical link back to the original (Medium's import tool sets `rel=canonical`
-  automatically; on LinkedIn, state "First published at projectcontrolsinstitute.org" with
+  automatically; on LinkedIn, state "First published at pciai.org" with
   the link in the first paragraph).
 - Offer the "What is project controls" and "EVM explained" articles to Planning Planet and
   PM World Journal as contributed pieces, with the canonical link in the author line.
@@ -225,7 +223,7 @@ Use four to six per post, always including `#ProjectControls` and `#ProjectContr
 >
 > Meeting the criteria does not guarantee recognition. That is what makes it worth having.
 >
-> The honorary route: https://projectcontrolsinstitute.org/route-honorary.html
+> The honorary route: https://pciai.org/route-honorary.html
 >
 > #ProjectControls #ProjectControlsInstitute #PCIAI #CostEngineering #ProjectFinance
 
@@ -237,13 +235,13 @@ Use four to six per post, always including `#ProjectControls` and `#ProjectContr
 >
 > The Body of Knowledge: thirteen domains, sixty-one knowledge areas, published in full.
 >
-> https://projectcontrolsinstitute.org/certifications.html
+> https://pciai.org/certifications.html
 >
 > #ProjectControls #ProjectControlsInstitute #PCLAI #GovernedAI #EarnedValue
 
 **X (thread opener)**
 
-> Honorary Fellow (PCI): conferred by the Board, no examination, no fee, no sponsor. Your record is the evidence. Meeting the criteria does not guarantee recognition. Film and the honorary route: https://projectcontrolsinstitute.org/route-honorary.html #ProjectControls #ProjectControlsInstitute
+> Honorary Fellow (PCI): conferred by the Board, no examination, no fee, no sponsor. Your record is the evidence. Meeting the criteria does not guarantee recognition. Film and the honorary route: https://pciai.org/route-honorary.html #ProjectControls #ProjectControlsInstitute
 
 **Instagram (square cut, caption)**
 
