@@ -9,7 +9,16 @@ pciai.org primary without losing the old domain's indexing, then the on-page fix
 Nothing in this document has been applied to the repo. Reference files ready to drop in are beside it in
 `seo/site-files/`: `sitemap.xml`, `sitemap-index.xml`, `robots.txt`, `llms.txt`.
 
-## Read this first — the site is already live on pciai.org
+## Read this first — the site is already live on pciai.org, and the repository is behind it
+
+A separate live audit of pciai.org on 10 September (the ChatGPT package, see `content-updates.md` §0)
+recorded canonicals already on `https://pciai.org/…`, the old domain's root redirecting to pciai.org,
+a 227-URL sitemap, and a student portal at `https://mypci.org/student`. None of that matches this
+repository's `main` (last commit 2 August 2026), which still declares `projectcontrolsinstitute.org`
+everywhere and has no `/student` route. **The deployed code is not this repository's `main`.** Find the
+source the live site is built from and bring `main` up to date with it before applying anything here;
+otherwise the next deploy from `main` reverts the live domain. Everything in Part A remains required
+for the repository; how much of it is also required for the live site depends on the check below.
 
 The plan changed from projectcontrolsinstitute.org to pciai.org after the code was written, and the site
 went live on pciai.org with the code unchanged. That means, right now:
@@ -175,6 +184,8 @@ as a second live copy, with canonicals pointing at the old domain and no noindex
 |---|---|---|
 | `PORTAL_BASE_URL` | `https://mypci.org` | `/app`, `/student.html` and `/reset-password.html` requested on pciai.org get a 308 to mypci.org; every *other* path requested on mypci.org gets a 308 back to `APP_BASE_URL`; the portal host gets `X-Robots-Tag: noindex, nofollow`; portal links in rendered pages and in password-reset emails become absolute to mypci.org; CORS allowlists the portal origin as a second origin |
 | `PORTAL_HOSTS` | `www.mypci.org` | Extra hostnames that serve the portal |
+
+PCI states the live portal path is **`https://mypci.org/student`** (no `.html`). The repository's `PortalDomain.IsPortalPath` recognises only `/app` and `/student.html`; add `/student` (and its sub-paths) so the 308 redirects, the noindex header and the link rewriting apply to the path actually in use. The registration URL used in the SEO package's drafts (`/student/register?…`) has no route in this repository; confirm it on the live portal before any CTA points at it.
 
 Three consequences the developer must handle:
 
@@ -417,6 +428,21 @@ Members@pciai.org and careers@pciai.org appear on **no page**; every page uses h
 
 ---
 
+## Part L — Findings from the SEO package, verified in code
+
+Full detail and the content plan are in `content-updates.md`. The code-level items, in priority order:
+
+| Item | Where | Fix |
+|---|---|---|
+| Certification detail pages render "0 minutes" and "0% pass mark" | `Core/Certs.cs:84-85` — a SQL NULL arriving as `DBNull` is not C# `null`, so the per-certification override path runs and `H.D(DBNull)` yields 0 instead of the global 90/65 | Treat `null`, `DBNull` and `<= 0` as "use global"; add a test; check the stored rows |
+| Sitemap lists login and reset-password pages | `pages.noindex` is never set from the file's `<meta name="robots">` at seed time | Set it in `PageContent.SeedFromFiles`; exclude `Redirects.IsPrivatePath` and `PortalDomain.IsPortalPath` paths in `Sitemap.Xml` |
+| `/certification.html` and `/certifications/pcl-ai` both describe PCL-AI | static page 2,362 words; `CertPage` render 110 words | Consolidate into the detail render, 301 the static page (or the reverse if Search Console says so) |
+| Homepage brand | `index.html` title, H1, JSON-LD names | Title "PCI AI \| Project Controls Institute"; H1 "PCI AI: Project Controls Institute"; Organisation `name` "PCI AI" with `legalName`; keep `sameAs`, `contactPoint`, `EducationalOrganization` |
+| Three homepage insight cards link to `insights.html` | `index.html` | Link each to its article |
+| Metadata for 16 further pages | `content-updates.md` §3 | Titles, descriptions, H1s, `og:site_name` "PCI AI" |
+
+---
+
 ## Part K — Noted, no action
 
 - `partner.html` has two H1s and `student.html` two; both are `noindex`.
@@ -437,3 +463,5 @@ Members@pciai.org and careers@pciai.org appear on **no page**; every page uses h
 5. `llms.txt: key facts block, feeds section, bucket keywords` — D.
 6. `secureexam: trust pciai.org` — A6, its own PR with the security reviewer.
 7. `Portal host: robots and sitemap on mypci.org` — A10 item 2; the env variables in A10 ship with commit 1.
+8. `Certs: exam config NULL handling` — Part L row 1, first of all if the live pages really show zeros.
+9. `Content: homepage, credential pages, metadata` — Part L and `content-updates.md`.
