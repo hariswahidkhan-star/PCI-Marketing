@@ -1,0 +1,26 @@
+platform,type,priority,prerequisite,profile_url,login_owner,boilerplate_matches_section_1,date_completed,notes
+LinkedIn company page,owned profile,high,,https://www.linkedin.com/company/project-control-institute,,,,Exists. Complete tagline/About/website/Products; upload film natively.
+X,owned profile,high,,https://x.com/projectcontrolinstitute,,,,Exists. Bio = one-liner; pin the film.
+YouTube channel,owned profile,high,,,,,,Create @projectcontrolsinstitute; upload the three films.
+Crunchbase,owned profile + registry,high,,,,,,Organisation profile; nonprofit; founded 2025.
+Wikidata item,owned profile,high,,,,,,Item not article. Instance of certification body; inception 2025; official website; LinkedIn/X IDs.
+GitHub organisation,owned profile,optional,something to publish,,,,,Only if PCI publishes an open artefact.
+Google Business Profile,local listing,hold,verifiable street address,,,,,Do not create with a registered-agent address.
+Bing Places,local listing,hold,verifiable street address,,,,,Same condition as Google Business Profile.
+Dun & Bradstreet D-U-N-S,registry,high,legal name + address,,,,,Free; underpins other registries.
+Candid (GuideStar),nonprofit registry,high when eligible,IRS determination,,,,,VERIFY eligibility; draft profile now; submit when 501(c)(3) granted.
+Better Business Bureau,registry,low,,,,,,Skip unless PCI wants to handle complaints there.
+Class Central,education directory,medium,VERIFY accepts certification bodies,,,,,List the three credentials; link certifications.html.
+CourseTalk / similar aggregators,education directory,medium,VERIFY accepts certification bodies,,,,,Same data as Class Central.
+Planning Planet,community directory,medium,,,,,,Community listing + founder profiles; engage rather than link-drop.
+Association aggregators,directory,medium,VERIFY each,,,,,Never accept a category that implies accreditation.
+Feedly,syndication,medium,,,,,,Submit https://projectcontrolsinstitute.org/feed.xml
+Flipboard,syndication,medium,,,,,,Submit feed.xml as a magazine source.
+Inoreader,syndication,low,,,,,,Submit feed.xml.
+Medium publication,syndication,medium,,,,,,Import articles with canonical link to the original.
+LinkedIn newsletter,syndication,medium,,,,,,Monthly from the company page.
+Qwoted,expert quotes,medium,,,,,,Register founder + senior examiner as sources.
+Featured,expert quotes,medium,,,,,,Same as Qwoted.
+Help a B2B Writer,expert quotes,low,,,,,,Same as Qwoted.
+Vimeo,video mirror,optional,,,,,,For partner-site embeds without YouTube branding.
+Trustpilot,reviews,hold,steady candidate flow,,,,,Do not open with fewer than a handful of genuine reviews.
