@@ -1,6 +1,6 @@
--- Sync the pages table with seo/metadata.json (idempotent; safe on SQLite and MySQL).
+-- Sync the pages and certifications tables with seo/metadata.json (idempotent; SQLite and MySQL).
 -- Run after apply-metadata.py so file and database agree; PageContent injects pages.title /
--- pages.meta_description over the file when they are set.
+-- pages.meta_description / pages.canonical_url over the file when they are set.
 
 UPDATE pages SET title='PCI AI | Project Controls Institute', meta_description='Explore PCI AI certifications from Project Controls Institute: PCL-AI, PFL-AI and PML-AI for project controls, finance and management.' WHERE slug='index.html';
 UPDATE pages SET title='About PCI AI | Project Controls Institute', meta_description='Learn about PCI AI, Project Controls Institute Global, Inc., its certification focus, professional standards and approach to responsible AI.' WHERE slug='about.html';
@@ -32,7 +32,26 @@ UPDATE pages SET meta_description='Project controls for aerospace and defence: a
 UPDATE pages SET meta_description='Find a recognised PCI Training Partner for PCL-AI exam preparation. Partners prepare candidates; the exam and certification decision stay independent.' WHERE slug='training-partners.html';
 UPDATE pages SET meta_description='Connect academic programmes to the project controls standard: curriculum alignment, a student pathway to PCI certifications and research collaboration.' WHERE slug='university-partnerships.html';
 UPDATE pages SET meta_description='Why EPC contractors, owners, energy, defence, aerospace and government value PCI certifications: planning, cost, forecasting, risk and AI governance.' WHERE slug='why-employers.html';
-UPDATE pages SET canonical_url='https://pciai.org/route-standard.html' WHERE slug='route-standard.html';
+UPDATE pages SET title='Standard Route to PCL-AI Certification | PCI AI', meta_description='The standard route to PCL-AI: create a free account on the student portal, activate membership, book the examination and earn the credential.', canonical_url='https://pciai.org/route-standard.html' WHERE slug='route-standard.html';
+UPDATE pages SET title='Earned Value Management Explained: EV, CPI, SPI | PCI AI', meta_description='Earned value management explained: how EV, PV and AC combine into CPI, SPI and a defensible forecast, with a worked example from PCI AI.' WHERE slug='blog-evm.html';
+UPDATE pages SET title='AI in Project Controls: What Changes, What Doesn''t | PCI AI', meta_description='AI in project controls: where it improves forecasting, reporting and risk, where a professional must still decide, and how PCI AI governs it.' WHERE slug='blog-ai-project-controls.html';
+UPDATE pages SET title='Project Controls vs Project Management | PCI AI', meta_description='Project controls vs project management: who owns which decisions, how the roles work together on a real delay, and which career path fits you.' WHERE slug='blog-pc-vs-pm.html';
+UPDATE pages SET title='What Is Project Controls? A Practical Guide | PCI AI', meta_description='What is project controls? Scope, schedule, cost, risk and forecasting working together, with a monthly reporting example and where AI fits, from PCI AI.' WHERE slug='blog-what-is-project-controls.html';
+UPDATE pages SET title='Project Cost Forecasting: EAC and ETC Explained | PCI AI', meta_description='Project cost forecasting explained: estimate at completion, estimate to complete and variance at completion, with a worked example and review checks.' WHERE slug='knowledge-forecasting.html';
+UPDATE pages SET title='Contact PCI AI | Membership, Certification and Careers', meta_description='Contact PCI AI: Members@pciai.org for membership and Honorary Fellow (PCI) enquiries, careers@pciai.org for careers, and general questions by email.' WHERE slug='contact.html';
+UPDATE pages SET title='Verify a PCI Credential | Public Registry | PCI AI', meta_description='Verify a PCI AI credential at source: confirm a professional''s PCL-AI, PFL-AI, PML-AI or Honorary Fellow (PCI) status on the Institute''s public registry.' WHERE slug='verify.html';
+UPDATE pages SET title='Human Oversight Policy for AI | PCI AI', meta_description='PCI AI''s Human Oversight Policy: a competent professional governs AI at every consequential step. AI proposes; the professional disposes.' WHERE slug='human-oversight.html';
+UPDATE pages SET title='Fellow Membership | Project Controls Institute | PCI AI', meta_description='Fellow membership, the Institute''s most senior grade, recognising distinguished contribution to the project controls profession: benefits and how to apply.' WHERE slug='membership-fellow.html';
+UPDATE pages SET title='PCL-AI Eligibility Requirements | PCI AI' WHERE slug='eligibility-requirements.html';
+UPDATE pages SET title='PCL-AI Exam Structure and Blueprint | PCI AI' WHERE slug='exam-structure.html';
+UPDATE pages SET title='PCL-AI Candidate Handbook | PCI AI' WHERE slug='handbook.html';
+UPDATE pages SET title='PMP vs AACE vs PCL-AI: Compare Scope and Purpose | PCI AI', meta_description='PMP vs AACE credentials vs PCL-AI, compared by scope, role and evidence, without assuming equivalence or recognition. A positioning guide from PCI AI.' WHERE slug='pmp-vs-aace-vs-pcl-ai.html';
+UPDATE pages SET title='Project Finance for Project Controls | PCI AI', meta_description='How major projects are funded and why project controls must speak the language of project finance: structures, bankability, coverage ratios, PFL-AI.' WHERE slug='knowledge-finance.html';
+
+-- Certification detail pages (/certifications/{slug}) read meta_title / meta_description from the certifications table.
+UPDATE certifications SET meta_title='Project Controls Certification: PCL-AI | PCI AI', meta_description='Explore PCL-AI project controls certification from PCI AI, covering planning, cost, forecasting, risk and responsible AI. Review the certification pathway.' WHERE code='PCL-AI';
+UPDATE certifications SET meta_title='Project Finance Certification: PFL-AI | PCI AI', meta_description='Explore PFL-AI project finance certification from PCI AI, covering financial modelling, capital structure, bankability and responsible AI analysis.' WHERE code='PFL-AI';
+UPDATE certifications SET meta_title='Project Management Certification: PML-AI | PCI AI', meta_description='Explore PML-AI project management certification from PCI AI, with governance, leadership, project delivery and responsible use of artificial intelligence.' WHERE code='PML-AI';
 
 -- Private and utility pages must never be indexable, whatever the seed said.
 UPDATE pages SET noindex=1 WHERE slug IN ('login.html','reset-password.html','forgot-password.html','student-login.html','student-dashboard.html','student-registration.html','student-welcome.html','student.html','enrol.html','enroll.html','checkout.html','payment-success.html','payment-failed.html','exam-ui.html','admin-chat.html','platform-preview.html','partner.html','index-launcher.html','coming-soon.html','404.html','blog-shell.html','careers-detail.html','certification-detail.html');

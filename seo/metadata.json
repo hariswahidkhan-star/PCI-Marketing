@@ -4,126 +4,250 @@
   "index.html": {
    "title": "PCI AI | Project Controls Institute",
    "description": "Explore PCI AI certifications from Project Controls Institute: PCL-AI, PFL-AI and PML-AI for project controls, finance and management.",
-   "h1": "PCI AI: Project Controls Institute"
+   "h1": "PCI AI: Project Controls Institute",
+   "keyword": "PCI AI"
   },
   "about.html": {
    "title": "About PCI AI | Project Controls Institute",
    "description": "Learn about PCI AI, Project Controls Institute Global, Inc., its certification focus, professional standards and approach to responsible AI.",
-   "h1": "About PCI AI and the Project Controls Institute"
+   "h1": "About PCI AI and the Project Controls Institute",
+   "keyword": "Project Controls Institute"
   },
   "certifications.html": {
    "title": "PCI AI Certifications | PCL-AI, PFL-AI & PML-AI",
    "description": "Compare PCI AI certifications in project controls, project finance and project management. Explore PCL-AI, PFL-AI and PML-AI and their application routes.",
-   "h1": "PCI AI Certifications"
+   "h1": "PCI AI Certifications",
+   "keyword": "PCI AI certifications"
   },
   "ai-standard.html": {
    "title": "AI Governance for Project Controls | PCI AI Standard",
    "description": "Explore the PCI AI standard for responsible project controls: validate AI forecasts, explain reporting outputs and retain professional accountability.",
-   "h1": "The PCI AI Standard for Responsible Project Controls"
+   "h1": "The PCI AI Standard for Responsible Project Controls",
+   "keyword": "AI governance project controls"
   },
   "body-of-knowledge.html": {
    "title": "PCL-AI Body of Knowledge | Project Controls | PCI AI",
-   "description": "Explore the PCL-AI Body of Knowledge, connecting project controls, finance, project management and responsible AI across thirteen domains."
+   "description": "Explore the PCL-AI Body of Knowledge, connecting project controls, finance, project management and responsible AI across thirteen domains.",
+   "keyword": "PCL-AI body of knowledge"
   },
   "curriculum.html": {
    "title": "PCL-AI Syllabus & Curriculum | PCI AI",
    "description": "Review the PCL-AI syllabus across project accounting, finance, management and AI. Explore the knowledge areas and plan your preparation.",
-   "h1": "PCL-AI Syllabus and Curriculum"
+   "h1": "PCL-AI Syllabus and Curriculum",
+   "keyword": "PCL-AI syllabus"
   },
   "sample-questions.html": {
    "title": "PCL-AI Sample Questions & Explanations | PCI AI",
-   "description": "Try illustrative PCL-AI sample questions on scheduling, earned value, risk and governed AI, with answers and explanations for familiarisation."
+   "description": "Try illustrative PCL-AI sample questions on scheduling, earned value, risk and governed AI, with answers and explanations for familiarisation.",
+   "keyword": "PCL-AI sample questions"
   },
   "insights.html": {
    "title": "Project Controls Guides & Insights | PCI AI",
    "description": "Explore PCI AI guides to project controls, earned value, forecasting and responsible AI, with practical reading paths for professionals.",
-   "h1": "Project controls guides and insights"
+   "h1": "Project controls guides and insights",
+   "keyword": "project controls guides"
   },
   "blog.html": {
    "title": "Project Controls Blog | PCI AI",
-   "description": "Read articles from PCI AI on project controls practice, certification preparation, cost, scheduling and professional development."
+   "description": "Read articles from PCI AI on project controls practice, certification preparation, cost, scheduling and professional development.",
+   "keyword": "project controls blog"
   },
   "project-controls-certification-saudi-arabia.html": {
    "title": "Project Controls Certification Saudi Arabia | PCI AI",
    "description": "Explore PCI AI project controls certification for professionals in Saudi Arabia, with planning, cost control, forecasting and responsible AI.",
-   "h1": "Project controls certification in Saudi Arabia"
+   "h1": "Project controls certification in Saudi Arabia",
+   "keyword": "project controls certification Saudi Arabia"
   },
   "project-controls-certification-uae.html": {
    "title": "Project Controls Certification UAE | PCI AI",
    "description": "Explore PCI AI project controls certification for professionals in the UAE, with planning, cost control, forecasting and responsible AI.",
-   "h1": "Project controls certification in the UAE"
+   "h1": "Project controls certification in the UAE",
+   "keyword": "project controls certification UAE"
   },
   "project-controls-certification-uk.html": {
    "title": "Project Controls Certification UK | PCI AI",
    "description": "Explore PCI AI project controls certification for professionals in the UK, with planning, cost control, forecasting and responsible AI.",
-   "h1": "Project controls certification in the UK"
+   "h1": "Project controls certification in the UK",
+   "keyword": "project controls certification UK"
   },
   "project-controls-certification-usa.html": {
    "title": "Project Controls Certification USA | PCI AI",
    "description": "Explore PCI AI project controls certification for professionals in the USA, with planning, cost control, forecasting and responsible AI.",
-   "h1": "Project controls certification in the USA"
+   "h1": "Project controls certification in the USA",
+   "keyword": "project controls certification USA"
   },
   "donate.html": {
-   "title": "Donate to the Project Controls Institute | PCI"
+   "title": "Donate to the Project Controls Institute | PCI",
+   "keyword": "donate Project Controls Institute"
   },
   "downloads-centre.html": {
    "title": "Downloads Centre: Policies and Legal Documents | PCI",
    "description": "Every PCI policy, guideline and legal document in one place: enrolment, payment, examination, membership, conduct and governance, as PDF downloads.",
-   "canonical": "self"
+   "canonical": "self",
+   "keyword": "PCI policies downloads"
   },
   "honorary-application.html": {
    "title": "Honorary Fellow (PCI) Application | PCI",
    "description": "Apply for the Board's consideration to be conferred Honorary Fellow (PCI), a recognition of distinguished contribution separate from examined credentials.",
-   "canonical": "self"
+   "canonical": "self",
+   "keyword": "Honorary Fellow PCI application"
   },
   "become-a-training-partner.html": {
-   "description": "Apply to become a recognised PCI Training Partner for PCL-AI exam preparation. The examination and the certification decision stay independent of training."
+   "description": "Apply to become a recognised PCI Training Partner for PCL-AI exam preparation. The examination and the certification decision stay independent of training.",
+   "keyword": "become a PCI training partner"
   },
   "course-outline.html": {
-   "description": "The complete PCL-AI study outline: thirteen domains and 61 knowledge areas, weighted 40/40/20 across finance, project management and governed AI."
+   "description": "The complete PCL-AI study outline: thirteen domains and 61 knowledge areas, weighted 40/40/20 across finance, project management and governed AI.",
+   "keyword": "PCL-AI course outline"
   },
   "directory.html": {
-   "description": "Search the PCI member directory for certified project controls professionals by name, country and certification. Listings are consented and verifiable."
+   "description": "Search the PCI member directory for certified project controls professionals by name, country and certification. Listings are consented and verifiable.",
+   "keyword": "PCI member directory"
   },
   "downloads.html": {
    "description": "PCI's candidate guidelines and policies: enrolment, payment, examination, membership and conduct, plus the emails you receive at each step.",
-   "canonical": "https://pciai.org/downloads-centre.html"
+   "canonical": "https://pciai.org/downloads-centre.html",
+   "keyword": "PCI guidelines"
   },
   "forum.html": {
-   "description": "The PCI community forum, open to everyone: project controls, exam preparation, the Body of Knowledge, AI in project controls and careers, worldwide."
+   "description": "The PCI community forum, open to everyone: project controls, exam preparation, the Body of Knowledge, AI in project controls and careers, worldwide.",
+   "keyword": "project controls forum"
   },
   "founding-status.html": {
-   "description": "An honest account of what the Project Controls Institute has established and what is still in development, including its accreditation roadmap."
+   "description": "An honest account of what the Project Controls Institute has established and what is still in development, including its accreditation roadmap.",
+   "keyword": "PCI founding status"
   },
   "leadership.html": {
-   "description": "How the Project Controls Institute is governed, who makes certification decisions, and the open call for founding examiners and subject-matter experts."
+   "description": "How the Project Controls Institute is governed, who makes certification decisions, and the open call for founding examiners and subject-matter experts.",
+   "keyword": "PCI leadership and governance"
   },
   "reviews.html": {
-   "description": "Reviews and testimonials from Project Controls Institute members and students on the PCI certification programmes, moderated and published unedited."
+   "description": "Reviews and testimonials from Project Controls Institute members and students on the PCI certification programmes, moderated and published unedited.",
+   "keyword": "PCI reviews"
   },
   "route-founding.html": {
    "description": "The founding route: an invitation-only founding cohort with membership, study and exam access. The credential is still earned by passing the examination.",
-   "canonical": "self"
+   "canonical": "self",
+   "keyword": "PCI founding route"
   },
   "route-honorary.html": {
    "description": "The honorary route: apply for the Board's consideration to be conferred Honorary Fellow (PCI), a recognition of distinguished contribution, no examination.",
-   "canonical": "self"
+   "canonical": "self",
+   "keyword": "Honorary Fellow PCI"
   },
   "sector-aero.html": {
-   "description": "Project controls for aerospace and defence: aircraft, spacecraft, defence platforms and advanced technologies, with governed AI and the PCI certifications."
+   "description": "Project controls for aerospace and defence: aircraft, spacecraft, defence platforms and advanced technologies, with governed AI and the PCI certifications.",
+   "keyword": "project controls aerospace defence"
   },
   "training-partners.html": {
-   "description": "Find a recognised PCI Training Partner for PCL-AI exam preparation. Partners prepare candidates; the exam and certification decision stay independent."
+   "description": "Find a recognised PCI Training Partner for PCL-AI exam preparation. Partners prepare candidates; the exam and certification decision stay independent.",
+   "keyword": "PCI training partner"
   },
   "university-partnerships.html": {
-   "description": "Connect academic programmes to the project controls standard: curriculum alignment, a student pathway to PCI certifications and research collaboration."
+   "description": "Connect academic programmes to the project controls standard: curriculum alignment, a student pathway to PCI certifications and research collaboration.",
+   "keyword": "PCI university partnerships"
   },
   "why-employers.html": {
-   "description": "Why EPC contractors, owners, energy, defence, aerospace and government value PCI certifications: planning, cost, forecasting, risk and AI governance."
+   "description": "Why EPC contractors, owners, energy, defence, aerospace and government value PCI certifications: planning, cost, forecasting, risk and AI governance.",
+   "keyword": "PCI certification for employers"
   },
   "route-standard.html": {
-   "canonical": "self"
+   "canonical": "self",
+   "title": "Standard Route to PCL-AI Certification | PCI AI",
+   "description": "The standard route to PCL-AI: create a free account on the student portal, activate membership, book the examination and earn the credential.",
+   "keyword": "PCL-AI standard route"
+  },
+  "blog-evm.html": {
+   "title": "Earned Value Management Explained: EV, CPI, SPI | PCI AI",
+   "description": "Earned value management explained: how EV, PV and AC combine into CPI, SPI and a defensible forecast, with a worked example from PCI AI.",
+   "keyword": "earned value management explained"
+  },
+  "blog-ai-project-controls.html": {
+   "title": "AI in Project Controls: What Changes, What Doesn't | PCI AI",
+   "description": "AI in project controls: where it improves forecasting, reporting and risk, where a professional must still decide, and how PCI AI governs it.",
+   "keyword": "AI in project controls"
+  },
+  "blog-pc-vs-pm.html": {
+   "title": "Project Controls vs Project Management | PCI AI",
+   "description": "Project controls vs project management: who owns which decisions, how the roles work together on a real delay, and which career path fits you.",
+   "keyword": "project controls vs project management"
+  },
+  "blog-what-is-project-controls.html": {
+   "title": "What Is Project Controls? A Practical Guide | PCI AI",
+   "description": "What is project controls? Scope, schedule, cost, risk and forecasting working together, with a monthly reporting example and where AI fits, from PCI AI.",
+   "keyword": "what is project controls"
+  },
+  "knowledge-forecasting.html": {
+   "title": "Project Cost Forecasting: EAC and ETC Explained | PCI AI",
+   "description": "Project cost forecasting explained: estimate at completion, estimate to complete and variance at completion, with a worked example and review checks.",
+   "h1": "Project cost forecasting: EAC and ETC",
+   "keyword": "project cost forecasting"
+  },
+  "contact.html": {
+   "title": "Contact PCI AI | Membership, Certification and Careers",
+   "description": "Contact PCI AI: Members@pciai.org for membership and Honorary Fellow (PCI) enquiries, careers@pciai.org for careers, and general questions by email.",
+   "keyword": "contact PCI AI"
+  },
+  "verify.html": {
+   "title": "Verify a PCI Credential | Public Registry | PCI AI",
+   "description": "Verify a PCI AI credential at source: confirm a professional's PCL-AI, PFL-AI, PML-AI or Honorary Fellow (PCI) status on the Institute's public registry.",
+   "keyword": "verify PCI credential"
+  },
+  "human-oversight.html": {
+   "title": "Human Oversight Policy for AI | PCI AI",
+   "description": "PCI AI's Human Oversight Policy: a competent professional governs AI at every consequential step. AI proposes; the professional disposes.",
+   "keyword": "human oversight AI policy"
+  },
+  "membership-fellow.html": {
+   "title": "Fellow Membership | Project Controls Institute | PCI AI",
+   "description": "Fellow membership, the Institute's most senior grade, recognising distinguished contribution to the project controls profession: benefits and how to apply.",
+   "keyword": "PCI Fellow membership"
+  },
+  "eligibility-requirements.html": {
+   "title": "PCL-AI Eligibility Requirements | PCI AI",
+   "keyword": "PCL-AI eligibility"
+  },
+  "exam-structure.html": {
+   "title": "PCL-AI Exam Structure and Blueprint | PCI AI",
+   "keyword": "PCL-AI exam structure"
+  },
+  "handbook.html": {
+   "title": "PCL-AI Candidate Handbook | PCI AI",
+   "keyword": "PCL-AI candidate handbook"
+  },
+  "pmp-vs-aace-vs-pcl-ai.html": {
+   "title": "PMP vs AACE vs PCL-AI: Compare Scope and Purpose | PCI AI",
+   "description": "PMP vs AACE credentials vs PCL-AI, compared by scope, role and evidence, without assuming equivalence or recognition. A positioning guide from PCI AI.",
+   "keyword": "PMP vs AACE vs PCL-AI"
+  },
+  "knowledge-finance.html": {
+   "title": "Project Finance for Project Controls | PCI AI",
+   "description": "How major projects are funded and why project controls must speak the language of project finance: structures, bankability, coverage ratios, PFL-AI.",
+   "keyword": "project finance for project controls"
   }
  },
- "host": "https://pciai.org"
+ "host": "https://pciai.org",
+ "certifications": {
+  "PCL-AI": {
+   "url": "/certifications/pcl-ai",
+   "title": "Project Controls Certification: PCL-AI | PCI AI",
+   "description": "Explore PCL-AI project controls certification from PCI AI, covering planning, cost, forecasting, risk and responsible AI. Review the certification pathway.",
+   "h1": "PCL-AI Project Controls Certification",
+   "keyword": "project controls certification"
+  },
+  "PFL-AI": {
+   "url": "/certifications/pfl-ai",
+   "title": "Project Finance Certification: PFL-AI | PCI AI",
+   "description": "Explore PFL-AI project finance certification from PCI AI, covering financial modelling, capital structure, bankability and responsible AI analysis.",
+   "h1": "PFL-AI Project Finance Certification",
+   "keyword": "project finance certification"
+  },
+  "PML-AI": {
+   "url": "/certifications/pml-ai",
+   "title": "Project Management Certification: PML-AI | PCI AI",
+   "description": "Explore PML-AI project management certification from PCI AI, with governance, leadership, project delivery and responsible use of artificial intelligence.",
+   "h1": "PML-AI Project Management Certification",
+   "keyword": "AI project management certification"
+  }
+ }
 }
