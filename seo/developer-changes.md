@@ -267,8 +267,8 @@ All replacements are at or under 155 characters and keep every factual claim of 
 | `downloads.html` | PCI's candidate guidelines and policies: enrolment, payment, examination, membership and conduct, plus the emails you receive at each step. |
 | `forum.html` | The PCI community forum, open to everyone: project controls, exam preparation, the Body of Knowledge, AI in project controls and careers, worldwide. |
 | `founding-status.html` | An honest account of what the Project Controls Institute has established and what is still in development, including its accreditation roadmap. |
-| `honorary-application.html` | Apply for the Board's consideration to be conferred Honorary Fellow (PCI), a recognition of distinguished contribution separate from PCI's examined credentials. |
-| `index.html` | The Project Controls Institute awards PCL-AI, PFL-AI and PML-AI: credentials uniting project controls, cost engineering and project finance with governed AI. |
+| `honorary-application.html` | Apply for the Board's consideration to be conferred Honorary Fellow (PCI), a recognition of distinguished contribution separate from examined credentials. |
+| `index.html` | The Project Controls Institute awards PCL-AI, PFL-AI and PML-AI: credentials uniting project controls, cost engineering and finance with governed AI. |
 | `leadership.html` | How the Project Controls Institute is governed, who makes certification decisions, and the open call for founding examiners and subject-matter experts. |
 | `reviews.html` | Reviews and testimonials from Project Controls Institute members and students on the PCI certification programmes, moderated and published unedited. |
 | `route-founding.html` | The founding route: an invitation-only founding cohort with membership, study and exam access. The credential is still earned by passing the examination. |
