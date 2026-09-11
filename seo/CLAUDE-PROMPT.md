@@ -11,9 +11,13 @@ You are implementing the SEO changes for the Project Controls Institute platform
 
 ## Facts
 
-- The public website is live at **https://pciai.org**. The student portal is live at
-  **https://mypci.org/student**. The legacy domain **projectcontrolsinstitute.org** must 301 to
-  pciai.org page-for-page. Treat pciai.org as the canonical host everywhere.
+- This website was built with **projectcontrolsinstitute.org** as its domain, and that domain is
+  still hard-coded in the canonical tags, Open Graph URLs, structured-data IDs, sitemap and robots
+  fallbacks, analytics tags, backend defaults, database seeds and tests. PCI has since decided that
+  the public website is **https://pciai.org** and the student portal is **https://mypci.org/student**.
+  Your job is the migration: update everything that still carries projectcontrolsinstitute.org to
+  pciai.org, make the old domain a page-for-page 301 to the new one, keep the portal out of search,
+  and apply the SEO fixes listed below. Treat pciai.org as the canonical host everywhere.
 - The site is a server-rendered ASP.NET Core 8 minimal API (`backend/`) serving ~235 static pages
   from `backend/wwwroot` with database-driven injection. Read `CLAUDE.md` first. Do not rebuild
   the site, do not add a framework, do not convert pages to Bootstrap.
@@ -40,13 +44,16 @@ You are implementing the SEO changes for the Project Controls Institute platform
   Open a draft PR at the end whose description lists each step as done, skipped or blocked, with
   the check output for each.
 
-## Step 0 — gate
+## Step 0 — inventory
 
-Run `git log -1 origin/main` and
-`curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'`. If the live
-page already shows `pciai.org` but `origin/main` still contains `projectcontrolsinstitute.org` in
-`backend/wwwroot/index.html`, stop and report that the deployed code is newer than `main` before
-changing anything.
+Before changing anything, record the starting state so the end state can be proven:
+`grep -rl "projectcontrolsinstitute.org" backend/wwwroot/*.html | wc -l`,
+`grep -rn "projectcontrolsinstitute.org" backend/Core backend/Endpoints backend/Program.cs | wc -l`,
+`grep -c "projectcontrolsinstitute.org" backend/wwwroot/sitemap.xml backend/wwwroot/robots.txt`, and
+`curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'`. Put these numbers
+in the PR description. At the end of the work the repository counts must be zero apart from e-mail
+addresses and deliberate history notes. If `origin/main` looks older than what the live site serves
+(different canonicals, routes the repository does not have), say so in the PR rather than guessing.
 
 ## Step 1 — environment (document, do not deploy)
 

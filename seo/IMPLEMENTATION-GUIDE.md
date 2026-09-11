@@ -19,21 +19,25 @@ is "Honorary Fellow (PCI)", a recognition; there is no "PCP-AI".
 
 ---
 
-## 0. Before anything: is `main` what is live?
+## 0. Why, and the starting inventory
+
+The website was built with `projectcontrolsinstitute.org` as its domain. PCI has since decided the
+public website is `pciai.org` and the student portal is `mypci.org/student`. Everything below migrates
+the old domain out of the code, the pages, the database and the tests, and turns the old domain into a
+page-for-page 301. Record the starting state first so the end state can be proven in the PR:
 
 ```bash
 cd PCI && git fetch origin && git log -1 --format='%h %cd' origin/main
+grep -rl "projectcontrolsinstitute.org" backend/wwwroot/*.html | wc -l                          # 223 at the time of writing
+grep -rn "projectcontrolsinstitute.org" backend/Core backend/Endpoints backend/Program.cs | wc -l # about 25
 curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'
 curl -s https://pciai.org/sitemap.xml | head -3
 curl -sI https://mypci.org/student | grep -iE '^(HTTP|location|x-robots)'
 ```
 
-`origin/main` was last committed on 2 August 2026 and declares `projectcontrolsinstitute.org` in
-every canonical. If the curl output already shows `pciai.org`, the live site is built from code that
-is not on `main`. **Stop and reconcile:** find that source (another branch, another repository, or a
-deploy with environment overrides plus database `pages.canonical_url` rows), merge it into `main`, and
-only then continue. Applying this guide to a stale `main` and deploying it would put the old domain
-back on the live site.
+If the live site serves something `origin/main` does not contain (canonicals already on pciai.org,
+a `/student` route), note it in the PR and confirm with whoever deploys which branch is live before
+merging; do not guess.
 
 Create the working branch:
 

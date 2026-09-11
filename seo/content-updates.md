@@ -9,19 +9,15 @@ ChatGPT "Keyword and on-page plan" (22 generated routes); the repository audit i
 
 ---
 
-## 0. Read this first — the live site is newer than the repository
+## 0. Read this first — the domain changed after the site was built
 
-The package's live audit (10 Sep) records canonicals such as `https://pciai.org/certifications/pcl-ai`,
-a 227-URL sitemap, and the old domain's root redirecting to pciai.org. The repository's `main` branch
-(last commit 2 Aug 2026) still carries `projectcontrolsinstitute.org` in every canonical, in the
-sitemap generator's default host, and in the redirect module, and has no `/student` route. **The
-deployed code is not this repository's `main`.** Before anyone applies either document:
-
-1. Find the source the live site is actually built from (a newer branch, another repository, or
-   environment overrides plus database `canonical_url` rows) and bring `main` up to date with it.
-2. Re-run the three-line check in `developer-changes.md` § Read this first. If the live canonicals are
-   already on pciai.org, Part A of that document is a **repository catch-up**, not a live-site fix; it
-   still has to be done, or the next deploy from `main` will put the old domain back.
+The website was built with projectcontrolsinstitute.org as its domain; PCI has since decided on
+pciai.org for the public site and mypci.org/student for the portal. The repository's `main` still
+carries the old domain in every canonical, in the sitemap generator's default host, in the redirect
+module and in the database seeds. The package's live audit (10 Sep) recorded some pciai.org canonicals
+on the live site, so the deployment may already carry partial changes that `main` does not; whoever
+deploys should confirm which branch is live, and the migration in `developer-changes.md` Part A brings
+the repository in line with the decision either way.
 
 Nothing below has been applied. This is the editorial and technical plan.
 

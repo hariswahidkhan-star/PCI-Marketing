@@ -2,26 +2,19 @@
 
 **For:** the PCI Platform developer (repo `PCI`, branch from `main`).
 **From:** the SEO audit of `backend/wwwroot` (235 pages) and the backend's SEO code, 10 Sep 2026.
-**Decisions that drive this document:** PCI's website is **pciai.org**; the student portal is **mypci.org**. The codebase currently treats
-`projectcontrolsinstitute.org` as canonical everywhere. This document lists every change needed to make
-pciai.org primary without losing the old domain's indexing, then the on-page fixes the audit found.
+**Why:** the website was built with **projectcontrolsinstitute.org** as its domain, and that domain
+is still hard-coded throughout the code, pages, database seeds and tests. PCI has since decided the
+public website is **pciai.org** and the student portal is **mypci.org/student**. This document lists
+every change needed to migrate to pciai.org without losing anything the old domain earned, then the
+on-page fixes the audit found.
 
 Nothing in this document has been applied to the repo. Reference files ready to drop in are beside it in
 `seo/site-files/`: `sitemap.xml`, `sitemap-index.xml`, `robots.txt`, `llms.txt`.
 
-## Read this first — the site is already live on pciai.org, and the repository is behind it
+## Read this first — a domain migration, not a tidy-up
 
-A separate live audit of pciai.org on 10 September (the ChatGPT package, see `content-updates.md` §0)
-recorded canonicals already on `https://pciai.org/…`, the old domain's root redirecting to pciai.org,
-a 227-URL sitemap, and a student portal at `https://mypci.org/student`. None of that matches this
-repository's `main` (last commit 2 August 2026), which still declares `projectcontrolsinstitute.org`
-everywhere and has no `/student` route. **The deployed code is not this repository's `main`.** Find the
-source the live site is built from and bring `main` up to date with it before applying anything here;
-otherwise the next deploy from `main` reverts the live domain. Everything in Part A remains required
-for the repository; how much of it is also required for the live site depends on the check below.
-
-The plan changed from projectcontrolsinstitute.org to pciai.org after the code was written, and the site
-went live on pciai.org with the code unchanged. That means, right now:
+The site was written for projectcontrolsinstitute.org and is now served on pciai.org. Wherever the
+code, pages or database still carry the old domain, this is what a search engine sees:
 
 - Every page served from pciai.org carries `<link rel="canonical">` and `og:url` pointing at
   **projectcontrolsinstitute.org**. Search engines read that as "index the other domain, not this one".
@@ -46,9 +39,11 @@ curl -sI https://mypci.org/about.html | grep -iE '^(HTTP|location|x-robots)'   #
 If the fourth command returns 200 with a page instead of a 308, the student-portal domain is not
 configured either (A10), and mypci.org is serving a second full copy of the marketing site.
 
-If the first two commands print `projectcontrolsinstitute.org`, Part A is not a tidy-up; it is the
-first release to ship, and every day it waits is a day the live domain is telling search engines to look
-elsewhere. Nothing else in this document matters until it is done.
+If the first two commands print `projectcontrolsinstitute.org`, Part A is the first release to ship;
+every day it waits is a day the live domain tells search engines to look elsewhere. If they already
+print `pciai.org`, the live deployment carries changes this repository does not; note that in the PR
+and confirm with whoever deploys which branch is live. Part A is still required so the repository
+matches the decision.
 
 Order of work matters: **Part A first, as one release.** A half-moved domain (canonicals on one host,
 redirects on another) is worse than either state, and that is the state the site is in today.

@@ -1,8 +1,11 @@
 # PCI AI SEO manual guide
 
-**Live facts this guide is written against.** Public website: **https://pciai.org** (live). Student
-portal: **https://mypci.org/student** (live; login surface, never indexed). Legacy domain:
-projectcontrolsinstitute.org, which must 301 to pciai.org page-for-page. Prepared 10 September 2026 from
+**Why this guide exists.** The website was built with **projectcontrolsinstitute.org** as its domain:
+every canonical tag, Open Graph URL, structured-data ID, sitemap entry, analytics tag, code default and
+database seed still carries it. PCI has since decided that the public website is **https://pciai.org**
+and the student portal is **https://mypci.org/student**. This guide is the migration: everything that
+still says projectcontrolsinstitute.org is updated to pciai.org, the old domain becomes a page-for-page
+301 to the new one, and the portal is kept out of search. Prepared 10 September 2026 from
 the site's own source (235 pages), the backend's SEO generators, the ChatGPT SEO package's live audit,
 and PCI's claim rules. Companion files sit beside this guide in `PCI-Marketing/seo/`:
 `site-files/sitemap.xml`, `sitemap-index.xml`, `robots.txt`, `llms.txt`, `pages-metadata.sql`,
@@ -45,9 +48,17 @@ the same service with TLS. Keep the old domain for at least twelve months. In Pl
 `pciai.org` as a site before the deploy; every page's analytics tag changes to
 `data-domain="pciai.org"`.
 
-If the repository's `main` still says `projectcontrolsinstitute.org` while the live site already
-says `pciai.org`, the live code is newer than `main`: merge the deployed source into `main` before
-changing anything, or the next deploy reverts the live domain.
+Before starting, take an inventory so the end state can be checked against it:
+
+```bash
+cd PCI && grep -rl "projectcontrolsinstitute.org" backend/wwwroot/*.html | wc -l      # pages carrying the old domain (223 at the time of writing)
+grep -rn "projectcontrolsinstitute.org" backend/Core backend/Endpoints backend/Program.cs | wc -l   # code defaults (about 25)
+curl -s https://pciai.org/route-honorary.html | grep -oE '(canonical|og:url)[^>]*'   # what the live page says today
+curl -s https://pciai.org/sitemap.xml | head -3                                       # which host the live sitemap lists
+```
+
+When the migration is complete, the first two counts are zero except e-mail addresses and deliberate
+history notes, and the live page and sitemap name only pciai.org.
 
 ---
 
