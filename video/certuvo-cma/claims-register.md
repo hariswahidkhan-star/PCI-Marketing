@@ -94,19 +94,32 @@ details.
 No salary guarantee or employment promise is made. The on-screen note carries
 the survey name and year next to the figure.
 
-## 7. How Certuvo prepares you (s9) — product claims
+## 7. Certuvo's features (s9, s10) — product claims
 
-| # | Claim | Status |
-|---|---|---|
-| 7.1 | Structured study for every domain in both parts, in the exam's own weightings | **P** |
-| 7.2 | Scenario-based question banks that mirror the real format, including case-based questions | **P** — "case-based questions" must exist in the product before the September 2026 window claim is made |
-| 7.3 | Full-length mock examinations under exam timing | **P** |
-| 7.4 | Readiness tracking that tells you when you're ready | **P** |
-| 7.5 | Fully online, at your own pace, on any device | **P** |
+Taken from certuvo.com as it read on 12 September 2026 (the features list, the
+"Peer support", "AI support" and "AI coach" sections). Each row must still
+describe the live product when the film is published; if not, cut it from
+`src/vo.py` (s9 or s10), re-record that scene and re-render.
 
-If any row does not describe the live product, cut it from vo.py (s9), re-record
-s9 and re-render. Nothing in the film promises a pass; the end frame states
-"Preparation does not guarantee a pass."
+| # | Claim in the film | certuvo.com wording | Status |
+|---|---|---|---|
+| 7.1 | Practice exams: scenario-based questions in the real format, timed quizzes and full-length mock exams that simulate the testing experience | "Practice Exam — realistic, scenario-based practice questions designed to reflect the format, difficulty, and style of your certification exam"; "timed quizzes and full-length mock exams designed to simulate the real testing experience" | **P** |
+| 7.2 | Progress tracking that shows your strengths, finds your knowledge gaps and tells you when you're ready | "Progress Tracking — smart analytics that highlight strengths, identify knowledge gaps, and help you improve with every practice session" | **P** — "tells you when you're ready" is the film's paraphrase of readiness analytics |
+| 7.3 | Live study rooms, where you practise with your cohort in real time | "Group Study Session — live collaborative sessions"; "Live study rooms — join your cohort by video anytime"; "Practice together on shared questions in real time" | **P** |
+| 7.4 | 24/7 chat support from experienced mentors | "24/7 Chat Support — round-the-clock support from experienced mentors" | **P** |
+| 7.5 | AI Question Forge writes unlimited new questions on any topic; every one passes a panel of four AI judges before you see it | "Unlimited new questions. Validated by 4 AI judges." — Generate · Verify answer · Quality & clarity · Blueprint match | **P** |
+| 7.6 | AI Coach: chat or call it during practice, in six languages | "Chat or call your AI Coach during practice"; "Coach speaks 6 languages: English · العربية · Français · Español · हिन्दी · Русский" | **P** |
+| 7.7 | It reads the question on your screen | "Reads your screen automatically — it sees the exact question, diagrams, tables, and answer options" | **P** |
+| 7.8 | Teaches you to think, not memorise | "It uses the Socratic method to teach you to think, not memorize" | **P** |
+| 7.9 | During mock exams it switches itself off | "Auto-disabled during mock exams — practice with help, test without it" | **P** |
+| 7.10 | On-screen only: "Blueprint match — aligned to the 2026 weighting" | "Confirms alignment to the official 2026 exam blueprint and weighting" | **P** |
+
+Deliberately **not** used from the site: "Under 0.1 % defect rate", "3.1× higher
+completion", "47-day avg. active streak", "14k+ studying together" — performance
+statistics Certuvo would need to be able to substantiate on request, and which
+date quickly in a film. Add them only with the evidence to hand. Nothing in the
+film promises a pass; the end frame states "Preparation does not guarantee a
+pass."
 
 ## 8. Trademark and independence (end frame)
 
@@ -132,11 +145,11 @@ The end-frame legal text, verbatim in `src/vo.py` (`LEGAL`) and `src/scene.html`
 - No claim of IMA approval, partnership or accreditation for Certuvo.
 - No claim about the number of Certuvo students or their results.
 - "Three minutes" is not said on screen: the narration says "in the next three
-  minutes" (s2) while the film runs 4:07; see README.md §Known issues.
+  minutes" (s2) while the film runs 4:35; see README.md §Known issues.
 
 ## 10. Timing evidence
 
 Cue times in `src/scene.html` (`CUES`) are relative to each scene's first caption
 and were set from the pauses ffmpeg `silencedetect` found in each take
-(`-38 dB`, ≥ 0.26 s); the explicit caption ends in `src/vo.py` (s4, s5, s9) were
+(`-38 dB`, ≥ 0.26 s); the explicit caption ends in `src/vo.py` (s4, s5, s9, s10) were
 taken from the same measurement so a weight rises as it is spoken.

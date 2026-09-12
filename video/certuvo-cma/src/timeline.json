@@ -1,5 +1,5 @@
 {
-  "total": 246.85,
+  "total": 275.39,
   "segments": {
     "1": [
       0.3,
@@ -91,31 +91,43 @@
     ],
     "23": [
       196.1,
-      205.17
+      199.18
     ],
     "24": [
-      205.17,
-      212.24
+      199.18,
+      209.34
     ],
     "25": [
-      212.24,
-      221.74
+      209.34,
+      215.72
     ],
     "26": [
-      221.74,
-      225.21
+      215.72,
+      224.61
     ],
     "27": [
-      226.31,
-      232.32
+      225.71,
+      237.3
     ],
     "28": [
-      232.32,
-      235.02
+      237.3,
+      247.66
     ],
     "29": [
-      235.02,
-      240.85
+      247.66,
+      253.75
+    ],
+    "30": [
+      254.85,
+      260.86
+    ],
+    "31": [
+      260.86,
+      263.56
+    ],
+    "32": [
+      263.56,
+      269.39
     ]
   },
   "captions": [
@@ -231,37 +243,52 @@
     ],
     [
       196.1,
-      205.17,
-      "Structured study for every domain in both\nparts \u2014 in the exam's own weightings."
+      199.18,
+      "Certuvo prepares you for exactly this exam."
     ],
     [
-      205.17,
-      212.24,
-      "Scenario-based question banks that mirror the\nreal format, including case-based questions."
+      199.18,
+      209.34,
+      "Practice exams: scenario-based questions in\nthe real format \u00b7 timed quizzes \u00b7 full-length\nmocks."
     ],
     [
-      212.24,
-      221.74,
-      "Full-length mocks under exam timing. Readiness\ntracking that tells you when you're ready."
+      209.34,
+      215.72,
+      "Progress tracking: your strengths, your gaps,\nand when you're ready."
     ],
     [
-      221.74,
-      225.21,
-      "Fully online. Your pace. Any device."
+      215.72,
+      224.61,
+      "Live study rooms with your cohort \u00b7 24/7 chat\nsupport from experienced mentors."
     ],
     [
-      226.31,
-      232.32,
+      225.71,
+      237.3,
+      "AI Question Forge: unlimited new questions on\nany topic, validated by four AI judges."
+    ],
+    [
+      237.3,
+      247.66,
+      "AI Coach: chat or call during practice, in six\nlanguages. It reads your screen."
+    ],
+    [
+      247.66,
+      253.75,
+      "Auto-disabled during mock exams. Practise with\nhelp. Test without it."
+    ],
+    [
+      254.85,
+      260.86,
       "Pick your part. Choose a testing window. Start\npreparing with Certuvo today."
     ],
     [
-      232.32,
-      235.02,
+      260.86,
+      263.56,
       "certuvo.com"
     ],
     [
-      235.02,
-      240.85,
+      263.56,
+      269.39,
       "The exam is hard by design. Being ready for it\ndoesn't have to be."
     ]
   ],
@@ -318,13 +345,19 @@
       "s9",
       "How Certuvo prepares you",
       195.55,
-      225.76
+      225.16
     ],
     [
       "s10",
+      "AI inside",
+      225.16,
+      254.3
+    ],
+    [
+      "s11",
       "Start",
-      225.76,
-      246.85
+      254.3,
+      275.39
     ]
   ]
 }

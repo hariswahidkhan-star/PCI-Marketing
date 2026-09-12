@@ -1,6 +1,6 @@
 # Share kit — Certuvo · The CMA, Part 1 and Part 2
 
-Platform copy for the film. Every line obeys the film's rules: CMA® with the
+Platform copy for the film (4:35). Every line obeys the film's rules: CMA® with the
 mark on first use, Certuvo described as an independent preparation provider,
 no pass guarantee, no fee amounts, no pass-rate claims, and every fact
 traceable to `claims-register.md`. Use as written or cut down — do not add to
@@ -10,11 +10,13 @@ it.
 
 ## Website (course page / landing page)
 
-**Headline:** The CMA, explained in four minutes.
+**Headline:** The CMA, explained in under five minutes.
 
 **Standfirst:** Two exams. Four hours each. Twelve domains. Here is exactly
 what is in Part 1 and Part 2, how the exam is scored, what you need to be
-certified — and how Certuvo gets you ready for it.
+certified — and how Certuvo gets you ready for it: practice exams, progress
+tracking, live study rooms, 24/7 mentor chat, the AI Question Forge and an AI
+Coach you can call during practice.
 
 **Below the player:**
 - Part 1 — Financial Planning, Performance and Analytics: six domains, 15–20 % each
@@ -36,7 +38,7 @@ details at imanet.org. Preparation does not guarantee a pass.
 
 **Description:**
 
-> Everything you need to know about the Certified Management Accountant (CMA®) exam in four minutes — the twelve domains and their weights across Part 1 and Part 2, how each four-hour exam is scored, the case-based questions that replace the essays from the September 2026 window, the 50 % gate, the 360/500 pass mark, the three testing windows, and what IMA requires for certification.
+> Everything you need to know about the Certified Management Accountant (CMA®) exam in under five minutes — the twelve domains and their weights across Part 1 and Part 2, how each four-hour exam is scored, the case-based questions that replace the essays from the September 2026 window, the 50 % gate, the 360/500 pass mark, the three testing windows, and what IMA requires for certification.
 >
 > Chapters
 > 0:00 Two exams, one credential
@@ -48,7 +50,8 @@ details at imanet.org. Preparation does not guarantee a pass.
 > 2:33 Requirements
 > 2:53 Why it matters
 > 3:16 How Certuvo prepares you
-> 3:46 Start
+> 3:45 AI inside: the Question Forge and the AI Coach
+> 4:14 Start
 >
 > Prepare with Certuvo → https://certuvo.com
 >
@@ -65,7 +68,7 @@ Thumbnail: `certuvo-cma-thumbnail-1280x720.png`.
 
 ## LinkedIn (company page)
 
-> **The CMA, in four minutes.**
+> **The CMA, in under five minutes.**
 >
 > Two exams. Four hours each. Twelve domains. If you are weighing up the Certified Management Accountant (CMA®), this is the structure — exactly as it stands for 2026:
 >
@@ -76,7 +79,7 @@ Thumbnail: `certuvo-cma-thumbnail-1280x720.png`.
 >
 > And what IMA requires to be certified — including the seven-year window that lets you sit the exam first and complete the experience later.
 >
-> Certuvo prepares you for exactly this exam: every domain in the exam's own weightings, scenario-based question banks, full-length timed mocks, and readiness tracking that tells you when you're ready — not just how much you've read.
+> Certuvo prepares you for exactly this exam: scenario-based practice exams and full-length timed mocks, progress tracking that finds your gaps, live study rooms with your cohort, 24/7 mentor chat, unlimited new questions validated by four AI judges — and an AI Coach you can chat to or call during practice, in six languages.
 >
 > Watch, then start → https://certuvo.com
 >
@@ -92,7 +95,7 @@ Use `certuvo-cma-1080x1080-captions.mp4` (feed) or the 16:9 captioned HD cut.
 
 **Caption:**
 
-> The CMA® exam, explained. Part 1, Part 2, the new case-based questions, the pass mark, the requirements — four minutes, no fluff. Link in bio → certuvo.com
+> The CMA® exam, explained. Part 1, Part 2, the new case-based questions, the pass mark, the requirements — and how Certuvo gets you ready. Under five minutes, no fluff. Link in bio → certuvo.com
 >
 > Certuvo is an independent CMA preparation provider, not affiliated with IMA. Preparation does not guarantee a pass.
 >
@@ -106,15 +109,15 @@ Use `certuvo-cma-1080x1920-captions.mp4`. For a Short/Reel under 60 s, cut
 
 ## Email (to enquiries / leads)
 
-**Subject:** The CMA exam in four minutes — Part 1, Part 2 and the 2026 format
+**Subject:** The CMA exam, explained — Part 1, Part 2 and the 2026 format
 
 > Hi {first name},
 >
-> You asked about the CMA. Rather than a brochure, here is a four-minute film that lays out the whole exam as it stands for 2026: the twelve domains and their weights across Part 1 and Part 2, how each four-hour exam is scored, the case-based questions that replace the essays from the September window, the pass mark, the testing windows, and what IMA requires to be certified.
+> You asked about the CMA. Rather than a brochure, here is a short film (4:35) that lays out the whole exam as it stands for 2026: the twelve domains and their weights across Part 1 and Part 2, how each four-hour exam is scored, the case-based questions that replace the essays from the September window, the pass mark, the testing windows, and what IMA requires to be certified.
 >
 > Watch it here: {link}
 >
-> When you are ready, Certuvo prepares you for exactly this exam — every domain in the exam's own weightings, scenario-based question banks, full-length timed mocks, and readiness tracking. Pick your part, choose a testing window, and start at certuvo.com.
+> When you are ready, Certuvo prepares you for exactly this exam — scenario-based practice exams and timed mocks, progress tracking, live study rooms, 24/7 mentor chat, the AI Question Forge and an AI Coach you can call during practice. Pick your part, choose a testing window, and start at certuvo.com.
 >
 > Kind regards,
 > {name}, Certuvo

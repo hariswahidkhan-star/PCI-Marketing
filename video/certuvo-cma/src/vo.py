@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Narration script and captions for the Certuvo CMA film ("The CMA in three minutes").
+Narration script and captions for the Certuvo CMA film ("The CMA, Part 1 and Part 2").
 
 SCENES: (scene id, chapter, [(caption, spoken, end_s?), ...]). Captions are what the
 viewer reads; `spoken` is what the narrator says (numbers spelled the way Nassim
@@ -85,16 +85,24 @@ SCENES = [
     "And the roles follow: financial planning and analysis, controller, finance business partner — and the route to CFO."),
  ]),
  ('s9', 'How Certuvo prepares you', [
-   ("Structured study for every domain in both parts — in the exam's own weightings.",
-    "Certuvo prepares you for exactly this exam. Structured study for every domain in both parts, in the exam's own weightings.", 9.07),
-   ("Scenario-based question banks that mirror the real format, including case-based questions.",
-    "Scenario-based question banks that mirror the real format — including case-based questions.", 16.14),
-   ("Full-length mocks under exam timing. Readiness tracking that tells you when you're ready.",
-    "Full-length mock examinations under exam timing. And readiness tracking that tells you when you're ready — not just how much you've read.", 25.64),
-   ("Fully online. Your pace. Any device.",
-    "All online, at your own pace, on any device."),
+   ("Certuvo prepares you for exactly this exam.",
+    "Certuvo prepares you for exactly this exam.", 3.08),
+   ("Practice exams: scenario-based questions in the real format · timed quizzes · full-length mocks.",
+    "Practice exams: scenario-based questions in the real format, with timed quizzes and full-length mock exams that simulate the testing experience.", 13.24),
+   ("Progress tracking: your strengths, your gaps, and when you're ready.",
+    "Progress tracking that shows your strengths, finds your knowledge gaps, and tells you when you're ready.", 19.62),
+   ("Live study rooms with your cohort · 24/7 chat support from experienced mentors.",
+    "Live study rooms, where you practise with your cohort in real time. And twenty-four seven chat support from experienced mentors."),
  ]),
- ('s10', 'Start', [                           # presenter on camera
+ ('s10', 'AI inside', [
+   ("AI Question Forge: unlimited new questions on any topic, validated by four AI judges.",
+    "Then the AI. Certuvo's Question Forge writes unlimited new questions on any topic — and every one passes a panel of four AI judges before you ever see it.", 11.59),
+   ("AI Coach: chat or call during practice, in six languages. It reads your screen.",
+    "And your AI Coach: chat or call it during practice, in six languages. It reads the question on your screen, and teaches you to think — not memorise.", 21.95),
+   ("Auto-disabled during mock exams. Practise with help. Test without it.",
+    "During mock exams it switches itself off. Practise with help. Test without it."),
+ ]),
+ ('s11', 'Start', [                           # presenter on camera
    ("Pick your part. Choose a testing window. Start preparing with Certuvo today.",
     "Pick your part. Choose a testing window. And start preparing with Certuvo today."),
    ("certuvo.com",
@@ -105,7 +113,7 @@ SCENES = [
 ]
 
 # Scenes delivered by the on-camera presenter (the rest are motion graphics).
-PRESENTER = {'s2', 's10'}
+PRESENTER = {'s2', 's11'}
 
 # eleven_v3 direction: the spoken lines of each scene with audio tags. Words match
 # SCENES exactly once the tags are stripped (checked by build).
@@ -118,8 +126,9 @@ DIRECTION = {
  's6':  "[practical, precise] Each part is a four-hour exam. One hundred multiple-choice questions in three hours — seventy-five per cent of your score. [attentive] Then one hour for the second section. From the September 2026 window, two case-based questions replace the old essays: a short business case, then up to seven questions on it. [firm] You need at least fifty per cent on the multiple choice to unlock that section. The pass mark is three hundred and sixty out of five hundred. [brisk] Three testing windows a year: January to February, May to June, September to October.",
  's7':  "[plain, helpful] To be certified, you need an active IMA membership, a bachelor's degree or an approved professional certification, and two continuous years of relevant experience. [encouraging] And the experience can be completed up to seven years after you pass. So you can sit the exam first, and finish the experience later.",
  's8':  "[assured, factual] IMA's own Global Salary Survey reports that CMAs earn more than their non-certified peers — twenty-one per cent higher median total compensation worldwide, in the 2023 survey. [confident, forward-looking] And the roles follow: financial planning and analysis, controller, finance business partner — and the route to CFO.",
- 's9':  "[proud, warm] Certuvo prepares you for exactly this exam. Structured study for every domain in both parts, in the exam's own weightings. [clear] Scenario-based question banks that mirror the real format — including case-based questions. [steady] Full-length mock examinations under exam timing. And readiness tracking that tells you when you're ready — not just how much you've read. [easy, inviting] All online, at your own pace, on any device.",
- 's10': "[direct, encouraging, to camera] Pick your part. Choose a testing window. And start preparing with Certuvo today. [clear] certuvo dot com. [quietly confident, slower] The exam is hard by design. Being ready for it… doesn't have to be.",
+ 's9':  "[proud, warm] Certuvo prepares you for exactly this exam. [clear, structured] Practice exams: scenario-based questions in the real format, with timed quizzes and full-length mock exams that simulate the testing experience. [steady] Progress tracking that shows your strengths, finds your knowledge gaps, and tells you when you're ready. [warm, inviting] Live study rooms, where you practise with your cohort in real time. And twenty-four seven chat support from experienced mentors.",
+ 's10': "[intrigued, confident] Then the AI. Certuvo's Question Forge writes unlimited new questions on any topic — [emphasis] and every one passes a panel of four AI judges before you ever see it. [warm, conversational] And your AI Coach: chat or call it during practice, in six languages. It reads the question on your screen, and teaches you to think — [pointed] not memorise. [firm, reassuring] During mock exams it switches itself off. [slower] Practise with help. Test without it.",
+ 's11': "[direct, encouraging, to camera] Pick your part. Choose a testing window. And start preparing with Certuvo today. [clear] certuvo dot com. [quietly confident, slower] The exam is hard by design. Being ready for it… doesn't have to be.",
 }
 
 LEGAL = ("CMA® is a registered trademark of the Institute of Management Accountants (IMA). Certuvo is an "

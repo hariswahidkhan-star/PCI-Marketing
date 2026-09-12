@@ -41,12 +41,17 @@ Legal end frame: CMA® is a registered trademark of the Institute of Management 
 - And the roles follow: financial planning and analysis, controller, finance business partner — and the route to CFO.
 
 ## s9 · How Certuvo prepares you
-- Certuvo prepares you for exactly this exam. Structured study for every domain in both parts, in the exam's own weightings.
-- Scenario-based question banks that mirror the real format — including case-based questions.
-- Full-length mock examinations under exam timing. And readiness tracking that tells you when you're ready — not just how much you've read.
-- All online, at your own pace, on any device.
+- Certuvo prepares you for exactly this exam.
+- Practice exams: scenario-based questions in the real format, with timed quizzes and full-length mock exams that simulate the testing experience.
+- Progress tracking that shows your strengths, finds your knowledge gaps, and tells you when you're ready.
+- Live study rooms, where you practise with your cohort in real time. And twenty-four seven chat support from experienced mentors.
 
-## s10 · Start · presenter on camera
+## s10 · AI inside
+- Then the AI. Certuvo's Question Forge writes unlimited new questions on any topic — and every one passes a panel of four AI judges before you ever see it.
+- And your AI Coach: chat or call it during practice, in six languages. It reads the question on your screen, and teaches you to think — not memorise.
+- During mock exams it switches itself off. Practise with help. Test without it.
+
+## s11 · Start · presenter on camera
 - Pick your part. Choose a testing window. And start preparing with Certuvo today.
 - certuvo dot com.
 - The exam is hard by design. Being ready for it… doesn't have to be.
