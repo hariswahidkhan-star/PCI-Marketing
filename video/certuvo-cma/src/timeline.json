@@ -1,0 +1,330 @@
+{
+  "total": 246.85,
+  "segments": {
+    "1": [
+      0.3,
+      2.9
+    ],
+    "2": [
+      2.9,
+      8.25
+    ],
+    "3": [
+      9.35,
+      19.76
+    ],
+    "4": [
+      19.76,
+      29.2
+    ],
+    "5": [
+      30.3,
+      41.48
+    ],
+    "6": [
+      41.48,
+      54.45
+    ],
+    "7": [
+      55.55,
+      61.0
+    ],
+    "8": [
+      61.0,
+      70.97
+    ],
+    "9": [
+      70.97,
+      79.06
+    ],
+    "10": [
+      79.06,
+      85.5
+    ],
+    "11": [
+      86.6,
+      91.16
+    ],
+    "12": [
+      91.16,
+      101.32
+    ],
+    "13": [
+      101.32,
+      108.73
+    ],
+    "14": [
+      108.73,
+      114.47
+    ],
+    "15": [
+      115.57,
+      124.35
+    ],
+    "16": [
+      124.35,
+      136.83
+    ],
+    "17": [
+      136.83,
+      145.97
+    ],
+    "18": [
+      145.97,
+      152.34
+    ],
+    "19": [
+      153.44,
+      164.1
+    ],
+    "20": [
+      164.1,
+      172.38
+    ],
+    "21": [
+      173.48,
+      186.27
+    ],
+    "22": [
+      186.27,
+      195.0
+    ],
+    "23": [
+      196.1,
+      205.17
+    ],
+    "24": [
+      205.17,
+      212.24
+    ],
+    "25": [
+      212.24,
+      221.74
+    ],
+    "26": [
+      221.74,
+      225.21
+    ],
+    "27": [
+      226.31,
+      232.32
+    ],
+    "28": [
+      232.32,
+      235.02
+    ],
+    "29": [
+      235.02,
+      240.85
+    ]
+  },
+  "captions": [
+    [
+      0.3,
+      2.9,
+      "Two exams. Four hours each."
+    ],
+    [
+      2.9,
+      8.25,
+      "One credential that says you can plan,\ncontrol, analyse \u2014 and decide."
+    ],
+    [
+      9.35,
+      19.76,
+      "Welcome to Certuvo. In the next three minutes:\nthe CMA, exactly as it stands in 2026."
+    ],
+    [
+      19.76,
+      29.2,
+      "What's in Part 1. What's in Part 2. How the\nexam works. How to be ready."
+    ],
+    [
+      30.3,
+      41.48,
+      "Awarded by IMA, the Institute of Management\nAccountants, since 1972."
+    ],
+    [
+      41.48,
+      54.45,
+      "The credential for management accounting:\nplanning, budgeting, performance, risk,\nstrategy."
+    ],
+    [
+      55.55,
+      61.0,
+      "Part 1 \u2014 Financial Planning, Performance and\nAnalytics. Six domains."
+    ],
+    [
+      61.0,
+      70.97,
+      "External Financial Reporting Decisions 15% \u00b7\nPlanning, Budgeting and Forecasting 20% \u00b7\nPerformance Management 20%"
+    ],
+    [
+      70.97,
+      79.06,
+      "Cost Management 15% \u00b7 Internal Controls 15% \u00b7\nTechnology and Analytics 15%"
+    ],
+    [
+      79.06,
+      85.5,
+      "Part 1 is the engine room: how the numbers are\nbuilt, budgeted, measured and controlled."
+    ],
+    [
+      86.6,
+      91.16,
+      "Part 2 \u2014 Strategic Financial Management. Six\ndomains."
+    ],
+    [
+      91.16,
+      101.32,
+      "Financial Statement Analysis 20% \u00b7 Corporate\nFinance 20% \u00b7 Decision Analysis 25%"
+    ],
+    [
+      101.32,
+      108.73,
+      "Risk Management 10% \u00b7 Investment Decisions 10%\n\u00b7 Professional Ethics 15%"
+    ],
+    [
+      108.73,
+      114.47,
+      "Part 2 is the boardroom: what the numbers\nmean, and what you decide because of them."
+    ],
+    [
+      115.57,
+      124.35,
+      "Each part: 4 hours. 100 multiple-choice\nquestions in 3 hours \u2014 75% of the score."
+    ],
+    [
+      124.35,
+      136.83,
+      "Then 1 hour: from the September 2026 window,\ntwo case-based questions replace the essays."
+    ],
+    [
+      136.83,
+      145.97,
+      "At least 50% on the multiple choice unlocks\nthe second section. Pass mark: 360 of 500."
+    ],
+    [
+      145.97,
+      152.34,
+      "Three windows a year: Jan\u2013Feb \u00b7 May\u2013Jun \u00b7\nSep\u2013Oct"
+    ],
+    [
+      153.44,
+      164.1,
+      "To be certified: IMA membership \u00b7 a bachelor's\ndegree or approved certification \u00b7 2 years'\nrelevant experience"
+    ],
+    [
+      164.1,
+      172.38,
+      "The experience can be completed up to 7 years\nafter passing \u2014 so you can sit the exam first."
+    ],
+    [
+      173.48,
+      186.27,
+      "IMA Global Salary Survey 2023: CMAs' median\ntotal compensation 21% higher than non-CMAs\nworldwide."
+    ],
+    [
+      186.27,
+      195.0,
+      "The roles follow: FP&A \u00b7 controller \u00b7 finance\nbusiness partner \u00b7 the route to CFO."
+    ],
+    [
+      196.1,
+      205.17,
+      "Structured study for every domain in both\nparts \u2014 in the exam's own weightings."
+    ],
+    [
+      205.17,
+      212.24,
+      "Scenario-based question banks that mirror the\nreal format, including case-based questions."
+    ],
+    [
+      212.24,
+      221.74,
+      "Full-length mocks under exam timing. Readiness\ntracking that tells you when you're ready."
+    ],
+    [
+      221.74,
+      225.21,
+      "Fully online. Your pace. Any device."
+    ],
+    [
+      226.31,
+      232.32,
+      "Pick your part. Choose a testing window. Start\npreparing with Certuvo today."
+    ],
+    [
+      232.32,
+      235.02,
+      "certuvo.com"
+    ],
+    [
+      235.02,
+      240.85,
+      "The exam is hard by design. Being ready for it\ndoesn't have to be."
+    ]
+  ],
+  "shots": [
+    [
+      "s1",
+      "Hook",
+      0.0,
+      8.8
+    ],
+    [
+      "s2",
+      "Welcome",
+      8.8,
+      29.75
+    ],
+    [
+      "s3",
+      "What the CMA is",
+      29.75,
+      55.0
+    ],
+    [
+      "s4",
+      "Part 1",
+      55.0,
+      86.05
+    ],
+    [
+      "s5",
+      "Part 2",
+      86.05,
+      115.02
+    ],
+    [
+      "s6",
+      "The exam",
+      115.02,
+      152.89
+    ],
+    [
+      "s7",
+      "Requirements",
+      152.89,
+      172.93
+    ],
+    [
+      "s8",
+      "Why it matters",
+      172.93,
+      195.55
+    ],
+    [
+      "s9",
+      "How Certuvo prepares you",
+      195.55,
+      225.76
+    ],
+    [
+      "s10",
+      "Start",
+      225.76,
+      246.85
+    ]
+  ]
+}

@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCI AI — Explainer</title>
+<!--
+  PCI AI explainer — deterministic scene, same contract as the other two films:
+  window.seek(t) computes every style from t, so a frame is identical however
+  long the renderer takes to grab it.
+
+  Unlike those films this one does NOT carry its own cut list. sync.py measures
+  the recorded narration and writes shots.data.js and captions.data.js; this
+  page reads both. Picture is cut to voice, not the other way round.
+
+  ?w=1920&h=1080&cc=1&plate=0&t=0&play=1
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+:root{
+  --ink:#0F172A; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  /* --padb is the gap the caption band lives in. 17: vo.py now breaks the
+     narration into breath-sized cues (two lines, three at the very most), so
+     the box is 121-165 px tall and its top sits 12.8-15.1 units above the
+     bottom edge. 17 leaves ~2 units clear of a three-line cue and gives the
+     tall scenes (3, 5, 6) 26 units of height. src/probe.mjs asserts both ends
+     stay clear at every size. */
+  --s:19.2; --padb:17; --h1:5.6; --h2:4.3; --h3:3.1;
+  --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
+  --rule:rgba(148,180,230,.20); --card:#111D33; --cardbd:rgba(59,130,246,.42); --cardsub:#8FA6C4;
+  --ccbg:rgba(6,12,24,.82); --ccfg:#FFFFFF; --track:rgba(148,180,230,.13);
+  /* Gold is reserved. It appears only on the three honorary beats — the name of
+     the recognition (s2), what recognition brings (s8) and the close (s10) — so
+     that it reads as distinction rather than decoration. Never on an examined
+     certification, and never near the PCL-AI/PFL-AI/PML-AI cards. */
+  --gold:#8A6B1F; --gold2:#C9A227;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:#0F172A;font-family:var(--sans);
+  color:var(--fg);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+#glow,#glow2{position:absolute;inset:-25%;pointer-events:none;will-change:transform,opacity}
+#glow{background:radial-gradient(closest-side, rgba(37,99,235,.32), rgba(37,99,235,0) 70%)}
+#glow2{background:radial-gradient(closest-side, rgba(193,51,41,.22), rgba(193,51,41,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%)}
+
+/* ---------- shots ---------- */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;
+  padding:calc(13 * var(--s) * 1px) calc(9.5 * var(--s) * 1px) calc(var(--padb) * var(--s) * 1px);
+  will-change:opacity,transform}
+.shot.left{align-items:flex-start;text-align:left}
+.eyebrow{font-weight:600;font-size:calc(1.28 * var(--s) * 1px);letter-spacing:.19em;
+  text-transform:uppercase;color:var(--eyeb);white-space:nowrap}
+.uline{height:calc(.4 * var(--s) * 1px);width:calc(7 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  border-radius:calc(.3 * var(--s) * 1px);transform-origin:center;will-change:transform}
+.shot.left .uline{transform-origin:left center}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.05;letter-spacing:-.023em;color:var(--fg)}
+h1{font-size:calc(var(--h1) * var(--s) * 1px)}
+h2{font-size:calc(var(--h2) * var(--s) * 1px)}
+h3{font-size:calc(var(--h3) * var(--s) * 1px)}
+.sub{font-weight:400;color:var(--sub);font-size:calc(1.82 * var(--s) * 1px);line-height:1.5;
+  max-width:calc(56 * var(--s) * 1px)}
+.ln{display:block;overflow:hidden;padding-bottom:calc(.5 * var(--s) * 1px)}
+.w{display:inline-block;will-change:transform,opacity}
+
+/* rows of tokens (disciplines, industries) */
+.tokens{display:flex;gap:calc(.9 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;
+  max-width:calc(80 * var(--s) * 1px)}
+/* 1.42/1.05 rather than 1.62/1.25, and the row allowed to run to 80 units: at
+   the old size scene 1's six pills wrapped to a second row, which made that
+   scene taller than its padding box. An overflowing flex column centres by
+   spilling BOTH ways, so the extra row pushed the eyebrow up into the masthead
+   as well as the sub-headline down into the caption. Losing the row fixes both
+   ends at once. src/probe.mjs asserts it. */
+.tok{font-family:var(--display);font-weight:800;letter-spacing:.02em;
+  font-size:calc(1.42 * var(--s) * 1px);
+  padding:calc(.72 * var(--s) * 1px) calc(1.05 * var(--s) * 1px);
+  border:calc(.11 * var(--s) * 1px) solid var(--cardbd);color:var(--fg);white-space:nowrap;
+  border-radius:calc(.2 * var(--s) * 1px);will-change:transform,opacity}
+.tok.on{border-color:rgba(193,51,41,.55)}
+
+/* comparison rows (PMI / ACCA / CFA) */
+.cmp{display:flex;flex-direction:column;gap:calc(1.0 * var(--s) * 1px);
+  width:calc(46 * var(--s) * 1px)}
+.cmp .row{display:flex;align-items:baseline;justify-content:space-between;
+  border-bottom:1px solid var(--rule);padding-bottom:calc(.75 * var(--s) * 1px);
+  will-change:transform,opacity}
+.cmp .row b{font-family:var(--display);font-weight:800;font-size:calc(2.35 * var(--s) * 1px);color:var(--fg)}
+.cmp .row span{font-size:calc(1.5 * var(--s) * 1px);color:var(--sub)}
+.cmp .row.gap b{color:var(--magenta)}
+.cmp .row.gap span{color:var(--eyeb)}
+
+/* credential cards */
+.cards{display:flex;gap:calc(1.3 * var(--s) * 1px);justify-content:center}
+.card{background:var(--card);border:calc(.11 * var(--s) * 1px) solid var(--cardbd);
+  padding:calc(1.7 * var(--s) * 1px) calc(1.9 * var(--s) * 1px);text-align:left;
+  border-radius:calc(.2 * var(--s) * 1px);min-width:calc(15.6 * var(--s) * 1px);
+  will-change:transform,opacity}
+.card b{display:block;font-family:var(--display);font-weight:800;
+  font-size:calc(2.85 * var(--s) * 1px);letter-spacing:-.02em;line-height:1;color:var(--fg)}
+.card span{display:block;margin-top:calc(.62 * var(--s) * 1px);font-size:calc(1.08 * var(--s) * 1px);
+  color:var(--cardsub);letter-spacing:.05em;text-transform:uppercase;font-weight:600;line-height:1.35}
+/* No white-space:nowrap on a card subtitle, ever. The card is overflow:hidden for
+   its corner radius, so a subtitle wider than the card is not pushed out where
+   the stage-overflow audit would see it — it is cut mid-word, silently. That is
+   how "labelled honorary" shipped as "LABELLED HONORA". probe.mjs now checks for
+   text wider than its own box, and this rule is why it finds nothing. */
+
+/* numbered stat pair */
+.stats{display:flex;gap:calc(3.4 * var(--s) * 1px);justify-content:center;align-items:flex-start}
+.stat{text-align:center;will-change:transform,opacity}
+.stat b{display:block;font-family:var(--display);font-weight:800;
+  font-size:calc(5.6 * var(--s) * 1px);line-height:1;color:var(--fg);letter-spacing:-.03em}
+.stat span{display:block;margin-top:calc(.6 * var(--s) * 1px);font-size:calc(1.32 * var(--s) * 1px);
+  color:var(--sub);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+
+/* weighting bars — three DIRECT-LABELLED bars, not one stacked bar.
+   Identity comes from the label beside each bar, never from colour alone, so
+   the two 40% groups can share the brand blue without ambiguity. Crimson marks
+   governed AI as the distinct third. Palette validated: blue/crimson ΔE 29.8
+   (deutan), 34.3 (normal vision). */
+.bars{display:flex;flex-direction:column;gap:calc(1.25 * var(--s) * 1px);width:calc(50 * var(--s) * 1px)}
+.bar{display:grid;grid-template-columns:1fr calc(4.6 * var(--s) * 1px);align-items:center;
+  gap:calc(1.1 * var(--s) * 1px);will-change:transform,opacity}
+.bar .lbl{font-size:calc(1.46 * var(--s) * 1px);color:var(--sub);font-weight:500;text-align:left;
+  padding-bottom:calc(.42 * var(--s) * 1px)}
+.bar .val{font-family:var(--display);font-weight:800;font-size:calc(1.95 * var(--s) * 1px);
+  color:var(--fg);text-align:right;font-variant-numeric:tabular-nums}
+.bar .track{grid-column:1 / -1;height:calc(.92 * var(--s) * 1px);background:var(--track);
+  border-radius:calc(.46 * var(--s) * 1px);overflow:hidden}
+.bar .fill{height:100%;border-radius:calc(.46 * var(--s) * 1px);transform-origin:left center;
+  background:var(--magenta)}
+.bar.ai .fill{background:var(--crimson)}
+
+/* three-up detail columns */
+.cols{display:flex;gap:calc(1.5 * var(--s) * 1px);justify-content:center;align-items:stretch}
+.col{border-left:calc(.17 * var(--s) * 1px) solid var(--cardbd);
+  padding:calc(.2 * var(--s) * 1px) 0 calc(.2 * var(--s) * 1px) calc(1.0 * var(--s) * 1px);
+  width:calc(15.5 * var(--s) * 1px);text-align:left;will-change:transform,opacity}
+.col b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.62 * var(--s) * 1px);
+  color:var(--fg);margin-bottom:calc(.42 * var(--s) * 1px)}
+.col span{font-size:calc(1.28 * var(--s) * 1px);color:var(--sub);line-height:1.42}
+
+.note{font-size:calc(1.16 * var(--s) * 1px);color:var(--foot);line-height:1.5;
+  max-width:calc(58 * var(--s) * 1px)}
+.quote{font-family:var(--display);font-weight:800;font-size:calc(2.9 * var(--s) * 1px);
+  letter-spacing:-.02em;color:var(--fg);line-height:1.15}
+
+/* identity + end card */
+#mark,#markEnd{width:calc(8.2 * var(--s) * 1px);height:calc(8.2 * var(--s) * 1px);display:block}
+.wordmark{display:flex;align-items:center;gap:calc(1.0 * var(--s) * 1px);justify-content:center}
+.wordmark .wm-t{font-family:var(--display);font-weight:800;letter-spacing:-.01em;
+  font-size:calc(3.1 * var(--s) * 1px);line-height:1;color:var(--fg)}
+.wordmark .wm-t em{font-style:normal;color:var(--magenta)}
+.wordmark .wm-s{font-weight:500;color:var(--sub);font-size:calc(1.12 * var(--s) * 1px);
+  line-height:1.3;text-align:left;border-left:calc(.11 * var(--s) * 1px) solid var(--rule);
+  padding-left:calc(.9 * var(--s) * 1px)}
+.url{font-weight:600;font-size:calc(1.8 * var(--s) * 1px);color:var(--fg)}
+.url em{font-style:normal;color:var(--sub);padding:0 calc(.65 * var(--s) * 1px)}
+.legal{font-weight:400;font-size:calc(.98 * var(--s) * 1px);color:var(--foot);line-height:1.55;
+  max-width:calc(60 * var(--s) * 1px)}
+
+/* ---------- persistent furniture ---------- */
+#topbar{position:absolute;display:flex;align-items:center;gap:calc(.8 * var(--s) * 1px);
+  left:calc(9.5 * var(--s) * 1px);top:calc(6 * var(--s) * 1px);will-change:opacity}
+#topbar img{width:calc(2.9 * var(--s) * 1px);height:calc(2.9 * var(--s) * 1px)}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.55 * var(--s) * 1px);color:var(--fg)}
+#topbar .t em{font-style:normal;color:var(--magenta)}
+#topbar .s{font-weight:500;font-size:calc(.88 * var(--s) * 1px);color:var(--foot);line-height:1.28;
+  text-align:left;border-left:calc(.1 * var(--s) * 1px) solid var(--rule);padding-left:calc(.66 * var(--s) * 1px)}
+/* No chapter rail in this campaign: two minutes does not need a "you are here",
+   and the corner it occupied is where the brief wants clear space. */
+#chapter{position:absolute;right:calc(9.5 * var(--s) * 1px);top:calc(6.6 * var(--s) * 1px);
+  text-align:right;will-change:opacity}
+#chapter .n{font-family:var(--display);font-weight:800;font-size:calc(1.05 * var(--s) * 1px);
+  color:var(--magenta);letter-spacing:.16em}
+#chapter .c{font-weight:600;font-size:calc(1.22 * var(--s) * 1px);color:var(--fg);
+  letter-spacing:.03em;margin-top:calc(.2 * var(--s) * 1px)}
+#footrule{position:absolute;left:calc(9.5 * var(--s) * 1px);right:calc(9.5 * var(--s) * 1px);
+  bottom:calc(4.6 * var(--s) * 1px);height:calc(.16 * var(--s) * 1px);background:var(--rule);
+  border-radius:calc(.08 * var(--s) * 1px);overflow:hidden}
+#progress{height:100%;width:100%;background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  transform-origin:left center}
+#footl{position:absolute;left:calc(9.5 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);
+  font-size:calc(.98 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;
+  color:var(--foot);font-weight:600}
+#footr{position:absolute;right:calc(9.5 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);
+  font-size:calc(.98 * var(--s) * 1px);color:var(--foot);font-weight:500}
+
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;
+  padding:0 calc(10 * var(--s) * 1px);pointer-events:none}
+#ccbox{background:var(--ccbg);border-bottom:calc(.26 * var(--s) * 1px) solid var(--crimson);
+  padding:calc(.85 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);font-weight:600;color:var(--ccfg);
+  text-align:center;white-space:pre-line;font-size:calc(1.7 * var(--s) * 1px);line-height:1.35;max-width:100%}
+
+/* ---------- vertical ---------- */
+#stage.pt .shot{padding-left:calc(5.5 * var(--s) * 1px);padding-right:calc(5.5 * var(--s) * 1px)}
+#stage.pt .cards,#stage.pt .cols,#stage.pt .stats{flex-direction:column;align-items:stretch;
+  gap:calc(1.1 * var(--s) * 1px);width:calc(40 * var(--s) * 1px)}
+#stage.pt .card{min-width:0}
+#stage.pt .col{width:auto}
+#stage.pt .cmp,#stage.pt .bars{width:calc(40 * var(--s) * 1px)}
+#stage.pt .tokens{max-width:calc(41 * var(--s) * 1px)}
+#stage.pt .tok{font-size:calc(1.5 * var(--s) * 1px)}
+#stage.pt .sub,#stage.pt .note,#stage.pt .legal{max-width:calc(41 * var(--s) * 1px)}
+#chapter{display:none}
+#stage.pt #cc{padding:0 calc(4.5 * var(--s) * 1px)}
+
+/* ---------- density variants ---------- */
+/* Eighteen sectors is the brief's list, so the sector scene runs a smaller pill
+   than the rest of the film rather than dropping any of them. */
+.tokens.dense{max-width:calc(86 * var(--s) * 1px);gap:calc(.7 * var(--s) * 1px)}
+.tokens.dense .tok{font-size:calc(1.16 * var(--s) * 1px);padding:calc(.58 * var(--s) * 1px) calc(.9 * var(--s) * 1px)}
+/* The four values in "who may apply" are words, not numerals, so they are
+   large pills rather than the .stats block that was drawn for "8+" and "3+". */
+.tok.hero{font-size:calc(2.0 * var(--s) * 1px);padding:calc(.95 * var(--s) * 1px) calc(1.6 * var(--s) * 1px);
+  border-width:calc(.14 * var(--s) * 1px);color:var(--magenta)}
+/* Three cards do not fit a 1080-wide square or a portrait column at full size.
+   Let them wrap and drop the no-wrap on the caption line so the card can be
+   narrower than its subtitle. */
+#stage.sq .cards,#stage.pt .cards{flex-wrap:wrap}
+#stage.sq .card{min-width:calc(13 * var(--s) * 1px);padding:calc(1.3 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
+#stage.sq .card b,#stage.pt .card b{font-size:calc(2.3 * var(--s) * 1px)}
+#stage.pt .roles{display:none}
+/* Compact stats: the institute's three figures and the four qualities in
+   scene 5 at 3.4 units rather than 5.6, and allowed to wrap. The full-size
+   figure is for "8+" / "3+" where there is nothing else on the frame. */
+.stats.compact{gap:calc(2.4 * var(--s) * 1px);flex-wrap:wrap}
+.stats.compact .stat b{font-size:calc(3.4 * var(--s) * 1px)}
+.stats.compact .stat span{font-size:calc(1.08 * var(--s) * 1px);margin-top:calc(.45 * var(--s) * 1px)}
+#stage.pt .stats.compact{flex-direction:row;justify-content:center;align-items:flex-start;gap:calc(1.8 * var(--s) * 1px)}
+#stage.pt .tokens.dense .tok{font-size:calc(1.2 * var(--s) * 1px)}
+#s3 h3{font-size:calc(2.5 * var(--s) * 1px)}
+
+/* ---------- benefits grid ---------- */
+.cards.grid{flex-wrap:wrap;max-width:calc(74 * var(--s) * 1px);gap:calc(1.1 * var(--s) * 1px)}
+.cards.grid .card{width:calc(23.4 * var(--s) * 1px);min-width:0;
+  padding:calc(1.4 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
+.cards.grid .card b{font-size:calc(2.15 * var(--s) * 1px)}
+.cards.grid .card span{font-size:calc(1.0 * var(--s) * 1px)}
+/* The square stage's inner width is ~51 units, so two cards must come in under
+   that with their gap or the grid collapses to one per row and stacks five high
+   — up into the masthead and down under the caption. 24.5 x 2 + 1.1 fits. */
+#stage.sq .cards.grid{max-width:calc(51 * var(--s) * 1px);gap:calc(1.0 * var(--s) * 1px)}
+#stage.sq .cards.grid .card{width:calc(24.5 * var(--s) * 1px);padding:calc(1.1 * var(--s) * 1px) calc(1.3 * var(--s) * 1px)}
+#stage.sq .cards.grid .card b{font-size:calc(1.85 * var(--s) * 1px)}
+#stage.sq .cards.grid .card span{font-size:calc(.92 * var(--s) * 1px)}
+#stage.pt .cards.grid .card{padding:calc(1.1 * var(--s) * 1px) calc(1.4 * var(--s) * 1px)}
+#stage.pt .cards.grid .card b{font-size:calc(2.0 * var(--s) * 1px)}
+/* The close's two-line headline wraps to three in the square and leaves
+   "profession." alone on a line. A slightly smaller heading there keeps the
+   two lines the copy was written as. */
+#stage.sq #s13 h3{font-size:calc(2.55 * var(--s) * 1px)}
+/* In the narrow aspects the close headline is broken by hand into three even
+   lines. Shrinking it was tried first and still left "profession." orphaned;
+   a balanced break reads better than a smaller heading. */
+.sqbr{display:none}
+#stage.sq .sqbr,#stage.pt .sqbr{display:inline}
+#stage.sq .nbr,#stage.pt .nbr{display:none}
+#stage.pt .cards.grid .card{width:calc(40 * var(--s) * 1px)}
+
+/* ---------- honorary gold ---------- */
+.eyebrow.gold{color:var(--gold)}
+.card.gold{border-color:rgba(201,162,39,.55)}
+.card.gold b{color:var(--gold)}
+.rule-gold{width:calc(7 * var(--s) * 1px);height:calc(.26 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:calc(.13 * var(--s) * 1px)}
+#markOpen{width:calc(7.6 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#markEnd{width:calc(6.4 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div><div id="glow2"></div>
+  <svg id="grid" preserveAspectRatio="none"></svg>
+  <div id="vig"></div>
+
+  <div id="topbar"><img src="../brand/logo.svg" alt="">
+    <div class="t">PCI <em>AI</em></div>
+    <div class="s">Project Controls<br>Institute Global, Inc.</div></div>
+  <div id="footrule"><div id="progress"></div></div>
+  <div id="footl">Honorary Fellow (PCI)</div>
+  <div id="footr">pciai.org</div>
+
+  <!-- 1 · the question -->
+  <section class="shot" id="s1">
+    <img id="markOpen" src="../brand/logo.svg" alt="" data-a="1">
+    <div class="wordmark" data-a="1" style="margin-top:calc(1.5*var(--s)*1px)">
+      <div class="wm-t">PCI <em>AI</em></div>
+      <div class="wm-s">Project Controls<br>Institute Global, Inc.</div></div>
+    <h2 style="margin-top:calc(3.0*var(--s)*1px)"><span class="ln"><span class="w">Some careers deliver projects.</span></span></h2>
+    <h2 style="margin-top:calc(0.4*var(--s)*1px)"><span class="ln"><span class="w">Exceptional careers advance professions.</span></span></h2>
+  </section>
+
+  <!-- 2 · the recognition -->
+  <section class="shot" id="s2">
+    <div class="eyebrow gold" data-a="1">Honorary Fellow (PCI)</div>
+    <div class="rule-gold" data-a="1" style="margin:calc(1.6*var(--s)*1px) auto calc(2.6*var(--s)*1px)"></div>
+    <h2><span class="ln"><span class="w">Recognition of distinguished</span></span><span class="ln"><span class="w">contribution.</span></span></h2>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">Conferred by the Board of an independent professional body. Your name, on PCI's own public registry — checkable at source.</div>
+  </section>
+
+  <!-- 3 · the institute -->
+  <section class="shot" id="s3">
+    <div class="eyebrow" data-a="1">The Institute</div>
+    <h3 style="margin-top:calc(1.4*var(--s)*1px)">An independent professional body, built for the AI era.</h3>
+    <div class="stats compact" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="stat" data-a="1"><b>13</b><span>domains</span></div>
+      <div class="stat" data-a="1"><b>61</b><span>knowledge areas</span></div>
+      <div class="stat" data-a="1"><b>40·40·20</b><span>finance · management · governed AI</span></div>
+    </div>
+    <div class="tokens dense" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">
+      <div class="tok">SECURE, PROCTORED EXAMS</div><div class="tok">VERIFIED IDENTITY</div><div class="tok">IMPARTIAL DECISIONS</div>
+      <div class="tok">ENFORCED ETHICS</div><div class="tok">VERIFIABLE REGISTRY</div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(1.4*var(--s)*1px)">Project Controls Institute Global, Inc. — a Delaware Non-Stock Corporation. Every credential it confers is entered on a public registry, checkable at source.</div>
+  </section>
+
+  <!-- 4 · what it is -->
+  <section class="shot" id="s4">
+    <div class="eyebrow" data-a="1">What it is</div>
+    <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="card" data-a="1"><b>No examination</b><span>The record is the evidence</span></div>
+      <div class="card" data-a="1"><b>Board-conferred</b><span>Solely at the Board's discretion</span></div>
+      <div class="card" data-a="1"><b>Individually reviewed</b><span>Considered on its own merits</span></div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.6*var(--s)*1px)">Separate from PCI's examined certifications — PCL-AI, PFL-AI and PML-AI.</div>
+    <div class="note" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">Meeting the eligibility criteria, or submitting an application, creates no entitlement to recognition.</div>
+  </section>
+
+  <!-- 5 · who may apply -->
+  <section class="shot" id="s5">
+    <div class="eyebrow" data-a="1">Who may apply</div>
+    <div class="tokens" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      <div class="tok hero">Leadership</div><div class="tok hero">Contribution</div>
+      <div class="tok hero">Impact</div><div class="tok hero">Service</div>
+    </div>
+    <div class="tokens dense roles" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">
+      <div class="tok">PROJECT &amp; PROGRAMME DIRECTORS</div><div class="tok">PROJECT CONTROLS LEADERS</div>
+      <div class="tok">PLANNING &amp; SCHEDULING</div><div class="tok">COST CONTROL</div>
+      <div class="tok">COMMERCIAL &amp; CONTRACTS</div><div class="tok">RISK &amp; GOVERNANCE</div>
+      <div class="tok">PMO DIRECTORS</div><div class="tok">FINANCE &amp; CFO</div>
+      <div class="tok">PROJECT FINANCE</div><div class="tok">TECHNICAL EXECUTIVES</div>
+      <div class="tok">DIGITAL &amp; AI LEADERS</div><div class="tok">ACADEMICS &amp; RESEARCHERS</div>
+      <div class="tok">PUBLIC SECTOR</div><div class="tok">CONSULTANTS</div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Job title alone establishes nothing. It is the sustained record of contribution that is assessed.</div>
+  </section>
+
+  <!-- 6 · industries -->
+  <section class="shot" id="s6">
+    <div class="eyebrow" data-a="1">Industries supported</div>
+    <div class="tokens dense" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      <div class="tok">CONSTRUCTION &amp; INFRASTRUCTURE</div><div class="tok">EPC</div>
+      <div class="tok">OIL &amp; GAS</div><div class="tok">ENERGY &amp; UTILITIES</div>
+      <div class="tok">RENEWABLE ENERGY</div><div class="tok">RAIL &amp; TRANSPORTATION</div>
+      <div class="tok">AVIATION &amp; AIRPORTS</div><div class="tok">AEROSPACE &amp; DEFENCE</div>
+      <div class="tok">MANUFACTURING</div><div class="tok">TECHNOLOGY &amp; SOFTWARE</div>
+      <div class="tok">AI &amp; DATA CENTRES</div><div class="tok">SMART CITIES</div>
+      <div class="tok">BANKING &amp; PROJECT FINANCE</div><div class="tok">GOVERNMENT PROGRAMMES</div>
+      <div class="tok">HEALTHCARE PROJECTS</div><div class="tok">TELECOMMUNICATIONS</div>
+      <div class="tok">MINING &amp; RESOURCES</div><div class="tok">CONSULTING</div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">Wherever leadership shapes outcomes.</div>
+  </section>
+
+  <!-- 7 · eligibility -->
+  <section class="shot" id="s7">
+    <div class="eyebrow" data-a="1">Eligibility</div>
+    <div class="stats" style="margin-top:calc(2.4*var(--s)*1px)">
+      <div class="stat" data-a="1"><b>8+</b><span>years of professional<br>experience</span></div>
+      <div class="stat" data-a="1"><b>3+</b><span>years at managerial<br>level</span></div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">In project controls, cost control, finance, project management or a closely related field — with a demonstrable record of distinguished contribution.</div>
+    <div class="note" data-a="1" style="margin-top:calc(1.3*var(--s)*1px)">Managerial responsibility may include leading teams, functions, programmes or budgets. Meeting the criteria does not guarantee recognition.</div>
+  </section>
+
+  <!-- 8 · your application -->
+  <section class="shot" id="s8">
+    <div class="eyebrow" data-a="1">Your application</div>
+    <div class="tokens" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="tok hero">No fee</div><div class="tok hero">Merit alone</div><div class="tok hero">One application</div>
+    </div>
+    <div class="cols" style="margin-top:calc(2.2*var(--s)*1px)">
+      <div class="col" data-a="1"><b>Profile</b><span>Role, employer, country and industry</span></div>
+      <div class="col" data-a="1"><b>Résumé or CV</b><span>With academic and professional evidence</span></div>
+      <div class="col" data-a="1"><b>Career history</b><span>The roles most relevant to this recognition</span></div>
+      <div class="col" data-a="1"><b>Contribution</b><span>Leadership, publications, mentoring, service</span></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">No nomination, assessment or credential fee — optional extras, such as awards-ceremony attendance, are charged separately and play no part in the decision. Reviewed confidentially; identity documents only if shortlisted, via a secure link, deleted after the decision.</div>
+  </section>
+
+  <!-- 9 · putting yourself forward -->
+  <section class="shot" id="s9">
+    <div class="eyebrow" data-a="1">Putting yourself forward</div>
+    <h2 style="margin-top:calc(2.2*var(--s)*1px)"><span class="ln"><span class="w">No sponsor needed.</span></span><span class="ln"><span class="w">You put the record forward.</span></span></h2>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">The Board assesses it against published criteria, on the evidence — and does so confidentially.</div>
+  </section>
+
+  <!-- 10 · the register -->
+  <section class="shot" id="s10">
+    <div class="eyebrow gold" data-a="1">If recognised</div>
+    <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="card gold" data-a="1"><b>Honorary Fellow (PCI)</b><span>Board-conferred recognition</span></div>
+      <div class="card" data-a="1"><b>On PCI's own registry</b><span>Checkable at source, by anyone</span></div>
+      <div class="card" data-a="1"><b>Labelled honorary</b><span>Never a passed examination</span></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.6*var(--s)*1px)">Every honorary award can be checked on PCI's verification page, answered from the same registry as every credential.</div>
+  </section>
+
+  <!-- 11 · what it opens -->
+  <section class="shot" id="s11">
+    <div class="eyebrow gold" data-a="1">What it opens</div>
+    <div class="cards grid" style="margin-top:calc(2.3*var(--s)*1px)">
+      <div class="card" data-a="1"><b>Student portal</b><span>Access credentials to the PCI student portal</span></div>
+      <div class="card" data-a="1"><b>Video lectures</b><span>The Institute's learning resources</span></div>
+      <div class="card" data-a="1"><b>Course material</b><span>Study materials aligned to the Body of Knowledge</span></div>
+      <div class="card" data-a="1"><b>Simulation lab</b><span>Realistic scenario practice</span></div>
+      <div class="card" data-a="1"><b>Study via Certuvo</b><span>PCI's official preparation platform</span></div>
+      <div class="card" data-a="1"><b>PCI AI events</b><span>Invitations to selected events</span></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">All subject to current programme terms, which may be varied or withdrawn.</div>
+  </section>
+
+  <!-- 12 · discipline alignment -->
+  <section class="shot" id="s12">
+    <div class="eyebrow" data-a="1">Discipline alignment</div>
+    <div class="cards" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="card" data-a="1"><b>PCL-AI</b><span>Project Controls</span></div>
+      <div class="card" data-a="1"><b>PFL-AI</b><span>Project Finance</span></div>
+      <div class="card" data-a="1"><b>PML-AI</b><span>Project Management</span></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(2.8*var(--s)*1px)">Optional, and for disciplinary alignment only. It does not confer an examined PCI certification — PCL-AI, PFL-AI and PML-AI are earned only by passing their examination.</div>
+  </section>
+
+  <!-- 13 · apply -->
+  <section class="shot" id="s13">
+    <img id="markEnd" src="../brand/logo.svg" alt="" data-a="1">
+    <div class="eyebrow gold" data-a="1" style="margin-top:calc(1.6*var(--s)*1px)">Honorary Fellow (PCI)</div>
+    <h3 style="margin-top:calc(1.5*var(--s)*1px)">If your work outlasted<span class="sqbr"><br></span> the projects,<br>let it be recognised.</h3>
+    <div class="tokens" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">
+      <div class="tok">APPLICATIONS OPEN</div><div class="tok">NO FEE</div><div class="tok">BOARD-REVIEWED</div><div class="tok">PUBLICLY VERIFIABLE</div>
+    </div>
+    <div class="url" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">pciai.org<em>·</em>Members@pciai.org</div>
+    <div class="legal" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">
+      Honorary Fellow (PCI) is a discretionary, board-conferred recognition involving no examination.
+      It is not an examined certification, licence or accreditation. Meeting the eligibility criteria
+      or submitting an application does not guarantee recognition.</div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+</div>
+
+<script src="captions.data.js"></script>
+<script src="shots.data.js"></script>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
+const CC = Q.get('cc') !== '0';
+/* theme=light is the default: the film is a bright piece. theme=dark renders
+   the original ink treatment from the same source — nothing else changes. */
+const THEME = (Q.get('theme') || 'light') === 'dark' ? 'dark' : 'light';
+const DUR = window.__DURATION;
+const RAW = window.__SHOTS, CAPS = window.__CAPS || [];
+
+const R = W / H;
+const ASPECT = R >= 1.40 ? '169' : (R >= 0.85 ? 'sq' : 'pt');
+const NOMINAL = ASPECT === '169' ? 1920 : ASPECT === 'sq' ? 1350 : 1180;
+const stage = document.getElementById('stage'), root = document.documentElement;
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+root.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+if (ASPECT === 'sq'){ stage.classList.add('sq'); root.style.setProperty('--padb','20'); }
+if (ASPECT === 'pt'){ stage.classList.add('pt');
+  root.style.setProperty('--padb','30'); root.style.setProperty('--h1','5.0');
+  root.style.setProperty('--h2','3.9'); root.style.setProperty('--h3','2.8'); }
+
+/* Grounds. The film still moves through warmth rather than sitting in one flat
+   wash — the light set is a sequence of papers (warm, cool, cream) rather than
+   a single white, which is what stops four minutes of bright frames going
+   clinical. Both sets are graded the same way; only the register changes. */
+const GROUNDS = {
+  light: {
+    s1:[244,247,252], s2:[251,247,238], s3:[242,246,252], s4:[241,245,251], s5:[243,246,252],
+    s6:[240,244,251], s7:[244,247,252], s8:[242,246,252], s9:[246,244,240], s10:[251,246,236],
+    s11:[250,246,238], s12:[241,245,251], s13:[247,244,238]
+  },
+  dark: {
+    s1:[15,23,42], s2:[28,22,14], s3:[13,20,34], s4:[13,20,34], s5:[15,23,42], s6:[12,19,32],
+    s7:[15,23,42], s8:[13,20,34], s9:[20,18,16], s10:[28,22,14], s11:[26,21,14], s12:[13,20,34], s13:[20,17,12]
+  }
+};
+const GROUND = GROUNDS[THEME];
+const WARM = { s1:.2, s2:.85, s3:.2, s4:.15, s5:.2, s6:.15, s7:.2, s8:.2, s9:.5, s10:.85, s11:.8, s12:.15, s13:.8 };
+
+const PALETTE = {
+  dark: { fg:'#FFFFFF', sub:'#B9C6DA', eyeb:'#E4785F', foot:'#7E90AC',
+          accent:'#3B82F6', rule:'rgba(148,180,230,.20)', card:'#111D33',
+          cardbd:'rgba(59,130,246,.42)', cardsub:'#8FA6C4',
+          ccbg:'rgba(6,12,24,.82)', ccfg:'#FFFFFF',
+          mesh:'rgba(148,180,230,.07)', spark:'rgba(59,130,246,.42)',
+          vig:'rgba(0,0,0,.55)', track:'rgba(148,180,230,.13)',
+          glowA:'rgba(37,99,235,.32)', glowB:'rgba(193,51,41,.22)' },
+  light:{ fg:'#0F172A', sub:'#475569', eyeb:'#C13329', foot:'#64748B',
+          /* the deeper brand blue: it is the step that holds contrast on paper,
+             and it is the one validated against a light surface */
+          accent:'#1D4ED8', rule:'rgba(15,23,42,.14)', card:'#FFFFFF',
+          cardbd:'rgba(29,78,216,.26)', cardsub:'#64748B',
+          ccbg:'rgba(255,255,255,.93)', ccfg:'#0F172A',
+          mesh:'rgba(15,23,42,.055)', spark:'rgba(29,78,216,.30)',
+          vig:'rgba(15,23,42,.10)', track:'rgba(15,23,42,.10)',
+          glowA:'rgba(29,78,216,.13)', glowB:'rgba(193,51,41,.10)' }
+}[THEME];
+for (const [k, v] of Object.entries({
+  '--fg':PALETTE.fg, '--sub':PALETTE.sub, '--eyeb':PALETTE.eyeb, '--foot':PALETTE.foot,
+  '--magenta':PALETTE.accent, '--rule':PALETTE.rule, '--card':PALETTE.card,
+  '--cardbd':PALETTE.cardbd, '--cardsub':PALETTE.cardsub, '--track':PALETTE.track,
+  '--ccbg':PALETTE.ccbg, '--ccfg':PALETTE.ccfg
+})) root.style.setProperty(k, v);
+document.getElementById('vig').style.background =
+  `radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 42%, ${PALETTE.vig} 100%)`;
+document.getElementById('glow').style.background =
+  `radial-gradient(closest-side, ${PALETTE.glowA}, rgba(0,0,0,0) 70%)`;
+document.getElementById('glow2').style.background =
+  `radial-gradient(closest-side, ${PALETTE.glowB}, rgba(0,0,0,0) 70%)`;
+
+const SHOTS = RAW.map(([el, chap, a, b]) =>
+  ({ el, chap, in: a, out: b, bg: GROUND[el], warm: WARM[el] }));
+const CHAPTERS = [...new Set(RAW.map(r => r[1]))];
+
+(function grid(){
+  const g = document.getElementById('grid');
+  g.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const step = W / (ASPECT === 'pt' ? 14 : 26);
+  let d = '';
+  for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
+  for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
+  g.innerHTML = `<path id="mesh" d="${d}" stroke="${PALETTE.mesh}" stroke-width="1" fill="none"/>`
+    + `<path id="spark" d="" stroke="${PALETTE.spark}" stroke-width="${(W/700).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
+  const pts = [], n = 120;
+  for (let i = 0; i <= n; i++){
+    const p = i / n, x = p * W;
+    const y = H * (0.80 - 0.52 * (1 / (1 + Math.exp(-(p - 0.5) * 9)))) + Math.sin(p * 7.1) * H * 0.012;
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const sp = g.querySelector('#spark');
+  sp.setAttribute('d', 'M' + pts.join('L'));
+  sp.__len = sp.getTotalLength(); sp.style.strokeDasharray = sp.__len;
+})();
+
+// The closing shot, addressed by position rather than by a hard-coded index:
+// a film with a different number of scenes should not need this line edited.
+const LAST = SHOTS[SHOTS.length - 1];
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const outCubic=x=>1-Math.pow(1-x,3), outExpo=x=>x>=1?1:1-Math.pow(2,-10*x);
+const inOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const seg=(t,a,b,e)=>{const p=clamp((t-a)/(b-a),0,1);return (e||outCubic)(p);};
+const rgb=c=>`rgb(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)})`;
+const XF = 0.45;
+
+/* cue sheet: which elements rise, and when, relative to the shot's in-point */
+const CUES = {
+  s1:[['#markOpen',.18,0],['.wordmark',.52,0],['h2 .w',1.05,.30]],
+  s2:[['.eyebrow',.18,0],['.rule-gold',.46,0],['h2 .w',.72,.14],['.sub',2.1,0]],
+  s3:[['.eyebrow',.16,0],['h3 ',.40,0],['.stat',1.3,.50],['.tok',2.8,.14],['.note',4.6,0]],
+  s4:[['.eyebrow',.16,0],['.card',.40,.85],['.sub',3.1,0],['.note',4.0,0]],
+  s5:[['.eyebrow',.16,0],['.tok.hero',.42,.30],['.roles .tok',1.9,.075],['.note',4.2,0]],
+  s6:[['.eyebrow',.16,0],['.tok',.46,.085],['.sub',2.6,0]],
+  s7:[['.eyebrow',.16,0],['.stat',.44,.70],['.sub',2.4,0],['.note',3.6,0]],
+  s8:[['.eyebrow',.16,0],['.tok.hero',.36,.28],['.col',1.4,.60],['.note',4.2,0]],
+  s9:[['.eyebrow',.16,0],['h2 .w',.55,.16],['.sub',2.2,0]],
+  s10:[['.eyebrow',.18,0],['.card',.44,.85],['.note',3.6,0]],
+  s11:[['.eyebrow',.18,0],['.card',.44,.55],['.note',4.4,0]],
+  s12:[['.eyebrow',.16,0],['.card',.40,.85],['.note',3.0,0]],
+  s13:[['#markEnd',.20,0],['.eyebrow',.55,0],['h3 ',.95,0],['.tok',1.5,.18],['.url',2.3,0],['.legal',2.9,0]]
+};
+const ANIM = [];
+for (const shot of SHOTS){
+  const rootEl = document.getElementById(shot.el);
+  for (const [sel, delay, stagger] of (CUES[shot.el] || [])){
+    rootEl.querySelectorAll(sel.trim()).forEach((el, i) =>
+      ANIM.push({ el, start: shot.in + delay + i * stagger }));
+  }
+}
+
+const E = {
+  glow:document.getElementById('glow'), glow2:document.getElementById('glow2'),
+  spark:document.getElementById('spark'), topbar:document.getElementById('topbar'),
+  progress:document.getElementById('progress'),
+  footrule:document.getElementById('footrule'), footl:document.getElementById('footl'),
+  footr:document.getElementById('footr'), cc:document.getElementById('cc'),
+  ccbox:document.getElementById('ccbox')
+};
+// Landscape sits the caption band at 11.5% rather than 14%: the three-line cues
+// the v3 read produces are 169px tall against 125 before, and scene 1 is taller
+// than its padding box, so raising --padb alone just re-centres it. Still clear
+// of the footer rule by ~36px, and well inside the action-safe area.
+E.cc.style.bottom = (ASPECT === 'pt' ? H*0.175 : H*0.115) + 'px';
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+
+  let wsum = 0;
+  const wts = SHOTS.map(shot => {
+    const fi = shot.in <= 0 ? 1 : seg(t, shot.in, shot.in + XF);
+    const fo = shot.out >= DUR ? 1 : 1 - seg(t, shot.out - XF, shot.out);
+    const o = fi * fo; wsum += o; return { shot, o, fi, fo };
+  });
+  const norm = wsum > 0.0001 ? wsum : 1;
+
+  let bg=[0,0,0], warm=0, cur=SHOTS[0];
+  let best=-1;
+  for (const {shot,o} of wts){
+    const k=o/norm;
+    bg=[bg[0]+shot.bg[0]*k, bg[1]+shot.bg[1]*k, bg[2]+shot.bg[2]*k];
+    warm+=shot.warm*k;
+    if (o>best){ best=o; cur=shot; }
+  }
+  stage.style.background = rgb(bg);
+
+  const drift = t / DUR;
+  E.glow.style.transform =
+    `translate(${(-10+drift*30).toFixed(2)}%, ${(-14+Math.sin(drift*7.5)*9).toFixed(2)}%) scale(${(1.05+drift*.2).toFixed(3)})`;
+  const amb = THEME === 'light' ? 0.55 : 1.0;
+  E.glow.style.opacity = ((0.28 + 0.40*(1-warm)) * amb).toFixed(3);
+  E.glow2.style.transform =
+    `translate(${(28-drift*24).toFixed(2)}%, ${(20-Math.cos(drift*6.1)*11).toFixed(2)}%) scale(${(1.15-drift*.1).toFixed(3)})`;
+  E.glow2.style.opacity = ((0.16 + 0.48*warm) * amb).toFixed(3);
+
+  const sp = E.spark;
+  sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 1.0, DUR-14, inOut))).toFixed(1);
+
+  /* furniture retires only for the end card */
+  const furn = seg(t, 0.15, 1.0) * (1 - seg(t, LAST.in, LAST.in + XF));
+  const f = clamp(furn,0,1).toFixed(3);
+  E.topbar.style.opacity=f; E.footrule.style.opacity=f; E.footl.style.opacity=f;
+  E.footr.style.opacity=f;
+
+  E.progress.style.transform = `scaleX(${(t/DUR).toFixed(4)})`;
+
+  for (const { shot, o, fi, fo } of wts){
+    const el = document.getElementById(shot.el);
+    el.style.opacity = o.toFixed(3);
+    el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    const push = (1-fi)*1.4 - (shot.out >= DUR ? 0 : (1-fo)*1.4);
+    el.style.transform = `translateX(${push.toFixed(3)}%)`;
+  }
+
+  const RISE = 0.68;
+  for (const a of ANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*1.1).toFixed(3)}em)`;
+  }
+  document.querySelectorAll('.uline').forEach(u => {
+    u.style.transform = `scaleX(${u.style.opacity || 0})`;
+  });
+  /* bars grow from the baseline, each to its own share */
+  document.querySelectorAll('.bar').forEach((bar) => {
+    const p = +bar.style.opacity || 0;
+    bar.querySelector('.fill').style.transform = `scaleX(${(p * +bar.querySelector('.fill').dataset.w).toFixed(4)})`;
+  });
+  const mk = document.getElementById('markEnd');
+  const mp = seg(t, LAST.in + 0.2, LAST.in + 1.1, outExpo);
+  mk.style.transform = `translateY(0) scale(${(0.88 + 0.12*mp).toFixed(4)})`;
+
+  if (!CC){ E.cc.style.opacity = '0'; }
+  else {
+    const cue = CAPS.find(c => t >= c[0] - 0.14 && t <= c[1] + 0.14);
+    if (!cue){ E.cc.style.opacity = '0'; }
+    else {
+      E.ccbox.textContent = cue[2];
+      const fi2 = seg(t, cue[0]-0.14, cue[0]+0.06);
+      const fo2 = 1 - seg(t, cue[1]-0.02, cue[1]+0.14);
+      E.cc.style.opacity = (fi2*fo2).toFixed(3);
+    }
+  }
+}
+window.seek = seek; window.__DUR = DUR;
+seek(+(Q.get('t') || 0));
+if (Q.get('play') === '1'){
+  const t0 = performance.now();
+  (function loop(){ seek(((performance.now()-t0)/1000) % DUR); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
