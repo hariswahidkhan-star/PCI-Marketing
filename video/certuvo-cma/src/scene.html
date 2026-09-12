@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — The CMA, Part 1 and Part 2</title>
+<!--
+  Certuvo CMA film — deterministic scene. window.seek(t) computes every style
+  from t, so a frame is identical however long the renderer takes to grab it.
+  seek() returns a promise: the two presenter scenes show a frame sequence
+  (../build/av/<scene>/NNNNN.jpg, cut from the HeyGen Avatar IV clips) and the
+  frame must be decoded before the screenshot. render.mjs and probe.mjs both
+  await it.
+
+  Cut list and captions come from sync.py / vo.py (shots.data.js, captions.data.js).
+  Cue times inside a scene are relative to the moment the narration of that scene
+  starts (its first caption), measured on the takes — see ../README.md.
+
+  ?w=1920&h=1080&cc=1&t=0&play=1
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+:root{
+  --navy:#07132B; --blue:#3260E5; --blue2:#6C8CFF; --copper:#CD6B33; --copper2:#E8905A;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:19.2; --padt:11.5; --padb:16; --h1:6.4; --h2:4.3; --h3:3.0;
+  --fg:#FFFFFF; --sub:#B7C4DE; --foot:#7386A8;
+  --rule:rgba(140,170,230,.18); --card:rgba(14,29,61,.92); --cardbd:rgba(108,140,255,.38); --cardsub:#93A6C9;
+  --ccbg:rgba(5,12,28,.86); --ccfg:#FFFFFF; --track:rgba(140,170,230,.14);
+  --acc:var(--blue2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:var(--navy);font-family:var(--sans);
+  color:var(--fg);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+#glow,#glow2{position:absolute;inset:-25%;pointer-events:none;will-change:transform,opacity}
+#glow{background:radial-gradient(closest-side, rgba(50,96,229,.42), rgba(50,96,229,0) 70%)}
+#glow2{background:radial-gradient(closest-side, rgba(205,107,51,.26), rgba(205,107,51,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none}
+#glowsweep{position:absolute;top:-20%;bottom:-20%;width:38%;left:0;pointer-events:none;
+  background:linear-gradient(100deg, rgba(120,160,255,0) 0%, rgba(120,160,255,.10) 50%, rgba(120,160,255,0) 100%);
+  will-change:transform,opacity}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 42%, rgba(0,0,0,.55) 100%)}
+
+/* ---------- shots ---------- */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;
+  padding:calc(var(--padt) * var(--s) * 1px) calc(9.5 * var(--s) * 1px) calc(var(--padb) * var(--s) * 1px);
+  will-change:opacity,transform}
+.shot.left{align-items:flex-start;text-align:left}
+.eyebrow{font-weight:600;font-size:calc(1.24 * var(--s) * 1px);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.eyebrow.copper{color:var(--copper2)}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.04;letter-spacing:-.024em;color:var(--fg)}
+h1{font-size:calc(var(--h1) * var(--s) * 1px)}
+h2{font-size:calc(var(--h2) * var(--s) * 1px)}
+h3{font-size:calc(var(--h3) * var(--s) * 1px)}
+.sub{font-weight:400;color:var(--sub);font-size:calc(1.72 * var(--s) * 1px);line-height:1.45;
+  max-width:calc(58 * var(--s) * 1px)}
+.ln{display:block;overflow:hidden;padding-bottom:calc(.4 * var(--s) * 1px)}
+.w{display:inline-block;will-change:transform,opacity}
+.note{font-size:calc(1.12 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(60 * var(--s) * 1px)}
+.dim{color:var(--foot)}
+.rule{height:calc(.34 * var(--s) * 1px);width:calc(7 * var(--s) * 1px);border-radius:calc(.2 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--blue),var(--blue2));transform-origin:left center}
+.rule.copper{background:linear-gradient(90deg,var(--copper),var(--copper2))}
+
+/* pills */
+.tokens{display:flex;gap:calc(.85 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;max-width:calc(80 * var(--s) * 1px)}
+.shot.left .tokens{justify-content:flex-start}
+.tok{font-family:var(--display);font-weight:800;letter-spacing:.02em;font-size:calc(1.4 * var(--s) * 1px);
+  padding:calc(.7 * var(--s) * 1px) calc(1.1 * var(--s) * 1px);
+  border:calc(.11 * var(--s) * 1px) solid var(--cardbd);color:var(--fg);white-space:nowrap;
+  border-radius:calc(.25 * var(--s) * 1px);background:rgba(14,29,61,.55);will-change:transform,opacity}
+.tok.hero{font-size:calc(1.9 * var(--s) * 1px);padding:calc(.9 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);color:var(--blue2)}
+.tok.copper{border-color:rgba(232,144,90,.55);color:var(--copper2)}
+.tok.solid{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* hero numerals (s1, s8) */
+.big{display:flex;gap:calc(4.5 * var(--s) * 1px);justify-content:center;align-items:flex-start}
+.big .n{text-align:center;will-change:transform,opacity}
+.big .n b{display:block;font-family:var(--display);font-weight:900;font-size:calc(11 * var(--s) * 1px);
+  line-height:.9;letter-spacing:-.05em;color:var(--fg);font-variant-numeric:tabular-nums}
+.big .n b.acc{color:var(--blue2)}
+.big .n > span{display:block;margin-top:calc(.9 * var(--s) * 1px);font-size:calc(1.3 * var(--s) * 1px);
+  color:var(--sub);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.verbs{display:flex;gap:calc(1.2 * var(--s) * 1px);justify-content:center;flex-wrap:wrap}
+.verbs .v{font-family:var(--display);font-weight:800;font-size:calc(3.2 * var(--s) * 1px);letter-spacing:-.02em;
+  color:var(--fg);will-change:transform,opacity;padding-bottom:calc(.3 * var(--s) * 1px);
+  border-bottom:calc(.3 * var(--s) * 1px) solid var(--blue)}
+.verbs .v.last{color:var(--copper2);border-color:var(--copper)}
+
+/* CMA mark (s3) */
+.cma{display:flex;align-items:baseline;gap:calc(1.4 * var(--s) * 1px);justify-content:center}
+.cma b{font-family:var(--display);font-weight:900;font-size:calc(9.2 * var(--s) * 1px);line-height:.95;
+  letter-spacing:-.04em;color:var(--fg)}
+.cma b sup{font-size:.28em;vertical-align:top;position:relative;top:.35em;color:var(--blue2);letter-spacing:0}
+.cma .full{text-align:left;font-size:calc(1.55 * var(--s) * 1px);color:var(--sub);line-height:1.3;
+  border-left:calc(.14 * var(--s) * 1px) solid var(--cardbd);padding-left:calc(1.1 * var(--s) * 1px)}
+.cma .full em{font-style:normal;display:block;color:var(--fg);font-weight:600}
+.stats{display:flex;gap:calc(3.2 * var(--s) * 1px);justify-content:center;align-items:flex-start;flex-wrap:wrap}
+.stat{text-align:center;will-change:transform,opacity}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:calc(3.6 * var(--s) * 1px);
+  line-height:1;color:var(--fg);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat b em{font-style:normal;color:var(--blue2)}
+.stat span{display:block;margin-top:calc(.5 * var(--s) * 1px);font-size:calc(1.08 * var(--s) * 1px);
+  color:var(--sub);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+
+/* two-column chapter layout (s4, s5) */
+.two{display:grid;grid-template-columns:calc(29 * var(--s) * 1px) 1fr;gap:calc(4 * var(--s) * 1px);
+  width:100%;align-items:center;text-align:left}
+.two .lead{display:flex;flex-direction:column;align-items:flex-start}
+.partno{font-family:var(--display);font-weight:900;font-size:calc(7.4 * var(--s) * 1px);line-height:.9;
+  letter-spacing:-.045em;color:var(--fg);will-change:transform,opacity}
+.partno em{font-style:normal;color:var(--blue2)}
+#s5 .partno em{color:var(--copper2)}
+.two h3{font-size:calc(2.35 * var(--s) * 1px);margin-top:calc(1.0 * var(--s) * 1px);will-change:transform,opacity}
+.two .sub{font-size:calc(1.4 * var(--s) * 1px);margin-top:calc(1.2 * var(--s) * 1px);max-width:none}
+.bars{display:flex;flex-direction:column;gap:calc(.9 * var(--s) * 1px);width:100%}
+.bar{display:grid;grid-template-columns:1fr calc(5 * var(--s) * 1px);align-items:end;column-gap:calc(1 * var(--s) * 1px);
+  will-change:transform,opacity}
+.bar .lbl{font-size:calc(1.3 * var(--s) * 1px);color:var(--sub);font-weight:500;text-align:left;
+  padding-bottom:calc(.3 * var(--s) * 1px);line-height:1.2}
+.bar .lbl i{font-style:normal;color:var(--copper2);font-weight:600;font-size:.85em;margin-left:.6em}
+.bar .val{font-family:var(--display);font-weight:800;font-size:calc(1.9 * var(--s) * 1px);
+  color:var(--fg);text-align:right;font-variant-numeric:tabular-nums;line-height:1.1}
+.bar .track{grid-column:1 / -1;height:calc(.9 * var(--s) * 1px);background:var(--track);
+  border-radius:calc(.45 * var(--s) * 1px);overflow:hidden;margin-top:calc(.3 * var(--s) * 1px)}
+.bar .fill{height:100%;border-radius:calc(.45 * var(--s) * 1px);transform-origin:left center;
+  background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.bar.copper .fill{background:linear-gradient(90deg,var(--copper),var(--copper2))}
+
+/* exam structure diagram (s6) */
+.exam{width:calc(78 * var(--s) * 1px);text-align:left}
+.tl{display:flex;gap:calc(.35 * var(--s) * 1px);height:calc(5.2 * var(--s) * 1px);width:100%}
+.tl .seg{border-radius:calc(.35 * var(--s) * 1px);display:flex;flex-direction:column;justify-content:center;
+  padding:0 calc(1.3 * var(--s) * 1px);overflow:hidden;transform-origin:left center;will-change:transform,opacity}
+.tl .seg b{font-family:var(--display);font-weight:800;font-size:calc(1.75 * var(--s) * 1px);color:#fff;white-space:nowrap;line-height:1.1}
+.tl .seg span{font-size:calc(1.05 * var(--s) * 1px);color:rgba(255,255,255,.82);font-weight:500;white-space:nowrap}
+.tl .mcq{flex:0 0 74.5%;background:linear-gradient(90deg,#2A52C9,var(--blue))}
+.tl .cbq{flex:1 1 auto;background:linear-gradient(90deg,var(--copper),var(--copper2))}
+.tl .cbq b{font-size:calc(1.3 * var(--s) * 1px)}
+.tl .cbq span{font-size:calc(.95 * var(--s) * 1px)}
+.axis{display:flex;justify-content:space-between;font-size:calc(1.05 * var(--s) * 1px);color:var(--foot);
+  letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-top:calc(.55 * var(--s) * 1px)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(1.2 * var(--s) * 1px);margin-top:calc(2.0 * var(--s) * 1px)}
+.fact{background:var(--card);border:calc(.11 * var(--s) * 1px) solid var(--cardbd);border-radius:calc(.3 * var(--s) * 1px);
+  padding:calc(1.1 * var(--s) * 1px) calc(1.4 * var(--s) * 1px);will-change:transform,opacity}
+.fact b{display:block;font-family:var(--display);font-weight:800;font-size:calc(2.5 * var(--s) * 1px);line-height:1;
+  color:var(--fg);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fact b em{font-style:normal;color:var(--blue2)}
+.fact.copper b em{color:var(--copper2)}
+.fact span{display:block;margin-top:calc(.5 * var(--s) * 1px);font-size:calc(1.02 * var(--s) * 1px);color:var(--cardsub);line-height:1.35}
+.windows{display:flex;align-items:center;gap:calc(1.0 * var(--s) * 1px);margin-top:calc(1.6 * var(--s) * 1px);flex-wrap:wrap}
+.windows .lbl{font-size:calc(1.12 * var(--s) * 1px);color:var(--sub);letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+  will-change:transform,opacity;margin-right:calc(.4 * var(--s) * 1px)}
+
+/* requirement cards (s7), feature cards (s9) */
+.cards{display:flex;gap:calc(1.3 * var(--s) * 1px);justify-content:center;flex-wrap:wrap}
+.card{background:var(--card);border:calc(.11 * var(--s) * 1px) solid var(--cardbd);text-align:left;
+  padding:calc(1.5 * var(--s) * 1px) calc(1.7 * var(--s) * 1px);border-radius:calc(.35 * var(--s) * 1px);
+  width:calc(24 * var(--s) * 1px);will-change:transform,opacity;position:relative}
+.card .k{font-family:var(--display);font-weight:800;font-size:calc(1.05 * var(--s) * 1px);color:var(--blue2);
+  letter-spacing:.16em;margin-bottom:calc(.7 * var(--s) * 1px)}
+.card b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.9 * var(--s) * 1px);
+  letter-spacing:-.015em;line-height:1.1;color:var(--fg)}
+.card span{display:block;margin-top:calc(.55 * var(--s) * 1px);font-size:calc(1.08 * var(--s) * 1px);color:var(--cardsub);line-height:1.4}
+.path{display:flex;align-items:center;gap:calc(1.0 * var(--s) * 1px);margin-top:calc(2.2 * var(--s) * 1px);
+  border:calc(.11 * var(--s) * 1px) solid rgba(232,144,90,.5);border-radius:calc(.35 * var(--s) * 1px);
+  padding:calc(.9 * var(--s) * 1px) calc(1.6 * var(--s) * 1px);background:rgba(205,107,51,.10);will-change:transform,opacity}
+.path b{font-family:var(--display);font-weight:800;font-size:calc(1.7 * var(--s) * 1px);color:var(--fg);white-space:nowrap}
+.path .arrow{width:calc(5 * var(--s) * 1px);height:calc(.3 * var(--s) * 1px);background:var(--copper2);position:relative;border-radius:2px}
+.path .arrow:after{content:'';position:absolute;right:calc(-.1 * var(--s) * 1px);top:calc(-.45 * var(--s) * 1px);
+  border-left:calc(1 * var(--s) * 1px) solid var(--copper2);border-top:calc(.6 * var(--s) * 1px) solid transparent;
+  border-bottom:calc(.6 * var(--s) * 1px) solid transparent}
+.path .yrs{font-family:var(--display);font-weight:800;font-size:calc(1.3 * var(--s) * 1px);color:var(--copper2);white-space:nowrap}
+.cards.grid{max-width:calc(76 * var(--s) * 1px)}
+.cards.grid .card{width:calc(36.5 * var(--s) * 1px);padding:calc(1.3 * var(--s) * 1px) calc(1.6 * var(--s) * 1px)}
+.cards.grid .card b{font-size:calc(1.75 * var(--s) * 1px)}
+.cards.grid .card span{font-size:calc(1.02 * var(--s) * 1px)}
+.cards.grid .card .k{margin-bottom:calc(.45 * var(--s) * 1px)}
+
+/* presenter scenes */
+.pres{position:absolute;inset:0;overflow:hidden}
+.pres img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.pres .shade{position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(7,19,43,.55) 0%, rgba(7,19,43,0) 24%, rgba(7,19,43,0) 60%, rgba(7,19,43,.78) 100%)}
+.shot.presenter{justify-content:flex-start;align-items:flex-end;text-align:left}
+.side{position:absolute;display:flex;flex-direction:column;gap:calc(.8 * var(--s) * 1px);align-items:flex-start;
+  left:calc(9.5 * var(--s) * 1px);top:calc(19 * var(--s) * 1px)}
+.side.right{left:auto;right:calc(9.5 * var(--s) * 1px);align-items:flex-end}
+.side .t{font-family:var(--display);font-weight:800;font-size:calc(1.05 * var(--s) * 1px);letter-spacing:.18em;
+  color:var(--blue2);text-transform:uppercase;margin-bottom:calc(.3 * var(--s) * 1px);will-change:transform,opacity}
+.side .tok{background:rgba(5,12,28,.72);backdrop-filter:blur(6px)}
+.side .tok.step{display:flex;align-items:center;gap:calc(.8 * var(--s) * 1px)}
+.side .tok.step i{font-style:normal;font-family:var(--display);font-weight:800;color:var(--blue2);font-size:.85em}
+.urlbadge{font-family:var(--display);font-weight:800;font-size:calc(2.3 * var(--s) * 1px);letter-spacing:-.01em;color:#fff;
+  background:var(--blue);padding:calc(.8 * var(--s) * 1px) calc(1.6 * var(--s) * 1px);border-radius:calc(.35 * var(--s) * 1px);
+  will-change:transform,opacity;white-space:nowrap}
+
+/* end card */
+#endcard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;background:var(--navy);padding:0 calc(9.5 * var(--s) * 1px);will-change:opacity}
+#endcard #glowend{position:absolute;inset:-20%;background:radial-gradient(closest-side, rgba(50,96,229,.38), rgba(50,96,229,0) 70%);
+  transform:translate(0,-18%)}
+#endcard > *{position:relative}
+#endlogo{width:calc(28 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#endcard h3{margin-top:calc(2.2 * var(--s) * 1px);will-change:transform,opacity}
+#endcard .url{font-family:var(--display);font-weight:800;font-size:calc(2.6 * var(--s) * 1px);color:var(--blue2);
+  margin-top:calc(1.6 * var(--s) * 1px);will-change:transform,opacity}
+#endcard .legal{font-weight:400;font-size:calc(.92 * var(--s) * 1px);color:var(--foot);line-height:1.5;
+  max-width:calc(70 * var(--s) * 1px);margin-top:calc(2.4 * var(--s) * 1px);will-change:transform,opacity}
+
+/* ---------- persistent furniture ---------- */
+#topbar{position:absolute;left:calc(9.5 * var(--s) * 1px);top:calc(5.4 * var(--s) * 1px);will-change:opacity;
+  display:flex;align-items:center;gap:calc(1.0 * var(--s) * 1px)}
+#topbar img{width:calc(11.5 * var(--s) * 1px);height:auto;display:block}
+#topbar .s{font-weight:500;font-size:calc(.9 * var(--s) * 1px);color:var(--foot);line-height:1.3;
+  border-left:calc(.1 * var(--s) * 1px) solid var(--rule);padding-left:calc(.8 * var(--s) * 1px);text-align:left}
+#chapter{position:absolute;right:calc(9.5 * var(--s) * 1px);top:calc(6.0 * var(--s) * 1px);text-align:right;will-change:opacity}
+#chapter .n{font-family:var(--display);font-weight:800;font-size:calc(1.0 * var(--s) * 1px);color:var(--blue2);letter-spacing:.18em}
+#chapter .c{font-weight:600;font-size:calc(1.18 * var(--s) * 1px);color:var(--fg);letter-spacing:.03em;margin-top:calc(.2 * var(--s) * 1px)}
+#footrule{position:absolute;left:calc(9.5 * var(--s) * 1px);right:calc(9.5 * var(--s) * 1px);
+  bottom:calc(4.6 * var(--s) * 1px);height:calc(.16 * var(--s) * 1px);background:var(--rule);
+  border-radius:calc(.08 * var(--s) * 1px);overflow:hidden}
+#progress{height:100%;width:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));transform-origin:left center}
+#footl{position:absolute;left:calc(9.5 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);
+  font-size:calc(.96 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;color:var(--foot);font-weight:600}
+#footr{position:absolute;right:calc(9.5 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);
+  font-size:calc(.96 * var(--s) * 1px);color:var(--foot);font-weight:500}
+
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;padding:0 calc(10 * var(--s) * 1px);pointer-events:none}
+#ccbox{background:var(--ccbg);border-bottom:calc(.26 * var(--s) * 1px) solid var(--blue);
+  padding:calc(.85 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);font-weight:600;color:var(--ccfg);
+  text-align:center;white-space:pre-line;font-size:calc(1.68 * var(--s) * 1px);line-height:1.35;max-width:100%}
+
+#s3 .tokens{max-width:none}
+#s3 .tok{font-size:calc(1.28 * var(--s) * 1px);padding:calc(.65 * var(--s) * 1px) calc(.95 * var(--s) * 1px)}
+
+.tl .short{display:none}
+#stage.sq .tl .full,#stage.pt .tl .full{display:none}
+#stage.sq .tl .short,#stage.pt .tl .short{display:inline}
+#stage.pt .tl .cbq > span{display:block}
+
+/* ---------- square ---------- */
+#stage.sq .two{grid-template-columns:1fr;gap:calc(1.6 * var(--s) * 1px)}
+#stage.sq .two .lead{flex-direction:row;align-items:baseline;gap:calc(1.6 * var(--s) * 1px);flex-wrap:wrap}
+#stage.sq .partno{font-size:calc(5.2 * var(--s) * 1px)}
+#stage.sq .two h3{font-size:calc(2.0 * var(--s) * 1px);margin-top:0}
+#stage.sq .two .sub{display:none}
+#stage.sq .bars{gap:calc(.55 * var(--s) * 1px)}
+#stage.sq .bar .lbl{font-size:calc(1.15 * var(--s) * 1px)}
+#stage.sq .bar .val{font-size:calc(1.6 * var(--s) * 1px)}
+#stage.sq .exam{width:100%}
+#stage.sq .facts{gap:calc(.8 * var(--s) * 1px)}
+#stage.sq .fact b{font-size:calc(2.0 * var(--s) * 1px)}
+#stage.sq .fact span{font-size:calc(.92 * var(--s) * 1px)}
+#stage.sq .big .n b{font-size:calc(9 * var(--s) * 1px)}
+#stage.sq .verbs .v{font-size:calc(2.6 * var(--s) * 1px)}
+#stage.sq .cma b{font-size:calc(7.5 * var(--s) * 1px)}
+#stage.sq .card{width:calc(24.5 * var(--s) * 1px)}
+#stage.sq .cards.grid .card{width:calc(24.8 * var(--s) * 1px)}
+#stage.sq .cards.grid{max-width:calc(52 * var(--s) * 1px);gap:calc(1.0 * var(--s) * 1px)}
+#stage.sq .cards.grid .card b{font-size:calc(1.5 * var(--s) * 1px)}
+#stage.sq .side{top:calc(30 * var(--s) * 1px)}
+#stage.sq .side .tok{font-size:calc(1.25 * var(--s) * 1px)}
+#stage.sq .urlbadge{font-size:calc(1.9 * var(--s) * 1px)}
+#stage.sq #endlogo{width:calc(24 * var(--s) * 1px)}
+
+/* ---------- vertical ---------- */
+#stage.pt .shot{padding-left:calc(5.5 * var(--s) * 1px);padding-right:calc(5.5 * var(--s) * 1px)}
+#stage.pt .two{grid-template-columns:1fr;gap:calc(2.4 * var(--s) * 1px)}
+#stage.pt .two .sub{display:none}
+#stage.pt .exam{width:100%}
+#stage.pt .facts{grid-template-columns:1fr;gap:calc(.9 * var(--s) * 1px)}
+#stage.pt .fact{display:flex;align-items:baseline;gap:calc(1.2 * var(--s) * 1px)}
+#stage.pt .fact span{margin-top:0}
+#stage.pt .tl{height:calc(6.2 * var(--s) * 1px)}
+#stage.pt .tl .seg b{font-size:calc(1.3 * var(--s) * 1px)}
+#stage.pt .tl .seg span{font-size:calc(.9 * var(--s) * 1px)}
+#stage.pt .tl .cbq b{font-size:calc(1.1 * var(--s) * 1px)}
+#stage.pt .big{gap:calc(3 * var(--s) * 1px)}
+#stage.pt .big .n b{font-size:calc(9 * var(--s) * 1px)}
+#stage.pt .verbs .v{font-size:calc(2.6 * var(--s) * 1px)}
+#stage.pt .cma{flex-direction:column;align-items:center;gap:calc(1.2 * var(--s) * 1px)}
+#stage.pt .cma .full{border-left:0;padding-left:0;text-align:center}
+#stage.pt .sub,#stage.pt .note{max-width:calc(52 * var(--s) * 1px)}
+#stage.pt .cards{flex-direction:column;align-items:center}
+#stage.pt .card,#stage.pt .cards.grid .card{width:calc(46 * var(--s) * 1px)}
+#stage.pt .path{flex-wrap:wrap;justify-content:center}
+#stage.pt .side{top:calc(63 * var(--s) * 1px);left:calc(5.5 * var(--s) * 1px);right:calc(5.5 * var(--s) * 1px);
+  flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center}
+#stage.pt .side.right{align-items:center}
+#stage.pt .side .t{width:100%;text-align:center}
+#stage.pt .pres{height:60%;-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,#000 70%,transparent 100%)}
+#stage.pt .pres img{object-position:50% 18%}
+#stage.pt .pres .shade{background:linear-gradient(180deg, rgba(7,19,43,.5) 0%, rgba(7,19,43,0) 30%)}
+#stage.pt .urlbadge{display:none}
+#stage.pt #chapter{display:none}
+#stage.pt #cc{padding:0 calc(4.5 * var(--s) * 1px)}
+#stage.pt #endcard .legal{max-width:calc(52 * var(--s) * 1px)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div><div id="glow2"></div>
+  <svg id="grid" preserveAspectRatio="none"></svg>
+  <div id="glowsweep"></div>
+  <div id="vig"></div>
+
+  <!-- 1 · hook -->
+  <section class="shot" id="s1">
+    <div class="big">
+      <div class="n" data-a="1"><b class="count" data-n="2">0</b><span>exams</span></div>
+      <div class="n" data-a="1"><b class="count acc" data-n="4">0</b><span>hours each</span></div>
+    </div>
+    <h3 style="margin-top:calc(2.6*var(--s)*1px)" data-a="1">One credential that says you can</h3>
+    <div class="verbs" style="margin-top:calc(1.2*var(--s)*1px)">
+      <div class="v">plan</div><div class="v">control</div><div class="v">analyse</div><div class="v last">decide</div>
+    </div>
+  </section>
+
+  <!-- 2 · welcome (presenter) -->
+  <section class="shot presenter" id="s2">
+    <div class="pres"><img id="pres2" src="../assets/presenter-a.png" alt=""><div class="shade"></div></div>
+    <div class="side right">
+      <div class="t" data-a="1">In the next four minutes</div>
+      <div class="tok" data-a="1">What's in Part 1</div>
+      <div class="tok" data-a="1">What's in Part 2</div>
+      <div class="tok" data-a="1">How the exam works</div>
+      <div class="tok solid" data-a="1">How to be ready on the day</div>
+    </div>
+  </section>
+
+  <!-- 3 · what the CMA is -->
+  <section class="shot" id="s3">
+    <div class="eyebrow" data-a="1">The credential</div>
+    <div class="cma" style="margin-top:calc(1.2*var(--s)*1px)">
+      <b data-a="1">CMA<sup>®</sup></b>
+      <div class="full" data-a="1"><em>Certified Management Accountant</em>Awarded by IMA — the Institute of Management Accountants</div>
+    </div>
+    <div class="stats" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="stat" data-a="1"><b>since <em>1972</em></b><span>first awarded</span></div>
+      <div class="stat" data-a="1"><b><em class="count" data-n="61">0</em></b><span>candidates passed in the first year</span></div>
+    </div>
+    <div class="tokens" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="tok" data-a="1">PLAN</div><div class="tok" data-a="1">BUDGET</div><div class="tok" data-a="1">MEASURE PERFORMANCE</div>
+      <div class="tok" data-a="1">MANAGE RISK</div><div class="tok" data-a="1">SUPPORT STRATEGY</div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(1.5*var(--s)*1px)">Not just reporting what already happened.</div>
+  </section>
+
+  <!-- 4 · part 1 -->
+  <section class="shot" id="s4">
+    <div class="two">
+      <div class="lead">
+        <div class="partno" data-a="1">Part <em>1</em></div>
+        <h3 data-a="1">Financial Planning, Performance and Analytics</h3>
+        <div class="sub" data-a="1"><b>Six domains.</b> The engine room: how the numbers are built, budgeted, measured and controlled.</div>
+      </div>
+      <div class="bars">
+        <div class="bar" data-a="1"><div class="lbl">External Financial Reporting Decisions</div><div class="val">15%</div><div class="track"><div class="fill" data-w=".60"></div></div></div>
+        <div class="bar" data-a="1"><div class="lbl">Planning, Budgeting and Forecasting</div><div class="val">20%</div><div class="track"><div class="fill" data-w=".80"></div></div></div>
+        <div class="bar" data-a="1"><div class="lbl">Performance Management</div><div class="val">20%</div><div class="track"><div class="fill" data-w=".80"></div></div></div>
+        <div class="bar" data-a="1"><div class="lbl">Cost Management</div><div class="val">15%</div><div class="track"><div class="fill" data-w=".60"></div></div></div>
+        <div class="bar" data-a="1"><div class="lbl">Internal Controls</div><div class="val">15%</div><div class="track"><div class="fill" data-w=".60"></div></div></div>
+        <div class="bar" data-a="1"><div class="lbl">Technology and Analytics</div><div class="val">15%</div><div class="track"><div class="fill" data-w=".60"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · part 2 -->
+  <section class="shot" id="s5">
+    <div class="two">
+      <div class="lead">
+        <div class="partno" data-a="1">Part <em>2</em></div>
+        <h3 data-a="1">Strategic Financial Management</h3>
+        <div class="sub" data-a="1"><b>Six domains.</b> The boardroom: what the numbers mean, and what you decide because of them.</div>
+      </div>
+      <div class="bars">
+        <div class="bar copper" data-a="1"><div class="lbl">Financial Statement Analysis</div><div class="val">20%</div><div class="track"><div class="fill" data-w=".80"></div></div></div>
+        <div class="bar copper" data-a="1"><div class="lbl">Corporate Finance</div><div class="val">20%</div><div class="track"><div class="fill" data-w=".80"></div></div></div>
+        <div class="bar copper" data-a="1"><div class="lbl">Decision Analysis <i data-a="1">largest single domain</i></div><div class="val">25%</div><div class="track"><div class="fill" data-w="1"></div></div></div>
+        <div class="bar copper" data-a="1"><div class="lbl">Risk Management</div><div class="val">10%</div><div class="track"><div class="fill" data-w=".40"></div></div></div>
+        <div class="bar copper" data-a="1"><div class="lbl">Investment Decisions</div><div class="val">10%</div><div class="track"><div class="fill" data-w=".40"></div></div></div>
+        <div class="bar copper" data-a="1"><div class="lbl">Professional Ethics</div><div class="val">15%</div><div class="track"><div class="fill" data-w=".60"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · the exam -->
+  <section class="shot" id="s6">
+    <div class="exam">
+      <div class="eyebrow" data-a="1">Each part · one four-hour exam</div>
+      <div class="tl" style="margin-top:calc(1.4*var(--s)*1px)">
+        <div class="seg mcq" data-a="1"><b>100 multiple-choice questions · 3 hours</b><span>75% of your score</span></div>
+        <div class="seg cbq" data-a="1"><b><span class="full">2 case-based questions</span><span class="short">2 cases</span></b><span><span class="full">1 hour · from the Sep 2026 window</span><span class="short">1 hour · Sep 2026 on</span></span></div>
+      </div>
+      <div class="axis" data-a="1"><span>0 h</span><span>3 h</span><span>4 h</span></div>
+      <div class="facts">
+        <div class="fact copper" data-a="1"><b><em>2</em> cases</b><span>A short business case, then up to seven questions on it — replacing the essays</span></div>
+        <div class="fact" data-a="1"><b><em>50%</em> gate</b><span>At least half on the multiple choice unlocks the second section</span></div>
+        <div class="fact" data-a="1"><b><em class="count" data-n="360">0</em> / 500</b><span>The pass mark, on the scaled score</span></div>
+      </div>
+      <div class="windows">
+        <div class="lbl" data-a="1">Three windows a year</div>
+        <div class="tok" data-a="1">JAN – FEB</div><div class="tok" data-a="1">MAY – JUN</div><div class="tok" data-a="1">SEP – OCT</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · requirements -->
+  <section class="shot" id="s7">
+    <div class="eyebrow" data-a="1">To be certified</div>
+    <div class="cards" style="margin-top:calc(2.0*var(--s)*1px)">
+      <div class="card" data-a="1"><div class="k">01</div><b>Active IMA membership</b><span>Held throughout the programme</span></div>
+      <div class="card" data-a="1"><div class="k">02</div><b>Bachelor's degree</b><span>or an approved professional certification</span></div>
+      <div class="card" data-a="1"><div class="k">03</div><b>2 years' experience</b><span>Continuous, relevant professional experience</span></div>
+    </div>
+    <div class="path" data-a="1">
+      <b>Sit the exam first</b><div class="arrow"></div><span class="yrs">up to 7 years</span><div class="arrow"></div><b>Complete the experience</b>
+    </div>
+  </section>
+
+  <!-- 8 · why it matters -->
+  <section class="shot" id="s8">
+    <div class="eyebrow" data-a="1">Why it matters</div>
+    <div class="big" style="margin-top:calc(1.0*var(--s)*1px)">
+      <div class="n" data-a="1"><b class="acc count" data-n="21" data-pre="+" data-suf="%">+0%</b>
+        <span>higher median total compensation</span></div>
+    </div>
+    <div class="note" data-a="1" style="margin-top:calc(1.3*var(--s)*1px)">CMAs vs non-CMAs, worldwide · IMA Global Salary Survey 2023</div>
+    <div class="tokens" style="margin-top:calc(1.8*var(--s)*1px)">
+      <div class="tok" data-a="1">FP&amp;A</div><div class="tok" data-a="1">CONTROLLER</div>
+      <div class="tok" data-a="1">FINANCE BUSINESS PARTNER</div><div class="tok solid" data-a="1">THE ROUTE TO CFO</div>
+    </div>
+  </section>
+
+  <!-- 9 · how Certuvo prepares you -->
+  <section class="shot" id="s9">
+    <div class="eyebrow" data-a="1">Certuvo prepares you for exactly this exam</div>
+    <div class="cards grid" style="margin-top:calc(1.6*var(--s)*1px)">
+      <div class="card" data-a="1"><div class="k">STRUCTURED STUDY</div><b>Every domain, both parts</b><span>In the exam's own weightings</span></div>
+      <div class="card" data-a="1"><div class="k">QUESTION BANKS</div><b>Scenario-based, real format</b><span>Including case-based questions</span></div>
+      <div class="card" data-a="1"><div class="k">MOCK EXAMS</div><b>Full-length, under exam timing</b><span>The four hours, as they will be</span></div>
+      <div class="card" data-a="1"><div class="k">READINESS TRACKING</div><b>Know when you're ready</b><span>Not just how much you've read</span></div>
+    </div>
+    <div class="tokens" style="margin-top:calc(1.6*var(--s)*1px)">
+      <div class="tok" data-a="1">FULLY ONLINE</div><div class="tok" data-a="1">YOUR OWN PACE</div><div class="tok" data-a="1">ANY DEVICE</div>
+    </div>
+  </section>
+
+  <!-- 10 · start (presenter → end card) -->
+  <section class="shot presenter" id="s10">
+    <div class="pres"><img id="pres10" src="../assets/presenter-a.png" alt=""><div class="shade"></div></div>
+    <div class="side">
+      <div class="t" data-a="1">Start here</div>
+      <div class="tok step" data-a="1"><i>1</i>Pick your part</div>
+      <div class="tok step" data-a="1"><i>2</i>Choose a testing window</div>
+      <div class="tok step solid" data-a="1"><i>3</i>Start preparing today</div>
+    </div>
+    <div class="side right"><div class="urlbadge" data-a="1">certuvo.com</div></div>
+  </section>
+
+  <div id="topbar"><img src="../brand/certuvo-logo-white.png" alt="Certuvo">
+    <div class="s">CMA® preparation<br>Part 1 · Part 2</div></div>
+  <div id="chapter"><div class="n">01 / 10</div><div class="c">Hook</div></div>
+  <div id="footrule"><div id="progress"></div></div>
+  <div id="footl">The CMA · Part 1 and Part 2 · 2026</div>
+  <div id="footr">certuvo.com</div>
+
+  <div id="endcard">
+    <div id="glowend"></div>
+    <img id="endlogo" src="../brand/certuvo-logo-white.png" alt="Certuvo" data-a="1">
+    <h3 data-a="1">The exam is hard by design.<br>Being ready for it doesn't have to be.</h3>
+    <div class="url" data-a="1">certuvo.com</div>
+    <div class="legal" data-a="1">CMA® is a registered trademark of the Institute of Management Accountants (IMA). Certuvo is an independent preparation provider and is not affiliated with, sponsored by or endorsed by IMA. Exam structure, fees and requirements as published by IMA for 2026; confirm current details at imanet.org. Preparation does not guarantee a pass.</div>
+  </div>
+
+  <div id="cc"><div id="ccbox"></div></div>
+</div>
+
+<script src="captions.data.js"></script>
+<script src="shots.data.js"></script>
+<script src="presenter.data.js"></script>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
+const CC = Q.get('cc') !== '0';
+const DUR = window.__DURATION;
+const RAW = window.__SHOTS, CAPS = window.__CAPTIONS || [];
+/* presenter.data.js (written by build.sh once the avatar clips are cut to
+   frames): { s2:{dir, fps, frames, lead}, s10:{...} }. Absent → the still. */
+const PRES = window.__PRESENTER || {};
+
+const R = W / H;
+const ASPECT = R >= 1.40 ? '169' : (R >= 0.85 ? 'sq' : 'pt');
+const NOMINAL = ASPECT === '169' ? 1920 : ASPECT === 'sq' ? 1350 : 1180;
+const stage = document.getElementById('stage'), root = document.documentElement;
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+root.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+if (ASPECT === 'sq'){ stage.classList.add('sq'); root.style.setProperty('--padb','20'); root.style.setProperty('--padt','12'); }
+if (ASPECT === 'pt'){ stage.classList.add('pt');
+  root.style.setProperty('--padb','30'); root.style.setProperty('--padt','14'); root.style.setProperty('--h1','5.0');
+  root.style.setProperty('--h2','3.9'); root.style.setProperty('--h3','2.7'); }
+
+/* Grounds: navy throughout, a touch cooler on the Part 1 / exam beats, a touch
+   warmer on the Part 2 and closing beats, so the film breathes without leaving
+   the brand ground. */
+const GROUND = {
+  s1:[7,19,43], s2:[6,15,36], s3:[7,19,43], s4:[6,18,44], s5:[11,18,38], s6:[6,17,42],
+  s7:[7,19,43], s8:[8,19,44], s9:[7,19,43], s10:[6,15,36]
+};
+const WARM = { s1:.25, s2:.15, s3:.2, s4:.1, s5:.7, s6:.15, s7:.25, s8:.35, s9:.2, s10:.45 };
+
+const SHOTS = RAW.map(([el, chap, a, b]) => {
+  const vs = (CAPS.find(c => c[0] >= a - 0.01) || [a])[0];
+  return { el, chap, in: a, out: b, vs, bg: GROUND[el] || [7,19,43], warm: WARM[el] ?? .2 };
+});
+
+(function grid(){
+  const g = document.getElementById('grid');
+  g.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const step = W / (ASPECT === 'pt' ? 12 : 24);
+  let d = '';
+  for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
+  for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
+  g.innerHTML = `<path d="${d}" stroke="rgba(140,170,230,.07)" stroke-width="1" fill="none"/>`
+    + `<path id="spark" d="" stroke="rgba(108,140,255,.22)" stroke-width="${(W/640).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
+  const pts = [], n = 140;
+  for (let i = 0; i <= n; i++){
+    const p = i / n, x = p * W;
+    const y = H * (0.82 - 0.56 * (1 / (1 + Math.exp(-(p - 0.5) * 8)))) + Math.sin(p * 9.3) * H * 0.014;
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const sp = g.querySelector('#spark');
+  sp.setAttribute('d', 'M' + pts.join('L'));
+  sp.__len = sp.getTotalLength(); sp.style.strokeDasharray = sp.__len;
+})();
+
+const LAST = SHOTS[SHOTS.length - 1];
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const outCubic=x=>1-Math.pow(1-x,3), outExpo=x=>x>=1?1:1-Math.pow(2,-10*x);
+const inOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const seg=(t,a,b,e)=>{const p=clamp((t-a)/(b-a),0,1);return (e||outCubic)(p);};
+const rgb=c=>`rgb(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)})`;
+const XF = 0.45;
+
+/* Cue sheet. Times are seconds after the scene's narration starts (its first
+   caption), measured against the pauses in each take, so an item rises as it
+   is named. [selector, delay, stagger] — stagger applies per matched element. */
+const CUES = {
+  s1:[['.big .n',-0.15,1.2],['h3',2.7,0],['.verbs .v',4.15,0],['.verbs .v',4.75,0],['.verbs .v',5.35,0],['.verbs .v',6.85,0]],
+  s2:[['.side .t',0.5,0],['.side .tok',1.25,1.55]],
+  s3:[['.eyebrow',0,0],['.cma b',0.3,0],['.cma .full',1.5,0],['.stat',5.55,2.6],['.tokens .tok',14.65,1.25],['.note',21.5,0]],
+  s4:[['.partno',-0.1,0],['.two h3',0.5,0],['.two .sub',3.9,0],['.bar',5.6,0],['.bar',9.6,0],['.bar',13.05,0],['.bar',15.55,0],['.bar',17.9,0],['.bar',20.25,0]],
+  s5:[['.partno',-0.1,0],['.two h3',0.5,0],['.two .sub',3.0,0],['.bar',4.7,0],['.bar',7.75,0],['.bar',9.9,0],['.bar',14.85,0],['.bar',16.85,0],['.bar',19.2,0],['.bar .lbl i',11.75,0]],
+  s6:[['.eyebrow',-0.1,0],['.tl .mcq',2.8,0],['.axis',2.8,0],['.tl .cbq',9.1,0],['.fact',11.6,0],['.fact',21.5,0],['.fact',26.1,0],['.windows .lbl',30.8,0],['.windows .tok',32.7,1.25]],
+  s7:[['.eyebrow',-0.1,0],['.card',1.3,0],['.card',4.1,0],['.card',7.2,0],['.path',10.75,0]],
+  s8:[['.eyebrow',-0.1,0],['.big .n',6.7,0],['.note',9.4,0],['.tokens .tok',14.55,1.7]],
+  s9:[['.eyebrow',-0.1,0],['.card',3.3,0],['.card',10.05,0],['.card',16.35,0],['.card',20.2,0],['.tokens .tok',25.85,.9]],
+  s10:[['.side .t',-0.1,0],['.side .tok',0.0,0],['.side .tok',1.1,0],['.side .tok',3.05,0],['.urlbadge',6.2,0]]
+};
+const ANIM = [];
+for (const shot of SHOTS){
+  const rootEl = document.getElementById(shot.el);
+  const seen = new Map();
+  for (const [sel, delay, stagger] of (CUES[shot.el] || [])){
+    const els = [...rootEl.querySelectorAll(sel.trim())];
+    if (stagger === 0 && els.length > 1){
+      // repeated selector with no stagger: each occurrence addresses the next element
+      const k = seen.get(sel) || 0; seen.set(sel, k + 1);
+      if (els[k]) ANIM.push({ el: els[k], start: shot.vs + delay });
+    } else {
+      els.forEach((el, i) => ANIM.push({ el, start: shot.vs + delay + i * stagger }));
+    }
+  }
+}
+/* the end card rises after the presenter's last line */
+const END_AT = LAST.vs + 15.2;
+const ENDANIM = [['#endlogo',0.35],['#endcard h3',0.85],['#endcard .url',1.35],['#endcard .legal',1.9]]
+  .map(([sel, d]) => ({ el: document.querySelector(sel), start: END_AT + d }));
+const COUNTS = [...document.querySelectorAll('.count')].map(el => {
+  const a = ANIM.find(x => x.el === el || x.el.contains(el));
+  return { el, n: +el.dataset.n, pre: el.dataset.pre || '', suf: el.dataset.suf || '', start: a ? a.start : 0 };
+});
+
+const E = {
+  glow:document.getElementById('glow'), glow2:document.getElementById('glow2'),
+  sweep:document.getElementById('glowsweep'), spark:document.getElementById('spark'),
+  topbar:document.getElementById('topbar'), chapter:document.getElementById('chapter'),
+  chN:document.querySelector('#chapter .n'), chC:document.querySelector('#chapter .c'),
+  progress:document.getElementById('progress'), footrule:document.getElementById('footrule'),
+  footl:document.getElementById('footl'), footr:document.getElementById('footr'),
+  cc:document.getElementById('cc'), ccbox:document.getElementById('ccbox'),
+  endcard:document.getElementById('endcard'),
+  pres:{ s2:document.getElementById('pres2'), s10:document.getElementById('pres10') }
+};
+E.cc.style.bottom = (ASPECT === 'pt' ? H*0.175 : H*0.115) + 'px';
+const PRES_SRC = {};
+
+function presenterFrame(shot, t){
+  const cfg = PRES[shot.el];
+  if (!cfg) return null;
+  const vt = t - shot.vs + (cfg.lead || 0);                 // time inside the clip
+  const f = clamp(Math.round(vt * cfg.fps), 0, cfg.frames - 1);
+  return `${cfg.dir}/${String(f).padStart(5,'0')}.jpg`;
+}
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+  const pending = [];
+
+  let wsum = 0;
+  const wts = SHOTS.map(shot => {
+    const fi = shot.in <= 0 ? 1 : seg(t, shot.in, shot.in + XF);
+    const fo = shot.out >= DUR ? 1 : 1 - seg(t, shot.out - XF, shot.out);
+    const o = fi * fo; wsum += o; return { shot, o, fi, fo };
+  });
+  const norm = wsum > 0.0001 ? wsum : 1;
+
+  let bg=[0,0,0], warm=0, cur=SHOTS[0], best=-1;
+  for (const {shot,o} of wts){
+    const k=o/norm;
+    bg=[bg[0]+shot.bg[0]*k, bg[1]+shot.bg[1]*k, bg[2]+shot.bg[2]*k];
+    warm+=shot.warm*k;
+    if (o>best){ best=o; cur=shot; }
+  }
+  stage.style.background = rgb(bg);
+
+  const drift = t / DUR;
+  E.glow.style.transform =
+    `translate(${(-12+drift*34).toFixed(2)}%, ${(-16+Math.sin(drift*7.5)*10).toFixed(2)}%) scale(${(1.05+drift*.2).toFixed(3)})`;
+  E.glow.style.opacity = (0.34 + 0.40*(1-warm)).toFixed(3);
+  E.glow2.style.transform =
+    `translate(${(30-drift*26).toFixed(2)}%, ${(22-Math.cos(drift*6.1)*12).toFixed(2)}%) scale(${(1.15-drift*.1).toFixed(3)})`;
+  E.glow2.style.opacity = (0.12 + 0.55*warm).toFixed(3);
+  /* a slow light sweep crosses the frame every 14 s */
+  const sw = (t % 14) / 14;
+  E.sweep.style.transform = `translateX(${(-60 + sw * 340).toFixed(2)}%) skewX(-12deg)`;
+  E.sweep.style.opacity = (Math.sin(sw * Math.PI) * 0.9).toFixed(3);
+
+  const sp = E.spark;
+  sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 1.0, DUR-20, inOut))).toFixed(1);
+
+  /* furniture retires only for the end card */
+  const endp = seg(t, END_AT, END_AT + 0.9);
+  const furn = seg(t, 0.15, 1.0) * (1 - endp);
+  const f = clamp(furn,0,1).toFixed(3);
+  E.topbar.style.opacity=f; E.footrule.style.opacity=f; E.footl.style.opacity=f; E.footr.style.opacity=f;
+  E.chapter.style.opacity = f;
+  const ci = SHOTS.indexOf(cur);
+  E.chN.textContent = String(ci+1).padStart(2,'0') + ' / ' + String(SHOTS.length).padStart(2,'0');
+  E.chC.textContent = cur.chap;
+  E.progress.style.transform = `scaleX(${(t/DUR).toFixed(4)})`;
+
+  for (const { shot, o, fi, fo } of wts){
+    const el = document.getElementById(shot.el);
+    el.style.opacity = o.toFixed(3);
+    el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    const push = (1-fi)*1.4 - (shot.out >= DUR ? 0 : (1-fo)*1.4);
+    el.style.transform = `translateX(${push.toFixed(3)}%)`;
+    if (E.pres[shot.el] && o >= 0.002){
+      const src = presenterFrame(shot, t);
+      if (src && PRES_SRC[shot.el] !== src){
+        PRES_SRC[shot.el] = src;
+        const img = E.pres[shot.el];
+        img.src = src;
+        pending.push(img.decode().catch(() => {}));
+      }
+    }
+  }
+
+  const RISE = 0.68;
+  for (const a of ANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*1.1).toFixed(3)}em)`;
+  }
+  for (const c of COUNTS){
+    const p = seg(t, c.start, c.start + 1.3, outExpo);
+    c.el.textContent = c.pre + Math.round(p * c.n) + c.suf;
+  }
+  document.querySelectorAll('.rule').forEach(u => { u.style.transform = `scaleX(${u.style.opacity || 0})`; });
+  document.querySelectorAll('.bar').forEach((bar) => {
+    const p = +bar.style.opacity || 0;
+    bar.querySelector('.fill').style.transform = `scaleX(${(p * +bar.querySelector('.fill').dataset.w).toFixed(4)})`;
+  });
+  document.querySelectorAll('.tl .seg').forEach(s => {
+    const p = +s.style.opacity || 0;
+    s.style.transform = `scaleX(${(0.2 + 0.8*p).toFixed(4)})`;
+  });
+
+  E.endcard.style.opacity = endp.toFixed(3);
+  E.endcard.style.visibility = endp < 0.002 ? 'hidden' : 'visible';
+  for (const a of ENDANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*1.1).toFixed(3)}em)`;
+  }
+  const lg = document.getElementById('endlogo');
+  const lp = seg(t, END_AT + 0.35, END_AT + 1.4, outExpo);
+  lg.style.transform = `translateY(${((1-lp)*1.1).toFixed(3)}em) scale(${(0.9 + 0.1*lp).toFixed(4)})`;
+
+  if (!CC){ E.cc.style.opacity = '0'; }
+  else {
+    const cue = CAPS.find(c => t >= c[0] - 0.14 && t <= c[1] + 0.14);
+    if (!cue){ E.cc.style.opacity = '0'; }
+    else {
+      E.ccbox.textContent = cue[2];
+      const fi2 = seg(t, cue[0]-0.14, cue[0]+0.06);
+      const fo2 = 1 - seg(t, cue[1]-0.02, cue[1]+0.14);
+      E.cc.style.opacity = (fi2*fo2).toFixed(3);
+    }
+  }
+  return pending.length ? Promise.all(pending).then(() => undefined) : undefined;
+}
+window.seek = seek; window.__DUR = DUR;
+seek(+(Q.get('t') || 0));
+if (Q.get('play') === '1'){
+  const t0 = performance.now();
+  (function loop(){ seek(((performance.now()-t0)/1000) % DUR); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
