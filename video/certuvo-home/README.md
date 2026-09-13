@@ -1,4 +1,4 @@
-# Certuvo — the homepage film (2:42)
+# Certuvo — the homepage film (2:46)
 
 The premium brand film for the top of certuvo.com. Eleven beats, opening and
 closing on camera with the presenter, in the light treatment the CMA films
@@ -15,17 +15,17 @@ break it.
 |---|---|---|---|
 | 1 | Late (presenter) | 0:00 | "It's late. Everyone else is asleep. And you're still here." |
 | 2 | The difference | 0:15 | The loop opens: "They all work hard." |
-| 3 | Ten credentials | 0:25 | The wall — one card lands on each spoken acronym |
-| 4 | Official partner | 0:49 | Certuvo × PCI lockup |
-| 5 | Already inside | 0:56 | **Animated:** a field of verified questions fills, then mocks, lectures, notes |
-| 6 | Four judges | 1:13 | **Animated:** one question is followed through all four gates |
-| 7 | AI Coach | 1:31 | **Animated:** a call, a beam reading the screen, then the coach stands down for a mock |
-| 8 | Not alone | 1:49 | **Animated:** the study room fills, the cohort works a shared question |
-| 9 | Readiness | 2:01 | **Animated:** the curve climbs to the exam-ready line, one domain flagged |
-| 10 | The price | 2:13 | "Less than the market asks." then "start free" |
-| 11 | What you work with (presenter) | 2:21 | The loop closes, then the end card |
+| 3 | Ten credentials | 0:27 | The wall — one card lands on each spoken acronym |
+| 4 | Official partner | 0:48 | Certuvo × PCI lockup |
+| 5 | Already inside | 0:55 | **Animated:** a field of verified questions fills, then mocks, lectures, notes |
+| 6 | Four judges | 1:12 | **Animated:** one question is followed through all four gates |
+| 7 | AI Coach | 1:31 | **Animated:** a call, a beam reading the screen, a Socratic reply, then the coach stands down for a mock |
+| 8 | Study with a peer | 1:48 | **Animated:** a screen shared live, two cursors on one question, a seat left open for a friend |
+| 9 | Readiness | 2:04 | **Animated:** the curve climbs to the exam-ready line, one domain flagged |
+| 10 | The price | 2:17 | "Less than the market asks." then "start free" |
+| 11 | What you work with (presenter) | 2:25 | The loop closes, then the end card |
 
-## The four animated sequences
+## The five animated sequences
 
 Scenes 5 to 9 are the answer to scene 2's question, and each is **shown working
 rather than listed**. A feature named is a claim; a feature demonstrated is
@@ -44,13 +44,29 @@ between frames.
   ticks on the word that names it; the spine fills; the card clears. Watching one
   item pass a visible process does more for trust in the other thousands than any
   adjective.
-- **The Coach (s7)** is shown mid-question at 23:07 on the clock. The beam makes
-  "it reads your screen" legible in a way the sentence cannot, and the coach
-  answers with a question rather than an answer, which is what "teaches you to
-  think, not memorise" actually looks like. Then the mock starts and it greys
-  itself out. That restraint is the credibility claim.
-- **The room (s8)** fills one peer at a time, then a mentor. Faces are initials
-  on discs, deliberately: stock faces read as stock, abstraction reads as privacy.
+- **The Coach (s7)** is shown mid-question at 23:07 on the clock, on a **real,
+  fully worked question** rather than a blurred placeholder: fixed overhead of
+  $480,000 over 60,000 budgeted units against 54,000 actual, so the volume
+  variance is $48,000 unfavourable. The question is written for the film, not
+  taken from any awarding body's paper — see `claims-register.md` §5A.6 for the
+  working. The beam makes "it reads your screen" legible in a way the sentence
+  cannot; the coach quotes those numbers back and then answers **with a
+  question**, and only after that does the option light. The order is enforced
+  in the animation, because "you leave with the method, not the answer" is the
+  claim. Then the mock starts and the coach greys itself out. That restraint is
+  the credibility claim.
+- **Study with a peer (s8)** is a shared screen, not a room. One person is
+  presenting, a second is already on it, and **two named cursors move on the
+  same question** and land on the same option — which is the only image that
+  reads as shared control. The mic indicator trades between speakers. A dashed
+  third seat, "Bring a friend · send them a link", lands last and keeps pulsing
+  after everything else has settled. Faces are initials on discs, deliberately:
+  stock faces read as stock, abstraction reads as privacy.
+
+  > **This scene replaced a cohort study room and a 24/7 mentor chat** after PCI
+  > confirmed neither feature exists. Both claims were traced to live
+  > certuvo.com copy — see the warning in `claims-register.md` §6, which is
+  > about the site, not the film.
 - **Readiness (s9)** draws a curve to a dashed exam-ready threshold with five
   domain bars, one short and flagged red. No numbers anywhere — it illustrates
   the feature, it does not promise a score.
@@ -85,7 +101,7 @@ average past 90; `build-serial.sh` runs one at a time on purpose.
 **The bed must be at least as long as the film.** `build-serial.sh` now refuses
 to build if it is not: a short bed does not fail on its own, `atrim` simply stops
 early and the close plays dry with nothing saying so. That happened once, when
-the film grew from 2:17 to 2:42.
+the film grew from 2:17 to 2:42; it now runs 2:46.
 
 `probe.mjs` must be clean at all four sizes before a build — it samples every
 0.5 s for page errors, stage overflow, caption collisions, chrome collisions and
@@ -116,7 +132,7 @@ cuts are for social, where players autoplay muted.
 
 ## Before this goes on the home page
 
-Read **`claims-register.md`**. Four things need Certuvo, not the film:
+Read **`claims-register.md`**. Six things need Certuvo, not the film:
 
 1. **"Thousands of verified questions"** is new in this cut and is a quantity
    claim. The line says *inside every course*, so it has to be true per course,
@@ -127,6 +143,13 @@ Read **`claims-register.md`**. Four things need Certuvo, not the film:
    scene 4 lockup and in the corner of every frame. There should be a written
    partnership record.
 4. **A free trial must actually be open to new students.**
+5. **The peer screen-share and "bring a friend" (s8) are recorded from a
+   written description, not from site copy or a build.** Confirm the peer sees
+   the presenter's screen, and that a candidate can invite someone themselves.
+6. **certuvo.com still advertises live study rooms and 24/7 mentor chat.** They
+   were withdrawn from this film because PCI said the features do not exist. If
+   that is right, the live site is a larger exposure than the film was, and it
+   was not part of this work.
 
 And Certuvo must satisfy itself it may reproduce the six third-party marks on
 the credential wall. If not, swap them for wordmark cards in the pattern already

@@ -123,27 +123,86 @@ The end frame carries "On-screen product views are illustrative."
 | 5A.4 | It teaches you to think, not memorise — shown as the coach answering a question with a question | "It uses the Socratic method to teach you to think, not memorize" | P |
 | 5A.5 | In a mock exam it switches itself off | "Auto-disabled during mock exams — practice with help, test without it" | P |
 
-The on-screen exchange ("I can see the question on your screen" → "I don't know
-which cost to allocate" → "Before I answer — which of those costs changes when
-volume changes?") is **written for the film** to demonstrate 5A.4. It is not a
-transcript of a real session. The exam panel's "Question 14 of 40" and its
-clock are likewise illustrative furniture.
+The on-screen exchange ("I can see it — $480,000 over 60,000 budgeted units."
+→ "Do I use budgeted units or actual?" → "Before I answer: the rate is set
+once, in advance. Which of the two numbers was known then?") is **written for
+the film** to demonstrate 5A.4. It is not a transcript of a real session. The
+exam panel's "Question 14 of 40" and its clock are likewise illustrative
+furniture.
 
-## 6. The study room (s8) and readiness (s9)
+### 5A.6 The question shown on screen is original, and it is worked
 
-| # | Claim in the film | certuvo.com wording | Status |
+PCI asked for a proper, comprehensive question on screen rather than blurred
+placeholders. The question in s7 and s8 is **written for this film**. It is
+deliberately *not* lifted from any institute's released paper or free question
+bank, free-to-use or otherwise: reproducing an awarding body's item would raise
+exactly the third-party-rights question section 1 is careful about, and a
+prep provider showing another body's item is a worse look than showing its own.
+
+The item is standard absorption-costing material and the arithmetic closes:
+
+| Step | Value |
+|---|---|
+| Budgeted fixed overhead | $480,000 |
+| Budgeted production | 60,000 units |
+| Fixed overhead absorption rate | $480,000 / 60,000 = **$8.00 per unit** |
+| Actual production | 54,000 units |
+| Overhead applied | 54,000 × $8.00 = $432,000 |
+| Under-absorbed | $480,000 − $432,000 = **$48,000** |
+| Volume variance | **$48,000 unfavourable — option B** |
+
+Distractors are the three standard errors: A inverts the sign, C applies the
+rate to the wrong base, D denies the variance exists. The film lights B, and
+only after the coach has answered with a question — so the sequence on screen
+is *coach asks → candidate answers*, never *coach supplies the answer*, which
+is what 5A.4 actually claims.
+
+This reverses, **for this film only**, the instruction given for the five
+feature-demonstration films ("use abstract cards and blurred placeholders —
+never display actual questions or answers"). That instruction still stands for
+those five; PCI's later note asked for a real question on the homepage cut.
+
+## 6. Study with a peer (s8) and readiness (s9)
+
+**This section was rewritten after PCI corrected the product description.** The
+earlier cut showed a live cohort study room of six people and a 24/7 mentor
+chat. PCI's note: *"There are no chat rooms. There is a feature study with your
+pear member — this feature will share the screen with the other member like a
+google meet and student can bring their friend together."* Both of the earlier
+claims are gone from the film.
+
+⚠️ **Site copy to check.** The withdrawn claims were traced to wording on
+certuvo.com ("Live study rooms — join your cohort by video anytime" and "24/7
+Chat Support — round-the-clock support from experienced mentors"). If those
+features do not exist, that wording is a bigger exposure than a film, and
+someone should look at the live site. The film has been corrected; the site has
+not been checked as part of this work.
+
+| # | Claim in the film | Source | Status |
 |---|---|---|---|
-| 6.1 | Live study rooms — your cohort, on video, working the same question in real time | "Live study rooms — join your cohort by video anytime"; "Practice together on shared questions in real time" | P |
-| 6.2 | Mentors on chat, around the clock | "24/7 Chat Support — round-the-clock support from experienced mentors" | P |
+| 6.1 | Study with a peer — share your screen live, so both people see the same question and the same numbers at the same second | PCI's description of the feature, quoted above | P |
+| 6.2 | Bring a friend into the session — shown as an invite seat reading "Bring a friend · send them a link" | PCI's description of the feature, quoted above | P |
 | 6.3 | Every question you answer moves a line; Certuvo tracks every domain and finds the gap you keep falling into | "Progress Tracking — smart analytics that highlight strengths, identify knowledge gaps" | P |
 | 6.4 | "Not how much you've read. Whether you're ready." | The film's paraphrase of readiness analytics | P |
 
-**The people in the study room are invented.** Six tiles carry first names and
-initials on coloured discs — no photographs, no real students, no testimonials,
-and no claim that any of them exist. Abstract avatars were chosen over stock
-faces for exactly this reason. No headcount is shown: certuvo.com's "14k+
-studying together" is a statistic Certuvo would have to substantiate, so it is
-not used.
+**Certuvo should confirm 6.1 and 6.2 against the shipped feature** — they are
+recorded here from a written description, not from site copy or a build. Two
+details are worth checking specifically, because the film shows both: that the
+peer sees the *presenter's* screen (not a synchronised copy of their own), and
+that the invitee can be someone the candidate brings in themselves rather than
+only an already-enrolled cohort member. PCI's wording says both, and the film
+depicts both.
+
+**The two people in the session are invented.** "Amara" and "Jonas" are first
+names on coloured initial discs — no photographs, no real students, no
+testimonials, and no claim that either exists. Their two cursors move on the
+shared screen and land on the same option; the mic indicator trades between
+them. That is a depiction of the mechanic, not a recording of a session. No
+headcount appears anywhere: certuvo.com's "14k+ studying together" is a
+statistic Certuvo would have to substantiate, so it is not used.
+
+**The shared screen shows the same original question as s7**, worked in 5A.6
+above. Nothing in the peer panel is copied from an awarding body.
 
 **The readiness chart carries no numbers.** No score, no percentage, no
 timescale, no axis values — a rising curve, a dashed "exam-ready" threshold, and
@@ -208,7 +267,7 @@ earnings — the earlier cut's "the number on the offer" has been cut.
 ## 10. Deliberately not said
 
 - No pass rates, pass guarantees, or "easy".
-- No student counts, room headcounts, completion rates, defect rates or streak figures — the
+- No student counts, session headcounts, completion rates, defect rates or streak figures — the
   statistics on certuvo.com ("Under 0.1 % defect rate", "3.1× higher
   completion", "47-day avg. active streak", "14k+ studying together") are all
   omitted. They would each need substantiation and they date quickly.
@@ -216,6 +275,11 @@ earnings — the earlier cut's "the number on the offer" has been cut.
 - No price, discount or "from £X".
 - No claim of approval, accreditation, endorsement or partnership by any
   awarding body other than PCI AI.
+- **No chat rooms and no 24/7 mentor chat.** Both were in the previous cut and
+  both were withdrawn on PCI's correction. Do not reinstate either without a
+  written confirmation that the feature exists — see section 6.
+- No question, item or answer reproduced from any awarding body's paper or
+  question bank. The two questions the film shows are its own — see 5A.6.
 
 ## 11. Trademark and independence (end frame)
 
@@ -228,9 +292,11 @@ Verbatim in `src/vo.py` (`LEGAL`) and on the end card in `src/scene.html`:
 > does not guarantee a pass.
 
 The sentence "On-screen product views are illustrative" is **new in this cut**
-and must stay: four scenes now depict product interfaces (the question bank, the
-Forge, the Coach, the study room and the readiness chart) that are drawn for the
-film rather than screen-recorded.
+and must stay: five scenes now depict product interfaces (the question bank, the
+Forge, the Coach, the peer screen-share and the readiness chart) that are drawn
+for the film rather than screen-recorded. The two exam questions shown inside
+them are original and worked — see 5A.6 — but the interfaces around them are
+illustrations, not screenshots.
 
 It holds on screen for about three seconds at full size. **This line must stay
 on any cut, crop or re-edit of this film**, including social versions.
@@ -255,3 +321,16 @@ in each take (−38 dB, ≥ 0.24 s). The explicit caption ends in `src/vo.py` co
 from the same measurement, so a credential card lands on its spoken acronym,
 each of the four judges ticks on the word that names it, and the coach switches
 itself off on "then, in a mock exam".
+
+The read was re-recorded for scenes 2–10 after PCI's corrections. Scenes 1 and
+11 are word-for-word unchanged, so their takes and both presenter clips are
+reused rather than re-billed. Two pronunciations were changed in the **spoken**
+field only, leaving the caption orthography correct: NCLEX is now read as a
+word rather than spelled out, and the brand is written phonetically for the
+narrator. PCI reported that a pronunciation is still wrong without naming the
+word; a reference take of eight candidate readings was generated so the right
+one can be chosen, and **s4, s9 and s11 would need re-recording if the brand
+reading is the one at issue** — s11 would also need a new presenter clip.
+
+Film length after conform: **165.76 s** (2 min 46 s) over 11 scenes and 31
+captions, plus the intro and outro stings.

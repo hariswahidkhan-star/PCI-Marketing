@@ -18,7 +18,7 @@ Everything below serves one of those three.
 
 ---
 
-## Act I — Recognition (0:00–0:33)
+## Act I — Recognition (0:00–0:27)
 
 **s1 · The private moment.** The film opens inside the viewer's own experience,
 not on the product: it is late, everyone else is asleep, they are reading the
@@ -48,7 +48,7 @@ viewer is no longer being asked "is this worth the money", they are being asked
 
 ---
 
-## Act II — Standing (0:33–1:00)
+## Act II — Standing (0:27–0:55)
 
 **s3 · The ten credentials.** Named one at a time, each landing its own card.
 Two things are happening. The **generation effect** — a viewer who is silently
@@ -67,7 +67,7 @@ end-frame independence line.
 
 ---
 
-## Act III — The answer, demonstrated (1:00–2:15)
+## Act III — The answer, demonstrated (0:55–2:17)
 
 This act is the answer to s2's open question — *it is what you work with* —
 but it never says so. It shows four things and lets the viewer close the loop
@@ -94,19 +94,68 @@ obvious objection that AI-written questions are slop.
 
 **s7 · The AI Coach.** Shown mid-question, at night, on the exact screen the
 student is stuck on. The beam sweeping the question makes "it reads your
-screen" legible in a way the sentence does not. Then the coach switches itself
-off for a mock — a **restraint signal**. A product that visibly declines to
-help at the moment help would be cheating is making a credibility claim that no
-amount of capability talk can buy.
+screen" legible in a way the sentence does not.
 
-**s8 · The study room.** Peers arriving one by one into a live room, working
-the same question. Preparing for a professional exam is isolating, and
-isolation is the most common reason people stop. This beat is doing
-**social proof** and **belonging** at once: other people are doing this, and
-they are doing it here.
+The question on that screen is now a **real, fully worked item** rather than a
+blurred placeholder, at PCI's request — fixed overhead of $480,000 over 60,000
+budgeted units against 54,000 actual. This is a bigger change than it looks.
+A blurred card asks the viewer to take the product's competence on trust; a
+question they can actually read, with distractors that are the three errors
+they have themselves made, is a **competence demonstration**. The candidate
+watching does the arithmetic in their head, gets $48,000, and has now had a
+small successful experience *inside the advert*. Nothing else in the film can
+buy that.
 
-Faces are abstract — initials on discs — deliberately. Stock faces read as
-stock; abstraction reads as privacy.
+It also sets up the beat that follows. The coach quotes the two numbers back,
+the candidate asks which base to use, and the coach answers **with a question**
+— "the rate is set once, in advance; which of the two numbers was known then?"
+Only after that does option B light. The order matters and is enforced in the
+animation: coach asks, candidate answers. Had the option lit first, the film
+would have shown the opposite of what the line claims while claiming it, and
+the viewer would have felt the mismatch without being able to name it.
+
+Then the coach switches itself off for a mock — a **restraint signal**. A
+product that visibly declines to help at the moment help would be cheating is
+making a credibility claim that no amount of capability talk can buy.
+
+**s8 · Study with a peer.** *This beat was rebuilt after PCI corrected the
+product description: there are no chat rooms, and the feature is sharing your
+screen with one other person, the way a video call does, with the option of
+bringing a friend in.*
+
+The correction improved the psychology, which is worth saying plainly. The
+cohort room was working **social proof** — look how many others are here — and
+social proof is the weakest tool available at this point in a film, because the
+viewer has spent the last ninety seconds being told this is about *them*.
+Anonymous crowds do not relieve isolation; one named person does. The rebuilt
+beat runs on **specific reciprocity** instead: two people, one screen, one
+problem.
+
+The whole beat rests on a single image — **two cursors moving on one screen**.
+Avatar tiles say "a call is happening." Two pointers on the same question, one
+of them not yours, is the only thing that says *shared control*, and it says it
+without a word of explanation. Getting this literally right mattered: in the
+first build the cursors were positioned against their own bounding box rather
+than the shared screen, so they barely moved and stacked on each other. The
+scene was technically present and psychologically absent.
+
+The mic indicator trades between the two names as they talk. Nobody consciously
+notices it. It is there because a still image of two people is a diagram, and a
+diagram of collaboration is not collaboration — turn-taking is what makes the
+picture read as *alive* rather than *arranged*.
+
+The third seat is the actual mechanism. It is a **dashed outline that never
+fills** — "Bring a friend · send them a link" — and it keeps pulsing gently
+after it lands, when everything else in the frame has settled. An open loop
+that stays open is the only element in the film still moving at that moment, so
+it holds attention past its own beat. And it converts the viewer from an
+observer of other people's studying into someone with a **specific person in
+mind**: almost everyone watching this has a colleague sitting the same paper.
+That thought, arriving unprompted, is worth more than any number of tiles.
+
+The two people are abstract — first names on initial discs — deliberately.
+Stock faces read as stock; abstraction reads as privacy. Two names read as
+people; six read as a stock photo.
 
 **s9 · Readiness.** A curve climbing toward a threshold, domain bars filling,
 one gap flagged. This is the **goal-gradient effect**: effort rises as a visible
@@ -120,7 +169,7 @@ score.
 
 ---
 
-## Act IV — Peak, then the small next step (2:15–2:45)
+## Act IV — Peak, then the small next step (2:17–2:46)
 
 **s10 · Price, then free.** The price line comes only after all four
 demonstrations, never before. Value first, cost second: the same figure reads
@@ -160,6 +209,41 @@ worth keeping.
   colour used for everything signals nothing.
 - **The end frame holds.** The legal line is on screen long enough to be read,
   not flashed. A disclosure that cannot be read is not a disclosure.
+
+## How the animation is timed
+
+PCI asked for the film to be made "through a world class animator". Nobody was
+engaged for that either. What was done instead is stated here so the craft can
+be checked rather than asserted.
+
+- **Every frame is a pure function of time.** `scene.html` exposes
+  `seek(t)`, which computes every position, opacity and colour from `t` alone.
+  There are no timers, no `requestAnimationFrame`, no CSS transitions or
+  keyframes, and no state carried between calls. The render walks the timeline
+  frame by frame, so the file is the film: the same `t` produces the same pixel
+  on any machine, and any frame can be inspected on its own.
+- **The cut follows the voice, not a grid.** Each take is measured with
+  `silencedetect` at −38 dB, and the caption boundaries and cue times come out
+  of that measurement. Nothing is stretched to hit a duration. A credential
+  card lands on its spoken acronym because the acronym's timestamp was measured,
+  not estimated.
+- **Motion is eased, never linear.** Entrances use `outExpo` or `outCubic` —
+  fast out of the gate, settling long. Linear motion is the single clearest
+  tell of an automated deck, because nothing physical moves that way.
+- **Things animate in place.** Elements fade and rise a fraction of their own
+  height rather than flying in from off-panel. A card briefly half-outside its
+  own container reads as a glitch, not as motion; the audit fails a build for
+  it.
+- **Nothing moves without a reason in the line.** Every cue is anchored to a
+  word. Where there is no word, the frame is still. Ambient drift added to look
+  expensive is the fastest way to look cheap.
+- **The audit is part of the craft.** `probe.mjs` samples the film every half
+  second at all four aspect ratios and fails on page errors, content leaving
+  the stage, captions colliding with the frame furniture, and clipped text. It
+  now also fails on a null element handle, because a renamed id can make an
+  entire scene stop animating while every layout check still passes and the
+  stills still look plausible. That had already happened twice before the check
+  existed.
 
 ## What the film deliberately refuses to do
 
