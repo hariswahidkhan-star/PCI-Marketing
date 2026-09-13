@@ -38,7 +38,10 @@ const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
   // that is the effect working rather than a layout fault. Only overflow away
   // from a cut is a real finding.
   const moving = CUTS.some(c => Math.abs(t - c) < 0.7);
-  const real = o.filter(x => !/^glow/.test(x));
+  // #wash / #wash2 are deliberately larger than the stage: they are full-bleed
+  // radial gradients that drift, and #stage clips them so not one pixel escapes.
+  // The audit measures boxes rather than painted pixels, so it has to be told.
+  const real = o.filter(x => !/^glow/.test(x) && !/^wash/.test(x) && !/^mesh/.test(x));
   if (real.length && !moving) bad.push(`t=${t}: `+real.join(' | '));
 
   // Caption collision: the caption block must never overlap live content. This
@@ -52,7 +55,7 @@ const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
     const cr = cc.getBoundingClientRect();
     if (cr.width === 0 || cr.height === 0) return null;
     const st = document.getElementById('stage').getBoundingClientRect();
-    const skip = new Set(['cc', 'ccbox', 'stage', 'vig', 'glow', 'glow2', 'progress', 'progwrap']);
+    const skip = new Set(['cc', 'ccbox', 'stage', 'vig', 'glow', 'glow2', 'wash', 'wash2', 'mesh', 'progress', 'progwrap', 'bar', 'barwrap']);
     for (const el of document.querySelectorAll('#stage *')) {
       if (skip.has(el.id) || el.closest('#cc')) continue;
       // Only leaf content can collide. A shot wrapper or a column is the full

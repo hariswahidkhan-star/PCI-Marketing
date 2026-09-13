@@ -123,7 +123,7 @@
 .rt{position:relative;border:1px solid var(--line);border-radius:calc(.34 * var(--s) * 1px);background:var(--white);
   aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;will-change:opacity,transform}
 .rt .face{width:calc(1.9 * var(--s) * 1px);height:calc(1.9 * var(--s) * 1px);font-size:calc(.78 * var(--s) * 1px)}
-.rt.men{border-color:var(--red2)}
+.rt.men{border-color:var(--blue);border-width:calc(.14 * var(--s) * 1px)}
 
 /* notes ------------------------------------------------------------------- */
 .note{flex:1 1 auto;display:flex;flex-direction:column;gap:calc(.4 * var(--s) * 1px)}
@@ -337,7 +337,7 @@
                 <div class="rt" id="rt3"><div class="face f3">RM</div></div>
                 <div class="rt" id="rt4"><div class="face f4">TN</div></div>
                 <div class="rt" id="rt5"><div class="face f5">SO</div></div>
-                <div class="rt men" id="rt6"><div class="face f6">M</div></div>
+                <div class="rt men" id="rt6"><div class="face" style="background:var(--blue2)">M</div></div>
               </div>
             </div>
           </div>
@@ -545,7 +545,11 @@ const FX = {
       b.style.opacity = p.toFixed(3);
       b.style.transform = `translateY(${((1-p)*0.7).toFixed(3)}em) scale(${(0.96+0.04*p).toFixed(4)})`;
     });
-    E.setBeam(P.beam, u, 4.6, 8.6, { width: 620 });
+    // 500, not 620: setBeam's travel is a percentage of the BEAM's own width, and
+    // at 620 the beam's box ends up past the stage edge. The card clips it so it
+    // looks right, but the audit measures boxes, and a beam that leaves the frame
+    // is the kind of thing that stops looking harmless at another aspect ratio.
+    E.setBeam(P.beam, u, 4.6, 8.6, { width: 500 });
     const sp = seg(u, 4.8, 5.3, outExpo) * (1 - seg(u, 8.6, 9.0));
     P.scanpill.style.opacity = sp.toFixed(3);
   },
