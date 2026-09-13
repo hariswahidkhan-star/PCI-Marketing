@@ -276,7 +276,7 @@
   <section class="shot" id="d1"><div class="dsheet"><div class="duo">
     <div class="half ha">
       <div class="hh">Verified questions</div>
-      <div class="hd">Thousands of them, syllabus-aligned, every one checked before a student sees it</div>
+      <div class="hd">Thousands of them, syllabus-aligned and pre-checked</div>
       <div class="box"><div class="bin">
         <div class="chipfield" id="chips"></div>
         <div style="margin-top:calc(.9*var(--s)*1px)"><span class="pill" id="verifpill"><i class="dot"></i>Verified</span></div>
@@ -284,7 +284,7 @@
     </div>
     <div class="half hb">
       <div class="hh">AI-generated practice</div>
-      <div class="hd">Unlimited new questions — and not one reaches you until four separate judges clear it</div>
+      <div class="hd">Unlimited new questions, cleared by four separate judges</div>
       <div class="box"><div class="bin">
         <div class="gates4">
           <div class="g4line"><div class="g4fill" id="g4fill"></div></div>
@@ -704,6 +704,7 @@ const headEl = document.getElementById('head');
 const headH2 = headEl.querySelector('h2'), headSub = headEl.querySelector('.sub');
 const ccWrap = document.getElementById('cc'), ccBox = document.getElementById('ccbox');
 const endEl = document.getElementById('end');
+const brandEl = document.getElementById('brandbar');
 /* the two halves of each dive, with their parts cached — seek() must not query */
 const HALVES = [];
 for (const s of DIVES) for (const side of ['ha', 'hb']){
@@ -724,8 +725,8 @@ function seek(t){
 
   E.wash(t, DUR, seg(t, DUR * 0.55, DUR));
   /* push 0: V4 does not slide its shots sideways. The motion that reads here is
-     the sheet scaling out of a tile, applied below on .dsheet, so paintShots is
-     used for its cross-fade bookkeeping and its `cur` pick only. */
+     the sheet scaling out of its tile, applied below on .dsheet — so paintShots
+     lays down the base cross-fade and the dive loop then refines the envelope. */
   E.paintShots(t, SHOTS, DUR, 0.50, 0);
 
   /* How deep we are inside each dive: 0 on the map, 1 mid-demonstration. The
@@ -817,6 +818,11 @@ function seek(t){
     label: onMap ? G0.label : liveDive.label, index: onMap ? 0 : liveDive.col + 1,
     total: DIVES.length, fade: 1 - endp,
   });
+  /* The logo has to be on frame one. The engine's furniture ramp starts at 0.15 s
+     and is right for the counter and the rules, but it would leave the first few
+     frames without a mark, so the brandbar gets its own entrance — never zero
+     until the end card, which carries the logo itself. */
+  brandEl.style.opacity = ((1 - endp) * (0.4 + 0.6 * seg(t, 0.05, 0.65))).toFixed(3);
 
   endEl.style.opacity = endp.toFixed(3);
   endEl.style.visibility = endp < 0.002 ? 'hidden' : 'visible';

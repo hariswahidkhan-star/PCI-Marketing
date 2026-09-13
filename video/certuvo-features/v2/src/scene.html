@@ -139,7 +139,8 @@
 .expl .blur::before,.helpnote .blur::before{filter:blur(calc(.3 * var(--s) * 1px))}
 .expl .eh{font-size:calc(.78 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   color:var(--blue);margin-bottom:calc(.6 * var(--s) * 1px)}
-.expl .blur{flex:1 1 auto;min-height:calc(4.4 * var(--s) * 1px)}
+.expl .blur{flex:1 1 auto;min-height:calc(3.2 * var(--s) * 1px)}
+.sk.xtra{margin-top:calc(.75 * var(--s) * 1px)}
 .helppin{position:absolute;right:calc(1.0 * var(--s) * 1px);top:calc(1.0 * var(--s) * 1px);
   width:calc(2.4 * var(--s) * 1px);height:calc(2.4 * var(--s) * 1px);border-radius:50%;background:var(--blue);
   color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:900;
@@ -149,7 +150,7 @@
   display:flex;flex-direction:column}
 .helpnote .hn{font-size:calc(.78 * var(--s) * 1px);font-weight:700;color:var(--blue);letter-spacing:.12em;
   text-transform:uppercase;margin-bottom:calc(.6 * var(--s) * 1px)}
-.helpnote .blur{flex:1 1 auto;min-height:calc(3.4 * var(--s) * 1px)}
+.helpnote .blur{flex:1 1 auto;min-height:calc(3.0 * var(--s) * 1px)}
 
 /* ---- 07 · coach ---------------------------------------------------------- */
 #d7{display:grid;grid-template-columns:.66fr 1fr;gap:calc(2.4 * var(--s) * 1px)}
@@ -199,6 +200,9 @@
 .curvewrap .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:7 7;vector-effect:non-scaling-stroke}
 .curvewrap .cp{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
   vector-effect:non-scaling-stroke}
+.curvewrap .cg{fill:none;stroke:#DCE4F5;stroke-width:2.5;stroke-dasharray:5 7;stroke-linecap:round;
+  vector-effect:non-scaling-stroke}
+.curvewrap .base{stroke:var(--line);stroke-width:2;vector-effect:non-scaling-stroke}
 .curvewrap .ca{fill:rgba(41,95,237,.10)}
 .thrtag{position:absolute;left:0;top:21%;transform:translateY(-120%);font-size:calc(.8 * var(--s) * 1px);
   font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--foot);background:var(--white);
@@ -332,7 +336,8 @@
           </div>
           <div class="panel">
             <div class="plab">Worked through</div>
-            <div class="expl" id="d5expl"><div class="eh">Explanation</div><div class="blur"></div></div>
+            <div class="expl" id="d5expl"><div class="eh">Explanation</div><div class="blur"></div>
+              <div class="sk w92 xtra"></div><div class="sk w70"></div></div>
           </div>
         </div>
       </article></div>
@@ -353,7 +358,8 @@
           </div>
           <div class="panel">
             <div class="plab">Asked here, answered here</div>
-            <div class="helpnote" id="d6note"><div class="hn">Help on this question</div><div class="blur"></div></div>
+            <div class="helpnote" id="d6note"><div class="hn">Help on this question</div><div class="blur"></div>
+              <div class="sk w84 xtra"></div><div class="sk w56"></div></div>
           </div>
         </div>
       </article></div>
@@ -488,6 +494,8 @@
           <div class="curvewrap">
             <svg id="d13svg" viewBox="0 0 460 200" preserveAspectRatio="none">
               <line class="thr" x1="0" y1="42" x2="460" y2="42"></line>
+              <line class="base" x1="6" y1="196" x2="454" y2="196"></line>
+              <path class="cg" id="d13ghost" d=""></path>
               <path class="ca" id="d13area" d=""></path>
               <path class="cp" id="d13path" d=""></path>
             </svg>
@@ -612,13 +620,14 @@ const P = {
   d10hl: Q('#d10hl'), d10tag: Q('#d10tag'),
   ba: [1, 2, 3, 4, 5].map(i => Q('#ba' + i)), bb: [1, 2, 3, 4, 5].map(i => Q('#bb' + i)),
   d12flag: Q('#d12flag'),
-  d13path: Q('#d13path'), d13area: Q('#d13area'), d13tag: Q('#d13tag'),
+  d13path: Q('#d13path'), d13area: Q('#d13area'), d13tag: Q('#d13tag'), d13ghost: Q('#d13ghost'),
   d14days: QA('#d14 .streak i'), d14lab: Q('#d14lab'),
   dash: QA('#deckbar i'),
 };
 const CURVE = [[6,182],[40,172],[74,160],[108,150],[142,138],[176,142],[210,124],[244,112],
                [278,100],[312,88],[346,74],[380,62],[414,50],[448,36]];
 const BARS_A = [.82,.74,.66,.58,.71], BARS_B = [.84,.77,.31,.72,.64], GAP = 2;
+P.d13ghost.setAttribute('d', E.pathTo(CURVE, 1).d);   /* the finished shape, drawn once */
 
 /* Every demonstration is a pure function of u = seconds since its own card was
    dealt, so a card plays out identically wherever the deck happens to sit in
@@ -672,21 +681,21 @@ const FX = [
   },
   /* 05 · explanations — an option settles, then the reasoning arrives beside it */
   function (u) {
-    const pick = seg(u, 0.22, 0.62, outExpo);
+    const pick = seg(u, 0.12, 0.52, outExpo);
     const o = P.d5opts[1];
     o.style.backgroundColor = mixc(C_WHITE, [238, 243, 255], pick);
     o.style.borderColor = mixc([230, 235, 245], C_BLUE, pick);
     o.querySelector('b').style.color = mixc(C_MUTE, C_BLUE, pick);
-    const ex = seg(u, 0.50, 1.05, outExpo);
+    const ex = seg(u, 0.32, 0.88, outExpo);
     P.d5expl.style.opacity = ex.toFixed(3);
     P.d5expl.style.transform = `translateY(${((1 - ex) * 0.7).toFixed(3)}em)`;
   },
   /* 06 · question-specific help — the pin lands on THIS item, the note opens */
   function (u) {
-    const hp = seg(u, 0.25, 0.75, outBack);
-    P.d6pin.style.opacity = clamp(seg(u, 0.25, 0.60)).toFixed(3);
+    const hp = seg(u, 0.12, 0.62, outBack);
+    P.d6pin.style.opacity = clamp(seg(u, 0.12, 0.45)).toFixed(3);
     P.d6pin.style.transform = `scale(${(0.55 + 0.45 * hp).toFixed(4)})`;
-    const hn = seg(u, 0.75, 1.3, outExpo);
+    const hn = seg(u, 0.42, 0.98, outExpo);
     P.d6note.style.opacity = hn.toFixed(3);
     P.d6note.style.transform = `translateY(${((1 - hn) * 0.7).toFixed(3)}em)`;
   },
@@ -753,11 +762,11 @@ const FX = [
   },
   /* 13 · progress — readiness drawn up to the exam-ready line */
   function (u) {
-    const d = seg(u, 0.10, 1.85, inOut);
+    const d = seg(u, 0.05, 1.65, inOut);
     const { d: path, end } = E.pathTo(CURVE, Math.max(0.02, d));
     P.d13path.setAttribute('d', path);
     P.d13area.setAttribute('d', path + `L${end[0].toFixed(1)},200L6,200Z`);
-    P.d13tag.style.opacity = seg(u, 1.45, 1.95, outExpo).toFixed(3);
+    P.d13tag.style.opacity = seg(u, 1.25, 1.75, outExpo).toFixed(3);
   },
   /* 14 · streaks — fourteen days lighting in sequence, echoing the deck itself */
   function (u) {
