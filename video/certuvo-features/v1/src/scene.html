@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — V1 Walkthrough</title>
+<!--
+  V1 "WALKTHROUGH" — the reference treatment for the feature films.
+
+  One product surface, toured. A rail of all fourteen features stays on screen
+  for the whole film and lights the pair being demonstrated; the pane beside it
+  swaps its contents. The effect is one piece of software being walked through
+  rather than fourteen unrelated cards.
+
+  HARD RULE, and the reason this file draws everything by hand: no real
+  question, option, explanation or note ever appears. Every one is a `.sk`
+  skeleton bar or a `.blur` block — unreadable by construction, not by cropping.
+
+  Deterministic: seek(t) is a pure function of t. Called twice with the same t
+  it paints the same pixels, which is what lets render.mjs screenshot frame by
+  frame and probe.mjs audit the timeline before anything is encoded.
+-->
+<link rel="stylesheet" href="../../common/ui.css">
+<style>
+/* ---- the tour layout ------------------------------------------------------ */
+#tour{position:absolute;left:calc(7 * var(--s) * 1px);right:calc(7 * var(--s) * 1px);
+  top:calc(10.5 * var(--s) * 1px);bottom:calc(11.5 * var(--s) * 1px);
+  display:grid;grid-template-columns:calc(17.5 * var(--s) * 1px) 1fr;gap:calc(1.6 * var(--s) * 1px)}
+
+/* the rail: every feature, always visible, the live pair lit ---------------- */
+#rail{display:flex;flex-direction:column;justify-content:center;gap:calc(.1 * var(--s) * 1px);text-align:left}
+.rl{display:flex;align-items:center;gap:calc(.66 * var(--s) * 1px);padding:calc(.3 * var(--s) * 1px) 0;
+  will-change:opacity,transform}
+.rl i{flex:0 0 auto;width:calc(.52 * var(--s) * 1px);height:calc(.52 * var(--s) * 1px);border-radius:50%;
+  background:var(--line2);will-change:background-color,transform}
+.rl span{font-size:calc(.94 * var(--s) * 1px);font-weight:600;color:var(--mute);letter-spacing:-.004em;
+  white-space:nowrap;will-change:color}
+#railtop{font-weight:700;font-size:calc(.82 * var(--s) * 1px);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:calc(.8 * var(--s) * 1px)}
+#railrule{position:absolute;left:calc(.24 * var(--s) * 1px);width:calc(.06 * var(--s) * 1px);
+  background:var(--tint2);top:0;bottom:0}
+
+/* the pane: the frame is permanent, only what is inside it changes ---------- */
+#pane{position:relative;background:var(--white);border:1px solid var(--line);
+  border-radius:calc(.75 * var(--s) * 1px);box-shadow:var(--card2);overflow:hidden}
+#panetop{position:absolute;left:0;right:0;top:0;height:calc(3.1 * var(--s) * 1px);z-index:3;
+  display:flex;align-items:center;gap:calc(.6 * var(--s) * 1px);
+  padding:0 calc(1.2 * var(--s) * 1px);border-bottom:1px solid var(--line);background:var(--panel)}
+#panetop .dots{display:flex;gap:calc(.3 * var(--s) * 1px)}
+#panetop .dots i{width:calc(.4 * var(--s) * 1px);height:calc(.4 * var(--s) * 1px);border-radius:50%;background:var(--line2);display:block}
+#panetop .url{margin-left:calc(.5 * var(--s) * 1px);flex:1 1 auto;height:calc(1.5 * var(--s) * 1px);
+  border-radius:calc(.75 * var(--s) * 1px);background:var(--white);border:1px solid var(--line);
+  display:flex;align-items:center;padding:0 calc(.7 * var(--s) * 1px);
+  font-size:calc(.78 * var(--s) * 1px);color:var(--mute);font-weight:600;letter-spacing:.02em}
+#panetop .live{display:flex;align-items:center;gap:calc(.3 * var(--s) * 1px);
+  font-size:calc(.76 * var(--s) * 1px);font-weight:700;color:var(--red);letter-spacing:.1em}
+#panetop .live i{width:calc(.36 * var(--s) * 1px);height:calc(.36 * var(--s) * 1px);border-radius:50%;background:var(--red);display:block}
+
+.shot{position:absolute;left:0;right:0;top:calc(3.1 * var(--s) * 1px);bottom:0;
+  padding:calc(1.5 * var(--s) * 1px) calc(1.7 * var(--s) * 1px);
+  display:flex;flex-direction:column;will-change:opacity,transform}
+.shead{display:flex;align-items:baseline;gap:calc(.7 * var(--s) * 1px);margin-bottom:calc(1.1 * var(--s) * 1px)}
+.shead h4{font-size:calc(1.62 * var(--s) * 1px)}
+.shead .sd{font-size:calc(.98 * var(--s) * 1px);color:var(--foot);font-weight:500}
+.duo{flex:1 1 auto;display:grid;grid-template-columns:1fr 1fr;gap:calc(1.5 * var(--s) * 1px);align-items:stretch}
+.half{display:flex;flex-direction:column;text-align:left;min-width:0;will-change:opacity,transform}
+.half .ht{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);margin-bottom:calc(.7 * var(--s) * 1px)}
+.half .ht b{font-family:var(--display);font-weight:800;font-size:calc(1.16 * var(--s) * 1px);color:var(--ink)}
+.half .hs{font-size:calc(.88 * var(--s) * 1px);color:var(--foot);margin-top:calc(-.45 * var(--s) * 1px);
+  margin-bottom:calc(.75 * var(--s) * 1px)}
+.box{flex:1 1 auto;border:1px solid var(--line);border-radius:calc(.48 * var(--s) * 1px);background:var(--white);
+  padding:calc(.9 * var(--s) * 1px);position:relative;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:var(--card)}
+.box.flat{background:var(--panel);box-shadow:none}
+
+/* the four validation ticks --------------------------------------------- */
+.gates4{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:calc(.3 * var(--s) * 1px);
+  flex:1 1 auto;padding-top:calc(1.6 * var(--s) * 1px)}
+.g4{display:flex;flex-direction:column;align-items:center;gap:calc(.42 * var(--s) * 1px);flex:1 1 0}
+.g4 .tick{width:calc(2.0 * var(--s) * 1px);height:calc(2.0 * var(--s) * 1px)}
+.g4 .tick b{font-size:calc(.94 * var(--s) * 1px)}
+.g4 em{font-style:normal;font-size:calc(.74 * var(--s) * 1px);color:var(--foot);text-align:center;line-height:1.25;font-weight:600}
+.g4line{position:absolute;left:12.5%;right:12.5%;top:calc(2.6 * var(--s) * 1px);
+  height:calc(.1 * var(--s) * 1px);background:var(--line)}
+.g4fill{height:100%;background:var(--blue);transform-origin:left center;transform:scaleX(0);will-change:transform}
+
+/* the mock-exam section bar ---------------------------------------------- */
+.sects{display:flex;gap:calc(.22 * var(--s) * 1px);margin-top:calc(.5 * var(--s) * 1px)}
+.sects i{flex:1 1 0;height:calc(.62 * var(--s) * 1px);border-radius:calc(.16 * var(--s) * 1px);background:var(--line);
+  overflow:hidden;position:relative}
+.sects i::after{content:'';position:absolute;inset:0;background:var(--blue);transform-origin:left center;
+  transform:scaleX(var(--f,0));will-change:transform}
+.mockmeta{display:flex;justify-content:space-between;align-items:baseline;margin-top:calc(.6 * var(--s) * 1px);
+  font-size:calc(.82 * var(--s) * 1px);color:var(--foot);font-weight:600}
+
+/* explanation reveal ------------------------------------------------------ */
+.expl{margin-top:calc(.6 * var(--s) * 1px);border-left:calc(.16 * var(--s) * 1px) solid var(--blue);
+  background:var(--tint);border-radius:calc(.3 * var(--s) * 1px);padding:calc(.6 * var(--s) * 1px);
+  will-change:opacity,transform}
+.expl .eh{font-size:calc(.74 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:calc(.42 * var(--s) * 1px)}
+.expl .blur{height:calc(2.6 * var(--s) * 1px)}
+
+/* question-specific help -------------------------------------------------- */
+.helppin{position:absolute;right:calc(.8 * var(--s) * 1px);top:calc(.8 * var(--s) * 1px);
+  width:calc(1.8 * var(--s) * 1px);height:calc(1.8 * var(--s) * 1px);border-radius:50%;background:var(--blue);
+  color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:900;
+  font-size:calc(1.0 * var(--s) * 1px);box-shadow:var(--glow);will-change:transform,opacity}
+.helpnote{margin-top:calc(.55 * var(--s) * 1px);border:1px dashed var(--blue);border-radius:calc(.34 * var(--s) * 1px);
+  background:var(--tint);padding:calc(.55 * var(--s) * 1px);will-change:opacity,transform}
+.helpnote .hn{font-size:calc(.74 * var(--s) * 1px);font-weight:700;color:var(--blue);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:calc(.4 * var(--s) * 1px)}
+
+/* coach ------------------------------------------------------------------- */
+.chatcol{display:flex;flex-direction:column;gap:calc(.42 * var(--s) * 1px);flex:1 1 auto}
+.chathead{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);margin-bottom:calc(.2 * var(--s) * 1px)}
+.chathead .av{width:calc(1.7 * var(--s) * 1px);height:calc(1.7 * var(--s) * 1px);border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:box-shadow,transform}
+.chathead b{font-size:calc(.94 * var(--s) * 1px);font-weight:700}
+.chathead .wave{margin-left:auto;height:calc(1.3 * var(--s) * 1px)}
+
+/* rooms ------------------------------------------------------------------- */
+.roomgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(.42 * var(--s) * 1px);flex:1 1 auto;align-content:center}
+.rt{position:relative;border:1px solid var(--line);border-radius:calc(.34 * var(--s) * 1px);background:var(--white);
+  aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;will-change:opacity,transform}
+.rt .face{width:calc(1.9 * var(--s) * 1px);height:calc(1.9 * var(--s) * 1px);font-size:calc(.78 * var(--s) * 1px)}
+.rt.men{border-color:var(--red2)}
+
+/* notes ------------------------------------------------------------------- */
+.note{flex:1 1 auto;display:flex;flex-direction:column;gap:calc(.4 * var(--s) * 1px)}
+.note .hl{background:linear-gradient(180deg, rgba(41,95,237,0) 55%, rgba(41,95,237,.18) 55%);
+  border-radius:calc(.1 * var(--s) * 1px)}
+.notetag{align-self:flex-start;margin-top:calc(.5 * var(--s) * 1px)}
+
+/* analytics --------------------------------------------------------------- */
+.bars{display:flex;flex-direction:column;gap:calc(.5 * var(--s) * 1px);flex:1 1 auto;justify-content:center}
+.gapflag{align-self:flex-start;margin-top:calc(.5 * var(--s) * 1px);will-change:opacity,transform}
+.curvewrap{position:relative;flex:1 1 auto;min-height:calc(6 * var(--s) * 1px)}
+.curvewrap svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.curvewrap .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:6 6;vector-effect:non-scaling-stroke}
+.curvewrap .cp{fill:none;stroke:var(--blue);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.curvewrap .ca{fill:rgba(41,95,237,.10)}
+.thrtag{position:absolute;left:0;top:0;font-size:calc(.72 * var(--s) * 1px);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--foot);background:var(--white);padding:0 calc(.24 * var(--s) * 1px);will-change:opacity}
+
+/* streak ------------------------------------------------------------------ */
+.streakwrap{display:flex;flex-direction:column;gap:calc(.6 * var(--s) * 1px);justify-content:center;flex:1 1 auto}
+.streak i{width:calc(1.24 * var(--s) * 1px);height:calc(1.24 * var(--s) * 1px)}
+.streaklab{font-size:calc(.84 * var(--s) * 1px);color:var(--foot);font-weight:600}
+
+/* ---- captions ------------------------------------------------------------ */
+#cc{position:absolute;left:0;right:0;bottom:calc(6.4 * var(--s) * 1px);display:flex;justify-content:center;
+  padding:0 calc(9 * var(--s) * 1px);pointer-events:none;z-index:7;will-change:opacity}
+#ccbox{background:rgba(255,255,255,.96);border-bottom:calc(.22 * var(--s) * 1px) solid var(--blue);
+  box-shadow:0 calc(.4 * var(--s) * 1px) calc(1.4 * var(--s) * 1px) rgba(11,18,32,.10);
+  border-radius:calc(.2 * var(--s) * 1px);padding:calc(.62 * var(--s) * 1px) calc(1.1 * var(--s) * 1px);
+  font-size:calc(1.28 * var(--s) * 1px);line-height:1.32;font-weight:500;color:var(--ink);text-align:center;
+  max-width:calc(52 * var(--s) * 1px);will-change:transform}
+
+/* ---- end card ------------------------------------------------------------ */
+#end{position:absolute;inset:0;z-index:9;background:var(--white);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:0 calc(9 * var(--s) * 1px);will-change:opacity}
+#end img{width:calc(24 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#end h3{margin-top:calc(1.8 * var(--s) * 1px);will-change:transform,opacity}
+#end .u{font-family:var(--display);font-weight:800;font-size:calc(2.1 * var(--s) * 1px);color:var(--blue);
+  margin-top:calc(1.2 * var(--s) * 1px);will-change:transform,opacity}
+#end .lg{font-size:calc(.82 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(60 * var(--s) * 1px);
+  margin-top:calc(2.0 * var(--s) * 1px);will-change:transform,opacity}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wash"></div><div id="wash2"></div>
+  <svg id="mesh" preserveAspectRatio="none"></svg>
+
+  <div id="brandbar"><img src="../../brand/certuvo-logo-blue.png" alt="Certuvo"><div class="bl">Your exam partner<br>Fourteen features, one platform</div></div>
+  <div id="count"><div class="n">01 / 07</div><div class="c">The bank</div></div>
+  <div id="barwrap"><div id="bar"></div></div>
+  <div id="footl">Inside Certuvo</div>
+  <div id="footr">certuvo.com</div>
+
+  <div id="tour">
+    <div id="rail">
+      <div id="railtop">Everything inside</div>
+      <div class="rl"><i></i><span>Verified questions</span></div>
+      <div class="rl"><i></i><span>Four-stage validation</span></div>
+      <div class="rl"><i></i><span>Timed quizzes</span></div>
+      <div class="rl"><i></i><span>Full mock exams</span></div>
+      <div class="rl"><i></i><span>Answer explanations</span></div>
+      <div class="rl"><i></i><span>Question-specific help</span></div>
+      <div class="rl"><i></i><span>AI Coach chat</span></div>
+      <div class="rl"><i></i><span>Voice calls</span></div>
+      <div class="rl"><i></i><span>Screen-aware guidance</span></div>
+      <div class="rl"><i></i><span>Peer study rooms</span></div>
+      <div class="rl"><i></i><span>Integrated notes</span></div>
+      <div class="rl"><i></i><span>Focused analytics</span></div>
+      <div class="rl"><i></i><span>Knowledge-gap detection</span></div>
+      <div class="rl"><i></i><span>Progress &amp; streaks</span></div>
+    </div>
+
+    <div id="pane">
+      <div id="panetop">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="url">certuvo.com &middot; practice</div>
+        <div class="live"><i></i>LIVE</div>
+      </div>
+
+      <!-- f1 · the bank, and how new questions are cleared ------------------ -->
+      <section class="shot" id="f1">
+        <div class="shead"><div class="num">01</div><h4>Questions you can trust</h4><div class="sd">verified, and syllabus-aligned</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Thousands, already there</b></div>
+            <div class="hs">Every one checked before a student sees it</div>
+            <div class="box"><div class="chipfield" id="chips"></div>
+              <div style="margin-top:auto;padding-top:calc(.6*var(--s)*1px)"><span class="pill" id="verifpill"><i class="dot"></i>Verified</span></div></div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>And unlimited more</b></div>
+            <div class="hs">Written by AI, cleared by four judges</div>
+            <div class="box">
+              <div class="gates4">
+                <div class="g4line"><div class="g4fill" id="g4fill"></div></div>
+                <div class="g4"><div class="tick"><b>1</b></div><em>Generated</em></div>
+                <div class="g4"><div class="tick"><b>2</b></div><em>Answer<br>verified</em></div>
+                <div class="g4"><div class="tick"><b>3</b></div><em>Ambiguity<br>checked</em></div>
+                <div class="g4"><div class="tick"><b>4</b></div><em>Blueprint<br>matched</em></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- f2 · under timing -------------------------------------------------- -->
+      <section class="shot" id="f2">
+        <div class="shead"><div class="num">02</div><h4>Practice under the clock</h4><div class="sd">short, or the full length</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Timed quizzes</b></div>
+            <div class="hs">Twenty minutes, whenever you have them</div>
+            <div class="box" style="align-items:center;justify-content:center">
+              <div class="ring" id="qring" style="width:calc(8.4*var(--s)*1px);height:calc(8.4*var(--s)*1px)">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                  <circle class="rtrack" cx="50" cy="50" r="42" stroke-width="7"></circle>
+                  <circle class="rfill" cx="50" cy="50" r="42" stroke-width="7"></circle>
+                </svg>
+                <div class="rlab" style="font-size:calc(1.7*var(--s)*1px)" id="qclock">20:00</div>
+              </div>
+            </div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>Full mock exams</b></div>
+            <div class="hs">Real length, real timing, all sections</div>
+            <div class="box" style="justify-content:center">
+              <div class="sects" id="sects"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="mockmeta"><span id="mockleft">Section 1 of 8</span><span id="mockright">4:00:00</span></div>
+              <div class="sk w100" style="margin-top:calc(1.2*var(--s)*1px)"></div>
+              <div class="sk w84"></div>
+              <div class="sk w56"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- f3 · why, not just what -------------------------------------------- -->
+      <section class="shot" id="f3">
+        <div class="shead"><div class="num">03</div><h4>Every answer, explained</h4><div class="sd">and help on the one in front of you</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Detailed explanations</b></div>
+            <div class="hs">Why the right answer is right — and the others are not</div>
+            <div class="box">
+              <div class="sk w100 tall"></div><div class="sk w70"></div>
+              <div class="optrow">
+                <div class="opt" id="o1"><b>A</b><div class="sk w84"></div></div>
+                <div class="opt" id="o2"><b>B</b><div class="sk w70"></div></div>
+              </div>
+              <div class="expl" id="expl"><div class="eh">Explanation</div><div class="blur tight"></div></div>
+            </div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>Question-specific help</b></div>
+            <div class="hs">Not a search box — this question</div>
+            <div class="box">
+              <div class="helppin" id="hpin">?</div>
+              <div class="sk w92 tall"></div><div class="sk w84"></div><div class="sk w40"></div>
+              <div class="helpnote" id="hnote"><div class="hn">Help on this question</div><div class="blur tight" style="height:calc(2.2*var(--s)*1px)"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- f4 · the coach ------------------------------------------------------ -->
+      <section class="shot" id="f4">
+        <div class="shead"><div class="num">04</div><h4>An AI Coach that can see</h4><div class="sd">chat, call, and read the screen</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Chat or call</b></div>
+            <div class="hs">Ask out loud and keep walking</div>
+            <div class="box">
+              <div class="chathead"><div class="av" id="cav"></div><b>AI Coach</b>
+                <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+              <div class="chatcol">
+                <div class="bubble them" id="b1"><div class="sk w92" style="background:rgba(41,95,237,.16)"></div><div class="sk w70" style="background:rgba(41,95,237,.16)"></div></div>
+                <div class="bubble me" id="b2"><div class="sk w84" style="background:rgba(255,255,255,.5)"></div></div>
+                <div class="bubble them" id="b3"><div class="sk w100" style="background:rgba(41,95,237,.16)"></div><div class="sk w56" style="background:rgba(41,95,237,.16)"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>Screen-aware guidance</b></div>
+            <div class="hs">It sees the question. You describe nothing.</div>
+            <div class="box">
+              <div class="beam" id="beam"></div>
+              <div class="sk w100 tall"></div><div class="sk w92"></div><div class="sk w56"></div>
+              <div class="optrow">
+                <div class="opt"><b>A</b><div class="sk w70"></div></div>
+                <div class="opt"><b>B</b><div class="sk w84"></div></div>
+                <div class="opt"><b>C</b><div class="sk w56"></div></div>
+              </div>
+              <div style="margin-top:auto;padding-top:calc(.55*var(--s)*1px)"><span class="pill" id="scanpill"><i class="dot"></i>Reading your screen</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- f5 · together, and in one place -------------------------------------- -->
+      <section class="shot" id="f5">
+        <div class="shead"><div class="num">05</div><h4>Not on your own</h4><div class="sd">and everything in one place</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Peer study rooms</b></div>
+            <div class="hs">Your cohort, on video, on the same question</div>
+            <div class="box">
+              <div class="roomgrid">
+                <div class="rt" id="rt1"><div class="face f1">AK</div></div>
+                <div class="rt" id="rt2"><div class="face f2">JD</div></div>
+                <div class="rt" id="rt3"><div class="face f3">RM</div></div>
+                <div class="rt" id="rt4"><div class="face f4">TN</div></div>
+                <div class="rt" id="rt5"><div class="face f5">SO</div></div>
+                <div class="rt men" id="rt6"><div class="face f6">M</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>Integrated notes</b></div>
+            <div class="hs">Kept beside the question that prompted them</div>
+            <div class="box">
+              <div class="note">
+                <div class="sk w100"></div><div class="sk w92"></div>
+                <div class="sk w84 hl" id="nhl"></div>
+                <div class="sk w70"></div><div class="sk w56"></div>
+              </div>
+              <span class="pill notetag" id="ntag">Saved to Question 14</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- f6 · what it finds ---------------------------------------------------- -->
+      <section class="shot" id="f6">
+        <div class="shead"><div class="num">06</div><h4>Analytics that stay on point</h4><div class="sd">and name the gap</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Focused analytics</b></div>
+            <div class="hs">Domain by domain, not a wall of charts</div>
+            <div class="box">
+              <div class="bars">
+                <div class="barrow" id="ba1"><span>Domain 1</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="ba2"><span>Domain 2</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="ba3"><span>Domain 3</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="ba4"><span>Domain 4</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="ba5"><span>Domain 5</span><div class="track"><i></i></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>Knowledge-gap detection</b></div>
+            <div class="hs">The one you keep falling into</div>
+            <div class="box">
+              <div class="bars">
+                <div class="barrow" id="bb1"><span>Domain 1</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="bb2"><span>Domain 2</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="bb3"><span>Domain 3</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="bb4"><span>Domain 4</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="bb5"><span>Domain 5</span><div class="track"><i></i></div></div>
+              </div>
+              <span class="pill red gapflag" id="gapflag"><i class="dot"></i>Gap detected &middot; three sessions running</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- f7 · where you are ----------------------------------------------------- -->
+      <section class="shot" id="f7">
+        <div class="shead"><div class="num">07</div><h4>Where you actually are</h4><div class="sd">progress, and the habit behind it</div></div>
+        <div class="duo">
+          <div class="half">
+            <div class="ht"><b>Progress tracking</b></div>
+            <div class="hs">Readiness over time — illustrative</div>
+            <div class="box">
+              <div class="curvewrap">
+                <svg id="csvg" viewBox="0 0 460 200" preserveAspectRatio="none">
+                  <line class="thr" x1="0" y1="42" x2="460" y2="42"></line>
+                  <path class="ca" id="carea" d=""></path>
+                  <path class="cp" id="cpath" d=""></path>
+                </svg>
+                <div class="thrtag" id="thrtag">Exam-ready</div>
+              </div>
+            </div>
+          </div>
+          <div class="half">
+            <div class="ht"><b>Study streaks</b></div>
+            <div class="hs">The habit that does the work</div>
+            <div class="box" style="justify-content:center">
+              <div class="streakwrap">
+                <div class="streak" id="sk1"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="streak" id="sk2"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="streaklab" id="sklab">Two weeks, unbroken</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="cc"><div id="ccbox"></div></div>
+
+  <div id="end">
+    <img src="../../brand/certuvo-logo-blue.png" alt="Certuvo">
+    <h3>Fourteen features. <em>One platform.</em></h3>
+    <div class="u">certuvo.com</div>
+    <div class="lg" id="endlg"></div>
+  </div>
+</div>
+
+<script src="shots.data.js"></script>
+<script src="captions.data.js"></script>
+<script src="../../common/engine.js"></script>
+<script>
+const E = window.CE;
+const { clamp, seg, pulse, outCubic, outExpo, inOut, mixc,
+        C_BLUE, C_RED, C_WHITE, C_SKEL, C_LINE2, C_MUTE, C_INK, C_SUB } = E;
+
+const { W, H, SS, CC } = E.setupStage();
+E.drawMesh(W, H, SS);
+
+const RAW  = window.__SHOTS || [];
+const DUR  = window.__DURATION || 80;
+const CAPS = window.__CAPTIONS || [];
+window.__DUR = DUR;
+const SHOTS = RAW.map(([id, label, a, b]) => ({ id, label, in: a, out: b, vs: a + 0.30 }));
+const LAST = SHOTS[SHOTS.length - 1];
+const END_AT = LAST.out - 4.6;
+
+/* the rail lights the pair being demonstrated; two rows per shot, except the
+   coach shot which owns three and the last which owns two */
+const RAIL_FOR = { f1:[0,1], f2:[2,3], f3:[4,5], f4:[6,7,8], f5:[9,10], f6:[11,12], f7:[13] };
+const RAILS = [...document.querySelectorAll('.rl')];
+
+const CUES = {
+  f1:[['.shead',-0.1,0],['.half',0.05,0],['.half',4.2,0]],
+  f2:[['.shead',-0.1,0],['.half',0.05,0],['.half',3.3,0]],
+  f3:[['.shead',-0.1,0],['.half',0.05,0],['.half',3.2,0]],
+  f4:[['.shead',-0.1,0],['.half',0.05,0],['.half',3.6,0]],
+  f5:[['.shead',-0.1,0],['.half',0.05,0],['.half',2.9,0]],
+  f6:[['.shead',-0.1,0],['.half',0.05,0],['.half',3.0,0]],
+  f7:[['.shead',-0.1,0],['.half',0.05,0],['.half',2.4,0]],
+};
+const ANIM = E.buildReveals(SHOTS, CUES);
+
+/* ---- parts ---------------------------------------------------------------- */
+const CHIPS = E.fillChipField(document.getElementById('chips'), 234, 13);
+const Q = s => document.querySelector(s), QA = s => [...document.querySelectorAll(s)];
+const P = {
+  verif: Q('#verifpill'), g4fill: Q('#g4fill'), g4: QA('#f1 .g4'),
+  qring: Q('#qring'), qclock: Q('#qclock'), sects: QA('#sects i'), mockleft: Q('#mockleft'), mockright: Q('#mockright'),
+  o1: Q('#o1'), o2: Q('#o2'), expl: Q('#expl'), hpin: Q('#hpin'), hnote: Q('#hnote'),
+  cav: Q('#cav'), wave: Q('#wave'), waves: QA('#wave i'), bubbles: [Q('#b1'), Q('#b2'), Q('#b3')],
+  beam: Q('#beam'), scanpill: Q('#scanpill'),
+  rts: [1,2,3,4,5,6].map(i => Q('#rt' + i)), nhl: Q('#nhl'), ntag: Q('#ntag'),
+  ba: [1,2,3,4,5].map(i => Q('#ba' + i)), bb: [1,2,3,4,5].map(i => Q('#bb' + i)), gapflag: Q('#gapflag'),
+  cpath: Q('#cpath'), carea: Q('#carea'), thrtag: Q('#thrtag'), csvg: Q('#csvg'),
+  sk1: QA('#sk1 i'), sk2: QA('#sk2 i'), sklab: Q('#sklab'),
+};
+const CURVE = [[6,182],[40,172],[74,160],[108,150],[142,138],[176,142],[210,124],[244,112],
+               [278,100],[312,88],[346,74],[380,62],[414,50],[440,38]];
+const BARS_A = [.82,.74,.66,.58,.71], BARS_B = [.84,.77,.31,.72,.64], GAP = 2;
+
+/* every demonstration is a pure function of u = seconds since its narration began */
+const FX = {
+  f1(u){
+    E.paintChipField(CHIPS, 13, u, 0.25, 0.10, 0.26);
+    const vp = seg(u, 2.4, 3.0, outExpo);
+    P.verif.style.opacity = vp.toFixed(3);
+    P.verif.style.transform = `translateY(${((1-vp)*0.5).toFixed(3)}em)`;
+    const T = [5.6, 6.5, 7.4, 8.3]; let done = 0;
+    T.forEach((at, i) => {
+      const p = seg(u, at, at + 0.42, outExpo); done += p;
+      const tk = P.g4[i].querySelector('.tick'), b = P.g4[i].querySelector('b');
+      tk.style.backgroundColor = mixc(C_WHITE, C_BLUE, p);
+      tk.style.borderColor = mixc(C_LINE2, C_BLUE, p);
+      tk.style.transform = `scale(${(1 + 0.14 * pulse(u, at, at + 0.45)).toFixed(4)})`;
+      b.style.color = mixc(C_MUTE, C_WHITE, p);
+    });
+    P.g4fill.style.transform = `scaleX(${(done / 4).toFixed(4)})`;
+  },
+  f2(u){
+    const run = clamp((u - 0.5) / 6.4);
+    E.setRing(P.qring, 1 - run, { colour: run > 0.78 ? 'rgb(229,69,63)' : 'rgb(41,95,237)' });
+    const left = Math.max(0, Math.round(1200 * (1 - run)));
+    P.qclock.textContent = String((left/60)|0).padStart(2,'0') + ':' + String(left%60).padStart(2,'0');
+    P.qclock.style.color = run > 0.78 ? 'var(--red)' : 'var(--ink)';
+    const prog = clamp((u - 4.0) / 5.2) * 8;
+    P.sects.forEach((s, i) => s.style.setProperty('--f', clamp(prog - i).toFixed(3)));
+    const sec = clamp(Math.ceil(prog), 1, 8);
+    P.mockleft.textContent = `Section ${sec} of 8`;
+    const secs = Math.max(0, Math.round(14400 * (1 - clamp((u - 4.0) / 5.2))));
+    P.mockright.textContent = `${(secs/3600)|0}:${String(((secs%3600)/60)|0).padStart(2,'0')}:${String(secs%60).padStart(2,'0')}`;
+  },
+  f3(u){
+    const pick = seg(u, 1.3, 1.7, outExpo);
+    P.o1.style.backgroundColor = mixc([255,255,255], [238,243,255], pick);
+    P.o1.style.borderColor = mixc([230,235,245], C_BLUE, pick);
+    P.o1.querySelector('b').style.color = mixc(C_MUTE, C_BLUE, pick);
+    const ex = seg(u, 2.1, 2.7, outExpo);
+    P.expl.style.opacity = ex.toFixed(3);
+    P.expl.style.transform = `translateY(${((1-ex)*0.6).toFixed(3)}em)`;
+    const hp = seg(u, 4.4, 4.9, outExpo);
+    P.hpin.style.opacity = hp.toFixed(3);
+    P.hpin.style.transform = `scale(${(0.6 + 0.4 * hp + 0.12 * pulse(u, 4.4, 5.3)).toFixed(4)})`;
+    const hn = seg(u, 5.6, 6.2, outExpo);
+    P.hnote.style.opacity = hn.toFixed(3);
+    P.hnote.style.transform = `translateY(${((1-hn)*0.6).toFixed(3)}em)`;
+  },
+  f4(u){
+    const conn = seg(u, 0.7, 1.3, outExpo);
+    const live = conn * (1 - seg(u, 9.6, 10.2));
+    P.cav.style.boxShadow = `0 0 0 ${(SS * 0.26 * live * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(u * 6)))).toFixed(2)}px rgba(41,95,237,.18)`;
+    P.cav.style.transform = `scale(${(1 + 0.05 * live * (0.5 + 0.5 * Math.sin(u * 6))).toFixed(4)})`;
+    P.wave.style.opacity = live.toFixed(3);
+    E.setWave(P.waves, u, live);
+    [1.2, 2.2, 3.1].forEach((at, i) => {
+      const p = seg(u, at, at + 0.45, outExpo), b = P.bubbles[i];
+      b.style.opacity = p.toFixed(3);
+      b.style.transform = `translateY(${((1-p)*0.7).toFixed(3)}em) scale(${(0.96+0.04*p).toFixed(4)})`;
+    });
+    E.setBeam(P.beam, u, 4.6, 8.6, { width: 620 });
+    const sp = seg(u, 4.8, 5.3, outExpo) * (1 - seg(u, 8.6, 9.0));
+    P.scanpill.style.opacity = sp.toFixed(3);
+  },
+  f5(u){
+    const J = [0.5, 0.85, 1.2, 1.55, 1.9, 2.3];
+    P.rts.forEach((t, i) => {
+      const p = seg(u, J[i], J[i] + 0.45, outExpo);
+      t.style.opacity = p.toFixed(3);
+      t.style.transform = `translateY(${((1-p)*0.7).toFixed(3)}em) scale(${(0.9+0.1*p).toFixed(4)})`;
+    });
+    const hl = seg(u, 4.6, 5.4, inOut);
+    P.nhl.style.backgroundSize = `${(hl * 100).toFixed(1)}% 100%`;
+    P.nhl.style.backgroundRepeat = 'no-repeat';
+    const nt = seg(u, 5.6, 6.2, outExpo);
+    P.ntag.style.opacity = nt.toFixed(3);
+    P.ntag.style.transform = `translateY(${((1-nt)*0.5).toFixed(3)}em)`;
+  },
+  f6(u){
+    P.ba.forEach((r, i) => {
+      const p = seg(u, 0.5 + i * 0.22, 0.5 + i * 0.22 + 0.5, outExpo);
+      r.querySelector('.track i').style.transform = `scaleX(${(BARS_A[i] * p).toFixed(4)})`;
+    });
+    P.bb.forEach((r, i) => {
+      const p = seg(u, 4.0 + i * 0.2, 4.0 + i * 0.2 + 0.5, outExpo);
+      const flag = i === GAP ? seg(u, 5.6, 6.1, outExpo) : 0;
+      const bar = r.querySelector('.track i');
+      bar.style.transform = `scaleX(${(BARS_B[i] * p).toFixed(4)})`;
+      bar.style.backgroundColor = mixc(C_BLUE, C_RED, flag);
+      r.querySelector('span').style.color = flag > 0.5 ? 'rgb(229,69,63)' : 'rgb(75,85,99)';
+    });
+    const gf = seg(u, 6.0, 6.6, outExpo);
+    P.gapflag.style.opacity = gf.toFixed(3);
+    P.gapflag.style.transform = `translateY(${((1-gf)*0.5).toFixed(3)}em)`;
+  },
+  f7(u){
+    const d = seg(u, 0.4, 3.0, inOut);
+    const { d: path, end } = E.pathTo(CURVE, Math.max(0.02, d));
+    P.cpath.setAttribute('d', path);
+    P.carea.setAttribute('d', path + `L${end[0].toFixed(1)},200L6,200Z`);
+    const r = P.csvg.getBoundingClientRect(), pr = P.csvg.parentElement.getBoundingClientRect();
+    P.thrtag.style.top = ((r.top - pr.top) + 42 / 200 * r.height - SS * 0.55).toFixed(1) + 'px';
+    P.thrtag.style.opacity = seg(u, 2.4, 2.9, outExpo).toFixed(3);
+    const all = [...P.sk1, ...P.sk2];
+    all.forEach((s, i) => {
+      const at = 3.0 + i * 0.105;
+      const p = seg(u, at, at + 0.3, outExpo);
+      s.style.backgroundColor = mixc(C_SKEL, C_BLUE, p);
+      s.style.transform = `scale(${(0.82 + 0.18 * p + 0.1 * pulse(u, at, at + 0.34)).toFixed(4)})`;
+    });
+    const sl = seg(u, 5.0, 5.6, outExpo);
+    P.sklab.style.opacity = sl.toFixed(3);
+    P.sklab.style.color = sl > 0.5 ? 'rgb(41,95,237)' : 'rgb(107,114,128)';
+  },
+};
+
+const ENDLG = 'Product views are illustrative: every question, option, explanation and note shown is an abstract '
+            + 'placeholder, not real exam content. All third-party names and marks are the property of their '
+            + 'respective owners. Preparation does not guarantee a pass.';
+document.getElementById('endlg').textContent = ENDLG;
+const ENDANIM = [['#end img', 0.30], ['#end h3', 0.75], ['#end .u', 1.20], ['#end .lg', 1.70]]
+  .map(([s, d]) => ({ el: document.querySelector(s), start: END_AT + d }));
+
+const ccWrap = document.getElementById('cc'), ccBox = document.getElementById('ccbox');
+const endEl = document.getElementById('end');
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+  const endp = seg(t, END_AT, END_AT + 0.8);
+
+  E.wash(t, DUR, seg(t, DUR * 0.55, DUR));
+  const { cur } = E.paintShots(t, SHOTS, DUR, 0.42, 1.1);
+  E.furniture(t, DUR, { label: cur.label, index: SHOTS.indexOf(cur) + 1, total: SHOTS.length, fade: 1 - endp });
+
+  /* the rail: rows for the live shot go blue, the rest stay quiet */
+  const live = new Set(RAIL_FOR[cur.id] || []);
+  RAILS.forEach((r, i) => {
+    const on = seg(t, cur.in, cur.in + 0.5) * (live.has(i) ? 1 : 0);
+    const passed = SHOTS.some(s => s.out <= t && (RAIL_FOR[s.id] || []).includes(i)) ? 1 : 0;
+    r.style.opacity = (0.38 + 0.62 * Math.max(on, passed * 0.55)).toFixed(3);
+    r.querySelector('i').style.backgroundColor = mixc(C_LINE2, C_BLUE, Math.max(on, passed * 0.6));
+    r.querySelector('i').style.transform = `scale(${(1 + 0.5 * on).toFixed(3)})`;
+    r.querySelector('span').style.color = mixc(C_MUTE, on > 0.5 ? C_INK : C_SUB, Math.max(on, passed * 0.7));
+    r.style.transform = `translateX(${(on * 0.28).toFixed(3)}em)`;
+  });
+
+  for (const s of SHOTS){ const fx = FX[s.id]; if (fx) fx(t - s.vs); }
+  E.paintReveals(t, ANIM, { rise: 0.55, lift: 0.7 });
+
+  endEl.style.opacity = endp.toFixed(3);
+  endEl.style.visibility = endp < 0.002 ? 'hidden' : 'visible';
+  for (const a of ENDANIM){
+    const p = seg(t, a.start, a.start + 0.6, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*0.8).toFixed(3)}em)`;
+  }
+  ccWrap.style.opacity = (1 - endp).toFixed(3);
+  E.paintCaptions(t, CAPS, { box: ccBox, wrap: ccWrap, on: CC && endp < 0.5 });
+}
+window.seek = seek;
+seek(0);
+window.__READY = true;
+</script>
+</body>
+</html>

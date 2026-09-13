@@ -4,8 +4,10 @@ npm-debug.log*
 
 # Render intermediates — frame sequences are large and fully reproducible
 # from source via video/*/src/build.sh. Built masters in dist/ are committed
-# so the deliverable is available without a rebuild.
+# so the deliverable is available without a rebuild. The second pattern covers
+# the variant projects under video/certuvo-features/<variant>/build.
 video/*/build/
+video/*/*/build/
 *.tmp
 
 # OS
@@ -23,3 +25,5 @@ video/explainer/build/
 # video/*/src/build.sh, and never an input to one.
 video/*/build.log
 video/*/build-*.log
+video/*/*/build.log
+video/*/*/build-*.log

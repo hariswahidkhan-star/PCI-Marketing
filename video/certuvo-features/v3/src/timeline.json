@@ -1,0 +1,177 @@
+{
+  "total": 65.08,
+  "segments": {
+    "1": [
+      0.3,
+      3.06
+    ],
+    "2": [
+      3.06,
+      7.41
+    ],
+    "3": [
+      7.96,
+      11.41
+    ],
+    "4": [
+      11.41,
+      17.0
+    ],
+    "5": [
+      17.55,
+      21.34
+    ],
+    "6": [
+      21.34,
+      26.17
+    ],
+    "7": [
+      26.72,
+      30.93
+    ],
+    "8": [
+      30.93,
+      35.41
+    ],
+    "9": [
+      35.96,
+      40.79
+    ],
+    "10": [
+      40.79,
+      46.17
+    ],
+    "11": [
+      46.72,
+      50.17
+    ],
+    "12": [
+      50.17,
+      54.31
+    ],
+    "13": [
+      54.86,
+      56.96
+    ],
+    "14": [
+      56.96,
+      59.58
+    ]
+  },
+  "captions": [
+    [
+      0.3,
+      3.06,
+      "Nine at night. You open Certuvo."
+    ],
+    [
+      3.06,
+      7.41,
+      "Thousands of verified questions are already\nthere, aligned to your syllabus."
+    ],
+    [
+      7.96,
+      11.41,
+      "You start with a timed quiz. Twenty minutes."
+    ],
+    [
+      11.41,
+      17.0,
+      "Later in the week, the full mock, at the real\nlength."
+    ],
+    [
+      17.55,
+      21.34,
+      "You get one wrong. The explanation is right\nthere."
+    ],
+    [
+      21.34,
+      26.17,
+      "Still not sure? Ask for help on that question.\nThat one."
+    ],
+    [
+      26.72,
+      30.93,
+      "So you call your AI Coach, and keep pacing."
+    ],
+    [
+      30.93,
+      35.41,
+      "It's reading your screen. You never describe a\nthing."
+    ],
+    [
+      35.96,
+      40.79,
+      "Your cohort is in a study room. You join for\ntwenty minutes."
+    ],
+    [
+      40.79,
+      46.17,
+      "What you learn goes into your notes, beside\nthe question."
+    ],
+    [
+      46.72,
+      50.17,
+      "Certuvo has been watching one thing all\nevening."
+    ],
+    [
+      50.17,
+      54.31,
+      "The same gap, three nights running. Now you\nknow."
+    ],
+    [
+      54.86,
+      56.96,
+      "Progress up. Streak intact."
+    ],
+    [
+      56.96,
+      59.58,
+      "Tomorrow, the same place. Certuvo."
+    ]
+  ],
+  "shots": [
+    [
+      "f1",
+      "Sit down",
+      0.0,
+      7.685
+    ],
+    [
+      "f2",
+      "Twenty minutes",
+      7.685,
+      17.275
+    ],
+    [
+      "f3",
+      "You get one wrong",
+      17.275,
+      26.445
+    ],
+    [
+      "f4",
+      "You call",
+      26.445,
+      35.685
+    ],
+    [
+      "f5",
+      "You are not alone",
+      35.685,
+      46.445
+    ],
+    [
+      "f6",
+      "What it noticed",
+      46.445,
+      54.585
+    ],
+    [
+      "f7",
+      "Close the laptop",
+      54.585,
+      65.08
+    ]
+  ]
+}
