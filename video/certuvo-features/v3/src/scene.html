@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — V3 One Session</title>
+<!--
+  V3 "ONE SESSION" — one evening of study, 21:04 to 23:05.
+
+  Where V1 tours a rail of features beside a browser pane and V2 turns each
+  feature into a full-frame card, V3 never cuts away from the desk. There is one
+  laptop, centred, and it does not move for the whole film. What changes is what
+  is on its screen and what time it is: a slim marker above the lid steps through
+  the evening and is the actual spine of the story. Features arrive where a
+  student would meet them — the quiz first, the wrong answer next, the Coach when
+  the wrong answer is not enough — rather than in a product-page order.
+
+  That is why the DOM is split the way it is. The device, the screen chrome, the
+  app nav and the question view live OUTSIDE the seven .shot sections and are
+  driven from absolute t, so they persist across cuts and the session reads as
+  continuous. Each .shot carries only the overlay that beat introduces — the mock
+  panel, the explanation, the call card, the room dock, the notes, and the two
+  full-screen views (analytics, summary) that legitimately replace the question.
+
+  HARD RULE, and the reason this file draws everything by hand: no real question,
+  option, explanation or note ever appears. Every one is a `.sk` skeleton bar or a
+  `.blur` block — unreadable by construction, not by cropping. A/B/C/D are labels
+  on abstract bars, nothing more.
+
+  Deterministic: seek(t) is a pure function of t. No timers, no rAF, no CSS
+  transitions, no state between calls. Called twice with the same t it paints the
+  same pixels, which is what lets render.mjs screenshot frame by frame and
+  probe.mjs audit the timeline before anything is encoded.
+-->
+<link rel="stylesheet" href="../../common/ui.css">
+<style>
+/* ---- the evening: the marker that carries the story ----------------------- */
+#clock{position:absolute;left:calc(23 * var(--s) * 1px);right:calc(23 * var(--s) * 1px);
+  top:calc(9.3 * var(--s) * 1px);height:calc(2.7 * var(--s) * 1px);z-index:5}
+#clkline{position:absolute;left:calc(100% / 14);right:calc(100% / 14);
+  top:calc(2.16 * var(--s) * 1px);height:calc(.08 * var(--s) * 1px);background:var(--line2);overflow:hidden}
+#clkfill{height:100%;background:var(--blue);transform-origin:left center;transform:scaleX(0);will-change:transform}
+#clkrow{position:absolute;inset:0;display:flex}
+.tk{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:calc(.36 * var(--s) * 1px)}
+.tk b{font-family:var(--display);font-weight:800;font-size:calc(.86 * var(--s) * 1px);
+  letter-spacing:.05em;color:var(--mute);white-space:nowrap;will-change:color}
+.tk i{width:calc(.5 * var(--s) * 1px);height:calc(.5 * var(--s) * 1px);border-radius:50%;
+  background:var(--line2);display:block;will-change:background-color,transform,box-shadow}
+
+/* ---- the device: one frame, fixed for the whole film ---------------------- */
+#lap{position:absolute;left:calc(23 * var(--s) * 1px);width:calc(54 * var(--s) * 1px);
+  top:calc(13.2 * var(--s) * 1px)}
+#lid{position:relative;height:calc(29.2 * var(--s) * 1px);background:var(--panel);
+  border:1px solid var(--line2);border-radius:calc(1.0 * var(--s) * 1px);box-shadow:var(--card2);
+  padding:calc(.78 * var(--s) * 1px) calc(.75 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);
+  display:flex;flex-direction:column}
+#cam{position:absolute;left:50%;top:calc(.3 * var(--s) * 1px);width:calc(.19 * var(--s) * 1px);
+  height:calc(.19 * var(--s) * 1px);margin-left:calc(-.095 * var(--s) * 1px);border-radius:50%;background:var(--line2)}
+#lfoot{position:relative;height:calc(1.05 * var(--s) * 1px);margin:0 calc(-4 * var(--s) * 1px);
+  background:linear-gradient(180deg,var(--panel),#EEF2FA);border:1px solid var(--line2);border-top:0;
+  border-radius:0 0 calc(.6 * var(--s) * 1px) calc(.6 * var(--s) * 1px)}
+#lfoot i{position:absolute;left:50%;top:calc(.2 * var(--s) * 1px);width:calc(7 * var(--s) * 1px);
+  height:calc(.2 * var(--s) * 1px);margin-left:calc(-3.5 * var(--s) * 1px);border-radius:calc(.1 * var(--s) * 1px);
+  background:var(--line2);display:block}
+
+/* the screen. overflow:hidden is load-bearing — every overlay slides against it */
+#scr{flex:1 1 auto;position:relative;background:var(--white);border:1px solid var(--line);
+  border-radius:calc(.4 * var(--s) * 1px);overflow:hidden}
+
+/* the app's own chrome: the one bar that never changes shape all evening ----- */
+#scrtop{position:absolute;left:0;right:0;top:0;height:calc(2.4 * var(--s) * 1px);z-index:4;
+  display:flex;align-items:center;gap:calc(.6 * var(--s) * 1px);padding:0 calc(.9 * var(--s) * 1px);
+  border-bottom:1px solid var(--line);background:var(--panel)}
+#scrtop .dots{display:flex;gap:calc(.24 * var(--s) * 1px)}
+#scrtop .dots i{width:calc(.32 * var(--s) * 1px);height:calc(.32 * var(--s) * 1px);border-radius:50%;
+  background:var(--line2);display:block}
+#url{flex:0 0 auto;width:calc(13 * var(--s) * 1px);height:calc(1.35 * var(--s) * 1px);
+  border-radius:calc(.68 * var(--s) * 1px);background:var(--white);border:1px solid var(--line);
+  display:flex;align-items:center;padding:0 calc(.65 * var(--s) * 1px);white-space:nowrap;
+  font-size:calc(.72 * var(--s) * 1px);color:var(--mute);font-weight:600;letter-spacing:.015em}
+#scrsp{flex:1 1 auto}
+#tchip{font-family:var(--display);font-weight:800;font-size:calc(.86 * var(--s) * 1px);letter-spacing:.02em;
+  padding:calc(.2 * var(--s) * 1px) calc(.6 * var(--s) * 1px);border-radius:calc(.3 * var(--s) * 1px);
+  background:var(--tint);color:var(--blue);white-space:nowrap;will-change:opacity,color,background-color}
+#qtag{font-size:calc(.74 * var(--s) * 1px);font-weight:700;color:var(--foot);white-space:nowrap;will-change:opacity}
+#livetag{display:flex;align-items:center;gap:calc(.3 * var(--s) * 1px);font-size:calc(.72 * var(--s) * 1px);
+  font-weight:800;color:var(--red);letter-spacing:.12em;white-space:nowrap;will-change:opacity}
+#livetag i{width:calc(.34 * var(--s) * 1px);height:calc(.34 * var(--s) * 1px);border-radius:50%;
+  background:var(--red);display:block;will-change:opacity}
+
+#scrbody{position:absolute;left:0;right:0;top:calc(2.4 * var(--s) * 1px);bottom:0;display:flex}
+
+/* the app nav. It never leaves, and the lit row is how you know the session
+   moved rooms without the screen having to announce it. */
+#nav{flex:0 0 auto;width:calc(9.2 * var(--s) * 1px);background:var(--panel);border-right:1px solid var(--line);
+  padding:calc(.8 * var(--s) * 1px) calc(.55 * var(--s) * 1px);display:flex;flex-direction:column;
+  gap:calc(.3 * var(--s) * 1px)}
+.nv{display:flex;align-items:center;gap:calc(.45 * var(--s) * 1px);padding:calc(.32 * var(--s) * 1px) calc(.4 * var(--s) * 1px);
+  border-radius:calc(.3 * var(--s) * 1px);will-change:background-color}
+.nv i{flex:0 0 auto;width:calc(.95 * var(--s) * 1px);height:calc(.95 * var(--s) * 1px);
+  border-radius:calc(.26 * var(--s) * 1px);background:var(--line2);display:block;will-change:background-color}
+.nv span{flex:1 1 auto;min-width:0;font-size:calc(.76 * var(--s) * 1px);font-weight:600;color:var(--mute);
+  white-space:nowrap;will-change:color}
+
+#view{flex:1 1 auto;position:relative}
+/* the question view and every beat overlay share one box, so nothing shifts
+   when a panel arrives — the point of the treatment */
+#qv,.shot{position:absolute;left:calc(1.3 * var(--s) * 1px);right:calc(1.3 * var(--s) * 1px);
+  top:calc(1.1 * var(--s) * 1px);bottom:calc(1.1 * var(--s) * 1px)}
+#qv{z-index:1;will-change:opacity,transform}
+.shot{z-index:2;will-change:opacity,transform}
+
+/* ---- the question view: the thing the whole evening happens on ------------ */
+.qh{display:flex;align-items:center;gap:calc(1.3 * var(--s) * 1px);height:calc(1.4 * var(--s) * 1px);
+  margin-bottom:calc(.9 * var(--s) * 1px)}
+.qk{font-size:calc(.8 * var(--s) * 1px);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)}
+.qpips{display:flex;gap:calc(.18 * var(--s) * 1px)}
+.qpips i{display:block;width:calc(.62 * var(--s) * 1px);height:calc(.3 * var(--s) * 1px);
+  border-radius:calc(.15 * var(--s) * 1px);background:var(--skel);will-change:background-color}
+.mk{flex:0 0 auto;width:calc(1.35 * var(--s) * 1px);height:calc(1.35 * var(--s) * 1px);border-radius:50%;
+  display:grid;place-items:center;opacity:0;will-change:opacity,transform}
+.mk svg{width:70%;height:70%;display:block}
+
+/* ---- overlays that slide over the screen ---------------------------------- */
+/* every panel docks inside the view box and moves less than the screen's own
+   padding, so nothing is ever half-outside the lid mid-slide */
+.panel{position:absolute;background:var(--white);border:1px solid var(--line);
+  border-radius:calc(.5 * var(--s) * 1px);box-shadow:var(--card2);padding:calc(.78 * var(--s) * 1px);
+  opacity:0;will-change:opacity,transform}
+.panel .ph{display:flex;align-items:baseline;gap:calc(.55 * var(--s) * 1px);margin-bottom:calc(.5 * var(--s) * 1px)}
+.panel .ph b{font-family:var(--display);font-weight:800;font-size:calc(.98 * var(--s) * 1px);color:var(--ink)}
+.panel .ph em{font-style:normal;font-size:calc(.78 * var(--s) * 1px);color:var(--foot);font-weight:600}
+.eh{font-size:calc(.74 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:calc(.42 * var(--s) * 1px)}
+
+#mock{left:0;right:0;bottom:0;height:calc(6.0 * var(--s) * 1px)}
+.sects{display:flex;gap:calc(.22 * var(--s) * 1px)}
+.sects i{flex:1 1 0;height:calc(.62 * var(--s) * 1px);border-radius:calc(.16 * var(--s) * 1px);
+  background:var(--line);overflow:hidden;position:relative}
+.sects i::after{content:'';position:absolute;inset:0;background:var(--blue);transform-origin:left center;
+  transform:scaleX(var(--f,0));will-change:transform}
+.mockmeta{display:flex;justify-content:space-between;align-items:baseline;margin-top:calc(.62 * var(--s) * 1px);
+  font-size:calc(.82 * var(--s) * 1px);color:var(--foot);font-weight:600}
+
+#expl{left:0;right:0;bottom:0;height:calc(6.2 * var(--s) * 1px);
+  border-left:calc(.18 * var(--s) * 1px) solid var(--blue)}
+#expl .blur{height:calc(3.3 * var(--s) * 1px)}
+
+#hpin{position:absolute;right:0;top:calc(2.4 * var(--s) * 1px);width:calc(1.9 * var(--s) * 1px);
+  height:calc(1.9 * var(--s) * 1px);border-radius:50%;background:var(--blue);color:#fff;display:grid;
+  place-items:center;font-family:var(--display);font-weight:900;font-size:calc(1.02 * var(--s) * 1px);
+  box-shadow:var(--glow);opacity:0;will-change:transform,opacity;z-index:3}
+#hnote{right:0;top:calc(5.74 * var(--s) * 1px);width:calc(15.5 * var(--s) * 1px);height:calc(6.39 * var(--s) * 1px);
+  border:1px dashed var(--blue);background:var(--tint);box-shadow:none}
+#hnote .blur{height:calc(2.9 * var(--s) * 1px);background:rgba(255,255,255,.55)}
+
+#call{right:0;top:0;width:calc(15 * var(--s) * 1px);height:calc(8.2 * var(--s) * 1px);box-shadow:var(--glow)}
+.callhead{display:flex;align-items:center;gap:calc(.6 * var(--s) * 1px)}
+.callhead .av{flex:0 0 auto;width:calc(2.2 * var(--s) * 1px);height:calc(2.2 * var(--s) * 1px);border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:box-shadow,transform}
+.callhead b{display:block;font-size:calc(.96 * var(--s) * 1px);font-weight:700;color:var(--ink)}
+.callhead .cs{font-size:calc(.76 * var(--s) * 1px);color:var(--foot);font-weight:600}
+#call .wave{height:calc(1.5 * var(--s) * 1px);margin-top:calc(.7 * var(--s) * 1px)}
+.callfoot{display:flex;align-items:center;justify-content:space-between;margin-top:calc(.72 * var(--s) * 1px);
+  padding-top:calc(.6 * var(--s) * 1px);border-top:1px solid var(--line)}
+.callfoot .cd{font-family:var(--display);font-weight:800;font-size:calc(1.0 * var(--s) * 1px);color:var(--blue)}
+.callfoot .cl{font-size:calc(.74 * var(--s) * 1px);font-weight:700;color:var(--foot);letter-spacing:.1em;text-transform:uppercase}
+#scanpill{position:absolute;left:0;bottom:0;opacity:0;z-index:3}
+
+#room{right:0;top:0;width:calc(15 * var(--s) * 1px);height:calc(10.2 * var(--s) * 1px)}
+.roomhead{display:flex;align-items:center;gap:calc(.4 * var(--s) * 1px);margin-bottom:calc(.55 * var(--s) * 1px)}
+.roomhead b{font-size:calc(.9 * var(--s) * 1px);font-weight:700;color:var(--ink)}
+.roomhead .rn{margin-left:auto;font-size:calc(.74 * var(--s) * 1px);color:var(--foot);font-weight:600}
+.roomgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(.36 * var(--s) * 1px)}
+.rt{position:relative;border:1px solid var(--line);border-radius:calc(.3 * var(--s) * 1px);background:var(--panel);
+  aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;opacity:0;will-change:opacity,transform}
+.rt .face{width:calc(1.6 * var(--s) * 1px);height:calc(1.6 * var(--s) * 1px);font-size:calc(.68 * var(--s) * 1px)}
+
+#notes{left:0;bottom:0;width:calc(21 * var(--s) * 1px);height:calc(7.7 * var(--s) * 1px)}
+#notes .hl{background:linear-gradient(180deg, rgba(41,95,237,0) 55%, rgba(41,95,237,.20) 55%);
+  border-radius:calc(.1 * var(--s) * 1px)}
+#ntag{margin-top:calc(.55 * var(--s) * 1px)}
+
+/* ---- the two views that genuinely replace the question -------------------- */
+.lay{position:absolute;inset:0;background:var(--white);display:flex;flex-direction:column;
+  will-change:transform}
+.lhead{display:flex;align-items:baseline;gap:calc(.7 * var(--s) * 1px);margin-bottom:calc(.85 * var(--s) * 1px)}
+.lhead b{font-family:var(--display);font-weight:800;font-size:calc(1.26 * var(--s) * 1px);color:var(--ink)}
+.lhead .lsub{font-size:calc(.86 * var(--s) * 1px);color:var(--foot);font-weight:500}
+.lhead .pill{margin-left:auto;opacity:0}
+
+#chips{align-content:start}
+#f1 .lfootrow{margin-top:auto;display:flex;align-items:center;gap:calc(.7 * var(--s) * 1px)}
+#f1 .lfootrow .tiny{color:var(--foot)}
+
+.bars{display:flex;flex-direction:column;gap:calc(1.15 * var(--s) * 1px)}
+#nights{left:0;right:0;bottom:0;height:calc(9.3 * var(--s) * 1px)}
+.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(.7 * var(--s) * 1px)}
+.ncard{border:1px solid var(--line);border-radius:calc(.4 * var(--s) * 1px);background:var(--panel);
+  padding:calc(.6 * var(--s) * 1px);opacity:0;will-change:opacity,transform}
+.ncard .nl{font-size:calc(.74 * var(--s) * 1px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--foot);margin-bottom:calc(.5 * var(--s) * 1px)}
+.nb{display:flex;align-items:flex-end;gap:calc(.46 * var(--s) * 1px);height:calc(3.4 * var(--s) * 1px)}
+.nb i{flex:1 1 0;display:block;border-radius:calc(.14 * var(--s) * 1px) calc(.14 * var(--s) * 1px) 0 0;
+  background:var(--skel);height:10%;will-change:height,background-color}
+#gapflag{margin-left:auto;opacity:0}
+
+.sumrow{display:flex;gap:calc(1.1 * var(--s) * 1px);flex:1 1 auto;min-height:0}
+.card{flex:1 1 0;border:1px solid var(--line);border-radius:calc(.45 * var(--s) * 1px);background:var(--white);
+  box-shadow:var(--card);padding:calc(.85 * var(--s) * 1px);display:flex;flex-direction:column;min-width:0}
+.card.grow{flex:1.35 1 0}
+.card .ct{font-size:calc(.76 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:calc(.6 * var(--s) * 1px)}
+.curvewrap{position:relative;flex:1 1 auto;min-height:calc(5 * var(--s) * 1px)}
+.curvewrap svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.curvewrap .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:6 6;vector-effect:non-scaling-stroke}
+.curvewrap .cp{fill:none;stroke:var(--blue);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;
+  vector-effect:non-scaling-stroke}
+.curvewrap .ca{fill:rgba(41,95,237,.10)}
+#thrtag{position:absolute;left:0;top:0;font-size:calc(.7 * var(--s) * 1px);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--foot);background:var(--white);padding:0 calc(.22 * var(--s) * 1px);
+  opacity:0;will-change:opacity}
+.streakwrap{display:flex;flex-direction:column;gap:calc(.62 * var(--s) * 1px);justify-content:center;flex:1 1 auto}
+#f7 .streak i{width:calc(1.55 * var(--s) * 1px);height:calc(1.55 * var(--s) * 1px)}
+#sklab{font-size:calc(.84 * var(--s) * 1px);color:var(--foot);font-weight:600;opacity:0}
+#donepill{align-self:flex-start;margin-top:calc(1.0 * var(--s) * 1px);opacity:0}
+
+/* ---- captions ------------------------------------------------------------- */
+#cc{position:absolute;left:0;right:0;bottom:calc(6.4 * var(--s) * 1px);display:flex;justify-content:center;
+  padding:0 calc(9 * var(--s) * 1px);pointer-events:none;z-index:7;will-change:opacity}
+#ccbox{background:rgba(255,255,255,.96);border-bottom:calc(.22 * var(--s) * 1px) solid var(--blue);
+  box-shadow:0 calc(.4 * var(--s) * 1px) calc(1.4 * var(--s) * 1px) rgba(11,18,32,.10);
+  border-radius:calc(.2 * var(--s) * 1px);padding:calc(.62 * var(--s) * 1px) calc(1.1 * var(--s) * 1px);
+  font-size:calc(1.28 * var(--s) * 1px);line-height:1.32;font-weight:500;color:var(--ink);text-align:center;
+  max-width:calc(52 * var(--s) * 1px);will-change:transform}
+
+/* ---- end card ------------------------------------------------------------- */
+#end{position:absolute;inset:0;z-index:9;background:var(--white);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:0 calc(9 * var(--s) * 1px);will-change:opacity}
+#end img{width:calc(24 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#end h3{margin-top:calc(1.8 * var(--s) * 1px);will-change:transform,opacity}
+#end .u{font-family:var(--display);font-weight:800;font-size:calc(2.1 * var(--s) * 1px);color:var(--blue);
+  margin-top:calc(1.2 * var(--s) * 1px);will-change:transform,opacity}
+#end .lg{font-size:calc(.82 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(60 * var(--s) * 1px);
+  margin-top:calc(2.0 * var(--s) * 1px);will-change:transform,opacity}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wash"></div><div id="wash2"></div>
+  <svg id="mesh" preserveAspectRatio="none"></svg>
+
+  <div id="brandbar"><img src="../../brand/certuvo-logo-blue.png" alt="Certuvo"><div class="bl">Your exam partner<br>One evening, one session</div></div>
+  <div id="count"><div class="n">01 / 07</div><div class="c">Sit down</div></div>
+  <div id="barwrap"><div id="bar"></div></div>
+  <div id="footl">One session</div>
+  <div id="footr">certuvo.com</div>
+
+  <!-- the spine: the evening, advancing -->
+  <div id="clock">
+    <div id="clkline"><div id="clkfill"></div></div>
+    <div id="clkrow">
+      <div class="tk"><b>21:04</b><i></i></div>
+      <div class="tk"><b>21:20</b><i></i></div>
+      <div class="tk"><b>21:38</b><i></i></div>
+      <div class="tk"><b>22:10</b><i></i></div>
+      <div class="tk"><b>22:35</b><i></i></div>
+      <div class="tk"><b>22:50</b><i></i></div>
+      <div class="tk"><b>23:05</b><i></i></div>
+    </div>
+  </div>
+
+  <!-- the device. It does not move for the whole film. -->
+  <div id="lap">
+    <div id="lid">
+      <div id="cam"></div>
+      <div id="scr">
+
+        <div id="scrtop">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div id="url">certuvo.com &middot; library</div>
+          <div id="scrsp"></div>
+          <div id="livetag"><i></i>LIVE</div>
+          <div id="tchip">20:00</div>
+          <div id="qtag">Question 14 of 20</div>
+        </div>
+
+        <div id="scrbody">
+          <div id="nav">
+            <div class="nv"><i></i><span>Library</span></div>
+            <div class="nv"><i></i><span>Practice</span></div>
+            <div class="nv"><i></i><span>Coach</span></div>
+            <div class="nv"><i></i><span>Rooms</span></div>
+            <div class="nv"><i></i><span>Insights</span></div>
+            <div class="nv"><i></i><span>Progress</span></div>
+          </div>
+
+          <div id="view">
+
+            <!-- the question the evening happens on. Outside the shots, because
+                 it has to survive four cuts without so much as a flicker. -->
+            <div id="qv">
+              <div class="qh"><span class="qk">Timed quiz</span><div class="qpips" id="qpips"></div></div>
+              <div class="qstem">
+                <div class="sk w100 tall"></div><div class="sk w92"></div><div class="sk w56"></div>
+              </div>
+              <div class="optrow">
+                <div class="opt" id="oA"><b>A</b><div class="sk w70"></div></div>
+                <div class="opt" id="oB"><b>B</b>
+                  <em class="mk" id="mkB"><svg viewBox="0 0 12 12"><path d="M3.6 3.6L8.4 8.4M8.4 3.6L3.6 8.4" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg></em>
+                  <div class="sk w84"></div></div>
+                <div class="opt" id="oC"><b>C</b>
+                  <em class="mk" id="mkC"><svg viewBox="0 0 12 12"><path d="M3 6.4L5.2 8.7L9 4.1" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></em>
+                  <div class="sk w92"></div></div>
+                <div class="opt" id="oD"><b>D</b><div class="sk w56"></div></div>
+              </div>
+            </div>
+
+            <!-- f1 · 21:04 · the library opens ----------------------------- -->
+            <section class="shot" id="f1">
+              <div class="lay">
+                <div class="lhead"><b>Question library</b><span class="lsub">already there, aligned to your syllabus</span>
+                  <span class="pill" id="verif"><i class="dot"></i>Verified</span></div>
+                <div class="chipfield" id="chips"></div>
+                <div class="lfootrow"><span class="tiny">Every domain, every difficulty &mdash; checked before you ever see it.</span></div>
+              </div>
+            </section>
+
+            <!-- f2 · 21:20 · under the clock, and a glimpse of the full mock -->
+            <section class="shot" id="f2">
+              <div class="panel" id="mock">
+                <div class="ph"><b>Full mock exam</b><em>every section, at the real length</em></div>
+                <div class="sects" id="sects"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="mockmeta"><span id="mockleft">Section 1 of 8</span><span id="mockright">4:00:00</span></div>
+              </div>
+            </section>
+
+            <!-- f3 · 21:38 · one wrong, the reason why, then help on THIS one -->
+            <section class="shot" id="f3">
+              <div id="hpin">?</div>
+              <div class="panel" id="hnote">
+                <div class="eh">Help on this question</div>
+                <div class="blur tight"></div>
+              </div>
+              <div class="panel" id="expl">
+                <div class="eh">Explanation</div>
+                <div class="blur tight"></div>
+              </div>
+            </section>
+
+            <!-- f4 · 22:10 · the call, and the beam that reads the screen ---- -->
+            <section class="shot" id="f4">
+              <div class="beam" id="beam"></div>
+              <div class="panel" id="call">
+                <div class="callhead"><div class="av" id="cav"></div>
+                  <div><b>AI Coach</b><div class="cs">voice call</div></div></div>
+                <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="callfoot"><span class="cd" id="cdur">00:00</span><span class="cl">On call</span></div>
+              </div>
+              <span class="pill" id="scanpill"><i class="dot"></i>Reading your screen</span>
+            </section>
+
+            <!-- f5 · 22:35 · the cohort, then what you keep from it ---------- -->
+            <section class="shot" id="f5">
+              <div class="panel" id="room">
+                <div class="roomhead"><b>Study room</b><span class="rn">your cohort</span></div>
+                <div class="roomgrid">
+                  <div class="rt" id="rt1"><div class="face f1">AK</div></div>
+                  <div class="rt" id="rt2"><div class="face f2">JD</div></div>
+                  <div class="rt" id="rt3"><div class="face f3">RM</div></div>
+                  <div class="rt" id="rt4"><div class="face f4">TN</div></div>
+                  <div class="rt" id="rt5"><div class="face f5">SO</div></div>
+                  <div class="rt" id="rt6"><div class="face f2">EL</div></div>
+                </div>
+              </div>
+              <div class="panel" id="notes">
+                <div class="eh">Your notes</div>
+                <div class="sk w100"></div>
+                <div class="sk w84 hl" id="nhl"></div>
+                <div class="sk w56"></div>
+                <span class="pill" id="ntag">Saved to Question 14</span>
+              </div>
+            </section>
+
+            <!-- f6 · 22:50 · what it noticed while you worked ---------------- -->
+            <section class="shot" id="f6">
+              <div class="lay" id="anlay">
+                <div class="lhead"><b>What Certuvo noticed</b><span class="lsub">this evening, domain by domain</span></div>
+                <div class="bars">
+                  <div class="barrow" id="ba1"><span>Domain 1</span><div class="track"><i></i></div></div>
+                  <div class="barrow" id="ba2"><span>Domain 2</span><div class="track"><i></i></div></div>
+                  <div class="barrow" id="ba3"><span>Domain 3</span><div class="track"><i></i></div></div>
+                  <div class="barrow" id="ba4"><span>Domain 4</span><div class="track"><i></i></div></div>
+                  <div class="barrow" id="ba5"><span>Domain 5</span><div class="track"><i></i></div></div>
+                </div>
+                <div class="panel" id="nights">
+                  <div class="ph"><b>The same gap</b><em>three nights running</em>
+                    <span class="pill red" id="gapflag"><i class="dot"></i>Knowledge gap detected</span></div>
+                  <div class="ngrid">
+                    <div class="ncard" id="nc1"><div class="nl">Night one</div><div class="nb"><i></i><i></i><i></i><i></i><i></i></div></div>
+                    <div class="ncard" id="nc2"><div class="nl">Night two</div><div class="nb"><i></i><i></i><i></i><i></i><i></i></div></div>
+                    <div class="ncard" id="nc3"><div class="nl">Tonight</div><div class="nb"><i></i><i></i><i></i><i></i><i></i></div></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- f7 · 23:05 · close the laptop -------------------------------- -->
+            <section class="shot" id="f7">
+              <div class="lay" id="sumlay">
+                <div class="lhead"><b>Tonight</b><span class="lsub">where the evening left you</span></div>
+                <div class="sumrow">
+                  <div class="card grow">
+                    <div class="ct">Progress</div>
+                    <div class="curvewrap">
+                      <svg id="csvg" viewBox="0 0 460 200" preserveAspectRatio="none">
+                        <line class="thr" x1="0" y1="42" x2="460" y2="42"></line>
+                        <path class="ca" id="carea" d=""></path>
+                        <path class="cp" id="cpath" d=""></path>
+                      </svg>
+                      <div id="thrtag">Exam-ready</div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="ct">Study streak</div>
+                    <div class="streakwrap">
+                      <div class="tiny">Your last fourteen nights</div>
+                      <div class="streak" id="sk1"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                      <div class="streak" id="sk2"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                      <div id="sklab">Fourteen nights, unbroken</div>
+                    </div>
+                  </div>
+                </div>
+                <span class="pill" id="donepill">Session saved &middot; back tomorrow</span>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="lfoot"><i></i></div>
+  </div>
+
+  <div id="cc"><div id="ccbox"></div></div>
+
+  <div id="end">
+    <img src="../../brand/certuvo-logo-blue.png" alt="Certuvo">
+    <h3>One evening. <em>One place.</em></h3>
+    <div class="u">certuvo.com</div>
+    <div class="lg" id="endlg"></div>
+  </div>
+</div>
+
+<script src="shots.data.js"></script>
+<script src="captions.data.js"></script>
+<script src="../../common/engine.js"></script>
+<script>
+const E = window.CE;
+const { clamp, seg, pulse, outCubic, outExpo, inOut, mixc,
+        C_BLUE, C_BLUE3, C_RED, C_WHITE, C_SKEL, C_LINE, C_LINE2, C_MUTE, C_TINT, C_INK, C_SUB } = E;
+
+const { W, H, SS, CC } = E.setupStage();
+E.drawMesh(W, H, SS);
+
+const RAW  = window.__SHOTS || [];
+const DUR  = window.__DURATION || 65.76;
+const CAPS = window.__CAPTIONS || [];
+window.__DUR = DUR;
+
+/* Each scene is two spoken lines, and every beat in this film is hung off one
+   of them. Rather than hand-copy the sub-timings, the two caption starts inside
+   a shot's window ARE the two cues: vs = when the first line begins, v2 = when
+   the second begins. Retiming the narration retimes the picture for free, and
+   nothing in the file has to be edited when sync.py re-measures a new take. */
+const SHOTS = RAW.map(([id, label, a, b]) => {
+  const mine = CAPS.filter(c => c[0] >= a - 0.02 && c[0] < b - 0.02);
+  return { id, label, in: a, out: b,
+           vs: mine.length ? mine[0][0] : a + 0.28,
+           v2: mine.length > 1 ? mine[1][0] : (a + b) / 2 };
+});
+const S = Object.fromEntries(SHOTS.map(s => [s.id, s]));
+const LAST = SHOTS[SHOTS.length - 1];
+const END_AT = LAST.out - 4.6;
+
+const Q = s => document.querySelector(s), QA = s => [...document.querySelectorAll(s)];
+const C_RED_TINT = [253, 236, 235];
+
+/* Only the three views that legitimately replace the question get a head
+   reveal; every overlay is hand-driven below so it can slide *and* retract. */
+const CUES = { f1:[['.lhead', -0.05, 0], ['.lfootrow', 1.1, 0]],
+               f6:[['.lhead', -0.05, 0]], f7:[['.lhead', -0.05, 0]] };
+const ANIM = E.buildReveals(SHOTS, CUES);
+
+/* ---- persistent parts (driven from absolute t, not from a shot) ----------- */
+const CHIPS = E.fillChipField(Q('#chips'), 352, 16);
+/* A uniformly lit field paints as one flat blue rectangle, which reads as a
+   graphic, not as a bank of items. Each chip gets a fixed pseudo-random density
+   instead — set once here, never in seek(), so the texture is identical on every
+   frame and the field still lights strictly left-to-right. */
+CHIPS.forEach((c, i) => { const h = Math.sin(i * 12.9898) * 43758.5453;
+  c.style.opacity = (0.40 + 0.60 * (h - Math.floor(h))).toFixed(3); });
+const PIPS  = (() => { const el = Q('#qpips'), f = document.createDocumentFragment();
+  for (let i = 0; i < 20; i++) f.appendChild(document.createElement('i'));
+  el.appendChild(f); return [...el.children]; })();
+
+const P = {
+  clkfill: Q('#clkfill'), tks: QA('.tk'),
+  url: Q('#url'), tchip: Q('#tchip'), qtag: Q('#qtag'), livetag: Q('#livetag'), livedot: Q('#livetag i'),
+  navs: QA('.nv'), qv: Q('#qv'),
+  oB: Q('#oB'), oC: Q('#oC'), mkB: Q('#mkB'), mkC: Q('#mkC'),
+  verif: Q('#verif'),
+  mock: Q('#mock'), sects: QA('#sects i'), mockleft: Q('#mockleft'), mockright: Q('#mockright'),
+  expl: Q('#expl'), hpin: Q('#hpin'), hnote: Q('#hnote'),
+  call: Q('#call'), cav: Q('#cav'), wave: Q('#wave'), waves: QA('#wave i'), cdur: Q('#cdur'),
+  beam: Q('#beam'), scanpill: Q('#scanpill'),
+  room: Q('#room'), rts: [1,2,3,4,5,6].map(i => Q('#rt' + i)),
+  notes: Q('#notes'), nhl: Q('#nhl'), ntag: Q('#ntag'),
+  anlay: Q('#anlay'), ba: [1,2,3,4,5].map(i => Q('#ba' + i)), nights: Q('#nights'),
+  ncs: [1,2,3].map(i => Q('#nc' + i)), nbs: [1,2,3].map(i => QA('#nc' + i + ' .nb i')), gapflag: Q('#gapflag'),
+  sumlay: Q('#sumlay'), cpath: Q('#cpath'), carea: Q('#carea'), csvg: Q('#csvg'), thrtag: Q('#thrtag'),
+  sk1: QA('#sk1 i'), sk2: QA('#sk2 i'), sklab: Q('#sklab'), donepill: Q('#donepill'),
+};
+
+/* the nav row lit per beat. f2, f3 and f4 all happen on "Practice" as far as the
+   student is concerned, so their windows are merged before they are painted —
+   otherwise the row blinks off at cuts that are not really changes of place. */
+const NAV_FOR = { f1:0, f2:1, f3:1, f4:2, f5:3, f6:4, f7:5 };
+const NAV_WIN = (() => {
+  const w = {};
+  for (const s of SHOTS){ const j = NAV_FOR[s.id];
+    w[j] = w[j] ? [Math.min(w[j][0], s.in), Math.max(w[j][1], s.out)] : [s.in, s.out]; }
+  return w;
+})();
+const URLS = { f1:'library', f2:'practice', f3:'practice', f4:'practice', f5:'rooms', f6:'insights', f7:'progress' };
+
+/* three nights of the same shape: column 3 is short every time, which is the
+   whole point of the panel — the gap is not tonight's bad luck. */
+const NIGHTS = [[.78,.70,.30,.66,.74], [.82,.74,.27,.70,.68], [.86,.78,.31,.72,.76]];
+const BARS = [.84, .76, .31, .70, .66], GAP = 2;
+const CURVE = [[6,182],[40,172],[74,160],[108,150],[142,138],[176,142],[210,124],[244,112],
+               [278,100],[312,88],[346,74],[380,62],[414,50],[440,38]];
+
+const mmss = s => String((s / 60) | 0).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+/* px offsets are deliberately smaller than the screen's own padding, so a panel
+   mid-slide is never half-outside the lid — the audit checks exactly that */
+const slideY = p => `translateY(${((1 - p) * SS * 0.95).toFixed(2)}px) scale(${(0.985 + 0.015 * p).toFixed(4)})`;
+const slideX = p => `translateX(${((1 - p) * SS * 0.95).toFixed(2)}px)`;
+
+/* Every beat is a pure function of two clocks: u = seconds since this scene's
+   first spoken line, v = seconds since its second. Beats that illustrate the
+   second sentence hang off v so they cannot drift when the read changes. */
+const FX = {
+  /* f1 · the bank opening. The field lights left-to-right with a row lag so it
+     reads as depth being loaded rather than a static texture; it finishes under
+     the word "thousands" instead of waiting for it. */
+  f1(u, v){
+    E.paintChipField(CHIPS, 16, u, 0.6, 0.17, 0.34);
+    const vp = seg(v, 2.2, 2.8, outExpo);
+    P.verif.style.opacity = vp.toFixed(3);
+    P.verif.style.transform = `translateY(${((1 - vp) * 0.5).toFixed(3)}em)`;
+  },
+
+  /* f2 · the mock is a *glimpse* on the second line: it rises over the quiz,
+     runs its sections, and retracts before the cut so f3 finds the question
+     uncovered and exactly where it was. */
+  f2(u, v){
+    const mp = seg(v, 0.35, 1.15, outExpo) * (1 - seg(v, 3.30, 3.85, inOut));
+    P.mock.style.opacity = mp.toFixed(3);
+    P.mock.style.transform = slideY(mp);
+    const prog = clamp((v - 0.9) / 2.2) * 8;
+    P.sects.forEach((s, i) => s.style.setProperty('--f', clamp(prog - i).toFixed(3)));
+    P.mockleft.textContent = `Section ${clamp(Math.ceil(prog), 1, 8)} of 8`;
+    const secs = Math.max(0, Math.round(14400 * (1 - clamp((v - 0.9) / 2.2))));
+    P.mockright.textContent = `${(secs / 3600) | 0}:${String(((secs % 3600) / 60) | 0).padStart(2,'0')}:${String(secs % 60).padStart(2,'0')}`;
+  },
+
+  /* f3 · line one is the wrong answer and the reason why; line two is help on
+     THIS question, which is why the pin attaches to the stem rather than
+     opening a search field somewhere else on the screen. */
+  f3(u, v){
+    const gone = seg(v, 3.85, 4.40, inOut);
+    const ep = seg(u, 1.9, 2.7, outExpo) * (1 - gone);
+    P.expl.style.opacity = ep.toFixed(3);
+    P.expl.style.transform = slideY(ep);
+    const hp = seg(v, 0.55, 1.05, outExpo) * (1 - gone);
+    P.hpin.style.opacity = hp.toFixed(3);
+    P.hpin.style.transform = `scale(${(0.62 + 0.38 * hp + 0.12 * pulse(v, 0.55, 1.5)).toFixed(4)})`;
+    const hn = seg(v, 1.5, 2.2, outExpo) * (1 - gone);
+    P.hnote.style.opacity = hn.toFixed(3);
+    P.hnote.style.transform = slideX(hn);
+  },
+
+  /* f4 · the card docks top-right on line one; on line two the beam sweeps the
+     question underneath it — the screen is being read, so nothing is described. */
+  f4(u, v){
+    const gone = seg(v, 4.05, 4.60, inOut);
+    const cp = seg(u, 0.5, 1.3, outExpo) * (1 - gone);
+    P.call.style.opacity = cp.toFixed(3);
+    P.call.style.transform = slideX(cp);
+    const live = seg(u, 1.0, 1.6) * (1 - seg(v, 3.9, 4.3));
+    const b = 0.5 + 0.5 * Math.sin(u * 6);
+    P.cav.style.boxShadow = `0 0 0 ${(SS * 0.26 * live * (0.4 + 0.6 * b)).toFixed(2)}px rgba(41,95,237,.18)`;
+    P.cav.style.transform = `scale(${(1 + 0.05 * live * b).toFixed(4)})`;
+    P.wave.style.opacity = live.toFixed(3);
+    E.setWave(P.waves, u, live);
+    P.cdur.textContent = mmss(Math.round(clamp(u - 1.0, 0, 7.2) * 8));
+    E.setBeam(P.beam, v, 0.5, 3.9, { width: 555, from: -20 });
+    const sp = seg(v, 0.7, 1.3, outExpo) * (1 - seg(v, 4.05, 4.45));
+    P.scanpill.style.opacity = sp.toFixed(3);
+    P.scanpill.style.transform = `translateY(${((1 - sp) * 0.5).toFixed(3)}em)`;
+  },
+
+  /* f5 · the room docks where the call card was — same corner, so the session
+     reads as handed over rather than restarted — and the note lands bottom-left
+     on line two, beside the question that prompted it. */
+  f5(u, v){
+    const gone = seg(v, 4.10, 4.65, inOut);
+    const rp = seg(u, 0.4, 1.2, outExpo) * (1 - gone);
+    P.room.style.opacity = rp.toFixed(3);
+    P.room.style.transform = slideX(rp);
+    const J = [0.9, 1.12, 1.34, 1.56, 1.78, 2.0];
+    P.rts.forEach((tile, i) => {
+      const p = seg(u, J[i], J[i] + 0.45, outExpo);
+      tile.style.opacity = p.toFixed(3);
+      tile.style.transform = `translateY(${((1 - p) * 0.5).toFixed(3)}em) scale(${(0.92 + 0.08 * p).toFixed(4)})`;
+    });
+    const np = seg(v, 0.4, 1.2, outExpo) * (1 - gone);
+    P.notes.style.opacity = np.toFixed(3);
+    P.notes.style.transform = slideY(np);
+    const hl = seg(v, 1.6, 2.6, inOut);
+    P.nhl.style.backgroundSize = `${(hl * 100).toFixed(1)}% 100%`;
+    P.nhl.style.backgroundRepeat = 'no-repeat';
+    const nt = seg(v, 2.9, 3.5, outExpo) * (1 - gone);
+    P.ntag.style.opacity = nt.toFixed(3);
+    P.ntag.style.transform = `translateY(${((1 - nt) * 0.5).toFixed(3)}em)`;
+  },
+
+  /* f6 · line one shows the evening's domains; line two names the finding. Red
+     is spent on that one column and the pill, and on nothing else. */
+  f6(u, v){
+    const rise = seg(u, -0.25, 0.55, outExpo);
+    P.anlay.style.transform = `translateY(${((1 - rise) * SS * 0.8).toFixed(2)}px)`;
+    const gp = seg(v, 0.4, 1.0, outExpo);
+    /* the colour a lit bar is heading for: blue, or blue turning red once the
+       second line names the gap. Composed numerically because mixc returns a
+       string and this needs two mixes in a row. */
+    const gapc = [0,1,2].map(i => C_BLUE[i] + (C_RED[i] - C_BLUE[i]) * gp);
+    P.ba.forEach((r, i) => {
+      const p = seg(u, 0.5 + i * 0.22, 0.5 + i * 0.22 + 0.5, outExpo);
+      const bar = r.querySelector('.track i');
+      bar.style.transform = `scaleX(${(BARS[i] * p).toFixed(4)})`;
+      bar.style.backgroundColor = i === GAP ? mixc(C_BLUE, C_RED, gp) : 'rgb(41,95,237)';
+      r.querySelector('span').style.color = i === GAP ? mixc(C_SUB, C_RED, gp) : 'rgb(75,85,99)';
+    });
+    const np = seg(u, 1.9, 2.7, outExpo);
+    P.nights.style.opacity = np.toFixed(3);
+    P.nights.style.transform = slideY(np);
+    P.ncs.forEach((c, i) => {
+      const at = 2.4 + i * 0.35;
+      const p = seg(u, at, at + 0.5, outExpo);
+      c.style.opacity = p.toFixed(3);
+      c.style.transform = `translateY(${((1 - p) * 0.6).toFixed(3)}em)`;
+      P.nbs[i].forEach((bar, k) => {
+        bar.style.height = `${(10 + 90 * NIGHTS[i][k] * p).toFixed(1)}%`;
+        bar.style.backgroundColor = mixc(C_SKEL, k === GAP ? gapc : C_BLUE, p * 0.92);
+      });
+    });
+    const gf = seg(v, 2.2, 2.8, outExpo);
+    P.gapflag.style.opacity = gf.toFixed(3);
+    P.gapflag.style.transform = `translateY(${((1 - gf) * 0.5).toFixed(3)}em)`;
+  },
+
+  /* f7 · the close. Everything lands on line one; line two is the sign-off, and
+     the end card takes the frame 4.6 s before the film ends. */
+  f7(u, v){
+    const rise = seg(u, -0.25, 0.55, outExpo);
+    P.sumlay.style.transform = `translateY(${((1 - rise) * SS * 0.8).toFixed(2)}px)`;
+    const d = seg(u, 0.3, 2.6, inOut);
+    const { d: path, end } = E.pathTo(CURVE, Math.max(0.02, d));
+    P.cpath.setAttribute('d', path);
+    P.carea.setAttribute('d', path + `L${end[0].toFixed(1)},200L6,200Z`);
+    const r = P.csvg.getBoundingClientRect(), pr = P.csvg.parentElement.getBoundingClientRect();
+    P.thrtag.style.top = ((r.top - pr.top) + 42 / 200 * r.height - SS * 0.5).toFixed(1) + 'px';
+    P.thrtag.style.opacity = seg(u, 2.2, 2.7, outExpo).toFixed(3);
+    [...P.sk1, ...P.sk2].forEach((s, i) => {
+      const at = 1.6 + i * 0.085;
+      const p = seg(u, at, at + 0.3, outExpo);
+      s.style.backgroundColor = mixc(C_SKEL, C_BLUE, p);
+      s.style.transform = `scale(${(0.84 + 0.16 * p + 0.1 * pulse(u, at, at + 0.34)).toFixed(4)})`;
+    });
+    const sl = seg(u, 3.0, 3.6, outExpo);
+    P.sklab.style.opacity = sl.toFixed(3);
+    P.sklab.style.color = sl > 0.5 ? 'rgb(41,95,237)' : 'rgb(107,114,128)';
+    const dp = seg(v, 0.5, 1.1, outExpo);
+    P.donepill.style.opacity = dp.toFixed(3);
+    P.donepill.style.transform = `translateY(${((1 - dp) * 0.5).toFixed(3)}em)`;
+  },
+};
+
+const ENDLG = 'Product views are illustrative: every question, option, explanation and note shown is an abstract '
+            + 'placeholder, not real exam content. All third-party names and marks are the property of their '
+            + 'respective owners. Preparation does not guarantee a pass.';
+document.getElementById('endlg').textContent = ENDLG;
+const ENDANIM = [['#end img', 0.30], ['#end h3', 0.75], ['#end .u', 1.20], ['#end .lg', 1.70]]
+  .map(([s, d]) => ({ el: document.querySelector(s), start: END_AT + d }));
+
+const ccWrap = document.getElementById('cc'), ccBox = document.getElementById('ccbox');
+const endEl = document.getElementById('end');
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+  const endp = seg(t, END_AT, END_AT + 0.8);
+
+  E.wash(t, DUR, seg(t, DUR * 0.55, DUR));
+  /* push = 0: the shots cross-fade in place. A lateral push would slide the
+     screen contents at every cut and break the single-session illusion. */
+  const { cur } = E.paintShots(t, SHOTS, DUR, 0.42, 0);
+  const idx = SHOTS.indexOf(cur);
+  E.furniture(t, DUR, { label: cur.label, index: idx + 1, total: SHOTS.length, fade: 1 - endp });
+
+  /* ---- the evening advances ----------------------------------------------
+     The clock is the spine of the story, so it moves only in the cut: each
+     node lights across a 0.48 s window centred on the cut and is finished
+     before the next line is spoken. A marker that crept forward under the
+     narration would pull the eye off the screen it is meant to frame. */
+  const step = seg(t, cur.in - 0.24, cur.in + 0.24, inOut);
+  P.clkfill.style.transform = `scaleX(${clamp((idx - 1 + step) / (SHOTS.length - 1)).toFixed(4)})`;
+  P.tks.forEach((tk, i) => {
+    const sh = SHOTS[i];
+    const live = i === idx ? step : 0;
+    const past = seg(t, sh.out - 0.24, sh.out + 0.24, inOut);
+    const dot = tk.querySelector('i'), lab = tk.querySelector('b');
+    dot.style.backgroundColor = mixc(C_LINE2, C_BLUE, Math.max(live, past * 0.75));
+    dot.style.transform = `scale(${(1 + 0.85 * live).toFixed(3)})`;
+    dot.style.boxShadow = `0 0 0 ${(SS * 0.26 * live).toFixed(2)}px rgba(41,95,237,.14)`;
+    lab.style.color = mixc(C_MUTE, live > past ? C_INK : C_SUB, Math.max(live, past * 0.8));
+  });
+
+  /* ---- the app chrome: one bar, changing only what it must ---------------- */
+  P.url.textContent = 'certuvo.com · ' + URLS[cur.id];
+  P.navs.forEach((nv, j) => {
+    const [a, b] = NAV_WIN[j];
+    const on = seg(t, a, a + 0.45) * (1 - seg(t, b - 0.25, b + 0.2));
+    nv.style.backgroundColor = on > 0.02 ? `rgba(41,95,237,${(0.07 * on).toFixed(3)})` : 'transparent';
+    nv.querySelector('i').style.backgroundColor = mixc(C_LINE2, C_BLUE, on);
+    nv.querySelector('span').style.color = mixc(C_MUTE, C_BLUE, on);
+  });
+
+  /* The quiz timer belongs to f2 and f3 together — it is one twenty-minute
+     sitting, so it runs straight across that cut and only reddens in the last
+     seconds before it leaves, which is the single use of red the clock gets. */
+  const tOn = seg(t, S.f2.in - 0.2, S.f2.in + 0.4) * (1 - seg(t, S.f3.out - 0.55, S.f3.out - 0.05));
+  const run = clamp((t - S.f2.vs) / (S.f3.out - 0.5 - S.f2.vs));
+  const low = seg(run, 0.950, 0.972, outExpo);
+  P.tchip.style.opacity = tOn.toFixed(3);
+  P.tchip.textContent = mmss(Math.max(0, Math.round(1200 * (1 - run * 0.93))));
+  P.tchip.style.color = mixc(C_BLUE, C_RED, low);
+  P.tchip.style.backgroundColor = mixc(C_TINT, C_RED_TINT, low);
+
+  const liveOn = seg(t, S.f5.in + 0.35, S.f5.in + 0.95) * (1 - seg(t, S.f5.out - 0.5, S.f5.out - 0.05));
+  P.livetag.style.opacity = liveOn.toFixed(3);
+  P.livedot.style.opacity = (0.5 + 0.5 * Math.sin(t * 5.2)).toFixed(3);
+
+  /* ---- the question view: in from f2, out when analytics take the screen --- */
+  const qvOn = seg(t, S.f2.in - 0.25, S.f2.in + 0.35) * (1 - seg(t, S.f6.in - 0.35, S.f6.in + 0.1));
+  P.qv.style.opacity = qvOn.toFixed(3);
+  P.qv.style.visibility = qvOn < 0.002 ? 'hidden' : 'visible';
+  P.qv.style.transform = `translateY(${((1 - qvOn) * 0.4).toFixed(3)}em)`;
+  P.qtag.style.opacity = qvOn.toFixed(3);
+
+  const done = clamp((t - S.f2.vs) / 5.4) * 13;
+  PIPS.forEach((p, i) => {
+    p.style.backgroundColor = i === 13 ? mixc(C_SKEL, C_BLUE3, clamp(done - 12.4))
+                                       : mixc(C_SKEL, C_BLUE, clamp(done - i));
+  });
+
+  /* the wrong answer, then the right one. These live on the persistent question
+     view rather than inside f3, because the student's mistake is still on screen
+     while the Coach is called and while the room is open — that continuity is
+     the treatment. */
+  const wrong = seg(t, S.f3.vs + 0.9, S.f3.vs + 1.5, outExpo) * qvOn;
+  const right = seg(t, S.f3.vs + 1.7, S.f3.vs + 2.3, outExpo) * qvOn;
+  P.oB.style.backgroundColor = mixc(C_WHITE, C_RED_TINT, wrong);
+  P.oB.style.borderColor = mixc(C_LINE, [240, 122, 114], wrong);
+  P.oB.querySelector('b').style.color = mixc(C_MUTE, C_RED, wrong);
+  P.mkB.style.backgroundColor = 'rgb(229,69,63)';
+  P.mkB.style.opacity = wrong.toFixed(3);
+  P.mkB.style.transform = `scale(${(0.5 + 0.5 * wrong + 0.14 * pulse(t, S.f3.vs + 0.9, S.f3.vs + 1.8)).toFixed(4)})`;
+  P.oC.style.backgroundColor = mixc(C_WHITE, C_TINT, right);
+  P.oC.style.borderColor = mixc(C_LINE, C_BLUE, right);
+  P.oC.querySelector('b').style.color = mixc(C_MUTE, C_BLUE, right);
+  P.mkC.style.backgroundColor = 'rgb(41,95,237)';
+  P.mkC.style.opacity = right.toFixed(3);
+  P.mkC.style.transform = `scale(${(0.5 + 0.5 * right + 0.14 * pulse(t, S.f3.vs + 1.7, S.f3.vs + 2.6)).toFixed(4)})`;
+
+  for (const s of SHOTS){ const fx = FX[s.id]; if (fx) fx(t - s.vs, t - s.v2); }
+  E.paintReveals(t, ANIM, { rise: 0.55, lift: 0.7 });
+
+  endEl.style.opacity = endp.toFixed(3);
+  endEl.style.visibility = endp < 0.002 ? 'hidden' : 'visible';
+  for (const a of ENDANIM){
+    const p = seg(t, a.start, a.start + 0.6, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1 - p) * 0.8).toFixed(3)}em)`;
+  }
+  ccWrap.style.opacity = (1 - endp).toFixed(3);
+  E.paintCaptions(t, CAPS, { box: ccBox, wrap: ccWrap, on: CC && endp < 0.5 });
+}
+window.seek = seek;
+seek(0);
+window.__READY = true;
+</script>
+</body>
+</html>

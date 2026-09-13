@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — V2 Card Deck</title>
+<!--
+  V2 "CARD DECK" — one feature, one card, fourteen times.
+
+  Where V1 tours a single surface from a standing rail, V2 deals a deck. There
+  is no rail and no browser chrome: each feature gets the whole frame to itself
+  as a large centred card, holds for exactly as long as its narration line, and
+  is then dealt over by the next one. The rhythm is the point — fourteen equal
+  beats, a keynote rather than a walkthrough.
+
+  THE HANDOFF is a hard horizontal seam, never a cross-fade. A vertical edge
+  travels right-to-left across the deck window: everything left of the seam is
+  the outgoing card (drifting left as it goes), everything right of it is the
+  incoming card (arriving from the right). Both cards stay fully opaque
+  throughout, which is what makes it read as a wipe rather than a dissolve.
+
+  Why the seam is a clip-path on a window wrapper and not a full-width slide:
+  probe.mjs audits every element against the stage bounds on a half-second grid
+  and only forgives overflow within 0.7 s of a SCENE cut. Seven of the thirteen
+  handoffs happen mid-scene, so a card that genuinely travelled its own width
+  would be reported as broken layout on every one of them. Clipping the window
+  and translating the card a short distance gives the same read — a decisive
+  directional handoff — while every rect stays on stage. The window is inset
+  4.6s *outside* the card so the card's drop shadow lives inside the clip and
+  is not sliced off at rest.
+
+  HARD RULE, same as V1 and the reason this file draws everything by hand: no
+  real question, option, explanation or note ever appears. Every one is a `.sk`
+  skeleton bar or a `.blur` block — unreadable by construction, not by cropping.
+  Red is rationed to four jobs only: the numbered tag, a timer running low, the
+  LIVE dot, and the detected knowledge gap.
+
+  Deterministic: seek(t) is a pure function of t. No timers, no rAF, no CSS
+  transitions, no state between calls. Called twice with the same t it paints
+  the same pixels, which is what lets render.mjs screenshot frame by frame.
+-->
+<link rel="stylesheet" href="../../common/ui.css">
+<style>
+/* ---- the deck -------------------------------------------------------------
+   One box, dead centre horizontally, holding all fourteen cards stacked. Only
+   the card being dealt and the one it is covering are ever visible. Sizes are
+   in --s units so the whole layout rescales with the render size.            */
+#deck{position:absolute;left:calc(17 * var(--s) * 1px);right:calc(17 * var(--s) * 1px);
+  top:calc(10.2 * var(--s) * 1px);height:calc(30.4 * var(--s) * 1px)}
+
+/* every scene is two cards; the sections exist so paintShots can hard-cut
+   between scenes and so probe.mjs can scope its .shot checks */
+.shot{position:absolute;inset:0;will-change:opacity}
+
+/* The card silhouette — border, corner radius and drop shadow — is painted once
+   on a plate that never moves, and the cards themselves are plain white sheets
+   clipped inside it. Mid-wipe the clip cuts the travelling cards square at the
+   deck edge, and without this plate the whole assembly would flip from a
+   rounded, lifted card to a hard-edged rectangle for half a second every time a
+   card was dealt. */
+#plate{position:absolute;inset:0;background:var(--white);border:1px solid var(--line);
+  border-radius:calc(1.0 * var(--s) * 1px);box-shadow:var(--card2);will-change:opacity}
+
+/* the clip window. Bigger than the card on every side so the plate's shadow
+   sits inside it; clip-path (not overflow) so probe's clipped-text walk does
+   not mistake a mid-wipe card for a layout fault. */
+.cardwin{position:absolute;inset:calc(-4.6 * var(--s) * 1px);will-change:clip-path}
+
+.card{position:absolute;inset:calc(4.6 * var(--s) * 1px);background:var(--white);
+  border:1px solid var(--line);border-radius:calc(1.0 * var(--s) * 1px);
+  overflow:hidden;text-align:left;display:flex;flex-direction:column;
+  padding:calc(2.3 * var(--s) * 1px) calc(2.8 * var(--s) * 1px) calc(2.1 * var(--s) * 1px);
+  will-change:transform}
+
+/* card head: numbered tag + family kicker, then the feature name, then one line */
+.ctop{display:flex;align-items:center;gap:calc(.7 * var(--s) * 1px);will-change:opacity,transform}
+.ctop .ck{font-weight:700;font-size:calc(.84 * var(--s) * 1px);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--blue)}
+.ctitle{font-size:calc(2.3 * var(--s) * 1px);margin-top:calc(.75 * var(--s) * 1px);
+  will-change:opacity,transform}
+.cdesc{font-size:calc(1.12 * var(--s) * 1px);line-height:1.45;color:var(--sub);font-weight:500;
+  margin-top:calc(.5 * var(--s) * 1px);will-change:opacity,transform}
+
+/* the demonstration: the lower two thirds of every card, and the only place
+   abstract content ever lives */
+.cdemo{flex:1 1 auto;min-height:0;margin-top:calc(1.5 * var(--s) * 1px);position:relative;
+  display:flex;flex-direction:column;justify-content:center}
+.cdemo.split{display:grid;grid-template-columns:1.05fr .95fr;gap:calc(2.4 * var(--s) * 1px);align-items:stretch}
+.panel{border:1px solid var(--line);border-radius:calc(.5 * var(--s) * 1px);background:var(--white);
+  padding:calc(1.0 * var(--s) * 1px);position:relative;display:flex;flex-direction:column;box-shadow:var(--card)}
+.panel.flat{background:var(--panel);box-shadow:none}
+/* a panel whose content is shorter than the demo band centres it, rather than
+   hanging from the top over a pool of empty white */
+.panel.mid{justify-content:center}
+.plab{font-size:calc(.76 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--foot);margin-bottom:calc(.55 * var(--s) * 1px)}
+
+/* ---- 01 · the bank ------------------------------------------------------- */
+#d1 .chipfield i{height:calc(.72 * var(--s) * 1px)}
+#d1 .foot{margin-top:calc(1.2 * var(--s) * 1px);display:flex;align-items:center;gap:calc(.9 * var(--s) * 1px)}
+
+/* ---- 02 · four-stage validation ------------------------------------------ */
+.draft{border:calc(.1 * var(--s) * 1px) dashed var(--line2);border-radius:calc(.44 * var(--s) * 1px);
+  background:var(--panel);padding:calc(.8 * var(--s) * 1px) calc(1.0 * var(--s) * 1px)}
+.g4wrap{position:relative;display:flex;align-items:flex-start;justify-content:space-between;
+  padding-top:calc(2.4 * var(--s) * 1px);margin-top:calc(1.3 * var(--s) * 1px)}
+.g4{display:flex;flex-direction:column;align-items:center;gap:calc(.55 * var(--s) * 1px);flex:1 1 0}
+.g4 .tick{width:calc(4.2 * var(--s) * 1px);height:calc(4.2 * var(--s) * 1px)}
+.g4 .tick b{font-size:calc(1.7 * var(--s) * 1px)}
+.g4 em{font-style:normal;font-size:calc(.86 * var(--s) * 1px);color:var(--foot);text-align:center;
+  line-height:1.25;font-weight:600}
+.g4line{position:absolute;left:12.5%;right:12.5%;top:calc(4.5 * var(--s) * 1px);
+  height:calc(.1 * var(--s) * 1px);background:var(--line)}
+.g4fill{height:100%;background:var(--blue);transform-origin:left center;transform:scaleX(0);will-change:transform}
+
+/* ---- 03 · timed quizzes -------------------------------------------------- */
+#d3{align-items:center;gap:calc(1.4 * var(--s) * 1px)}
+#d3 .ring{width:calc(14 * var(--s) * 1px);height:calc(14 * var(--s) * 1px)}
+#d3 .rlab{font-size:calc(2.8 * var(--s) * 1px)}
+.qdots{display:flex;gap:calc(.44 * var(--s) * 1px)}
+.qdots i{display:block;width:calc(.9 * var(--s) * 1px);height:calc(.9 * var(--s) * 1px);
+  border-radius:calc(.24 * var(--s) * 1px);background:var(--skel);will-change:background-color}
+
+/* ---- 04 · full mock exams ------------------------------------------------ */
+.sects{display:flex;gap:calc(.3 * var(--s) * 1px)}
+.sects i{flex:1 1 0;height:calc(3.0 * var(--s) * 1px);border-radius:calc(.22 * var(--s) * 1px);
+  background:var(--line);overflow:hidden;position:relative}
+.sects i::after{content:'';position:absolute;inset:0;background:var(--blue);transform-origin:left center;
+  transform:scaleX(var(--f,0));will-change:transform}
+.mockmeta{display:flex;justify-content:space-between;align-items:baseline;margin-top:calc(.7 * var(--s) * 1px);
+  font-size:calc(1.0 * var(--s) * 1px);color:var(--foot);font-weight:600}
+.mockmeta b{font-family:var(--display);font-weight:800;font-size:calc(1.3 * var(--s) * 1px);color:var(--ink)}
+#d4 .rest{margin-top:calc(1.5 * var(--s) * 1px);background:var(--panel);
+  border:1px solid var(--line);border-radius:calc(.5 * var(--s) * 1px);padding:calc(1.0 * var(--s) * 1px)}
+
+/* ---- 05 · explanations · 06 · question help ------------------------------ */
+.expl{flex:1 1 auto;display:flex;flex-direction:column;
+  border-left:calc(.2 * var(--s) * 1px) solid var(--blue);background:var(--tint);
+  border-radius:calc(.34 * var(--s) * 1px);padding:calc(.9 * var(--s) * 1px);will-change:opacity,transform}
+.expl .blur::before,.helpnote .blur::before{filter:blur(calc(.3 * var(--s) * 1px))}
+.expl .eh{font-size:calc(.78 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:calc(.6 * var(--s) * 1px)}
+.expl .blur{flex:1 1 auto;min-height:calc(4.4 * var(--s) * 1px)}
+.helppin{position:absolute;right:calc(1.0 * var(--s) * 1px);top:calc(1.0 * var(--s) * 1px);
+  width:calc(2.4 * var(--s) * 1px);height:calc(2.4 * var(--s) * 1px);border-radius:50%;background:var(--blue);
+  color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:900;
+  font-size:calc(1.3 * var(--s) * 1px);box-shadow:var(--glow);will-change:transform,opacity;z-index:2}
+.helpnote{border:calc(.1 * var(--s) * 1px) dashed var(--blue);border-radius:calc(.4 * var(--s) * 1px);
+  background:var(--tint);padding:calc(.9 * var(--s) * 1px);will-change:opacity,transform;flex:1 1 auto;
+  display:flex;flex-direction:column}
+.helpnote .hn{font-size:calc(.78 * var(--s) * 1px);font-weight:700;color:var(--blue);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:calc(.6 * var(--s) * 1px)}
+.helpnote .blur{flex:1 1 auto;min-height:calc(3.4 * var(--s) * 1px)}
+
+/* ---- 07 · coach ---------------------------------------------------------- */
+#d7{display:grid;grid-template-columns:.66fr 1fr;gap:calc(2.4 * var(--s) * 1px)}
+.callcard{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:calc(.9 * var(--s) * 1px);text-align:center}
+.callcard .av{width:calc(6.2 * var(--s) * 1px);height:calc(6.2 * var(--s) * 1px);border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:box-shadow,transform}
+.callcard b{font-size:calc(1.1 * var(--s) * 1px)}
+.callcard .wave{height:calc(2.2 * var(--s) * 1px)}
+.callcard .wave i{width:calc(.26 * var(--s) * 1px)}
+.chatcol{gap:calc(.6 * var(--s) * 1px)}
+/* a bubble is align-self'd, so it shrink-wraps; without an explicit width the
+   percentage skeleton bars inside it resolve against nothing and collapse */
+.chatcol .bubble.them{width:88%}
+.chatcol .bubble.me{width:64%}
+
+/* ---- 08 · screen-aware --------------------------------------------------- */
+#d8 .surface{position:relative;overflow:hidden;flex:1 1 auto;justify-content:center}
+#d8 .foot{margin-top:calc(1.0 * var(--s) * 1px)}
+
+/* ---- 09 · rooms ---------------------------------------------------------- */
+#d9 .rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:calc(1.0 * var(--s) * 1px)}
+#d9 .rhead .rl2{font-size:calc(.92 * var(--s) * 1px);color:var(--foot);font-weight:600}
+.roomrow{display:grid;grid-template-columns:repeat(6,1fr);gap:calc(.7 * var(--s) * 1px)}
+.rt{position:relative;border:1px solid var(--line);border-radius:calc(.42 * var(--s) * 1px);background:var(--panel);
+  aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;will-change:opacity,transform}
+.rt .face{width:calc(4.2 * var(--s) * 1px);height:calc(4.2 * var(--s) * 1px);font-size:calc(1.5 * var(--s) * 1px)}
+
+/* ---- 10 · notes ---------------------------------------------------------- */
+#d10{display:grid;grid-template-columns:1.15fr .85fr;gap:calc(2.4 * var(--s) * 1px)}
+.note{display:flex;flex-direction:column;gap:calc(.52 * var(--s) * 1px)}
+.note .sk{margin:0}
+.note .hl{background:linear-gradient(180deg, rgba(41,95,237,0) 40%, rgba(41,95,237,.30) 40%);
+  border-radius:calc(.1 * var(--s) * 1px)}
+.notetag{align-self:flex-start;margin-top:calc(1.3 * var(--s) * 1px)}
+
+/* ---- 11 · analytics · 12 · the gap --------------------------------------- */
+.bars{display:flex;flex-direction:column;gap:calc(1.4 * var(--s) * 1px)}
+.bars .barrow span{width:calc(7.4 * var(--s) * 1px);font-size:calc(1.0 * var(--s) * 1px);will-change:color}
+.bars .barrow .track{height:calc(1.3 * var(--s) * 1px);border-radius:calc(.65 * var(--s) * 1px)}
+.bars .barrow .track i{border-radius:calc(.65 * var(--s) * 1px)}
+.gapflag{align-self:flex-start;margin-top:calc(1.4 * var(--s) * 1px);will-change:opacity,transform}
+
+/* ---- 13 · progress ------------------------------------------------------- */
+.curvewrap{position:relative;flex:1 1 auto;min-height:0}
+.curvewrap svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.curvewrap .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:7 7;vector-effect:non-scaling-stroke}
+.curvewrap .cp{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  vector-effect:non-scaling-stroke}
+.curvewrap .ca{fill:rgba(41,95,237,.10)}
+.thrtag{position:absolute;left:0;top:21%;transform:translateY(-120%);font-size:calc(.8 * var(--s) * 1px);
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--foot);background:var(--white);
+  padding:0 calc(.3 * var(--s) * 1px);will-change:opacity}
+
+/* ---- 14 · streaks -------------------------------------------------------- */
+#d14{align-items:center;gap:calc(1.0 * var(--s) * 1px)}
+#d14 .streak i{width:calc(5.6 * var(--s) * 1px);height:calc(5.6 * var(--s) * 1px);
+  border-radius:calc(1.0 * var(--s) * 1px)}
+#d14 .streak{gap:calc(1.0 * var(--s) * 1px)}
+.streaklab{font-size:calc(1.1 * var(--s) * 1px);color:var(--foot);font-weight:600;will-change:color,opacity}
+
+/* ---- the deck indicator ---------------------------------------------------
+   Fourteen dashes, one per card, sitting between the deck and the caption so
+   the viewer always knows how far through the deck they are. The live dash is
+   widened with transform (not width) so its neighbours never shift.          */
+#deckbar{position:absolute;left:calc(17 * var(--s) * 1px);right:calc(17 * var(--s) * 1px);
+  bottom:calc(13.2 * var(--s) * 1px);display:flex;align-items:center;justify-content:center;
+  gap:calc(.9 * var(--s) * 1px);z-index:6;will-change:opacity}
+#deckbar i{display:block;width:calc(1.0 * var(--s) * 1px);height:calc(.3 * var(--s) * 1px);
+  border-radius:calc(.15 * var(--s) * 1px);background:var(--line2);will-change:transform,background-color}
+
+/* ---- captions (identical to V1) ------------------------------------------ */
+#cc{position:absolute;left:0;right:0;bottom:calc(6.4 * var(--s) * 1px);display:flex;justify-content:center;
+  padding:0 calc(9 * var(--s) * 1px);pointer-events:none;z-index:7;will-change:opacity}
+#ccbox{background:rgba(255,255,255,.96);border-bottom:calc(.22 * var(--s) * 1px) solid var(--blue);
+  box-shadow:0 calc(.4 * var(--s) * 1px) calc(1.4 * var(--s) * 1px) rgba(11,18,32,.10);
+  border-radius:calc(.2 * var(--s) * 1px);padding:calc(.62 * var(--s) * 1px) calc(1.1 * var(--s) * 1px);
+  font-size:calc(1.28 * var(--s) * 1px);line-height:1.32;font-weight:500;color:var(--ink);text-align:center;
+  max-width:calc(52 * var(--s) * 1px);will-change:transform}
+
+/* ---- end card (identical to V1) ------------------------------------------ */
+#end{position:absolute;inset:0;z-index:9;background:var(--white);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:0 calc(9 * var(--s) * 1px);will-change:opacity}
+#end img{width:calc(24 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#end h3{margin-top:calc(1.8 * var(--s) * 1px);will-change:transform,opacity}
+#end .u{font-family:var(--display);font-weight:800;font-size:calc(2.1 * var(--s) * 1px);color:var(--blue);
+  margin-top:calc(1.2 * var(--s) * 1px);will-change:transform,opacity}
+#end .lg{font-size:calc(.82 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(60 * var(--s) * 1px);
+  margin-top:calc(2.0 * var(--s) * 1px);will-change:transform,opacity}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wash"></div><div id="wash2"></div>
+  <svg id="mesh" preserveAspectRatio="none"></svg>
+
+  <div id="brandbar"><img src="../../brand/certuvo-logo-blue.png" alt="Certuvo"><div class="bl">Your exam partner<br>Fourteen features, one platform</div></div>
+  <div id="count"><div class="n">01 / 07</div><div class="c">Verified</div></div>
+  <div id="barwrap"><div id="bar"></div></div>
+  <div id="footl">Inside Certuvo</div>
+  <div id="footr">certuvo.com</div>
+
+  <div id="deck">
+    <div id="plate"></div>
+
+    <!-- f1 · the bank, and how new questions are cleared -------------------- -->
+    <section class="shot" id="f1">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">01</span><span class="ck">Question bank</span></div>
+        <h2 class="ctitle">Thousands of verified questions</h2>
+        <p class="cdesc">Written and checked by people, aligned to the syllabus.</p>
+        <div class="cdemo" id="d1">
+          <div class="chipfield" id="chips"></div>
+          <div class="foot"><span class="pill" id="d1pill"><i class="dot"></i>Verified before a student sees it</span></div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">02</span><span class="ck">Question bank</span></div>
+        <h2 class="ctitle">Unlimited AI practice</h2>
+        <p class="cdesc">Generated on demand, then cleared by four independent judges.</p>
+        <div class="cdemo" id="d2">
+          <div class="draft"><div class="plab">Draft item</div><div class="sk w92 tall"></div><div class="sk w70"></div></div>
+          <div class="g4wrap">
+            <div class="g4line"><div class="g4fill" id="d2fill"></div></div>
+            <div class="g4"><div class="tick"><b>1</b></div><em>Generated</em></div>
+            <div class="g4"><div class="tick"><b>2</b></div><em>Answer<br>verified</em></div>
+            <div class="g4"><div class="tick"><b>3</b></div><em>Ambiguity<br>checked</em></div>
+            <div class="g4"><div class="tick"><b>4</b></div><em>Blueprint<br>matched</em></div>
+          </div>
+        </div>
+      </article></div>
+    </section>
+
+    <!-- f2 · under the clock ------------------------------------------------ -->
+    <section class="shot" id="f2">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">03</span><span class="ck">Under the clock</span></div>
+        <h2 class="ctitle">Timed quizzes</h2>
+        <p class="cdesc">Twenty minutes, whenever you have them.</p>
+        <div class="cdemo" id="d3">
+          <div class="ring" id="d3ring">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <circle class="rtrack" cx="50" cy="50" r="43" stroke-width="6"></circle>
+              <circle class="rfill" cx="50" cy="50" r="43" stroke-width="6"></circle>
+            </svg>
+            <div class="rlab" id="d3clock">20:00</div>
+          </div>
+          <div class="qdots" id="d3dots"></div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">04</span><span class="ck">Under the clock</span></div>
+        <h2 class="ctitle">Full mock exams</h2>
+        <p class="cdesc">Real length, real timing, every section.</p>
+        <div class="cdemo" id="d4">
+          <div class="sects" id="d4sects"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="mockmeta"><span id="d4left">Section 1 of 8</span><b id="d4right">4:00:00</b></div>
+          <div class="rest"><div class="sk w100 tall"></div><div class="sk w92"></div><div class="sk w56"></div></div>
+        </div>
+      </article></div>
+    </section>
+
+    <!-- f3 · why, not just what --------------------------------------------- -->
+    <section class="shot" id="f3">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">05</span><span class="ck">Understanding</span></div>
+        <h2 class="ctitle">Every answer, explained</h2>
+        <p class="cdesc">Why the right answer is right — and why the others are not.</p>
+        <div class="cdemo split" id="d5">
+          <div class="panel flat mid">
+            <div class="sk w100 tall"></div><div class="sk w84"></div>
+            <div class="optrow">
+              <div class="opt" id="d5o1"><b>A</b><div class="sk w84"></div></div>
+              <div class="opt" id="d5o2"><b>B</b><div class="sk w70"></div></div>
+              <div class="opt" id="d5o3"><b>C</b><div class="sk w92"></div></div>
+              <div class="opt" id="d5o4"><b>D</b><div class="sk w56"></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="plab">Worked through</div>
+            <div class="expl" id="d5expl"><div class="eh">Explanation</div><div class="blur"></div></div>
+          </div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">06</span><span class="ck">Understanding</span></div>
+        <h2 class="ctitle">Help on this question</h2>
+        <p class="cdesc">Not a search box — the question in front of you.</p>
+        <div class="cdemo split" id="d6">
+          <div class="panel flat mid">
+            <div class="helppin" id="d6pin">?</div>
+            <div class="sk w92 tall"></div><div class="sk w84"></div><div class="sk w40"></div>
+            <div class="optrow">
+              <div class="opt"><b>A</b><div class="sk w70"></div></div>
+              <div class="opt"><b>B</b><div class="sk w84"></div></div>
+              <div class="opt"><b>C</b><div class="sk w56"></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="plab">Asked here, answered here</div>
+            <div class="helpnote" id="d6note"><div class="hn">Help on this question</div><div class="blur"></div></div>
+          </div>
+        </div>
+      </article></div>
+    </section>
+
+    <!-- f4 · the coach ------------------------------------------------------- -->
+    <section class="shot" id="f4">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">07</span><span class="ck">AI Coach</span></div>
+        <h2 class="ctitle">An AI Coach you can call</h2>
+        <p class="cdesc">Chat by text, or talk to it and keep walking.</p>
+        <div class="cdemo" id="d7">
+          <div class="panel flat callcard">
+            <div class="av" id="d7av"></div>
+            <b>AI Coach</b>
+            <div class="wave" id="d7wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <span class="pill" id="d7pill"><i class="dot"></i>On a call</span>
+          </div>
+          <div class="panel mid chatcol">
+            <div class="bubble them" id="d7b1"><div class="sk w92" style="background:rgba(41,95,237,.16)"></div><div class="sk w70" style="background:rgba(41,95,237,.16)"></div></div>
+            <div class="bubble me" id="d7b2"><div class="sk w84" style="background:rgba(255,255,255,.5)"></div></div>
+            <div class="bubble them" id="d7b3"><div class="sk w100" style="background:rgba(41,95,237,.16)"></div><div class="sk w56" style="background:rgba(41,95,237,.16)"></div></div>
+          </div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">08</span><span class="ck">AI Coach</span></div>
+        <h2 class="ctitle">Screen-aware guidance</h2>
+        <p class="cdesc">It reads the question you are on, so you describe nothing.</p>
+        <div class="cdemo" id="d8">
+          <div class="panel flat surface mid">
+            <div class="beam" id="d8beam"></div>
+            <div class="sk w100 tall"></div><div class="sk w92"></div><div class="sk w56"></div>
+            <div class="optrow">
+              <div class="opt"><b>A</b><div class="sk w70"></div></div>
+              <div class="opt"><b>B</b><div class="sk w92"></div></div>
+              <div class="opt"><b>C</b><div class="sk w56"></div></div>
+            </div>
+          </div>
+          <div class="foot"><span class="pill" id="d8pill"><i class="dot"></i>Reading your screen</span></div>
+        </div>
+      </article></div>
+    </section>
+
+    <!-- f5 · not on your own -------------------------------------------------- -->
+    <section class="shot" id="f5">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">09</span><span class="ck">Together</span></div>
+        <h2 class="ctitle">Peer study rooms</h2>
+        <p class="cdesc">Your cohort, live, on the same question.</p>
+        <div class="cdemo" id="d9">
+          <div class="rhead"><span class="rl2">Room · your cohort</span><span class="pill red" id="d9live"><i class="dot"></i>LIVE</span></div>
+          <div class="roomrow">
+            <div class="rt" id="rt1"><div class="face f1">AK</div></div>
+            <div class="rt" id="rt2"><div class="face f2">JD</div></div>
+            <div class="rt" id="rt3"><div class="face f3">RM</div></div>
+            <div class="rt" id="rt4"><div class="face f4">TN</div></div>
+            <div class="rt" id="rt5"><div class="face f5">SO</div></div>
+            <div class="rt" id="rt6"><div class="face f2">LB</div></div>
+          </div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">10</span><span class="ck">Together</span></div>
+        <h2 class="ctitle">Integrated notes</h2>
+        <p class="cdesc">Kept beside the question that prompted them.</p>
+        <div class="cdemo" id="d10">
+          <div class="panel mid">
+            <div class="plab">Your note</div>
+            <div class="note">
+              <div class="sk w100"></div><div class="sk w92"></div>
+              <div class="sk w84 hl" id="d10hl"></div>
+              <div class="sk w70"></div><div class="sk w56"></div>
+            </div>
+            <span class="pill notetag" id="d10tag">Saved to Question 14</span>
+          </div>
+          <div class="panel flat mid">
+            <div class="plab">The question it came from</div>
+            <div class="sk w92 tall"></div><div class="sk w70"></div>
+            <div class="optrow">
+              <div class="opt"><b>A</b><div class="sk w84"></div></div>
+              <div class="opt"><b>B</b><div class="sk w56"></div></div>
+            </div>
+          </div>
+        </div>
+      </article></div>
+    </section>
+
+    <!-- f6 · what it finds ----------------------------------------------------- -->
+    <section class="shot" id="f6">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">11</span><span class="ck">What it finds</span></div>
+        <h2 class="ctitle">Focused analytics</h2>
+        <p class="cdesc">Domain by domain, not a wall of charts.</p>
+        <div class="cdemo" id="d11">
+          <div class="bars">
+            <div class="barrow" id="ba1"><span>Domain 1</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="ba2"><span>Domain 2</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="ba3"><span>Domain 3</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="ba4"><span>Domain 4</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="ba5"><span>Domain 5</span><div class="track"><i></i></div></div>
+          </div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">12</span><span class="ck">What it finds</span></div>
+        <h2 class="ctitle">Knowledge-gap detection</h2>
+        <p class="cdesc">The one you keep falling into, named.</p>
+        <div class="cdemo" id="d12">
+          <div class="bars">
+            <div class="barrow" id="bb1"><span>Domain 1</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="bb2"><span>Domain 2</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="bb3"><span>Domain 3</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="bb4"><span>Domain 4</span><div class="track"><i></i></div></div>
+            <div class="barrow" id="bb5"><span>Domain 5</span><div class="track"><i></i></div></div>
+          </div>
+          <span class="pill red gapflag" id="d12flag"><i class="dot"></i>Gap detected · three sessions running</span>
+        </div>
+      </article></div>
+    </section>
+
+    <!-- f7 · where you are ------------------------------------------------------ -->
+    <section class="shot" id="f7">
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">13</span><span class="ck">Where you are</span></div>
+        <h2 class="ctitle">Progress you can see</h2>
+        <p class="cdesc">Readiness over time — illustrative.</p>
+        <div class="cdemo" id="d13">
+          <div class="curvewrap">
+            <svg id="d13svg" viewBox="0 0 460 200" preserveAspectRatio="none">
+              <line class="thr" x1="0" y1="42" x2="460" y2="42"></line>
+              <path class="ca" id="d13area" d=""></path>
+              <path class="cp" id="d13path" d=""></path>
+            </svg>
+            <div class="thrtag" id="d13tag">Exam-ready</div>
+          </div>
+        </div>
+      </article></div>
+
+      <div class="cardwin"><article class="card">
+        <div class="ctop"><span class="num">14</span><span class="ck">Where you are</span></div>
+        <h2 class="ctitle">Study streaks</h2>
+        <p class="cdesc">The habit that does the work.</p>
+        <div class="cdemo" id="d14">
+          <div class="streak"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="streak"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="streaklab" id="d14lab">Fourteen days, unbroken</div>
+        </div>
+      </article></div>
+    </section>
+
+  </div>
+
+  <div id="deckbar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <div id="cc"><div id="ccbox"></div></div>
+
+  <div id="end">
+    <img src="../../brand/certuvo-logo-blue.png" alt="Certuvo">
+    <h3>Fourteen features. <em>One platform.</em></h3>
+    <div class="u">certuvo.com</div>
+    <div class="lg" id="endlg"></div>
+  </div>
+</div>
+
+<script src="shots.data.js"></script>
+<script src="captions.data.js"></script>
+<script src="../../common/engine.js"></script>
+<script>
+const E = window.CE;
+const { clamp, seg, pulse, outCubic, outExpo, inOut, outBack, mixc,
+        C_BLUE, C_RED, C_WHITE, C_SKEL, C_LINE2, C_MUTE, C_INK, C_SUB } = E;
+
+const { W, H, SS, CC } = E.setupStage();
+E.drawMesh(W, H, SS);
+
+const RAW  = window.__SHOTS || [];
+const DUR  = window.__DURATION || 60;
+const CAPS = window.__CAPTIONS || [];
+window.__DUR = DUR;
+
+/* vs is the moment the narration for a scene actually begins — the shot cut
+   sits in the middle of the beat of silence before it, so demonstrations that
+   key off the voice start a third of a second in, exactly as V1 does. */
+const SHOTS = RAW.map(([id, label, a, b]) => ({ id, label, in: a, out: b, vs: a + 0.30 }));
+const LAST = SHOTS[SHOTS.length - 1];
+const END_AT = LAST.out - 4.6;
+
+/* ---- the deck -------------------------------------------------------------
+   Fourteen cards, two per scene. The first card of a scene is dealt on the
+   scene cut; the second is dealt when its own narration line starts, plus a
+   0.15 s beat so the voice leads the picture rather than racing it. Both times
+   come out of the generated data, so a re-run of sync.py re-cuts the film
+   without a single hand-copied number in here.                               */
+const WIPE = 0.46;                      // how long the seam takes to cross
+const SLIDE_IN = 9 * SS;                // incoming card's arrival travel, px
+const SLIDE_OUT = 5 * SS;               // outgoing card's drift as it is covered
+/* The clip window is 4.6s wider than the card on each side so the card's drop
+   shadow survives the clip. That margin also lets a travelling card poke past
+   where a card is meant to sit, which reads as a stray slab rather than motion —
+   so while a card is moving its far edge is pinned back to the card's resting
+   edge. PAD is that margin as a fraction of the window, which is all the clip
+   expresses. */
+const PAD = 4.6 * SS / (W - 24.8 * SS) * 100;
+const CARDS = [];
+document.querySelectorAll('.shot').forEach((sec, k) => {
+  const shot = SHOTS[k];
+  const wins = [...sec.querySelectorAll('.cardwin')];
+  /* second narration line of this scene; clamped so a very short first line
+     still leaves the opening card a beat of its own */
+  const line2 = CAPS[2 * k + 1] ? CAPS[2 * k + 1][0] + 0.15 : (shot.in + shot.out) / 2;
+  const at = [shot.in, clamp(line2, shot.in + 1.1, shot.out - 1.1)];
+  wins.forEach((win, j) => CARDS.push({ win, card: win.firstElementChild, at: at[j], shot }));
+});
+CARDS.forEach((c, i) => { c.out = CARDS[i + 1] ? CARDS[i + 1].at : DUR; });
+
+/* paintShots is used purely as the stacking/visibility manager between scenes,
+   with an all-but-instant cross-fade: the wipe is what the eye should read, and
+   a real cross-fade underneath it would only make the seam mushy. The scenes
+   are handed an `out` extended by one wipe so the outgoing scene is still
+   painted while the incoming card's seam travels over it — otherwise the left
+   of the seam would flash white for half a second at every scene change. */
+const PAINT = SHOTS.map((s, i) => ({ ...s, out: i === SHOTS.length - 1 ? s.out : s.out + WIPE }));
+
+/* Card heads rise as their card lands. buildReveals resolves a repeated
+   selector to the first, then the second, match inside the shot — which is
+   exactly the two cards of that scene, in order. */
+const CUES = {};
+SHOTS.forEach((s, k) => {
+  const [a, b] = [CARDS[2 * k].at - s.in, CARDS[2 * k + 1].at - s.in];
+  CUES[s.id] = [['.ctop', a - 0.10, 0], ['.ctitle', a - 0.04, 0], ['.cdesc', a + 0.04, 0],
+                ['.ctop', b - 0.10, 0], ['.ctitle', b - 0.04, 0], ['.cdesc', b + 0.04, 0]];
+});
+const ANIM = E.buildReveals(SHOTS, CUES);
+
+/* ---- parts ---------------------------------------------------------------- */
+const Q = s => document.querySelector(s), QA = s => [...document.querySelectorAll(s)];
+const CHIP_COLS = 34;
+const CHIPS = E.fillChipField(Q('#chips'), CHIP_COLS * 11, CHIP_COLS);
+/* twenty question dots for the timed quiz, built here so the markup stays quiet */
+Q('#d3dots').innerHTML = new Array(20).fill('<i></i>').join('');
+const P = {
+  d1pill: Q('#d1pill'),
+  d2fill: Q('#d2fill'), d2ticks: QA('#d2 .g4'),
+  d3ring: Q('#d3ring'), d3clock: Q('#d3clock'), d3dots: QA('#d3dots i'),
+  d4sects: QA('#d4sects i'), d4left: Q('#d4left'), d4right: Q('#d4right'),
+  d5opts: [1, 2, 3, 4].map(i => Q('#d5o' + i)), d5expl: Q('#d5expl'),
+  d6pin: Q('#d6pin'), d6note: Q('#d6note'),
+  d7av: Q('#d7av'), d7wave: Q('#d7wave'), d7bars: QA('#d7wave i'), d7pill: Q('#d7pill'),
+  d7bub: [1, 2, 3].map(i => Q('#d7b' + i)),
+  d8beam: Q('#d8beam'), d8pill: Q('#d8pill'),
+  d9live: Q('#d9live'), d9rt: [1, 2, 3, 4, 5, 6].map(i => Q('#rt' + i)),
+  d10hl: Q('#d10hl'), d10tag: Q('#d10tag'),
+  ba: [1, 2, 3, 4, 5].map(i => Q('#ba' + i)), bb: [1, 2, 3, 4, 5].map(i => Q('#bb' + i)),
+  d12flag: Q('#d12flag'),
+  d13path: Q('#d13path'), d13area: Q('#d13area'), d13tag: Q('#d13tag'),
+  d14days: QA('#d14 .streak i'), d14lab: Q('#d14lab'),
+  dash: QA('#deckbar i'),
+};
+const CURVE = [[6,182],[40,172],[74,160],[108,150],[142,138],[176,142],[210,124],[244,112],
+               [278,100],[312,88],[346,74],[380,62],[414,50],[448,36]];
+const BARS_A = [.82,.74,.66,.58,.71], BARS_B = [.84,.77,.31,.72,.64], GAP = 2;
+
+/* Every demonstration is a pure function of u = seconds since its own card was
+   dealt, so a card plays out identically wherever the deck happens to sit in
+   the timeline. Each one is timed to finish inside its card's window; the
+   shortest window in the film is a shade over two seconds, which is why the
+   openings here are quicker than V1's. */
+const FX = [
+  /* 01 · thousands of verified questions — the bank filling in, left to right */
+  function (u) {
+    E.paintChipField(CHIPS, CHIP_COLS, u, 0.18, 0.055, 0.24);
+    const p = seg(u, 2.3, 2.9, outExpo);
+    P.d1pill.style.opacity = p.toFixed(3);
+    P.d1pill.style.transform = `translateY(${((1 - p) * 0.5).toFixed(3)}em)`;
+  },
+  /* 02 · four-stage validation — a draft item walked through four gates */
+  function (u) {
+    const T = [1.1, 2.0, 2.9, 3.8]; let done = 0;
+    T.forEach((at, i) => {
+      const p = seg(u, at, at + 0.42, outExpo); done += p;
+      const tk = P.d2ticks[i].querySelector('.tick'), b = P.d2ticks[i].querySelector('b');
+      tk.style.backgroundColor = mixc(C_WHITE, C_BLUE, p);
+      tk.style.borderColor = mixc(C_LINE2, C_BLUE, p);
+      tk.style.transform = `scale(${(1 + 0.10 * pulse(u, at, at + 0.45)).toFixed(4)})`;
+      b.style.color = mixc(C_MUTE, C_WHITE, p);
+      P.d2ticks[i].querySelector('em').style.color = mixc(C_MUTE, C_SUB, p);
+    });
+    P.d2fill.style.transform = `scaleX(${(done / 4).toFixed(4)})`;
+  },
+  /* 03 · timed quizzes — twenty minutes, compressed; red only at the death */
+  function (u) {
+    /* twenty minutes compressed into the card, stopping at 90 % so the ring
+       still reads as an arc rather than a stub for most of the hold */
+    const run = clamp((u - 0.3) / 3.7) * 0.90;
+    const low = run > 0.78;
+    E.setRing(P.d3ring, 1 - run, { colour: low ? 'rgb(229,69,63)' : 'rgb(41,95,237)' });
+    const left = Math.max(0, Math.round(1200 * (1 - run)));
+    P.d3clock.textContent = String((left / 60) | 0).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0');
+    P.d3clock.style.color = low ? 'rgb(229,69,63)' : 'rgb(11,18,32)';
+    P.d3dots.forEach((d, i) => {
+      const p = seg(u, 0.3 + i * 0.14, 0.3 + i * 0.14 + 0.2, outCubic);
+      d.style.backgroundColor = mixc(C_SKEL, C_BLUE, p);
+    });
+  },
+  /* 04 · full mock exams — eight sections and a four-hour clock draining */
+  function (u) {
+    const prog = clamp((u - 0.25) / 1.4) * 8;
+    P.d4sects.forEach((s, i) => s.style.setProperty('--f', clamp(prog - i).toFixed(3)));
+    P.d4left.textContent = `Section ${clamp(Math.ceil(prog), 1, 8)} of 8`;
+    const secs = Math.max(0, Math.round(14400 * (1 - clamp((u - 0.25) / 1.4))));
+    P.d4right.textContent = `${(secs / 3600) | 0}:${String(((secs % 3600) / 60) | 0).padStart(2, '0')}:${String(secs % 60).padStart(2, '0')}`;
+  },
+  /* 05 · explanations — an option settles, then the reasoning arrives beside it */
+  function (u) {
+    const pick = seg(u, 0.22, 0.62, outExpo);
+    const o = P.d5opts[1];
+    o.style.backgroundColor = mixc(C_WHITE, [238, 243, 255], pick);
+    o.style.borderColor = mixc([230, 235, 245], C_BLUE, pick);
+    o.querySelector('b').style.color = mixc(C_MUTE, C_BLUE, pick);
+    const ex = seg(u, 0.50, 1.05, outExpo);
+    P.d5expl.style.opacity = ex.toFixed(3);
+    P.d5expl.style.transform = `translateY(${((1 - ex) * 0.7).toFixed(3)}em)`;
+  },
+  /* 06 · question-specific help — the pin lands on THIS item, the note opens */
+  function (u) {
+    const hp = seg(u, 0.25, 0.75, outBack);
+    P.d6pin.style.opacity = clamp(seg(u, 0.25, 0.60)).toFixed(3);
+    P.d6pin.style.transform = `scale(${(0.55 + 0.45 * hp).toFixed(4)})`;
+    const hn = seg(u, 0.75, 1.3, outExpo);
+    P.d6note.style.opacity = hn.toFixed(3);
+    P.d6note.style.transform = `translateY(${((1 - hn) * 0.7).toFixed(3)}em)`;
+  },
+  /* 07 · chat or call — the call goes live and the thread answers */
+  function (u) {
+    const live = seg(u, 0.2, 0.7, outExpo);
+    const b = 0.5 + 0.5 * Math.sin(u * 6);
+    P.d7av.style.boxShadow = `0 0 0 ${(SS * 0.3 * live * (0.4 + 0.6 * b)).toFixed(2)}px rgba(41,95,237,.16)`;
+    P.d7av.style.transform = `scale(${(1 + 0.05 * live * b).toFixed(4)})`;
+    P.d7wave.style.opacity = live.toFixed(3);
+    E.setWave(P.d7bars, u, live);
+    P.d7pill.style.opacity = seg(u, 0.6, 1.0, outExpo).toFixed(3);
+    [0.15, 0.55, 0.95].forEach((at, i) => {
+      const p = seg(u, at, at + 0.4, outExpo), el = P.d7bub[i];
+      el.style.opacity = p.toFixed(3);
+      el.style.transform = `translateY(${((1 - p) * 0.8).toFixed(3)}em) scale(${(0.96 + 0.04 * p).toFixed(4)})`;
+    });
+  },
+  /* 08 · screen-aware — a reading beam crosses the item the student is on */
+  function (u) {
+    E.setBeam(P.d8beam, u, 0.45, 3.5, { width: 880, from: -30 });
+    const p = seg(u, 0.5, 0.9, outExpo) * (1 - seg(u, 3.6, 3.9));
+    P.d8pill.style.opacity = p.toFixed(3);
+  },
+  /* 09 · peer study rooms — the cohort arrives one tile at a time */
+  function (u) {
+    P.d9live.style.opacity = seg(u, 0.12, 0.5, outExpo).toFixed(3);
+    P.d9rt.forEach((t, i) => {
+      const at = 0.1 + i * 0.11;
+      const p = seg(u, at, at + 0.4, outExpo);
+      t.style.opacity = p.toFixed(3);
+      t.style.transform = `translateY(${((1 - p) * 0.7).toFixed(3)}em) scale(${(0.9 + 0.1 * p).toFixed(4)})`;
+    });
+  },
+  /* 10 · integrated notes — a line is marked and the note files itself */
+  function (u) {
+    const hl = seg(u, 0.35, 1.25, inOut);
+    P.d10hl.style.backgroundSize = `${(hl * 100).toFixed(1)}% 100%`;
+    P.d10hl.style.backgroundRepeat = 'no-repeat';
+    const nt = seg(u, 1.1, 1.65, outExpo);
+    P.d10tag.style.opacity = nt.toFixed(3);
+    P.d10tag.style.transform = `translateY(${((1 - nt) * 0.5).toFixed(3)}em)`;
+  },
+  /* 11 · focused analytics — five domains, nothing else */
+  function (u) {
+    P.ba.forEach((r, i) => {
+      const p = seg(u, 0.15 + i * 0.13, 0.15 + i * 0.13 + 0.42, outExpo);
+      r.querySelector('.track i').style.transform = `scaleX(${(BARS_A[i] * p).toFixed(4)})`;
+    });
+  },
+  /* 12 · the gap — the same five bars, and the one that keeps failing named */
+  function (u) {
+    P.bb.forEach((r, i) => {
+      const p = seg(u, 0.14 + i * 0.12, 0.14 + i * 0.12 + 0.4, outExpo);
+      const flag = i === GAP ? seg(u, 1.15, 1.6, outExpo) : 0;
+      const bar = r.querySelector('.track i');
+      bar.style.transform = `scaleX(${(BARS_B[i] * p).toFixed(4)})`;
+      bar.style.backgroundColor = mixc(C_BLUE, C_RED, flag);
+      r.querySelector('span').style.color = mixc(C_SUB, C_RED, flag);
+    });
+    const gf = seg(u, 1.45, 1.95, outExpo);
+    P.d12flag.style.opacity = gf.toFixed(3);
+    P.d12flag.style.transform = `translateY(${((1 - gf) * 0.5).toFixed(3)}em)`;
+  },
+  /* 13 · progress — readiness drawn up to the exam-ready line */
+  function (u) {
+    const d = seg(u, 0.10, 1.85, inOut);
+    const { d: path, end } = E.pathTo(CURVE, Math.max(0.02, d));
+    P.d13path.setAttribute('d', path);
+    P.d13area.setAttribute('d', path + `L${end[0].toFixed(1)},200L6,200Z`);
+    P.d13tag.style.opacity = seg(u, 1.45, 1.95, outExpo).toFixed(3);
+  },
+  /* 14 · streaks — fourteen days lighting in sequence, echoing the deck itself */
+  function (u) {
+    P.d14days.forEach((s, i) => {
+      const at = 0.15 + i * 0.075;
+      const p = seg(u, at, at + 0.3, outExpo);
+      s.style.backgroundColor = mixc(C_SKEL, C_BLUE, p);
+      s.style.transform = `scale(${(0.84 + 0.16 * p + 0.1 * pulse(u, at, at + 0.34)).toFixed(4)})`;
+    });
+    const sl = seg(u, 1.55, 2.05, outExpo);
+    P.d14lab.style.opacity = sl.toFixed(3);
+    P.d14lab.style.color = mixc([107, 114, 128], C_BLUE, sl);
+  },
+];
+
+const ENDLG = 'Product views are illustrative: every question, option, explanation and note shown is an abstract '
+            + 'placeholder, not real exam content. All third-party names and marks are the property of their '
+            + 'respective owners. Preparation does not guarantee a pass.';
+document.getElementById('endlg').textContent = ENDLG;
+const ENDANIM = [['#end img', 0.30], ['#end h3', 0.75], ['#end .u', 1.20], ['#end .lg', 1.70]]
+  .map(([s, d]) => ({ el: document.querySelector(s), start: END_AT + d }));
+
+const ccWrap = document.getElementById('cc'), ccBox = document.getElementById('ccbox');
+const endEl = document.getElementById('end'), deckbar = document.getElementById('deckbar');
+const plate = document.getElementById('plate');
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+  const endp = seg(t, END_AT, END_AT + 0.8);
+
+  E.wash(t, DUR, seg(t, DUR * 0.55, DUR));
+  E.paintShots(t, PAINT, DUR, 0.02, 0);
+
+  /* the counter follows the real cut list, not paintShots' opinion — the
+     scenes deliberately overlap by one wipe, so the two disagree mid-handoff */
+  let si = 0; while (si < SHOTS.length - 1 && t >= SHOTS[si + 1].in) si++;
+  E.furniture(t, DUR, { label: SHOTS[si].label, index: si + 1, total: SHOTS.length, fade: 1 - endp });
+
+  /* ---- deal the deck ------------------------------------------------------
+     Each card carries its own entry wipe and inherits the next card's entry as
+     the wipe that consumes it, so at any instant at most two cards are drawn
+     and they share one seam. Left of the seam is the outgoing card, right of it
+     the incoming one; the clip is expressed on the window so the card itself is
+     free to travel. Cards outside that pair are set visibility:hidden, which
+     also takes their whole subtree out of probe.mjs' bounds audit. */
+  for (let i = 0; i < CARDS.length; i++){
+    const c = CARDS[i];
+    const wIn  = i === 0 ? 1 : seg(t, c.at, c.at + WIPE, inOut);
+    const wOut = CARDS[i + 1] ? seg(t, CARDS[i + 1].at, CARDS[i + 1].at + WIPE, inOut) : 0;
+    const on = wIn > 0.001 && wOut < 0.999;
+    c.win.style.visibility = on ? 'visible' : 'hidden';
+    if (!on) continue;
+    c.win.style.clipPath = (wIn > 0.999 && wOut < 0.001)
+      ? 'none'
+      : `inset(0 ${(wOut * 100 + PAD * clamp((1 - wIn) * 6)).toFixed(2)}% 0 ${((1 - wIn) * 100 + PAD * clamp(wOut * 6)).toFixed(2)}%)`;
+    /* the opening card has no card to wipe over, so it lifts in instead */
+    const open = i === 0 ? seg(t, 0.05, 0.75, outExpo) : 1;
+    const dx = (1 - wIn) * SLIDE_IN - wOut * SLIDE_OUT;
+    const dy = (1 - open) * SS * 0.9;
+    c.card.style.opacity = open.toFixed(3);
+    c.card.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+    FX[i](t - c.at);
+  }
+
+  /* the fourteen dashes: done ones keep a trace of blue, the live one is wider */
+  P.dash.forEach((d, i) => {
+    const c = CARDS[i];
+    const act  = seg(t, c.at - 0.05, c.at + 0.3) * (1 - seg(t, c.out - 0.05, c.out + 0.3));
+    const past = seg(t, c.out, c.out + 0.3);
+    const dim  = C_LINE2.map((v, k) => v + (C_BLUE[k] - v) * 0.34 * past);
+    d.style.backgroundColor = mixc(dim, C_BLUE, act);
+    d.style.transform = `scaleX(${(1 + 1.4 * act).toFixed(3)})`;
+  });
+  deckbar.style.opacity = (clamp(seg(t, 0.15, 1.0)) * (1 - endp)).toFixed(3);
+  /* the plate arrives with the opening card and leaves with the end card */
+  plate.style.opacity = (seg(t, 0.05, 0.75, outExpo) * (1 - endp)).toFixed(3);
+
+  E.paintReveals(t, ANIM, { rise: 0.34, lift: 0.4 });
+
+  endEl.style.opacity = endp.toFixed(3);
+  endEl.style.visibility = endp < 0.002 ? 'hidden' : 'visible';
+  for (const a of ENDANIM){
+    const p = seg(t, a.start, a.start + 0.6, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1 - p) * 0.8).toFixed(3)}em)`;
+  }
+  ccWrap.style.opacity = (1 - endp).toFixed(3);
+  E.paintCaptions(t, CAPS, { box: ccBox, wrap: ccWrap, on: CC && endp < 0.5 });
+}
+window.seek = seek;
+seek(0);
+window.__READY = true;
+</script>
+</body>
+</html>
