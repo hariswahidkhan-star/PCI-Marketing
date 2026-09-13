@@ -223,38 +223,63 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
 .msg.me{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:calc(.16 * var(--s) * 1px)}
 .chat .langs{margin-top:auto;padding-top:calc(.5 * var(--s) * 1px)}
 
+/* --- a real question, set as a real question ------------------------------
+   The film now shows a properly formed item rather than grey bars, because a
+   product that will not show you its own content is asking to be doubted. It is
+   written for the film; see the comment above s7 in the markup. --------------- */
+.qtext{font-size:calc(1.02 * var(--s) * 1px);line-height:1.5;color:var(--fg);margin-top:calc(.7 * var(--s) * 1px)}
+.qtext b{font-weight:700;color:var(--fg)}
+.qtext.sm{font-size:calc(.92 * var(--s) * 1px);line-height:1.45}
+.opts .opt span{flex:1 1 auto;font-size:calc(.94 * var(--s) * 1px);color:var(--sub);line-height:1.25}
+.opts.sm .opt{height:auto;min-height:calc(1.7 * var(--s) * 1px);padding:calc(.32 * var(--s) * 1px) calc(.6 * var(--s) * 1px)}
+.opts.sm .opt span{font-size:calc(.86 * var(--s) * 1px)}
+.opt.pick{background:var(--tint);border-color:var(--blue)}
+.opt.pick b,.opt.pick span{color:var(--blue)}
+
 /* ---------------------------------------------------------------------------
-   s8 · the room fills. Faces are abstract on purpose: stock faces read as
-   stock, initials read as privacy.
+   s8 · study with a peer. One shared screen, two people on it, and a third
+   seat left open — that third seat is the feature, so it is on screen the whole
+   time rather than arriving as an afterthought.
 --------------------------------------------------------------------------- */
-.room{display:grid;grid-template-columns:1.15fr 1fr;gap:calc(1.3 * var(--s) * 1px);width:100%;align-items:stretch}
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(.6 * var(--s) * 1px)}
-.tile{position:relative;background:var(--card);border:1px solid var(--cardbd);border-radius:calc(.4 * var(--s) * 1px);
-  box-shadow:var(--shadow);aspect-ratio:4 / 3;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:calc(.35 * var(--s) * 1px);will-change:transform,opacity,box-shadow}
-.tile .av{width:calc(2.85 * var(--s) * 1px);height:calc(2.85 * var(--s) * 1px);border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-family:var(--display);font-weight:900;font-size:calc(1.08 * var(--s) * 1px);color:#fff;letter-spacing:.02em}
-.tile .a1{background:#2F6BEE}.tile .a2{background:#5B8AF5}.tile .a3{background:#7C4DD4}
-.tile .a4{background:#1E9E86}.tile .a5{background:#C4661F}.tile .a6{background:var(--red)}
-.tile span{font-size:calc(.86 * var(--s) * 1px);color:var(--cardsub);font-weight:600}
-.tile.mentor{border-top:calc(.2 * var(--s) * 1px) solid var(--red)}
-.tile .mb{position:absolute;top:calc(.4 * var(--s) * 1px);right:calc(.4 * var(--s) * 1px);background:var(--red);color:#fff;
-  font-family:var(--display);font-weight:800;font-size:calc(.64 * var(--s) * 1px);letter-spacing:.08em;
-  padding:calc(.14 * var(--s) * 1px) calc(.36 * var(--s) * 1px);border-radius:calc(.2 * var(--s) * 1px)}
-.shared{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
-  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.0 * var(--s) * 1px);text-align:left;
-  display:flex;flex-direction:column;will-change:transform,opacity}
-.sh{display:flex;align-items:center;justify-content:space-between}
-.sh b{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:calc(.8 * var(--s) * 1px);color:var(--blue)}
-.live2{display:flex;align-items:center;gap:calc(.3 * var(--s) * 1px);font-size:calc(.8 * var(--s) * 1px);color:var(--red);font-weight:700}
-.live2 i{width:calc(.42 * var(--s) * 1px);height:calc(.42 * var(--s) * 1px);border-radius:50%;background:var(--red);display:inline-block}
-.shared .ql{margin-top:calc(.85 * var(--s) * 1px)}
-.votes{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(.42 * var(--s) * 1px);margin-top:calc(1.0 * var(--s) * 1px)}
-.v{height:calc(2.35 * var(--s) * 1px);border:1px solid var(--cardbd);border-radius:calc(.3 * var(--s) * 1px);background:#FAFBFE;
-  display:flex;align-items:center;justify-content:center;will-change:background-color,border-color,transform}
-.v b{font-family:var(--display);font-weight:800;font-size:calc(1.1 * var(--s) * 1px);will-change:color}
-.vnote{margin-top:auto;padding-top:calc(.7 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub);
-  will-change:opacity,transform}
+.meet{display:grid;grid-template-columns:1.6fr 1fr;gap:calc(1.2 * var(--s) * 1px);width:100%;align-items:stretch}
+.stage2{position:relative;background:var(--card);border:1px solid var(--cardbd);
+  border-top:calc(.2 * var(--s) * 1px) solid var(--blue);border-radius:calc(.5 * var(--s) * 1px);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;will-change:transform,opacity}
+.mtop{display:flex;align-items:center;justify-content:space-between;padding:calc(.62 * var(--s) * 1px) calc(.85 * var(--s) * 1px);
+  border-bottom:1px solid var(--cardbd);background:#F7F9FE}
+.mlab{display:flex;align-items:center;gap:calc(.42 * var(--s) * 1px);font-size:calc(.88 * var(--s) * 1px);
+  font-weight:700;color:var(--blue)}
+.mlab .sd{width:calc(.8 * var(--s) * 1px);height:calc(.58 * var(--s) * 1px);border:calc(.11 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.1 * var(--s) * 1px);display:block}
+.mscreen{position:relative;flex:1 1 auto;margin:calc(.7 * var(--s) * 1px);padding:calc(.8 * var(--s) * 1px);
+  border:calc(.14 * var(--s) * 1px) solid var(--blue);border-radius:calc(.36 * var(--s) * 1px);
+  background:#fff;overflow:hidden;will-change:box-shadow}
+.mscreen .qtop{border:0;padding:0;background:none;margin-bottom:calc(.2 * var(--s) * 1px)}
+/* two live cursors, because that is what shared control actually looks like */
+.cursor{position:absolute;left:0;top:0;display:flex;align-items:flex-start;gap:calc(.2 * var(--s) * 1px);
+  pointer-events:none;will-change:left,top,opacity;opacity:0}
+.cursor i{width:0;height:0;border-left:calc(.42 * var(--s) * 1px) solid var(--blue);
+  border-bottom:calc(.62 * var(--s) * 1px) solid transparent;border-right:calc(.2 * var(--s) * 1px) solid transparent;display:block}
+.cursor em{font-style:normal;font-size:calc(.66 * var(--s) * 1px);font-weight:700;color:#fff;background:var(--blue);
+  border-radius:calc(.16 * var(--s) * 1px);padding:calc(.06 * var(--s) * 1px) calc(.26 * var(--s) * 1px);
+  transform:translateY(calc(.3 * var(--s) * 1px))}
+.cursor.two i{border-left-color:#7C4DD4}
+.cursor.two em{background:#7C4DD4}
+.side2{display:flex;flex-direction:column;gap:calc(.6 * var(--s) * 1px);text-align:left}
+.peer{display:flex;align-items:center;gap:calc(.66 * var(--s) * 1px);background:var(--card);
+  border:1px solid var(--cardbd);border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);
+  padding:calc(.66 * var(--s) * 1px) calc(.8 * var(--s) * 1px);will-change:transform,opacity,box-shadow}
+.peer .face{width:calc(2.5 * var(--s) * 1px);height:calc(2.5 * var(--s) * 1px);border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:900;font-size:calc(.95 * var(--s) * 1px)}
+.peer .f1{background:#2F6BEE}.peer .f2{background:#7C4DD4}
+.peer .face.plus{background:var(--card);border:calc(.14 * var(--s) * 1px) dashed var(--blue);color:var(--blue);
+  font-size:calc(1.5 * var(--s) * 1px)}
+.peer .pn b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.1 * var(--s) * 1px);color:var(--fg);line-height:1.15}
+.peer .pn span{display:block;font-size:calc(.84 * var(--s) * 1px);color:var(--cardsub)}
+.peer .mic{margin-left:auto;width:calc(.5 * var(--s) * 1px);height:calc(.9 * var(--s) * 1px);border-radius:calc(.25 * var(--s) * 1px);
+  background:var(--cardbd);display:block;will-change:background-color,transform}
+.peer.invite{border-style:dashed;border-color:var(--blue);background:#FBFCFF;box-shadow:none}
+.mnote{margin-top:auto;font-size:calc(.98 * var(--s) * 1px);color:var(--cardsub);line-height:1.4;will-change:opacity,transform}
 
 /* ---------------------------------------------------------------------------
    s9 · readiness. One measure, one axis, no numbers: the chart illustrates the
@@ -471,14 +496,29 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
     </div>
   </section>
 
-  <!-- 7 · the coach — reads the screen, then stands down for a mock -->
+  <!-- 7 · the coach — reads a REAL question, then stands down for a mock.
+
+       The question below is written for this film, not lifted from any awarding
+       body's published paper: reproducing an institute's question would be their
+       copyright even where it is free to read. It is a properly formed
+       absorption-costing item and it works out: $480,000 / 60,000 = $8 a unit,
+       applied 54,000 x $8 = $432,000, under-absorbed by $48,000, so B. Anyone
+       who pauses the film and does the arithmetic finds it correct — which is
+       the whole point of showing a real one. -->
   <section class="shot" id="s7">
     <div class="eyebrow" data-a="1">AI Coach</div>
     <div class="coach" style="margin-top:calc(1.4*var(--s)*1px)">
       <div class="qpanel" id="qpanel">
-        <div class="qtop"><span>Question 14 of 40</span><span class="clock" id="qclock">23:07</span></div>
-        <div class="ql l1"></div><div class="ql l2"></div><div class="ql l3"></div>
-        <div class="opts"><div class="opt"><b>A</b><i></i></div><div class="opt"><b>B</b><i></i></div><div class="opt"><b>C</b><i></i></div><div class="opt"><b>D</b><i></i></div></div>
+        <div class="qtop"><span>Question 14 of 40 · Cost management</span><span class="clock" id="qclock">23:07</span></div>
+        <p class="qtext">A company applies fixed manufacturing overhead using a rate based on budgeted
+          production of <b>60,000 units</b>. Budgeted fixed overhead is <b>$480,000</b>. Actual production
+          was <b>54,000 units</b>.<br>Under absorption costing, what is the fixed overhead <b>volume variance</b>?</p>
+        <div class="opts">
+          <div class="opt" id="oA"><b>A</b><span>$48,000 favourable</span></div>
+          <div class="opt" id="oB"><b>B</b><span>$48,000 unfavourable</span></div>
+          <div class="opt" id="oC"><b>C</b><span>$54,000 unfavourable</span></div>
+          <div class="opt" id="oD"><b>D</b><span>Nil — no volume variance arises</span></div>
+        </div>
         <div class="beam" id="beam"></div>
         <div class="scanlab" id="scanlab">Reading your screen</div>
         <div class="mockbar" id="mockbar">Mock exam — Coach off</div>
@@ -489,31 +529,47 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
           <div class="cwho"><b>AI Coach</b><span id="cstat">Connecting…</span></div>
           <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         </div>
-        <div class="msg them" id="m1">I can see the question on your screen.</div>
-        <div class="msg me" id="m2">I don't know which cost to allocate.</div>
-        <div class="msg them" id="m3">Before I answer — which of those costs changes when volume changes?</div>
+        <div class="msg them" id="m1">I can see it — $480,000 over 60,000 budgeted units.</div>
+        <div class="msg me" id="m2">Do I use budgeted units or actual?</div>
+        <div class="msg them" id="m3">Before I answer: the rate is set once, in advance. Which of the two numbers was known then?</div>
         <div class="langs" id="langs"><b>Six languages</b> · English · العربية · Français · Español · हिन्दी · Русский</div>
       </div>
     </div>
   </section>
 
-  <!-- 8 · the room fills -->
+  <!-- 8 · study with a peer.
+
+       CORRECTED FEATURE. There are no chat rooms and no cohort lobby. What
+       Certuvo has is a two-person study session: one student shares their
+       screen the way they would on a call, the other sees the same question at
+       the same second, and either can invite a friend in. The scene is built to
+       show exactly that and nothing more, because the previous version showed a
+       feature that does not exist. -->
   <section class="shot" id="s8">
-    <div class="eyebrow" data-a="1">Live study rooms</div>
-    <div class="room" style="margin-top:calc(1.4*var(--s)*1px)">
-      <div class="tiles">
-        <div class="tile" id="p1"><div class="av a1">AK</div><span>Amara</span></div>
-        <div class="tile" id="p2"><div class="av a2">JD</div><span>Jonas</span></div>
-        <div class="tile" id="p3"><div class="av a3">RM</div><span>Rhea</span></div>
-        <div class="tile" id="p4"><div class="av a4">TN</div><span>Tomas</span></div>
-        <div class="tile" id="p5"><div class="av a5">SO</div><span>Sade</span></div>
-        <div class="tile mentor" id="p6"><div class="av a6">M</div><span>Mentor</span><div class="mb">24/7</div></div>
+    <div class="eyebrow" data-a="1">Study with a peer</div>
+    <div class="meet" style="margin-top:calc(1.3*var(--s)*1px)">
+      <div class="stage2" id="stage2">
+        <div class="mtop">
+          <span class="mlab"><i class="sd"></i>Amara is sharing her screen</span>
+          <span class="live2" id="mlive"><i></i>Live</span>
+        </div>
+        <div class="mscreen" id="mscreen">
+          <div class="qtop"><span>Question 14 of 40 · Cost management</span><span>Shared</span></div>
+          <p class="qtext sm">Budgeted fixed overhead <b>$480,000</b> over <b>60,000 units</b>.
+            Actual production <b>54,000 units</b>. What is the fixed overhead <b>volume variance</b>?</p>
+          <div class="opts sm">
+            <div class="opt" id="mA"><b>A</b><span>$48,000 favourable</span></div>
+            <div class="opt" id="mB"><b>B</b><span>$48,000 unfavourable</span></div>
+          </div>
+          <div class="cursor" id="cur1"><i></i><em>Amara</em></div>
+          <div class="cursor two" id="cur2"><i></i><em>Jonas</em></div>
+        </div>
       </div>
-      <div class="shared" id="shared">
-        <div class="sh"><b>Shared question</b><span class="live2"><i></i>Live</span></div>
-        <div class="ql l1"></div><div class="ql l3"></div>
-        <div class="votes"><div class="v" id="v1"><b>A</b></div><div class="v" id="v2"><b>B</b></div><div class="v" id="v3"><b>C</b></div><div class="v" id="v4"><b>D</b></div></div>
-        <div class="vnote" id="vnote">Working it together, in real time</div>
+      <div class="side2">
+        <div class="peer" id="pr1"><div class="face f1">AK</div><div class="pn"><b>Amara</b><span>presenting</span></div><i class="mic on"></i></div>
+        <div class="peer" id="pr2"><div class="face f2">JD</div><div class="pn"><b>Jonas</b><span>speaking</span></div><i class="mic on"></i></div>
+        <div class="peer invite" id="pr3"><div class="face plus">+</div><div class="pn"><b>Bring a friend</b><span>send them a link</span></div></div>
+        <div class="mnote" id="mnote">Screen share · both cursors live</div>
       </div>
     </div>
   </section>
@@ -727,9 +783,10 @@ const FX_EL = {
   gates: [$1('#g1'), $1('#g2'), $1('#g3'), $1('#g4')],
   beam: $1('#beam'), scanlab: $1('#scanlab'), mockbar: $1('#mockbar'), qclock: $1('#qclock'),
   chat: $1('#chat'), cav: $1('#cav'), cstat: $1('#cstat'), wave: $1('#wave'), waves: $$('#wave i'),
-  msgs: [$1('#m1'), $1('#m2'), $1('#m3')], langs: $1('#langs'),
-  tiles: [$1('#p1'), $1('#p2'), $1('#p3'), $1('#p4'), $1('#p5'), $1('#p6')],
-  shared: $1('#shared'), votes: [$1('#v1'), $1('#v2'), $1('#v3'), $1('#v4')], vnote: $1('#vnote'),
+  msgs: [$1('#m1'), $1('#m2'), $1('#m3')], langs: $1('#langs'), oB: $1('#oB'),
+  stage2: $1('#stage2'), mscreen: $1('#mscreen'), mlive: $1('#mlive'),
+  peers: [$1('#pr1'), $1('#pr2'), $1('#pr3')], mics: $$('#s8 .mic'),
+  cur1: $1('#cur1'), cur2: $1('#cur2'), mB: $1('#mB'), mnote: $1('#mnote'),
   rpath: $1('#rpath'), rarea: $1('#rarea'), rdot: $1('#rdot'), thrlab: $1('#thrlab'),
   doms: [$1('#d1'), $1('#d2'), $1('#d3'), $1('#d4'), $1('#d5')], gaplab: $1('#gaplab'),
   verdict: $1('#verdict'),
@@ -838,6 +895,16 @@ const SCENEFX = {
     E.scanlab.style.opacity = scan.toFixed(3);
     E.scanlab.style.transform = `translateY(${((1 - scan) * 0.6).toFixed(3)}em)`;
 
+    // the option the exchange is walking toward lights only after the Socratic
+    // line, so the film never hands over the answer before the reasoning
+    const pick = seg(u, 13.60, 14.10, outExpo);
+    if (E.oB){
+      E.oB.style.backgroundColor = mixc([255,255,255], [238,243,255], pick);
+      E.oB.style.borderColor = mixc([226,231,241], C_BLUE, pick);
+      E.oB.querySelector('b').style.color = mixc([107,114,128], C_BLUE, pick);
+      E.oB.querySelector('span').style.color = mixc([75,85,99], C_BLUE, pick);
+    }
+
     // the exchange — the third line is Socratic, which is the actual claim
     const MT = [5.20, 7.10, 11.10];
     E.msgs.forEach((m, i) => {
@@ -860,35 +927,90 @@ const SCENEFX = {
     E.qclock.style.color = mk > 0.5 ? 'var(--red)' : 'var(--red)';
   },
 
-  /* ---- s8 · the room fills ---------------------------------------------- */
+  /* ---- s8 · study with a peer -------------------------------------------
+     Beat order matches the line: the screen is shared, the second person is
+     already on it, then the empty third seat is offered. The two cursors are
+     the whole point — one person's pointer moving on another person's screen
+     is what "share your screen, live" actually looks like, and no amount of
+     avatar tiles says it.                                                    */
   s8(u){
-    const E = FX_EL; if (!E.tiles[0]) return;
-    const JOIN = [2.70, 3.15, 3.60, 4.05, 4.50, 8.45];   // five peers, then the mentor
-    E.tiles.forEach((tl, i) => {
-      if (!tl) return;
-      const p = seg(u, JOIN[i], JOIN[i] + 0.52, outExpo);
-      tl.style.opacity = p.toFixed(3);
-      tl.style.transform = `translateY(${((1 - p) * 0.9).toFixed(3)}em) scale(${(0.9 + 0.1 * p).toFixed(4)})`;
-      const glow = Math.sin(Math.PI * seg(u, JOIN[i], JOIN[i] + 0.9));
-      tl.style.boxShadow = `0 ${(SS * 0.5).toFixed(1)}px ${(SS * 1.6).toFixed(1)}px rgba(11,18,32,.06), 0 0 0 ${(SS * 0.2 * glow).toFixed(2)}px rgba(41,95,237,.22)`;
+    const E = FX_EL; if (!E.stage2) return;
+
+    // the shared screen arrives first: this is a screen, not a room
+    const sp = seg(u, 0.15, 0.85, outExpo);
+    E.stage2.style.opacity = sp.toFixed(3);
+    E.stage2.style.transform = `translateY(${((1 - sp) * 0.7).toFixed(3)}em) scale(${(0.97 + 0.03 * sp).toFixed(4)})`;
+
+    // the blue ring on the shared area breathes while it is being presented
+    const shareOn = seg(u, 1.10, 1.70, outExpo);
+    if (E.mscreen)
+      E.mscreen.style.boxShadow = `0 0 0 ${(SS * 0.16 * shareOn * (0.55 + 0.45 * Math.sin(u * 3.1))).toFixed(2)}px rgba(41,95,237,.20)`;
+    if (E.mlive) E.mlive.style.opacity = shareOn.toFixed(3);
+
+    // Amara is presenting, Jonas is already there, the third seat is the offer
+    const JOIN = [0.60, 3.60, 9.30];
+    E.peers.forEach((pr, i) => {
+      if (!pr) return;
+      const p = seg(u, JOIN[i], JOIN[i] + 0.55, outExpo);
+      pr.style.opacity = p.toFixed(3);
+      pr.style.transform = `translateX(${((1 - p) * 1.1).toFixed(3)}em)`;
+      const ring = Math.sin(Math.PI * seg(u, JOIN[i], JOIN[i] + 1.0));
+      pr.style.boxShadow = `0 ${(SS * 0.55).toFixed(1)}px ${(SS * 1.8).toFixed(1)}px rgba(11,18,32,.06), 0 0 0 ${(SS * 0.2 * ring).toFixed(2)}px rgba(41,95,237,.20)`;
     });
-    const sp = seg(u, 4.80, 5.40, outExpo);
-    E.shared.style.opacity = sp.toFixed(3);
-    E.shared.style.transform = `translateY(${((1 - sp) * 0.7).toFixed(3)}em)`;
-    // answers land as the cohort works it
-    const VT = [5.70, 6.20, 6.70, 7.20];
-    E.votes.forEach((v, i) => {
-      if (!v) return;
-      const p = seg(u, VT[i], VT[i] + 0.4, outExpo);
-      const chosen = i === 2 ? p : p * 0.35;   // most of the room converges on C
-      v.style.backgroundColor = mixc([250,251,254], [238,243,255], p);
-      v.style.borderColor = mixc([226,231,241], C_BLUE, chosen);
-      v.style.transform = `scale(${(1 + 0.05 * Math.sin(Math.PI * p)).toFixed(4)})`;
-      v.querySelector('b').style.color = mixc([107,114,128], C_BLUE, chosen);
+    // the invite seat keeps pulsing after it lands: it is the call to action
+    if (E.peers[2]){
+      const inv = seg(u, 9.30, 9.90, outExpo);
+      E.peers[2].style.transform =
+        `translateX(${((1 - inv) * 1.1).toFixed(3)}em) scale(${(1 + 0.02 * inv * (0.5 + 0.5 * Math.sin(u * 3.4))).toFixed(4)})`;
+    }
+
+    // whoever is talking has the live mic; they trade it, as people do
+    E.mics.forEach((m, i) => {
+      const talking = i === 0 ? (u > 1.0 && u < 4.6) : (u > 4.6 && u < 9.0);
+      const lvl = talking ? (0.45 + 0.55 * Math.abs(Math.sin(u * 6.2 + i))) : 0.12;
+      m.style.backgroundColor = mixc([226,231,241], C_BLUE, lvl);
+      m.style.transform = `scaleY(${(0.7 + 0.3 * lvl).toFixed(3)})`;
     });
-    const np = seg(u, 7.60, 8.10, outExpo);
-    E.vnote.style.opacity = np.toFixed(3);
-    E.vnote.style.transform = `translateY(${((1 - np) * 0.6).toFixed(3)}em)`;
+
+    // two cursors on one screen — the feature, stated in motion
+    const path = (t0, t1, pts) => {
+      // clamp/3 — called with one argument it returns v untouched, and a
+      // negative k then indexes off the front of the point list
+      const k = clamp((u - t0) / Math.max(0.001, t1 - t0), 0, 1);
+      const n = pts.length - 1, f = k * n, i = Math.max(0, Math.min(n - 1, Math.floor(f))), r = f - i;
+      const e = outCubic(r);
+      return [pts[i][0] + (pts[i+1][0] - pts[i][0]) * e, pts[i][1] + (pts[i+1][1] - pts[i][1]) * e];
+    };
+    // they read the stem, then converge on the same option from opposite
+    // sides — close enough to be together, far enough apart to stay two people
+    // they land at the two clear ends of the option row, not across its text:
+    // a name badge sitting on the words reads as a rendering fault, not a peer
+    const c1 = path(1.6, 8.4, [[58,14],[40,30],[22,44],[50,60],[55,64]]);
+    const c2 = path(4.2, 9.0, [[92,82],[74,50],[50,32],[84,60],[88,64]]);
+    const place = (el, c, t0) => {
+      if (!el) return;
+      el.style.opacity = (seg(u, t0, t0 + 0.4) * (1 - seg(u, 9.6, 10.1))).toFixed(3);
+      el.style.left = c[0].toFixed(1) + '%';
+      el.style.top  = c[1].toFixed(1) + '%';
+    };
+    place(E.cur1, c1, 1.6);
+    place(E.cur2, c2, 4.2);
+
+    // they land on the same option, together — the point of studying in pairs
+    const agree = seg(u, 8.20, 8.70, outExpo);
+    for (const el of [E.mB]) {
+      if (!el) continue;
+      el.style.backgroundColor = mixc([255,255,255], [238,243,255], agree);
+      el.style.borderColor = mixc([226,231,241], C_BLUE, agree);
+      el.querySelector('b').style.color = mixc([107,114,128], C_BLUE, agree);
+      el.querySelector('span').style.color = mixc([75,85,99], C_BLUE, agree);
+    }
+
+    const np = seg(u, 10.10, 10.70, outExpo);
+    if (E.mnote){
+      E.mnote.style.opacity = np.toFixed(3);
+      E.mnote.style.transform = `translateY(${((1 - np) * 0.6).toFixed(3)}em)`;
+    }
   },
 
   /* ---- s9 · the curve climbs to the line -------------------------------- */

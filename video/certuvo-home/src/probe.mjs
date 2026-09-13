@@ -147,6 +147,21 @@ const CUTS = await pg.evaluate(()=>(window.__SHOTS||[]).map(s=>s[2]));
   if (clip) clipped.push(`t=${t}: ${clip}`);
   if ([8,24,38,55,70,86,98,112,125,140,155,170,178,192,210,229].includes(t)) await pg.locator('#stage').screenshot({path:path.join(OUT,`${tag}-t${String(t).padStart(2,'0')}.png`),animations:'disabled'});
 }
+// Every animator guards on one cached element and returns early if it is null,
+// so a renamed or removed id makes a whole scene silently stop animating while
+// the page still renders, still passes every layout audit, and still looks
+// plausible in a still. s7's option pick and the whole of s8 shipped dead that
+// way once. A null in the cache is therefore a hard failure, not a warning.
+const dead = await pg.evaluate(() => {
+  const out = [];
+  for (const [k, v] of Object.entries(FX_EL)) {
+    if (Array.isArray(v)) { v.forEach((x, i) => { if (!x) out.push(k + '[' + i + ']'); }); if (!v.length) out.push(k + ' (empty)'); }
+    else if (!v) out.push(k);
+  }
+  return out;
+});
+if (dead.length) errs.push('FX_EL null entries (scene animators will no-op): ' + dead.join(', '));
+
 console.log(tag+' errors: '+(errs.length?errs.join('\n  '):'none'));
 console.log(tag+' overflow: '+(bad.length?'\n  '+bad.join('\n  '):'none')+'  (transitions excluded)');
 console.log(tag+' caption collisions: '+(collide.length?'\n  '+collide.join('\n  '):'none')+`  (${TS.length} samples)`);

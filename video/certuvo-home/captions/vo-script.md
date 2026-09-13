@@ -12,12 +12,12 @@ Legal end frame: All third-party names and marks shown are the property of their
 - They all work hard.
 
 ## s3 · Ten credentials
-- C M A. C P A. C F A. C I A. C I S A. P M P. N C L E X — R N and P N.
+- C M A. C P A. C F A. C I A. C I S A. P M P. En-clex — R N and P N.
 - And P C I's own: Project Controls Leader. Project Management Leader. Project Finance Leader.
 - Ten credentials. One platform.
 
 ## s4 · Official partner
-- And Certuvo is the official training partner of P C I A I — the Project Controls Institute.
+- And Sertoovo is the official training partner of P C I A I — the Project Controls Institute.
 
 ## s5 · Already inside
 - Inside every course: thousands of verified questions.
@@ -31,18 +31,18 @@ Legal end frame: All third-party names and marks shown are the property of their
 
 ## s7 · AI Coach
 - Stuck, at eleven at night? Call your A I Coach.
-- It reads your screen — the exact question, the diagrams, the options.
-- It speaks six languages. And it teaches you to think, not memorise.
+- It reads your screen. The question, the numbers, every option.
+- And it answers with a question — so you leave with the method, not the answer.
 - Then, in a mock exam, it switches itself off.
 
-## s8 · Not alone
-- And you are not doing this alone.
-- Live study rooms. Your cohort, on video, working the same question in real time.
-- And mentors on chat, around the clock.
+## s8 · Study with a peer
+- And when you want another mind on it — study with a peer.
+- Share your screen, live. The same question, the same numbers, at the same second.
+- Bring a friend in. Two of you, one problem — until it gives.
 
 ## s9 · Readiness
 - And every question you answer moves a line.
-- Certuvo tracks every domain, and finds the gap you keep falling into.
+- Sertoovo tracks every domain, and finds the gap you keep falling into.
 - Not how much you have read. Whether you are ready.
 
 ## s10 · Start free

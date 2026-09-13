@@ -17,7 +17,9 @@ CAPDIR = os.path.normpath(os.path.join(HERE, '..', 'captions'))
 NAME = 'certuvo-home'
 
 SCENES = [
- ('s1', 'Late', [                              # presenter on camera — take reused from v1
+ # s1 and s11 are deliberately word-for-word unchanged from the previous cut, so
+ # both presenter takes and both HeyGen clips are reused rather than re-rendered.
+ ('s1', 'Late', [                              # presenter on camera — take reused
    ("It's late. Everyone else is asleep. And you're still here.",
     "It's late. Everyone else is asleep. And you're still here — reading the same page for the third time.", 8.30),
    ("Everyone who ever earned those letters did exactly this.",
@@ -25,63 +27,66 @@ SCENES = [
  ]),
  ('s2', 'The difference', [
    ("Here's the thing nobody tells you.",
-    "But here's the thing nobody tells you.", 2.3),
+    "But here's the thing nobody tells you.", 2.30),
    ("The people who pass and the people who keep re-sitting aren't divided by effort.",
-    "The difference between the people who pass and the people who keep re-sitting isn't how hard they work.", 8.4),
+    "The difference between the people who pass and the people who keep re-sitting isn't how hard they work.", 8.40),
    ("They all work hard.",
     "They all work hard."),
  ]),
  ('s3', 'Ten credentials', [
+   # NCLEX is a word, not seven letters. Spelled out it was simply wrong.
    ("CMA · CPA · CFA · CIA · CISA · PMP · NCLEX-RN & PN",
-    "C M A. C P A. C F A. C I A. C I S A. P M P. N C L E X — R N and P N.", 11.6),
+    "C M A. C P A. C F A. C I A. C I S A. P M P. En-clex — R N and P N.", 11.60),
    ("And PCI's own: Project Controls, Project Management and Project Finance Leader.",
-    "And P C I's own: Project Controls Leader. Project Management Leader. Project Finance Leader.", 19.7),
+    "And P C I's own: Project Controls Leader. Project Management Leader. Project Finance Leader.", 19.70),
    ("Ten credentials. One platform.",
     "Ten credentials. One platform."),
  ]),
  ('s4', 'Official partner', [
    ("Certuvo is the official training partner of PCI AI — the Project Controls Institute.",
-    "And Certuvo is the official training partner of P C I A I — the Project Controls Institute."),
+    "And Sertoovo is the official training partner of P C I A I — the Project Controls Institute."),
  ]),
  ('s5', 'Already inside', [
    ("Inside every course: thousands of verified questions.",
     "Inside every course: thousands of verified questions.", 3.75),
-   ("Full-length mock exams under real timing. Video lectures. Course notes you'll actually keep.",
+   ("Full mock exams under real timing. Video lectures. Course notes you'll actually keep.",
     "Full-length mock exams, under real timing. Video lectures. Course notes you will actually keep.", 10.95),
    ("Built from research. Mapped to the official blueprint, in the exam's own weightings.",
     "Built from research. Mapped to the official blueprint, in the exam's own weightings."),
  ]),
  ('s6', 'Four judges', [
    ("And when you've worked through them, the AI Question Forge writes more.",
-    "And when you have worked through them, the A I Question Forge writes more.", 4.3),
+    "And when you have worked through them, the A I Question Forge writes more.", 4.30),
    ("Unlimited new questions — and not one reaches you until it has passed four AI judges.",
-    "Unlimited new questions — and not one reaches you until it has passed four A I judges.", 10.8),
+    "Unlimited new questions — and not one reaches you until it has passed four A I judges.", 10.80),
    ("Generated. Answer verified. Checked for ambiguity. Matched to the blueprint.",
     "Generated. Answer verified. Checked for ambiguity. Matched to the blueprint."),
  ]),
  ('s7', 'AI Coach', [
-   ("Stuck, at eleven at night? Call your AI Coach.",
+   ("Stuck at eleven at night? Call your AI Coach.",
     "Stuck, at eleven at night? Call your A I Coach.", 4.05),
-   ("It reads your screen — the exact question, the diagrams, the options.",
-    "It reads your screen — the exact question, the diagrams, the options.", 8.95),
-   ("It speaks six languages. And it teaches you to think, not memorise.",
-    "It speaks six languages. And it teaches you to think, not memorise.", 14.1),
+   ("It reads your screen — the question, the numbers, every option.",
+    "It reads your screen. The question, the numbers, every option.", 8.60),
+   ("It answers with a question, so you leave with the method — not the answer.",
+    "And it answers with a question — so you leave with the method, not the answer.", 14.30),
    ("Then, in a mock exam, it switches itself off.",
     "Then, in a mock exam, it switches itself off."),
  ]),
- ('s8', 'Not alone', [
-   ("You are not doing this alone.",
-    "And you are not doing this alone.", 2.25),
-   ("Live study rooms — your cohort, on video, working the same question in real time.",
-    "Live study rooms. Your cohort, on video, working the same question in real time.", 8.2),
-   ("And mentors on chat, around the clock.",
-    "And mentors on chat, around the clock."),
+ # s8 is the corrected feature. There are no chat rooms; there is a peer study
+ # session where two students share one screen, and either can bring a friend.
+ ('s8', 'Study with a peer', [
+   ("When you want another mind on it — study with a peer.",
+    "And when you want another mind on it — study with a peer.", 3.20),
+   ("Share your screen, live. The same question, the same numbers, at the same second.",
+    "Share your screen, live. The same question, the same numbers, at the same second.", 9.70),
+   ("Bring a friend in. Two of you, one problem, until it gives.",
+    "Bring a friend in. Two of you, one problem — until it gives."),
  ]),
  ('s9', 'Readiness', [
    ("Every question you answer moves a line.",
-    "And every question you answer moves a line.", 3.1),
-   ("Certuvo tracks every domain and finds the gap you keep falling into.",
-    "Certuvo tracks every domain, and finds the gap you keep falling into.", 8.25),
+    "And every question you answer moves a line.", 3.10),
+   ("Certuvo tracks every domain, and finds the gap you keep falling into.",
+    "Sertoovo tracks every domain, and finds the gap you keep falling into.", 8.25),
    ("Not how much you've read. Whether you're ready.",
     "Not how much you have read. Whether you are ready."),
  ]),
@@ -91,13 +96,13 @@ SCENES = [
    ("And if you're new — start free. Open it, and see.",
     "And if you are new — start free. Open it, and see for yourself."),
  ]),
- ('s11', 'What you work with', [               # presenter on camera
+ ('s11', 'What you work with', [               # presenter on camera — take reused
    ("So — the difference?",
     "So. The difference?", 1.95),
    ("It was never how hard you work. It's what you work with.",
-    "It was never how hard you work. It's what you work with.", 6.7),
+    "It was never how hard you work. It's what you work with.", 6.70),
    ("Ten credentials. One platform. That's enough.",
-    "Ten credentials. One platform. That's enough.", 11.8),
+    "Ten credentials. One platform. That's enough.", 11.80),
    ("Certuvo. Your exam partner.",
     "Certuvo. Your exam partner."),
  ]),
@@ -106,16 +111,16 @@ SCENES = [
 PRESENTER = {'s1', 's11'}
 
 DIRECTION = {
- 's1':  "[quiet, intimate, direct to camera] It's late. [pause] Everyone else is asleep. And you're still here — reading the same page for the third time. [warm, knowing, gentle smile] I know. [slower] Because everyone who ever earned those letters did exactly this.",
+ 's1':  "[quiet, intimate, direct to camera] It's late. [pause] Everyone else is asleep. And you're still here \u2014 reading the same page for the third time. [warm, knowing, gentle smile] I know. [slower] Because everyone who ever earned those letters did exactly this.",
  's2':  "[lowered, confiding, leaning in] But here's the thing nobody tells you. [measured] The difference between the people who pass and the people who keep re-sitting isn't how hard they work. [flat, certain, a beat of silence after] They all work hard.",
- 's3':  "[clear, gathering pace, proud] C M A. C P A. C F A. C I A. C I S A. P M P. N C L E X — R N and P N. [warmer] And P C I's own: Project Controls Leader. Project Management Leader. Project Finance Leader. [settled, certain] Ten credentials. One platform.",
- 's4':  "[authoritative, proud] And Certuvo is the official training partner of P C I A I — the Project Controls Institute.",
+ 's3':  "[clear, gathering pace, proud] C M A. C P A. C F A. C I A. C I S A. P M P. En-clex \u2014 R N and P N. [warmer] And P C I's own: Project Controls Leader. Project Management Leader. Project Finance Leader. [settled, certain] Ten credentials. One platform.",
+ 's4':  "[authoritative, proud] And Sertoovo is the official training partner of P C I A I \u2014 the Project Controls Institute.",
  's5':  "[opening up, generous] Inside every course: thousands of verified questions. [listing, unhurried] Full-length mock exams, under real timing. Video lectures. Course notes you will actually keep. [deliberate, credible] Built from research. Mapped to the official blueprint, in the exam's own weightings.",
- 's6':  "[intrigued, confident] And when you have worked through them, the A I Question Forge writes more. [emphasis] Unlimited new questions — and not one reaches you until it has passed four A I judges. [crisp, ticking them off] Generated. Answer verified. Checked for ambiguity. Matched to the blueprint.",
- 's7':  "[wry, understanding] Stuck, at eleven at night? [warm] Call your A I Coach. [conversational] It reads your screen — the exact question, the diagrams, the options. It speaks six languages. And it teaches you to think, not memorise. [firm, a little proud] Then, in a mock exam, it switches itself off.",
- 's8':  "[warm, human] And you are not doing this alone. Live study rooms. Your cohort, on video, working the same question in real time. [reassuring] And mentors on chat, around the clock.",
- 's9':  "[building, precise] And every question you answer moves a line. Certuvo tracks every domain, and finds the gap you keep falling into. [slower, landing it] Not how much you have read. [emphasis] Whether you are ready.",
- 's10': "[direct, a little defiant] All of it, for less than the market asks. [bright, inviting] And if you are new — start free. Open it, and see for yourself.",
+ 's6':  "[intrigued, confident] And when you have worked through them, the A I Question Forge writes more. [emphasis] Unlimited new questions \u2014 and not one reaches you until it has passed four A I judges. [crisp, ticking them off] Generated. Answer verified. Checked for ambiguity. Matched to the blueprint.",
+ 's7':  "[wry, understanding] Stuck, at eleven at night? [warm] Call your A I Coach. [conversational] It reads your screen. The question, the numbers, every option. [quietly impressed] And it answers with a question \u2014 so you leave with the method, not the answer. [firm, a little proud] Then, in a mock exam, it switches itself off.",
+ 's8':  "[warm, opening out] And when you want another mind on it \u2014 study with a peer. [precise, a little marvelling] Share your screen, live. The same question, the same numbers, at the same second. [warm, human, smiling] Bring a friend in. Two of you, one problem \u2014 until it gives.",
+ 's9':  "[building, precise] And every question you answer moves a line. Sertoovo tracks every domain, and finds the gap you keep falling into. [slower, landing it] Not how much you have read. [emphasis] Whether you are ready.",
+ 's10': "[direct, a little defiant] All of it, for less than the market asks. [bright, inviting] And if you are new \u2014 start free. Open it, and see for yourself.",
  's11': "[quiet, to camera, a small smile] So. The difference? [slower, certain] It was never how hard you work. [emphasis] It's what you work with. [warm, final] Ten credentials. One platform. That's enough. [gentle] Certuvo. Your exam partner.",
 }
 
