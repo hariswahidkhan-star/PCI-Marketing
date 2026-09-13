@@ -25,6 +25,18 @@ if [[ "${MIX:-1}" == "1" ]]; then
   # the prompt already keeps 1-4 kHz sparse for the narration.
   MUSIC="${MUSIC-../music-own/certuvo-home-bed.mp3}"
   TOTAL="$(python3 -c "import json;print(json.load(open('timeline.json'))['total'])")"
+  # A bed shorter than the film does not fail: atrim just stops early and amix
+  # pads the tail with silence, so the close plays dry and nothing says so.
+  # Caught it once when the film grew from 2:17 to 2:42 — never again.
+  # ffmpeg -i with no output file exits 1 by design, which pipefail would treat
+  # as a build failure — hence the `|| true`.
+  BEDLEN="$({ "$FFMPEG" -hide_banner -i "$MUSIC" 2>&1 || true; } | sed -n 's/.*Duration: \([0-9:.]*\).*/\1/p' | head -1 \
+            | awk -F: '{printf "%.2f", $1*3600+$2*60+$3}')"
+  [[ -n "$BEDLEN" ]] || { echo "could not read the duration of $MUSIC" >&2; exit 1; }
+  awk -v b="$BEDLEN" -v t="$TOTAL" 'BEGIN{exit !(b+0 >= t+0)}' || {
+    echo "bed is ${BEDLEN}s but the film is ${TOTAL}s — the last $(awk -v b="$BEDLEN" -v t="$TOTAL" 'BEGIN{printf "%.1f", t-b}')s would be silent." >&2
+    echo "regenerate ../music-own/certuvo-home-bed.mp3 at the new length (see ../music-own/README.md)" >&2
+    exit 1; }
   FADE_AT="$(python3 -c "print(max(0.0, $TOTAL - 4.0))")"
   "$FFMPEG" -hide_banner -loglevel error -y -i "$MUSIC" \
     -af "atrim=0:$TOTAL,afade=t=in:st=0:d=2.0,afade=t=out:st=$FADE_AT:d=4" \

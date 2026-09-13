@@ -60,48 +60,103 @@ Certuvo's instruction. **A written partnership record between Certuvo and PCI AI
 should exist before publication.** The PCI mark is reproduced on the s4 lockup
 on the same basis.
 
-## 3. How courses are built (s5)
+## 3. How courses are built (s5, the provenance strip)
 
 | # | Claim in the film | Status |
 |---|---|---|
-| 3.1 | "Every course is built from research. Not recycled." | **S** — describes Certuvo's own process; Certuvo should be able to describe that process if asked |
+| 3.1 | Spoken: "Built from research." On screen: "Researched" | **S** — describes Certuvo's own process; Certuvo should be able to describe that process if asked |
 | 3.2 | "Mapped to the official blueprint, in the exam's own weightings" | P — matches "Blueprint match — aligned to the official exam blueprint and weighting" on certuvo.com |
-| 3.3 | "Rewritten the moment the exam changes" | **S** — a commitment about Certuvo's own maintenance cycle, not a published feature. Soften to "kept current with the exam" if the commitment cannot be met |
 
-## 4. What is inside a course (s6)
+**"Not recycled" and "rewritten the moment the exam changes" have been cut.**
+Both were in the earlier version of this film. The first is a negative claim
+about other providers' materials that Certuvo would have to be able to defend;
+the second is a commitment about a maintenance cycle rather than a published
+feature. Neither is worth the exposure for one clause, and the scene reads no
+weaker without them. If Certuvo wants the maintenance commitment back, it can
+be added to the provenance strip in s5 of `src/scene.html` without re-recording,
+because it is on screen only.
 
-Traced to certuvo.com as it read on 12 September 2026.
+## 4. What is already inside a course (s5) — including the quantity claim
+
+Traced to certuvo.com as it read on 12 September 2026, except row 4.1.
+
+| # | Claim in the film | Source | Status |
+|---|---|---|---|
+| 4.1 | **"Thousands of verified questions"** — spoken, and on screen as "Thousands already in the bank" | Certuvo's instruction | **S — quantity claim** |
+| 4.2 | Every one checked before a student sees it | The four-judge validation at 5.1 is what "verified" refers to | P |
+| 4.3 | Full-length mock exams, under real timing | "timed quizzes and full-length mock exams designed to simulate the real testing experience" | P |
+| 4.4 | Video lectures, every domain taught end to end | Course video lectures | P |
+| 4.5 | Course notes | Course notes | P |
+| 4.6 | Built from research, mapped to the official blueprint, in the exam's own weightings | "Blueprint match — aligned to the official exam blueprint and weighting" | P / **S** for "built from research" |
+
+**4.1 is a quantity claim and it is new in this cut.** "Thousands" means at
+least two thousand to an ordinary listener. **Certuvo must be able to show that
+each course it sells carries a bank of that size**, because the line says
+"inside every course", not "across the platform". If the true figure is lower
+for some credentials, the honest fixes are: say "thousands across the platform"
+(and change the on-screen line to match), or drop the number and keep "a bank of
+verified questions", which the visual already carries on its own.
+
+Deliberately **no exact figure** is shown. The bank is drawn as a field of
+question chips filling in rather than a counter, because a counter states a
+number Certuvo has not published and invites the reader to check it.
+
+## 5. The Forge and the four judges (s6)
 
 | # | Claim in the film | certuvo.com wording | Status |
 |---|---|---|---|
-| 4.1 | Verified multiple-choice questions, checked before a student ever sees them | The four-judge validation described at 5.1 is what "verified" refers to | P |
-| 4.2 | Full-length mock exams, under real timing | "timed quizzes and full-length mock exams designed to simulate the real testing experience" | P |
-| 4.3 | Video lectures, every domain taught end to end | Course video lectures | P |
-| 4.4 | Course notes | Course notes | P |
+| 5.1 | Unlimited new questions, and not one reaches you until it has passed four AI judges | "Unlimited new questions. Validated by 4 AI judges." | P |
+| 5.2 | The four gates, in order: Generated · Answer verified · Checked for ambiguity · Matched to the blueprint | Generate · Verify answer · Quality & clarity · Blueprint match | P — reworded, same four |
+| 5.3 | On screen: "re-solved independently", "anything unclear is rejected", "the exam's current weighting" | The site's own descriptions of the same four steps | P |
 
-## 5. The AI features (s7)
+The scene shows **one** question being generated and passing all four gates.
+That is a depiction of the described process, not a recording of the product.
+The end frame carries "On-screen product views are illustrative."
 
-| # | Claim in the film | certuvo.com wording | Status |
-|---|---|---|---|
-| 5.1 | AI Question Forge: unlimited new questions, every one checked by four AI judges (Generate · Verify answer · Quality & clarity · Blueprint match) | "Unlimited new questions. Validated by 4 AI judges." | P |
-| 5.2 | AI Coach you can chat or call mid-question | "Chat or call your AI Coach during practice" | P |
-| 5.3 | Six languages (English · العربية · Français · Español · हिन्दी · Русский) | "Coach speaks 6 languages" | P |
-| 5.4 | It reads your screen — the exact question, diagrams, tables and options | "Reads your screen automatically — it sees the exact question, diagrams, tables, and answer options" | P |
-| 5.5 | It switches itself off in a mock | "Auto-disabled during mock exams — practice with help, test without it" | P |
-
-## 6. Peer support and readiness (s8)
+## 5A. The AI Coach (s7)
 
 | # | Claim in the film | certuvo.com wording | Status |
 |---|---|---|---|
-| 6.1 | Live study rooms — join your cohort by video, practise on shared questions in real time | "Live study rooms — join your cohort by video anytime"; "Practice together on shared questions in real time" | P |
+| 5A.1 | Call your AI Coach mid-question | "Chat or call your AI Coach during practice" | P |
+| 5A.2 | It reads your screen — the exact question, the diagrams, the options | "Reads your screen automatically — it sees the exact question, diagrams, tables, and answer options" | P |
+| 5A.3 | Six languages | "Coach speaks 6 languages: English · العربية · Français · Español · हिन्दी · Русский" | P |
+| 5A.4 | It teaches you to think, not memorise — shown as the coach answering a question with a question | "It uses the Socratic method to teach you to think, not memorize" | P |
+| 5A.5 | In a mock exam it switches itself off | "Auto-disabled during mock exams — practice with help, test without it" | P |
+
+The on-screen exchange ("I can see the question on your screen" → "I don't know
+which cost to allocate" → "Before I answer — which of those costs changes when
+volume changes?") is **written for the film** to demonstrate 5A.4. It is not a
+transcript of a real session. The exam panel's "Question 14 of 40" and its
+clock are likewise illustrative furniture.
+
+## 6. The study room (s8) and readiness (s9)
+
+| # | Claim in the film | certuvo.com wording | Status |
+|---|---|---|---|
+| 6.1 | Live study rooms — your cohort, on video, working the same question in real time | "Live study rooms — join your cohort by video anytime"; "Practice together on shared questions in real time" | P |
 | 6.2 | Mentors on chat, around the clock | "24/7 Chat Support — round-the-clock support from experienced mentors" | P |
-| 6.3 | Tracking that tells you when you're ready | "Progress Tracking — smart analytics that highlight strengths, identify knowledge gaps" — "tells you when you're ready" is the film's paraphrase of readiness analytics | P |
+| 6.3 | Every question you answer moves a line; Certuvo tracks every domain and finds the gap you keep falling into | "Progress Tracking — smart analytics that highlight strengths, identify knowledge gaps" | P |
+| 6.4 | "Not how much you've read. Whether you're ready." | The film's paraphrase of readiness analytics | P |
 
-## 7. Price (s9) — the claim that needs the most care
+**The people in the study room are invented.** Six tiles carry first names and
+initials on coloured discs — no photographs, no real students, no testimonials,
+and no claim that any of them exist. Abstract avatars were chosen over stock
+faces for exactly this reason. No headcount is shown: certuvo.com's "14k+
+studying together" is a statistic Certuvo would have to substantiate, so it is
+not used.
+
+**The readiness chart carries no numbers.** No score, no percentage, no
+timescale, no axis values — a rising curve, a dashed "exam-ready" threshold, and
+five domain bars of which one is short and flagged. It illustrates that the
+product tracks readiness by domain. It does not predict, promise or imply any
+outcome, and the card is labelled "illustrative" on its face. The five domain
+names are real CMA Part 1 domains, used as a plausible example.
+
+## 7. Price (s10) — the claim that needs the most care
 
 | # | Claim in the film | Status |
 |---|---|---|
-| 7.1 | "All of it costs less than the market asks." On screen: "Less than the market asks." | **S — comparative advertising** |
+| 7.1 | "All of it, for less than the market asks." On screen: "Less than the market asks." | **S — comparative advertising** |
 
 This is a comparative price claim against unnamed competitors. In most
 advertising regimes a claim of this shape must be **capable of substantiation at
@@ -116,39 +171,48 @@ statement about Certuvo's own pricing ("One price. Every course.", "Priced so
 the cost is never the reason you stop") carries none of this risk. Changing it
 means editing s9 in `src/vo.py`, re-recording that take, and re-rendering.
 
-The second half of the scene — "the price of preparing should never be the
-reason you stop" — is **N**, a statement of intent, not a factual claim.
+Changing it means editing s10 in `src/vo.py`, re-recording that take, and
+re-rendering.
 
 ## 8. Free trial (s10)
 
 | # | Claim in the film | Status |
 |---|---|---|
-| 8.1 | "New here? Start with a free trial." | **S** |
+| 8.1 | "And if you are new — start free." | **S** |
 
 The film says only that a free trial exists for new students. It deliberately
 does not state a length, a scope, or whether a card is required. **A free trial
 must actually be available to new students when the film is published**, and
 what it includes should be stated wherever the film is embedded. If the trial is
-withdrawn or becomes conditional, cut s10.
+withdrawn or becomes conditional, cut the second half of s10.
 
-## 9. Emotional framing (s1, s2, s11) — not claims of fact
+## 9. Framing, not claims of fact (s1, s2, s11)
 
-"It's late… you're still here", "everyone who ever earned those letters did
-exactly this", "a certification isn't three letters after your name — it's the
-room you get invited into, the number on the offer", "Ten credentials. One
-platform. That's enough." These are **N**: the film's framing. Note that "the
-number on the offer" gestures at a salary benefit without asserting one; no
-figure, multiple or percentage appears anywhere in the film, and none should be
-added without published evidence.
+The film opens and closes on a claim about **effort**, not about outcomes:
+
+> The difference between the people who pass and the people who keep re-sitting
+> isn't how hard they work. They all work hard. … It was never how hard you
+> work. It's what you work with.
+
+This is **N** — the film's framing, and the device that holds it together (see
+`narrative-design.md`). Read strictly it is a generalisation about candidates,
+not a claim about Certuvo, and it promises nothing: it does not say Certuvo
+makes the difference, that its users pass, or that anyone else's materials fail.
+It should stay that way. If it is ever tightened into "Certuvo is the
+difference", it becomes an outcome claim and needs evidence.
+
+"It's late… you're still here" and "Ten credentials. One platform. That's
+enough." are likewise framing. Nothing in the film gestures at salary or
+earnings — the earlier cut's "the number on the offer" has been cut.
 
 ## 10. Deliberately not said
 
 - No pass rates, pass guarantees, or "easy".
-- No student counts, completion rates, defect rates or streak figures — the
+- No student counts, room headcounts, completion rates, defect rates or streak figures — the
   statistics on certuvo.com ("Under 0.1 % defect rate", "3.1× higher
   completion", "47-day avg. active streak", "14k+ studying together") are all
   omitted. They would each need substantiation and they date quickly.
-- No salary figures or earnings claims.
+- No salary figures or earnings claims, and no readiness score or percentage.
 - No price, discount or "from £X".
 - No claim of approval, accreditation, endorsement or partnership by any
   awarding body other than PCI AI.
@@ -160,7 +224,13 @@ Verbatim in `src/vo.py` (`LEGAL`) and on the end card in `src/scene.html`:
 > All third-party names and marks shown are the property of their respective
 > owners. Certuvo is an independent preparation provider and is not affiliated
 > with, sponsored by or endorsed by any of them, except PCI AI, whose official
-> training partner it is. Preparation does not guarantee a pass.
+> training partner it is. On-screen product views are illustrative. Preparation
+> does not guarantee a pass.
+
+The sentence "On-screen product views are illustrative" is **new in this cut**
+and must stay: four scenes now depict product interfaces (the question bank, the
+Forge, the Coach, the study room and the readiness chart) that are drawn for the
+film rather than screen-recorded.
 
 It holds on screen for about three seconds at full size. **This line must stay
 on any cut, crop or re-edit of this film**, including social versions.
@@ -179,8 +249,9 @@ or expert, and makes no claim in his own person.
 
 ## 13. Timing evidence
 
-Cue times in `src/scene.html` (`CUES`, `FOCUS`) are relative to each scene's
-first caption and were set from the pauses ffmpeg `silencedetect` found in each
-take (−38 dB, ≥ 0.24 s). The explicit caption ends in `src/vo.py` come from the
-same measurement, so a credential card lands on its spoken acronym and a feature
-card is raised while it is being described.
+Cue times in `src/scene.html` (`CUES`, `FOCUS`, `SCENEFX`) are relative to each
+scene's first caption and were set from the pauses ffmpeg `silencedetect` found
+in each take (−38 dB, ≥ 0.24 s). The explicit caption ends in `src/vo.py` come
+from the same measurement, so a credential card lands on its spoken acronym,
+each of the four judges ticks on the word that names it, and the coach switches
+itself off on "then, in a mock exam".

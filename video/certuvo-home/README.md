@@ -1,66 +1,75 @@
-# Certuvo — the homepage film (2:17)
+# Certuvo — the homepage film (2:42)
 
-The premium brand film for the top of certuvo.com: what Certuvo is, the ten
-credentials it prepares candidates for, and every feature that makes it one
-platform rather than a stack of them. Eleven beats, opening and closing on
-camera with the presenter, in the same light treatment as the CMA films
-(`../certuvo-cma`, `../certuvo-cma-60`) — off-white ground, white cards with a
-blue top rule, Certuvo blue, and the lecture's red reserved for the numbered
-tags, the chapter counter and the progress bar.
+The premium brand film for the top of certuvo.com. Eleven beats, opening and
+closing on camera with the presenter, in the light treatment the CMA films
+established: off-white ground, white cards with a blue top rule, Certuvo blue,
+and the lecture's red rationed to the numbered tags, the chapter counter, the
+progress bar and the one flagged gap in the readiness scene.
+
+**Read `narrative-design.md` before changing the order of anything.** The film
+is built on a single withheld question — *the difference isn't how hard you
+work* — opened in scene 2 and not answered until scene 11. Move a scene and you
+break it.
 
 | # | Scene | Starts | On screen |
 |---|---|---|---|
 | 1 | Late (presenter) | 0:00 | "It's late. Everyone else is asleep. And you're still here." |
-| 2 | What it is worth | 0:15 | "The room you get invited into. The number on the offer." |
-| 3 | Ten credentials | 0:27 | The wall — one card lands on each spoken acronym |
+| 2 | The difference | 0:15 | The loop opens: "They all work hard." |
+| 3 | Ten credentials | 0:25 | The wall — one card lands on each spoken acronym |
 | 4 | Official partner | 0:49 | Certuvo × PCI lockup |
-| 5 | Built on research | 0:56 | Researched · Mapped to the blueprint · Rewritten when it changes |
-| 6 | What is inside | 1:08 | Verified MCQs · Mock exams · Video lectures · Course notes |
-| 7 | AI inside | 1:19 | AI Question Forge (four judges) · AI Coach (calls, reads your screen, six languages, off in mocks) |
-| 8 | Not alone | 1:35 | Live study rooms · Mentors 24/7 · Readiness tracking |
-| 9 | The price | 1:49 | "Less than the market asks." |
-| 10 | Start free | 1:58 | "Start with a free trial." |
-| 11 | One platform (presenter) | 2:03 | "Ten credentials. One platform. That's enough." then the end card |
+| 5 | Already inside | 0:56 | **Animated:** a field of verified questions fills, then mocks, lectures, notes |
+| 6 | Four judges | 1:13 | **Animated:** one question is followed through all four gates |
+| 7 | AI Coach | 1:31 | **Animated:** a call, a beam reading the screen, then the coach stands down for a mock |
+| 8 | Not alone | 1:49 | **Animated:** the study room fills, the cohort works a shared question |
+| 9 | Readiness | 2:01 | **Animated:** the curve climbs to the exam-ready line, one domain flagged |
+| 10 | The price | 2:13 | "Less than the market asks." then "start free" |
+| 11 | What you work with (presenter) | 2:21 | The loop closes, then the end card |
 
-## How the credential wall works (scene 3)
+## The four animated sequences
 
-Ten cards in two rows of five. Six are the supplied third-party marks (CMA, CPA,
-CFA Institute, Certified Internal Auditor, CISA, NCLEX), cropped to their ink in
-`assets/logos/trim-*.png` so they read at even weight. Four are set as
-wordmarks rather than logos — **PMP®**, and PCI's own **PCL-AI**, **PML-AI** and
-**PFL-AI** — each with its expansion underneath. PMP is type, not PMI's mark,
-deliberately: see `claims-register.md` §1.
+Scenes 5 to 9 are the answer to scene 2's question, and each is **shown working
+rather than listed**. A feature named is a claim; a feature demonstrated is
+evidence. They are driven by `SCENEFX` in `src/scene.html` — one pure function
+per scene, taking only the seconds elapsed since that scene's narration began,
+so every frame is still reproducible from `t` alone and nothing holds state
+between frames.
 
-Cards land one per spoken acronym, so the wall assembles in time with the voice
-and is complete on "One platform. All of them."
-
-## The feature scenes (5, 6, 8)
-
-Each row lands complete within half a second, then the **card being spoken about
-is raised** — red top rule, filled numbered tag, a small lift — and released as
-the voice moves on. That is the `FOCUS` table in `src/scene.html`, alongside the
-`CUES` reveal table; both are keyed off measured pauses in the takes, so nothing
-is eyeballed. It replaces a slower one-card-at-a-time reveal that left the grid
-looking half-empty for seconds at a time.
+- **The bank (s5)** fills as a field of question chips rather than a counter. A
+  counter states a number Certuvo has not published; a field that fills in front
+  of you carries the impression honestly. Provenance follows immediately —
+  researched, mapped to the blueprint, in the exam's own weightings — because
+  volume without provenance reads as filler.
+- **The Forge (s6)** follows one question from "Writing…" through Generated,
+  Answer verified, Checked for ambiguity and Matched to the blueprint. Each gate
+  ticks on the word that names it; the spine fills; the card clears. Watching one
+  item pass a visible process does more for trust in the other thousands than any
+  adjective.
+- **The Coach (s7)** is shown mid-question at 23:07 on the clock. The beam makes
+  "it reads your screen" legible in a way the sentence cannot, and the coach
+  answers with a question rather than an answer, which is what "teaches you to
+  think, not memorise" actually looks like. Then the mock starts and it greys
+  itself out. That restraint is the credibility claim.
+- **The room (s8)** fills one peer at a time, then a mentor. Faces are initials
+  on discs, deliberately: stock faces read as stock, abstraction reads as privacy.
+- **Readiness (s9)** draws a curve to a dashed exam-ready threshold with five
+  domain bars, one short and flagged red. No numbers anywhere — it illustrates
+  the feature, it does not promise a score.
 
 ## Voice, presenter, music
 
 - **Voice:** ElevenLabs *Nassim* (`repzAAjoKlgcT2oOAIWt`), `eleven_v3`, eleven
   takes with inline audio direction (`DIRECTION` in `src/vo.py`).
-- **Presenter:** the same synthetic portrait as the CMA films, animated by
-  **HeyGen Avatar IV** (`heygen-avatar4`, expressive, 1080p) from the untrimmed
-  s1 and s11 takes → `assets/avatar-s1.mp4`, `assets/avatar-s11.mp4`.
+- **Presenter:** a synthetic portrait animated by **HeyGen Avatar IV**
+  (`heygen-avatar4`, 1080p) from the untrimmed s1 and s11 takes.
   `src/presenter.py` cuts them to JPEG frames and measures the leading silence
   `sync.py` trims, so the lips match the laid voice track.
-- **Music:** `music-own/certuvo-home-bed.mp3`, generated for **this** film with
-  `eleven_music_v2` — bare for the first twenty seconds under the intimate open,
-  building from ninety, peaking 110–130 under the price and the close, resolving
-  warm. It has about 18 dB of range against the shared CMA bed's 7, which is why
-  this film does not use `../certuvo-cma/music`. Confirmed instrumental by
-  transcription (empty transcript). Mixed at `BED=0.42` under a side-chain, to
-  −14 LUFS / −1.5 dBTP; the measured narration-to-music margin in the 300 Hz –
-  4 kHz band is **21 dB median**, and the only seconds where the music comes
-  forward are the scene gaps, by design.
+- **Music:** `music-own/certuvo-home-bed.mp3`, 170 s, generated for this film
+  with `eleven_music_v2` — bare for the first twenty seconds under the intimate
+  open, building from a hundred, peaking 125–155 under the price and the close,
+  resolving warm. Confirmed instrumental by transcription. Mixed at `BED=0.42`
+  under a side-chain to −14 LUFS / −1.5 dBTP; measured narration-to-music margin
+  in the 300 Hz – 4 kHz band is **18 dB median**, and the only seconds where the
+  bed comes forward are the gaps between scenes.
 
 ## Build
 
@@ -73,13 +82,14 @@ MIX=0 ./build-serial.sh              # reuse the existing build/mixed.wav
 **Serial, always.** Four Chromium renders on this four-core box take the load
 average past 90; `build-serial.sh` runs one at a time on purpose.
 
-The pipeline is the same as the CMA films: `sync.py` measures the takes and
-writes `shots.data.js` + `timeline.json`; `vo.py` writes the captions;
-`presenter.py` cuts the clips; `scene.html` exposes `window.seek(t)` so every
-frame is computed from `t` alone; `render.mjs` drives it over CDP and pipes PNGs
-straight into ffmpeg. **`probe.mjs` must be clean at all four sizes before a
-build** — it samples every 0.5 s for page errors, stage overflow, caption
-collisions, chrome collisions and clipped text:
+**The bed must be at least as long as the film.** `build-serial.sh` now refuses
+to build if it is not: a short bed does not fail on its own, `atrim` simply stops
+early and the close plays dry with nothing saying so. That happened once, when
+the film grew from 2:17 to 2:42.
+
+`probe.mjs` must be clean at all four sizes before a build — it samples every
+0.5 s for page errors, stage overflow, caption collisions, chrome collisions and
+clipped text:
 
 ```bash
 cd src && ./run-probes.sh && tail -6 ../build/probe-*.txt
@@ -92,33 +102,32 @@ cd src && ./run-probes.sh && tail -6 ../build/probe-*.txt
 `certuvo-home-1080x1080-captions.mp4` (1:1), plus `.srt` / `.vtt` in
 `captions/`. H.264 High, yuv420p, `+faststart`, AAC 192 kbps 48 kHz.
 
-`-FULL-` versions of each are the same cut with the Certuvo intro and outro
-stings joined on (2:34 rather than 2:17). There is no certifications card
-between the film and the outro, unlike the one-minute cut: scene 3 of this film
-is already the credential wall, so a card would only repeat it.
+`-FULL-` versions are the same cut with the Certuvo intro and outro stings
+joined on. There is no certifications card between the film and the outro,
+unlike the one-minute cut: scene 3 is already the credential wall.
 
-`certuvo-home-poster.jpg` is the frame at 40 s, the complete credential wall —
-the right still for a page that shows a poster before play. `-still-3s`,
-`-still-92s` and `-still-130s` are the presenter, the AI panels and the close,
-for wherever else the film is promoted. All are pulled from the clean cut, so
-none carries a burned-in caption.
+`certuvo-home-poster.jpg` is the frame at 40 s, the complete credential wall.
+The other stills are the presenter, the Coach and the close. All come from the
+clean cut, so none carries a burned-in caption.
 
 The `-clean` cut has no burned-in captions — use it on the page with the `.vtt`
-as a `<track>`, so the captions are selectable and indexable. The captioned cuts
-are for social, where players autoplay muted.
+as a `<track>`, so the captions stay selectable and indexable. The captioned
+cuts are for social, where players autoplay muted.
 
 ## Before this goes on the home page
 
-Read **`claims-register.md`**. Three things need Certuvo, not the film:
+Read **`claims-register.md`**. Four things need Certuvo, not the film:
 
-1. **"Less than the market asks"** (scene 9) is a comparative price claim and
-   needs a dated like-for-like comparison behind it, maintained.
-2. **"Official training partner of PCI AI"** appears in the narration, on the
-   scene 4 lockup and in the furniture on every frame. There should be a written
+1. **"Thousands of verified questions"** is new in this cut and is a quantity
+   claim. The line says *inside every course*, so it has to be true per course,
+   not across the platform.
+2. **"Less than the market asks"** is comparative and needs a dated
+   like-for-like comparison behind it, maintained.
+3. **"Official training partner of PCI AI"** appears in the narration, on the
+   scene 4 lockup and in the corner of every frame. There should be a written
    partnership record.
-3. **A free trial must actually be open to new students** (scene 10).
+4. **A free trial must actually be open to new students.**
 
-And Certuvo must satisfy itself it is entitled to reproduce the six third-party
-marks on the credential wall. If not, swap them for wordmark cards in the
-pattern already used for PMP and the three PCI credentials — that is a change to
-`src/scene.html` alone.
+And Certuvo must satisfy itself it may reproduce the six third-party marks on
+the credential wall. If not, swap them for wordmark cards in the pattern already
+used for PMP and the three PCI credentials — a change to `src/scene.html` alone.

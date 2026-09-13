@@ -103,47 +103,189 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
 .lockup img.pci{width:calc(6.4 * var(--s) * 1px);height:auto;display:block;border-radius:calc(.9 * var(--s) * 1px)}
 .lockup .x{font-family:var(--display);font-weight:800;font-size:calc(1.9 * var(--s) * 1px);color:var(--foot)}
 
-/* ---------- process row (s5) ---------- */
-.flow{display:flex;align-items:stretch;gap:calc(.9 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;
-  max-width:calc(74 * var(--s) * 1px)}
-.step{will-change:transform,opacity,box-shadow;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
-  border-radius:calc(.3 * var(--s) * 1px);box-shadow:var(--shadow);text-align:left;
-  padding:calc(1.1 * var(--s) * 1px) calc(1.3 * var(--s) * 1px);width:calc(17.2 * var(--s) * 1px);will-change:transform,opacity}
-.step .tag{margin-bottom:calc(.55 * var(--s) * 1px)}
-.step b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.55 * var(--s) * 1px);line-height:1.12;color:var(--fg)}
-.step span{display:block;margin-top:calc(.4 * var(--s) * 1px);font-size:calc(1.0 * var(--s) * 1px);color:var(--cardsub);line-height:1.4}
-
-/* ---------- feature cards (s6, s8) ---------- */
-.cards{display:flex;gap:calc(1.1 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;max-width:calc(74 * var(--s) * 1px)}
-.card{will-change:transform,opacity,box-shadow;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
-  box-shadow:var(--shadow);text-align:left;padding:calc(1.2 * var(--s) * 1px) calc(1.45 * var(--s) * 1px);
-  border-radius:calc(.3 * var(--s) * 1px);width:calc(17.2 * var(--s) * 1px);will-change:transform,opacity}
-.card .tag{margin-bottom:calc(.6 * var(--s) * 1px)}
-.card b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.7 * var(--s) * 1px);line-height:1.12;color:var(--fg)}
-.card span{display:block;margin-top:calc(.45 * var(--s) * 1px);font-size:calc(1.0 * var(--s) * 1px);color:var(--cardsub);line-height:1.4}
-.cards.three .card{width:calc(22.6 * var(--s) * 1px)}
-
-/* ---------- AI panels (s7) ---------- */
-.ai{display:grid;grid-template-columns:1fr 1fr;gap:calc(1.5 * var(--s) * 1px);width:100%;text-align:left;align-items:stretch}
-.panel{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
-  box-shadow:var(--shadow);border-radius:calc(.3 * var(--s) * 1px);padding:calc(1.2 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);will-change:transform,opacity}
-.panel .pk{font-weight:700;font-size:calc(.92 * var(--s) * 1px);letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
-.panel h4{font-family:var(--display);font-weight:800;font-size:calc(1.8 * var(--s) * 1px);letter-spacing:-.015em;line-height:1.12;color:var(--fg);margin-top:calc(.3 * var(--s) * 1px)}
-.panel h4 em{font-style:normal;color:var(--blue)}
-.steps{list-style:none;margin-top:calc(.9 * var(--s) * 1px);display:flex;flex-direction:column;gap:calc(.5 * var(--s) * 1px)}
-.steps li{display:flex;align-items:baseline;gap:calc(.75 * var(--s) * 1px);font-size:calc(1.06 * var(--s) * 1px);color:var(--sub);line-height:1.35;will-change:transform,opacity}
-.steps li b{color:var(--fg);font-weight:700;font-family:var(--sans)}
-.steps li .tag{flex:0 0 auto}
-.langs{margin-top:calc(.8 * var(--s) * 1px);font-size:calc(1.0 * var(--s) * 1px);color:var(--sub);line-height:1.4;will-change:transform,opacity}
-.langs b{color:var(--blue);font-weight:700}
-
-/* ---------- s9 price, s10 CTA ---------- */
-.price{display:flex;align-items:baseline;gap:calc(1.4 * var(--s) * 1px);justify-content:center;will-change:transform,opacity}
-.price .big{font-family:var(--display);font-weight:900;font-size:calc(8.4 * var(--s) * 1px);line-height:.9;letter-spacing:-.05em;color:var(--blue)}
-.price .lbl{text-align:left;font-size:calc(1.5 * var(--s) * 1px);color:var(--sub);line-height:1.3;max-width:calc(22 * var(--s) * 1px)}
+/* ---------- s10 CTA, shared language strip ---------- */
 .cta{font-family:var(--display);font-weight:800;font-size:calc(2.4 * var(--s) * 1px);letter-spacing:-.01em;color:#fff;
   background:var(--blue);padding:calc(.85 * var(--s) * 1px) calc(2.0 * var(--s) * 1px);border-radius:calc(.35 * var(--s) * 1px);
   will-change:transform,opacity;white-space:nowrap;box-shadow:0 calc(.6 * var(--s) * 1px) calc(1.8 * var(--s) * 1px) rgba(41,95,237,.28)}
+.langs{font-size:calc(1.0 * var(--s) * 1px);color:var(--sub);line-height:1.4;will-change:transform,opacity}
+.langs b{color:var(--blue);font-weight:700}
+
+/* ---------------------------------------------------------------------------
+   s5 · already inside — the bank of verified questions, then the other three.
+   Volume is a field of chips rather than a number: a number invites arithmetic
+   and Certuvo has published no bank size, while a field that fills in front of
+   you carries the impression honestly.
+--------------------------------------------------------------------------- */
+.inside{display:grid;grid-template-columns:1.42fr 1fr;gap:calc(1.2 * var(--s) * 1px);width:100%;align-items:stretch}
+.bank{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.1 * var(--s) * 1px) calc(1.2 * var(--s) * 1px);
+  text-align:left;display:flex;flex-direction:column;will-change:transform,opacity}
+.bank .bh b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.5 * var(--s) * 1px);color:var(--fg);line-height:1.1}
+.bank .bh span{display:block;margin-top:calc(.22 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub)}
+.chips{display:grid;grid-template-columns:repeat(16,1fr);gap:calc(.26 * var(--s) * 1px);margin-top:calc(.9 * var(--s) * 1px);
+  flex:1 1 auto;align-content:start}
+.chips i{display:block;height:calc(.6 * var(--s) * 1px);border-radius:calc(.14 * var(--s) * 1px);background:#E7ECF7;
+  will-change:background-color,opacity,transform}
+.bank .bf{margin-top:calc(.85 * var(--s) * 1px);font-size:calc(1.02 * var(--s) * 1px);color:var(--cardsub)}
+.bank .bf em{font-style:normal;font-family:var(--display);font-weight:900;font-size:calc(1.5 * var(--s) * 1px);
+  color:var(--blue);letter-spacing:-.02em}
+.stack{display:flex;flex-direction:column;gap:calc(.7 * var(--s) * 1px)}
+.mini{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.4 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(.78 * var(--s) * 1px) calc(.95 * var(--s) * 1px);
+  text-align:left;flex:1 1 0;display:flex;flex-direction:column;justify-content:center;will-change:transform,opacity,box-shadow}
+.mini .tag{margin-bottom:calc(.32 * var(--s) * 1px);align-self:flex-start}
+.mini b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.34 * var(--s) * 1px);color:var(--fg);line-height:1.1}
+.mini span{display:block;margin-top:calc(.2 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub);line-height:1.35}
+.prov{display:flex;align-items:center;justify-content:center;gap:calc(.9 * var(--s) * 1px);flex-wrap:wrap;
+  font-size:calc(1.04 * var(--s) * 1px);color:var(--sub);font-weight:600;will-change:transform,opacity}
+.prov i{display:block;width:calc(1.5 * var(--s) * 1px);height:calc(.1 * var(--s) * 1px);background:var(--rule)}
+
+/* ---------------------------------------------------------------------------
+   s6 · the forge — one question is followed through all four judges. Watching
+   a single item pass a visible process does more for trust in the rest of the
+   bank than any adjective could.
+--------------------------------------------------------------------------- */
+.forge{display:grid;grid-template-columns:1fr 1.3fr;gap:calc(1.6 * var(--s) * 1px);width:100%;align-items:center}
+.qcard{position:relative;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.1 * var(--s) * 1px);text-align:left;
+  will-change:transform,opacity,box-shadow}
+.qh{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  font-size:calc(.82 * var(--s) * 1px);color:var(--blue)}
+.qdot{width:calc(.42 * var(--s) * 1px);height:calc(.42 * var(--s) * 1px);border-radius:50%;background:var(--blue);
+  display:inline-block;will-change:opacity,transform}
+.ql{height:calc(.5 * var(--s) * 1px);border-radius:calc(.25 * var(--s) * 1px);background:#E7ECF7;margin-top:calc(.6 * var(--s) * 1px);
+  transform-origin:left center;will-change:transform,opacity}
+.ql.l1{width:100%}.ql.l2{width:92%}.ql.l3{width:64%}
+.qo{display:grid;grid-template-columns:1fr 1fr;gap:calc(.45 * var(--s) * 1px);margin-top:calc(.95 * var(--s) * 1px)}
+.qo i{display:block;height:calc(1.5 * var(--s) * 1px);border-radius:calc(.28 * var(--s) * 1px);border:1px solid var(--cardbd);
+  background:#FAFBFE;transform-origin:left center;will-change:opacity,transform}
+.qstamp{position:absolute;right:calc(1.0 * var(--s) * 1px);bottom:calc(1.0 * var(--s) * 1px);
+  font-family:var(--display);font-weight:900;font-size:calc(1.0 * var(--s) * 1px);letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;background:var(--blue);border-radius:calc(.28 * var(--s) * 1px);
+  padding:calc(.28 * var(--s) * 1px) calc(.7 * var(--s) * 1px);will-change:transform,opacity}
+.gates{position:relative;display:flex;flex-direction:column;gap:calc(.6 * var(--s) * 1px);text-align:left}
+.spine{position:absolute;left:calc(1.03 * var(--s) * 1px);top:calc(1.0 * var(--s) * 1px);bottom:calc(1.0 * var(--s) * 1px);
+  width:calc(.14 * var(--s) * 1px);background:var(--track);border-radius:calc(.07 * var(--s) * 1px);overflow:hidden}
+.spinefill{width:100%;height:100%;background:var(--blue);transform-origin:top center;will-change:transform}
+.gate{position:relative;display:flex;align-items:flex-start;gap:calc(.85 * var(--s) * 1px);will-change:transform,opacity}
+.gtick{position:relative;z-index:1;flex:0 0 auto;width:calc(2.1 * var(--s) * 1px);height:calc(2.1 * var(--s) * 1px);border-radius:50%;
+  background:var(--card);border:calc(.14 * var(--s) * 1px) solid var(--cardbd);display:flex;align-items:center;justify-content:center;
+  will-change:background-color,border-color,transform}
+.gtick b{font-family:var(--display);font-weight:900;font-size:calc(1.0 * var(--s) * 1px);will-change:color}
+.gt{padding-top:calc(.14 * var(--s) * 1px)}
+.gt b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.3 * var(--s) * 1px);color:var(--fg);line-height:1.12}
+.gt span{display:block;margin-top:calc(.14 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub);line-height:1.35}
+
+/* ---------------------------------------------------------------------------
+   s7 · the coach — the beam makes "it reads your screen" legible in a way the
+   sentence cannot, and the mock bar is the restraint signal: a product that
+   visibly declines to help where help would be cheating.
+--------------------------------------------------------------------------- */
+.coach{display:grid;grid-template-columns:1.05fr 1fr;gap:calc(1.3 * var(--s) * 1px);width:100%;align-items:stretch}
+.qpanel{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--cardbd);
+  border-top:calc(.2 * var(--s) * 1px) solid var(--blue);border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);
+  padding:calc(1.05 * var(--s) * 1px);padding-bottom:calc(3.0 * var(--s) * 1px);text-align:left;will-change:transform,opacity}
+.qtop{display:flex;justify-content:space-between;align-items:baseline;font-size:calc(.88 * var(--s) * 1px);
+  color:var(--cardsub);font-weight:600}
+.qtop .clock{font-family:var(--display);font-weight:800;color:var(--red);letter-spacing:.04em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:calc(.5 * var(--s) * 1px);margin-top:calc(1.0 * var(--s) * 1px)}
+.opt{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);height:calc(1.85 * var(--s) * 1px);
+  border:1px solid var(--cardbd);border-radius:calc(.3 * var(--s) * 1px);background:#FAFBFE;padding:0 calc(.6 * var(--s) * 1px)}
+.opt b{font-family:var(--display);font-weight:800;font-size:calc(.94 * var(--s) * 1px);color:var(--foot)}
+.opt i{display:block;flex:1 1 auto;height:calc(.36 * var(--s) * 1px);border-radius:calc(.18 * var(--s) * 1px);background:#E7ECF7}
+.beam{position:absolute;top:0;bottom:0;width:calc(7 * var(--s) * 1px);pointer-events:none;will-change:transform,opacity;opacity:0;
+  background:linear-gradient(90deg, rgba(41,95,237,0), rgba(41,95,237,.20), rgba(41,95,237,0));
+  border-right:calc(.1 * var(--s) * 1px) solid rgba(41,95,237,.5)}
+.scanlab{position:absolute;left:calc(1.05 * var(--s) * 1px);bottom:calc(.85 * var(--s) * 1px);
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:calc(.78 * var(--s) * 1px);color:var(--blue);
+  opacity:0;will-change:opacity,transform}
+.mockbar{position:absolute;left:calc(.7 * var(--s) * 1px);right:calc(.7 * var(--s) * 1px);bottom:calc(.7 * var(--s) * 1px);
+  background:var(--red);color:#fff;text-align:center;border-radius:calc(.3 * var(--s) * 1px);
+  font-family:var(--display);font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  font-size:calc(.88 * var(--s) * 1px);padding:calc(.48 * var(--s) * 1px);opacity:0;will-change:transform,opacity;
+  box-shadow:0 calc(.3 * var(--s) * 1px) calc(1.0 * var(--s) * 1px) rgba(229,69,63,.28)}
+.chat{position:relative;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.0 * var(--s) * 1px);
+  text-align:left;display:flex;flex-direction:column;gap:calc(.5 * var(--s) * 1px);will-change:transform,opacity,filter}
+.chead{display:flex;align-items:center;gap:calc(.62 * var(--s) * 1px)}
+.cav{flex:0 0 auto;width:calc(2.2 * var(--s) * 1px);height:calc(2.2 * var(--s) * 1px);border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:transform,box-shadow}
+.cwho b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.16 * var(--s) * 1px);color:var(--fg);line-height:1.1}
+.cwho span{display:block;font-size:calc(.86 * var(--s) * 1px);color:var(--cardsub)}
+.wave{margin-left:auto;display:flex;align-items:center;gap:calc(.16 * var(--s) * 1px);height:calc(1.7 * var(--s) * 1px);
+  opacity:0;will-change:opacity}
+.wave i{display:block;width:calc(.2 * var(--s) * 1px);border-radius:calc(.1 * var(--s) * 1px);background:var(--blue);
+  height:30%;will-change:height}
+.msg{max-width:88%;font-size:calc(1.02 * var(--s) * 1px);line-height:1.4;
+  padding:calc(.55 * var(--s) * 1px) calc(.78 * var(--s) * 1px);border-radius:calc(.5 * var(--s) * 1px);
+  will-change:transform,opacity}
+.msg.them{background:#EEF3FF;color:var(--fg);border-bottom-left-radius:calc(.16 * var(--s) * 1px);align-self:flex-start}
+.msg.me{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:calc(.16 * var(--s) * 1px)}
+.chat .langs{margin-top:auto;padding-top:calc(.5 * var(--s) * 1px)}
+
+/* ---------------------------------------------------------------------------
+   s8 · the room fills. Faces are abstract on purpose: stock faces read as
+   stock, initials read as privacy.
+--------------------------------------------------------------------------- */
+.room{display:grid;grid-template-columns:1.15fr 1fr;gap:calc(1.3 * var(--s) * 1px);width:100%;align-items:stretch}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(.6 * var(--s) * 1px)}
+.tile{position:relative;background:var(--card);border:1px solid var(--cardbd);border-radius:calc(.4 * var(--s) * 1px);
+  box-shadow:var(--shadow);aspect-ratio:4 / 3;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:calc(.35 * var(--s) * 1px);will-change:transform,opacity,box-shadow}
+.tile .av{width:calc(2.85 * var(--s) * 1px);height:calc(2.85 * var(--s) * 1px);border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-family:var(--display);font-weight:900;font-size:calc(1.08 * var(--s) * 1px);color:#fff;letter-spacing:.02em}
+.tile .a1{background:#2F6BEE}.tile .a2{background:#5B8AF5}.tile .a3{background:#7C4DD4}
+.tile .a4{background:#1E9E86}.tile .a5{background:#C4661F}.tile .a6{background:var(--red)}
+.tile span{font-size:calc(.86 * var(--s) * 1px);color:var(--cardsub);font-weight:600}
+.tile.mentor{border-top:calc(.2 * var(--s) * 1px) solid var(--red)}
+.tile .mb{position:absolute;top:calc(.4 * var(--s) * 1px);right:calc(.4 * var(--s) * 1px);background:var(--red);color:#fff;
+  font-family:var(--display);font-weight:800;font-size:calc(.64 * var(--s) * 1px);letter-spacing:.08em;
+  padding:calc(.14 * var(--s) * 1px) calc(.36 * var(--s) * 1px);border-radius:calc(.2 * var(--s) * 1px)}
+.shared{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.0 * var(--s) * 1px);text-align:left;
+  display:flex;flex-direction:column;will-change:transform,opacity}
+.sh{display:flex;align-items:center;justify-content:space-between}
+.sh b{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:calc(.8 * var(--s) * 1px);color:var(--blue)}
+.live2{display:flex;align-items:center;gap:calc(.3 * var(--s) * 1px);font-size:calc(.8 * var(--s) * 1px);color:var(--red);font-weight:700}
+.live2 i{width:calc(.42 * var(--s) * 1px);height:calc(.42 * var(--s) * 1px);border-radius:50%;background:var(--red);display:inline-block}
+.shared .ql{margin-top:calc(.85 * var(--s) * 1px)}
+.votes{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(.42 * var(--s) * 1px);margin-top:calc(1.0 * var(--s) * 1px)}
+.v{height:calc(2.35 * var(--s) * 1px);border:1px solid var(--cardbd);border-radius:calc(.3 * var(--s) * 1px);background:#FAFBFE;
+  display:flex;align-items:center;justify-content:center;will-change:background-color,border-color,transform}
+.v b{font-family:var(--display);font-weight:800;font-size:calc(1.1 * var(--s) * 1px);will-change:color}
+.vnote{margin-top:auto;padding-top:calc(.7 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub);
+  will-change:opacity,transform}
+
+/* ---------------------------------------------------------------------------
+   s9 · readiness. One measure, one axis, no numbers: the chart illustrates the
+   feature, it does not promise a score. Red is spent on the single flagged gap.
+--------------------------------------------------------------------------- */
+.an{display:grid;grid-template-columns:1.32fr 1fr;gap:calc(1.3 * var(--s) * 1px);width:100%;align-items:stretch}
+.chart{position:relative;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.0 * var(--s) * 1px);text-align:left;
+  display:flex;flex-direction:column;will-change:transform,opacity}
+.ch{display:flex;align-items:baseline;justify-content:space-between}
+.ch b{font-family:var(--display);font-weight:800;font-size:calc(1.24 * var(--s) * 1px);color:var(--fg)}
+.ch span{font-size:calc(.8 * var(--s) * 1px);color:var(--foot);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+#rsvg{width:100%;flex:1 1 auto;margin-top:calc(.7 * var(--s) * 1px);display:block}
+#rsvg .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:7 6;vector-effect:non-scaling-stroke}
+#rpath{fill:none;stroke:var(--blue);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#rarea{fill:rgba(41,95,237,.10);stroke:none}
+.chart .dot{position:absolute;top:0;left:0;width:calc(.7 * var(--s) * 1px);height:calc(.7 * var(--s) * 1px);border-radius:50%;
+  background:var(--blue);box-shadow:0 0 0 calc(.2 * var(--s) * 1px) #fff;opacity:0;will-change:transform,opacity}
+.thrlab{position:absolute;left:calc(1.35 * var(--s) * 1px);font-weight:700;font-size:calc(.8 * var(--s) * 1px);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--foot);background:var(--card);padding:0 calc(.3 * var(--s) * 1px);
+  opacity:0;will-change:opacity}
+.doms{position:relative;display:flex;flex-direction:column;justify-content:center;gap:calc(.68 * var(--s) * 1px);text-align:left}
+.dom span{display:block;font-size:calc(.98 * var(--s) * 1px);color:var(--sub);font-weight:600;margin-bottom:calc(.26 * var(--s) * 1px)}
+.dom .bar{height:calc(.6 * var(--s) * 1px);border-radius:calc(.3 * var(--s) * 1px);background:var(--track);overflow:hidden}
+.dom .bar i{display:block;height:100%;border-radius:calc(.3 * var(--s) * 1px);background:var(--blue);
+  transform-origin:left center;transform:scaleX(0);will-change:transform,background-color}
+.gaplab{font-size:calc(.9 * var(--s) * 1px);color:var(--red);font-weight:700;opacity:0;will-change:opacity,transform}
+.verdict{margin-top:calc(1.1 * var(--s) * 1px);font-family:var(--display);font-weight:800;line-height:1.14;
+  font-size:calc(1.85 * var(--s) * 1px);letter-spacing:-.02em;color:var(--sub);will-change:transform,opacity}
+.verdict em{font-style:normal;color:var(--blue)}
+.verdict em{font-style:normal;color:var(--blue)}
 
 /* ---------- presenter ---------- */
 .shot.presenter{flex-direction:row;align-items:center;justify-content:center;gap:calc(3.0 * var(--s) * 1px);text-align:left}
@@ -249,12 +391,12 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
 
   <!-- 2 · what it is worth -->
   <section class="shot" id="s2">
-    <div class="eyebrow" data-a="1">What it's worth</div>
+    <div class="eyebrow" data-a="1">The difference</div>
     <div class="lines" style="margin-top:calc(1.6*var(--s)*1px)">
-      <h2 class="l">It isn't three letters<br>after your name.</h2>
-      <h3 class="l" style="margin-top:calc(1.2*var(--s)*1px);color:var(--sub);font-weight:800">It's the room you get invited into.</h3>
-      <h3 class="l" style="color:var(--sub);font-weight:800">The number on the offer.</h3>
-      <h3 class="l">The moment your judgement is <i>the one they trust.</i></h3>
+      <h3 class="l" style="color:var(--sub);font-weight:800">Here's the thing nobody tells you.</h3>
+      <h2 class="l" style="margin-top:calc(1.1*var(--s)*1px)">The ones who pass and the ones<br>who keep re-sitting</h2>
+      <h2 class="l"><i>aren't divided by effort.</i></h2>
+      <h3 class="l" style="margin-top:calc(1.5*var(--s)*1px)">They all work hard.</h3>
     </div>
   </section>
 
@@ -273,7 +415,7 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
       <div class="lg"><div class="wm">PML<em>-AI</em></div><div class="wmsub">Project Management Leader</div></div>
       <div class="lg"><div class="wm">PFL<em>-AI</em></div><div class="wmsub">Project Finance Leader</div></div>
     </div>
-    <h3 data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">One platform. <em>All of them.</em></h3>
+    <h3 data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Ten credentials. <em>One platform.</em></h3>
   </section>
 
   <!-- 4 · official partner -->
@@ -288,86 +430,137 @@ h2 i,h3 i{font-style:normal;color:var(--red)}
     <div class="note" data-a="1" style="margin-top:calc(1.0*var(--s)*1px)">The Project Controls Institute — PCL-AI, PML-AI and PFL-AI</div>
   </section>
 
-  <!-- 5 · built on research -->
+  <!-- 5 · already inside — the bank fills, then the other three land -->
   <section class="shot" id="s5">
-    <div class="eyebrow" data-a="1">How every course is built</div>
-    <h3 data-a="1" style="margin-top:calc(1.1*var(--s)*1px)">Built from research. <i>Not recycled.</i></h3>
-    <div class="flow" style="margin-top:calc(2.0*var(--s)*1px)">
-      <div class="step" data-a="1"><div class="tag">01</div><b>Researched</b><span>Written from the source material, not rewritten from someone else's notes</span></div>
-      <div class="step" data-a="1"><div class="tag">02</div><b>Mapped to the blueprint</b><span>Every domain, in the exam's own weightings</span></div>
-      <div class="step" data-a="1"><div class="tag">03</div><b>Rewritten when it changes</b><span>The moment the awarding body updates the exam</span></div>
+    <div class="eyebrow" data-a="1">Already inside every course</div>
+    <div class="inside" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="bank" data-a="1">
+        <div class="bh"><b>Verified questions</b><span>every one checked before a student sees it</span></div>
+        <div class="chips" id="chips"></div>
+        <div class="bf"><em id="bankn">Thousands</em> already in the bank</div>
+      </div>
+      <div class="stack">
+        <div class="mini" data-a="1"><div class="tag">01</div><b>Mock exams</b><span>Full-length, under real timing</span></div>
+        <div class="mini" data-a="1"><div class="tag">02</div><b>Video lectures</b><span>Every domain, taught end to end</span></div>
+        <div class="mini" data-a="1"><div class="tag">03</div><b>Course notes</b><span>The ones you'll actually keep</span></div>
+      </div>
+    </div>
+    <div class="prov" data-a="1" style="margin-top:calc(1.3*var(--s)*1px)">
+      <span>Researched</span><i></i><span>Mapped to the blueprint</span><i></i><span>In the exam's own weightings</span>
     </div>
   </section>
 
-  <!-- 6 · what is inside -->
+  <!-- 6 · the forge — one question walks four judges -->
   <section class="shot" id="s6">
-    <div class="eyebrow" data-a="1">What's inside every course</div>
-    <div class="cards" style="margin-top:calc(1.8*var(--s)*1px)">
-      <div class="card" data-a="1"><div class="tag">01</div><b>Verified MCQs</b><span>Multiple-choice questions checked before a student ever sees them</span></div>
-      <div class="card" data-a="1"><div class="tag">02</div><b>Mock exams</b><span>Full-length, under real exam timing</span></div>
-      <div class="card" data-a="1"><div class="tag">03</div><b>Video lectures</b><span>Every domain, taught end to end</span></div>
-      <div class="card" data-a="1"><div class="tag">04</div><b>Course notes</b><span>The ones you'll actually keep</span></div>
+    <div class="eyebrow" data-a="1">AI Question Forge</div>
+    <h3 data-a="1" style="margin-top:calc(.9*var(--s)*1px)">Unlimited new questions. <em>Four AI judges.</em></h3>
+    <div class="forge" style="margin-top:calc(1.5*var(--s)*1px)">
+      <div class="qcard" id="qcard">
+        <div class="qh"><span id="qstate">Writing…</span><i class="qdot" id="qdot"></i></div>
+        <div class="ql l1"></div><div class="ql l2"></div><div class="ql l3"></div>
+        <div class="qo"><i></i><i></i><i></i><i></i></div>
+        <div class="qstamp" id="qstamp">Approved</div>
+      </div>
+      <div class="gates">
+        <div class="spine"><div class="spinefill" id="spinefill"></div></div>
+        <div class="gate" id="g1"><div class="gtick"><b>1</b></div><div class="gt"><b>Generated</b><span>the question, four options and the explanation</span></div></div>
+        <div class="gate" id="g2"><div class="gtick"><b>2</b></div><div class="gt"><b>Answer verified</b><span>re-solved independently</span></div></div>
+        <div class="gate" id="g3"><div class="gtick"><b>3</b></div><div class="gt"><b>Checked for ambiguity</b><span>anything unclear is rejected</span></div></div>
+        <div class="gate" id="g4"><div class="gtick"><b>4</b></div><div class="gt"><b>Matched to the blueprint</b><span>the exam's current weighting</span></div></div>
+      </div>
     </div>
   </section>
 
-  <!-- 7 · AI inside -->
+  <!-- 7 · the coach — reads the screen, then stands down for a mock -->
   <section class="shot" id="s7">
-    <div class="eyebrow" data-a="1">AI inside</div>
-    <div class="ai" style="margin-top:calc(1.4*var(--s)*1px)">
-      <div class="panel" data-a="1">
-        <div class="pk">AI Question Forge</div>
-        <h4>Unlimited new questions. <em>Validated by 4 AI judges.</em></h4>
-        <ul class="steps">
-          <li data-a="1"><span class="tag">1</span><span><b>Generate</b> — the question, four options and the explanation</span></li>
-          <li data-a="1"><span class="tag">2</span><span><b>Verify answer</b> — re-solved independently</span></li>
-          <li data-a="1"><span class="tag">3</span><span><b>Quality &amp; clarity</b> — anything ambiguous is rejected</span></li>
-          <li data-a="1"><span class="tag">4</span><span><b>Blueprint match</b> — aligned to the current weighting</span></li>
-        </ul>
+    <div class="eyebrow" data-a="1">AI Coach</div>
+    <div class="coach" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="qpanel" id="qpanel">
+        <div class="qtop"><span>Question 14 of 40</span><span class="clock" id="qclock">23:07</span></div>
+        <div class="ql l1"></div><div class="ql l2"></div><div class="ql l3"></div>
+        <div class="opts"><div class="opt"><b>A</b><i></i></div><div class="opt"><b>B</b><i></i></div><div class="opt"><b>C</b><i></i></div><div class="opt"><b>D</b><i></i></div></div>
+        <div class="beam" id="beam"></div>
+        <div class="scanlab" id="scanlab">Reading your screen</div>
+        <div class="mockbar" id="mockbar">Mock exam — Coach off</div>
       </div>
-      <div class="panel" data-a="1">
-        <div class="pk">AI Coach</div>
-        <h4>Chat or call, <em>mid-question.</em></h4>
-        <ul class="steps">
-          <li data-a="1"><span class="tag">1</span><span><b>Voice calls</b> — ask out loud, walk and study</span></li>
-          <li data-a="1"><span class="tag">2</span><span><b>Reads your screen</b> — the exact question, no copy-paste</span></li>
-          <li data-a="1"><span class="tag">3</span><span><b>Off in a mock</b> — practise with help, test without it</span></li>
-        </ul>
-        <div class="langs" data-a="1"><b>Speaks 6 languages</b> · English · العربية · Français · Español · हिन्दी · Русский</div>
+      <div class="chat" id="chat">
+        <div class="chead">
+          <div class="cav" id="cav"></div>
+          <div class="cwho"><b>AI Coach</b><span id="cstat">Connecting…</span></div>
+          <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="msg them" id="m1">I can see the question on your screen.</div>
+        <div class="msg me" id="m2">I don't know which cost to allocate.</div>
+        <div class="msg them" id="m3">Before I answer — which of those costs changes when volume changes?</div>
+        <div class="langs" id="langs"><b>Six languages</b> · English · العربية · Français · Español · हिन्दी · Русский</div>
       </div>
     </div>
   </section>
 
-  <!-- 8 · not alone -->
+  <!-- 8 · the room fills -->
   <section class="shot" id="s8">
-    <div class="eyebrow" data-a="1">You're not doing this alone</div>
-    <div class="cards three" style="margin-top:calc(1.8*var(--s)*1px)">
-      <div class="card" data-a="1"><div class="tag">01</div><b>Live study rooms</b><span>Join your cohort by video and practise on shared questions in real time</span></div>
-      <div class="card" data-a="1"><div class="tag">02</div><b>Mentors, around the clock</b><span>24/7 chat support from experienced mentors</span></div>
-      <div class="card" data-a="1"><div class="tag">03</div><b>Readiness tracking</b><span>Tells you when you're ready — not just how much you've read</span></div>
+    <div class="eyebrow" data-a="1">Live study rooms</div>
+    <div class="room" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="tiles">
+        <div class="tile" id="p1"><div class="av a1">AK</div><span>Amara</span></div>
+        <div class="tile" id="p2"><div class="av a2">JD</div><span>Jonas</span></div>
+        <div class="tile" id="p3"><div class="av a3">RM</div><span>Rhea</span></div>
+        <div class="tile" id="p4"><div class="av a4">TN</div><span>Tomas</span></div>
+        <div class="tile" id="p5"><div class="av a5">SO</div><span>Sade</span></div>
+        <div class="tile mentor" id="p6"><div class="av a6">M</div><span>Mentor</span><div class="mb">24/7</div></div>
+      </div>
+      <div class="shared" id="shared">
+        <div class="sh"><b>Shared question</b><span class="live2"><i></i>Live</span></div>
+        <div class="ql l1"></div><div class="ql l3"></div>
+        <div class="votes"><div class="v" id="v1"><b>A</b></div><div class="v" id="v2"><b>B</b></div><div class="v" id="v3"><b>C</b></div><div class="v" id="v4"><b>D</b></div></div>
+        <div class="vnote" id="vnote">Working it together, in real time</div>
+      </div>
     </div>
   </section>
 
-  <!-- 9 · the price -->
+  <!-- 9 · readiness — the curve, the gap, the line -->
   <section class="shot" id="s9">
-    <div class="eyebrow" data-a="1">The price</div>
-    <h2 data-a="1" style="margin-top:calc(1.4*var(--s)*1px)">Less than the market asks.</h2>
-    <div class="sub" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">Because the price of preparing should never be the reason you stop.</div>
+    <div class="eyebrow" data-a="1">Readiness</div>
+    <div class="an" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="chart">
+        <div class="ch"><b>Readiness over time</b><span>illustrative</span></div>
+        <svg id="rsvg" viewBox="0 0 620 250" preserveAspectRatio="none" aria-hidden="true">
+          <line class="thr" x1="0" y1="52" x2="620" y2="52"/>
+          <path id="rarea" d=""/>
+          <path id="rpath" d=""/>
+        </svg>
+        <div class="dot" id="rdot"></div>
+        <div class="thrlab" id="thrlab">Exam-ready</div>
+      </div>
+      <div class="doms">
+        <div class="dom" id="d1"><span>Planning &amp; budgeting</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d2"><span>Performance</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d3"><span>Cost management</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d4"><span>Internal controls</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d5"><span>Technology &amp; analytics</span><div class="bar"><i></i></div></div>
+        <div class="gaplab" id="gaplab">the gap you keep falling into</div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict">The question isn't how much you've read.<br><em>It's whether you're ready.</em></div>
   </section>
 
-  <!-- 10 · start free -->
+  <!-- 10 · price, then the smallest next step -->
   <section class="shot" id="s10">
-    <div class="eyebrow" data-a="1">New here?</div>
-    <h2 data-a="1" style="margin-top:calc(1.2*var(--s)*1px)">Start with a <em>free trial.</em></h2>
-    <div class="cta" data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">certuvo.com</div>
+    <div class="eyebrow" data-a="1">The price</div>
+    <h2 data-a="1" style="margin-top:calc(1.2*var(--s)*1px)">Less than the market asks.</h2>
+    <div class="sub" data-a="1" style="margin-top:calc(1.5*var(--s)*1px)">And if you're new — start free.</div>
+    <div class="cta" data-a="1" style="margin-top:calc(1.7*var(--s)*1px)">certuvo.com</div>
   </section>
 
   <!-- 11 · one platform (presenter → end card) -->
   <section class="shot presenter" id="s11">
     <div class="pres" data-a="1"><img id="pres11" src="../assets/presenter-a.png" alt=""><div class="live"><i></i>CERTUVO</div></div>
     <div class="side">
-      <div class="t" data-a="1">One platform</div>
-      <h3 data-a="1">Ten credentials. One platform. <em>That's enough.</em></h3>
-      <div class="tokens" data-a="1" style="margin-top:calc(.4*var(--s)*1px)">
+      <div class="t" data-a="1">The difference</div>
+      <h3 class="a" data-a="1">It was never how hard you work.</h3>
+      <h3 class="b" data-a="1">It's <em>what you work with.</em></h3>
+      <div class="sub" data-a="1" style="margin-top:calc(.5*var(--s)*1px)">Ten credentials. One platform. That's enough.</div>
+      <div class="tokens" data-a="1" style="margin-top:calc(.5*var(--s)*1px)">
         <div class="tok solid">certuvo.com</div>
       </div>
     </div>
@@ -461,19 +654,19 @@ const XF = 0.45;
    next matching element each time. */
 const CUES = {
   s1:[['.pres',-0.7,0],['.side .t',0.4,0],['.side h3.a',1.1,0],['.side h3.b',8.5,0]],
-  s2:[['.eyebrow',-0.1,0],['.lines .l',0.2,0],['.lines .l',3.3,0],['.lines .l',5.6,0],['.lines .l',7.8,0]],
-  /* the wall lands one card per spoken acronym, then the PCI three together */
-  s3:[['.eyebrow',-0.1,0],['.lg',0.15,0],['.lg',1.35,0],['.lg',2.45,0],['.lg',3.65,0],['.lg',4.95,0],['.lg',6.35,0],['.lg',8.15,0],
-      ['.lg',11.9,0],['.lg',13.6,0],['.lg',15.3,0],['h3',19.1,0]],
+  /* s2 holds the loop open: the last line lands alone, then the film moves on */
+  s2:[['.eyebrow',-0.1,0],['.lines .l',0.1,0],['.lines .l',2.6,0],['.lines .l',5.2,0],['.lines .l',8.8,0]],
+  /* the wall lands one card per spoken acronym, then the PCI three */
+  s3:[['.eyebrow',-0.1,0],['.lg',0.25,0],['.lg',1.45,0],['.lg',2.75,0],['.lg',4.05,0],['.lg',5.30,0],['.lg',6.80,0],['.lg',8.10,0],
+      ['.lg',12.10,0],['.lg',13.85,0],['.lg',15.85,0],['h3',20.25,0]],
   s4:[['.eyebrow',-0.1,0],['.lockup',0.2,0],['h3',1.6,0],['.note',3.4,0]],
-  s5:[['.eyebrow',-0.1,0],['h3',0.1,0],['.step',3.9,0.15]],
-  s6:[['.eyebrow',-0.1,0],['.card',0.1,0.15]],
-  s7:[['.eyebrow',-0.1,0],['.panel',0.1,0],['.panel:nth-child(1) .steps li',1.6,0.9],['.panel',7.4,0],
-      ['.panel:nth-child(2) .steps li',7.6,0],['.panel:nth-child(2) .steps li',9.3,0],['.langs',11.0,0],['.panel:nth-child(2) .steps li',13.4,0]],
-  s8:[['.eyebrow',-0.1,0],['.card',1.5,0.15]],
-  s9:[['.eyebrow',-0.1,0],['h2',0.1,0],['.sub',3.6,0]],
-  s10:[['.eyebrow',-0.1,0],['h2',0.8,0],['.cta',2.7,0]],
-  s11:[['.pres',-0.7,0],['.side .t',-0.1,0],['.side h3',0.1,0],['.side .tokens',4.8,0]]
+  s5:[['.eyebrow',-0.1,0],['.bank',0.05,0],['.mini',4.05,0],['.mini',7.35,0],['.mini',8.70,0],['.prov',11.45,0]],
+  s6:[['.eyebrow',-0.1,0],['h3',0.1,0],['.qcard',0.35,0]],
+  s7:[['.eyebrow',-0.1,0],['.qpanel',0.1,0],['.chat',1.6,0]],
+  s8:[['.eyebrow',-0.1,0]],
+  s9:[['.eyebrow',-0.1,0],['.chart',0.1,0],['.doms',3.5,0]],
+  s10:[['.eyebrow',-0.1,0],['h2',0.1,0],['.sub',3.55,0],['.cta',5.0,0]],
+  s11:[['.pres',-0.7,0],['.side .t',-0.1,0],['.side h3.a',2.40,0],['.side h3.b',4.90,0],['.side .sub',7.10,0],['.side .tokens',12.35,0]]
 };
 const ANIM = [];
 for (const shot of SHOTS){
@@ -494,9 +687,7 @@ for (const shot of SHOTS){
    half-empty grid; the voice then walks across it. */
 const FOCUS_W = 0.42;
 const FOCUS = {
-  s5:[['.step',0,4.10,5.50],['.step',1,5.60,8.00],['.step',2,8.10,11.30]],
-  s6:[['.card',0,0.70,2.70],['.card',1,2.80,6.20],['.card',2,6.30,7.80],['.card',3,7.90,10.90]],
-  s8:[['.card',0,2.00,4.90],['.card',1,5.00,8.10],['.card',2,8.20,13.40]]
+  s5:[['.mini',0,4.05,6.85],['.mini',1,7.35,8.35],['.mini',2,8.70,10.90]]
 };
 const C_BLUE=[41,95,237], C_RED=[229,69,63], C_WHITE=[255,255,255];
 const mixc=(a,b,p)=>`rgb(${Math.round(a[0]+(b[0]-a[0])*p)},${Math.round(a[1]+(b[1]-a[1])*p)},${Math.round(a[2]+(b[2]-a[2])*p)})`;
@@ -509,6 +700,238 @@ for (const shot of SHOTS){
   }
 }
 const FOCP = new Map();
+
+/* ---------------------------------------------------------------------------
+   SCENEFX — the four demonstration scenes. Each function is a pure function of
+   u (seconds since its scene's narration started) so every frame is still
+   reproducible from t alone; nothing here holds state between frames.
+
+   Times come from ffmpeg silencedetect on the takes, so a gate ticks on the
+   word that names it and a peer arrives on the beat the voice leaves.
+--------------------------------------------------------------------------- */
+const CHIP_N = 240;
+(function buildChips(){
+  const g = document.getElementById('chips'); if (!g) return;
+  for (let i = 0; i < CHIP_N; i++) g.appendChild(document.createElement('i'));
+})();
+
+const $1 = sel => document.querySelector(sel);
+const $$ = sel => [...document.querySelectorAll(sel)];
+
+const FX_EL = {
+  chips: $$('#chips i'),
+  bankn: $1('#bankn'),
+  qcard: $1('#qcard'), qstate: $1('#qstate'), qdot: $1('#qdot'), qstamp: $1('#qstamp'),
+  qls: $$('#qcard .ql'), qos: $$('#qcard .qo i'),
+  spinefill: $1('#spinefill'),
+  gates: [$1('#g1'), $1('#g2'), $1('#g3'), $1('#g4')],
+  beam: $1('#beam'), scanlab: $1('#scanlab'), mockbar: $1('#mockbar'), qclock: $1('#qclock'),
+  chat: $1('#chat'), cav: $1('#cav'), cstat: $1('#cstat'), wave: $1('#wave'), waves: $$('#wave i'),
+  msgs: [$1('#m1'), $1('#m2'), $1('#m3')], langs: $1('#langs'),
+  tiles: [$1('#p1'), $1('#p2'), $1('#p3'), $1('#p4'), $1('#p5'), $1('#p6')],
+  shared: $1('#shared'), votes: [$1('#v1'), $1('#v2'), $1('#v3'), $1('#v4')], vnote: $1('#vnote'),
+  rpath: $1('#rpath'), rarea: $1('#rarea'), rdot: $1('#rdot'), thrlab: $1('#thrlab'),
+  doms: [$1('#d1'), $1('#d2'), $1('#d3'), $1('#d4'), $1('#d5')], gaplab: $1('#gaplab'),
+  verdict: $1('#verdict'),
+};
+
+/* the readiness curve: a rising, flattening path with a small dip at the gap.
+   No numbers anywhere — it illustrates the feature, it does not promise a score. */
+const R_W = 620, R_H = 250, R_THR = 52;
+const RPTS = (() => {
+  const ys = [232, 224, 210, 196, 188, 176, 158, 150, 156, 140, 122, 110, 96, 84, 74, 62, 52, 44];
+  const L = 8, R = R_W - 26;
+  return ys.map((y, i) => [L + i * ((R - L) / (ys.length - 1)), y]);
+})();
+function rPathD(frac){
+  const n = RPTS.length, last = 1 + frac * (n - 1);
+  const k = Math.floor(last), f = last - k;
+  const pts = RPTS.slice(0, Math.max(2, k + 1)).map(p => p.slice());
+  if (k > 0 && k < n){
+    const a = RPTS[k - 1], b = RPTS[k];
+    pts[pts.length - 1] = [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+  }
+  return { d: 'M' + pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('L'), end: pts[pts.length - 1] };
+}
+
+const DOM_FILL = [0.86, 0.78, 0.34, 0.71, 0.64];   // index 2 is the flagged gap
+const GAP_I = 2;
+
+const SCENEFX = {
+  /* ---- s5 · the bank fills, then the other three land ------------------- */
+  s5(u){
+    const E = FX_EL; if (!E.chips.length) return;
+    // 0.20 -> 3.40: the field fills, left to right, with a slight row lag
+    for (let i = 0; i < E.chips.length; i++){
+      const col = i % 16, row = (i / 16) | 0;
+      const at = 0.20 + col * 0.115 + row * 0.055;
+      const p = seg(u, at, at + 0.30, outCubic);
+      const c = E.chips[i];
+      c.style.backgroundColor = p > 0.5 ? mixc([231,236,247], C_BLUE, (p - 0.5) * 2 * 0.82) : '#E7ECF7';
+      c.style.transform = `scaleY(${(0.55 + 0.45 * p).toFixed(3)})`;
+    }
+    const bp = seg(u, 2.60, 3.40, outExpo);
+    E.bankn.style.opacity = bp.toFixed(3);
+    E.bankn.style.transform = `translateY(${((1 - bp) * 0.5).toFixed(3)}em)`;
+  },
+
+  /* ---- s6 · one question, four judges ----------------------------------- */
+  s6(u){
+    const E = FX_EL; if (!E.qcard) return;
+    // the card writes itself while "the Forge writes more" is said
+    const write = [[0.55, 'l1'], [1.15, 'l2'], [1.70, 'l3']];
+    E.qls.forEach((el, i) => {
+      const p = seg(u, write[i][0], write[i][0] + 0.5, outExpo);
+      el.style.transform = `scaleX(${p.toFixed(3)})`; el.style.opacity = (0.35 + 0.65 * p).toFixed(3);
+    });
+    E.qos.forEach((el, i) => {
+      const p = seg(u, 2.30 + i * 0.22, 2.30 + i * 0.22 + 0.45, outExpo);
+      el.style.opacity = p.toFixed(3); el.style.transform = `scaleX(${(0.7 + 0.3 * p).toFixed(3)})`;
+    });
+    const blink = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(u * 7.5));
+    const writing = 1 - seg(u, 4.60, 5.10);
+    E.qdot.style.opacity = (blink * writing + (1 - writing)).toFixed(3);
+    E.qstate.textContent = u < 4.8 ? 'Writing…' : (u < 15.9 ? 'In review' : 'Cleared');
+
+    // the four gates, on the words that name them
+    const GT = [11.40, 12.44, 13.91, 15.71];
+    let done = 0;
+    GT.forEach((at, i) => {
+      const p = seg(u, at, at + 0.42, outExpo);
+      done += p;
+      const g = E.gates[i]; if (!g) return;
+      const tick = g.querySelector('.gtick'), num = g.querySelector('.gtick b');
+      tick.style.backgroundColor = mixc([255,255,255], C_BLUE, p);
+      tick.style.borderColor = mixc([226,231,241], C_BLUE, p);
+      tick.style.transform = `scale(${(1 + 0.12 * Math.sin(Math.PI * p)).toFixed(4)})`;
+      num.style.color = mixc([107,114,128], C_WHITE, p);
+      g.style.opacity = (0.42 + 0.58 * Math.max(p, seg(u, 4.90 + i * 0.14, 5.50 + i * 0.14))).toFixed(3);
+    });
+    E.spinefill.style.transform = `scaleY(${(done / 4).toFixed(4)})`;
+    const sp = seg(u, 16.20, 16.70, outExpo);
+    E.qstamp.style.opacity = sp.toFixed(3);
+    E.qstamp.style.transform = `scale(${(0.8 + 0.2 * sp).toFixed(3)}) rotate(${((1 - sp) * -6).toFixed(2)}deg)`;
+    const lift = seg(u, 16.20, 16.70, outExpo);
+    E.qcard.style.borderTopColor = mixc(C_BLUE, [30,158,134], lift);
+  },
+
+  /* ---- s7 · the coach reads the screen, then stands down ----------------- */
+  s7(u){
+    const E = FX_EL; if (!E.beam) return;
+    // 0.0-2.5 the call connects
+    const conn = seg(u, 2.10, 2.60, outExpo);
+    E.cstat.textContent = u < 2.3 ? 'Connecting…' : (u < 14.2 ? 'On a call' : 'Off for this mock');
+    E.cav.style.transform = `scale(${(1 + 0.06 * conn * (0.5 + 0.5 * Math.sin(u * 6))).toFixed(4)})`;
+    E.cav.style.boxShadow = `0 0 0 ${(SS * 0.28 * conn * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(u * 6)))).toFixed(2)}px rgba(41,95,237,.18)`;
+    const live = conn * (1 - seg(u, 14.20, 14.70));
+    E.wave.style.opacity = live.toFixed(3);
+    E.waves.forEach((b, i) => {
+      const h = 22 + 66 * Math.abs(Math.sin(u * 5.2 + i * 0.85)) * live;
+      b.style.height = h.toFixed(1) + '%';
+    });
+
+    // 4.30-8.70 the beam sweeps the question: "it reads your screen"
+    const sw = seg(u, 4.30, 8.70, inOut);
+    const scan = seg(u, 4.30, 4.60) * (1 - seg(u, 8.50, 8.95));
+    E.beam.style.opacity = scan.toFixed(3);
+    E.beam.style.transform = `translateX(${(-40 + sw * 640).toFixed(1)}%)`;
+    E.scanlab.style.opacity = scan.toFixed(3);
+    E.scanlab.style.transform = `translateY(${((1 - scan) * 0.6).toFixed(3)}em)`;
+
+    // the exchange — the third line is Socratic, which is the actual claim
+    const MT = [5.20, 7.10, 11.10];
+    E.msgs.forEach((m, i) => {
+      if (!m) return;
+      const p = seg(u, MT[i], MT[i] + 0.5, outExpo);
+      m.style.opacity = p.toFixed(3);
+      m.style.transform = `translateY(${((1 - p) * 0.8).toFixed(3)}em) scale(${(0.96 + 0.04 * p).toFixed(4)})`;
+    });
+    const lp = seg(u, 9.20, 9.80, outExpo);
+    E.langs.style.opacity = lp.toFixed(3);
+    E.langs.style.transform = `translateY(${((1 - lp) * 0.8).toFixed(3)}em)`;
+
+    // 14.40 the mock starts and the coach switches itself off
+    // in place, not sliding in from outside the panel: the panel clips, and a
+    // banner that is briefly half outside its own card reads as a glitch
+    const mk = seg(u, 14.40, 15.00, outExpo);
+    E.mockbar.style.transform = `translateY(${((1 - mk) * 0.45).toFixed(3)}em) scale(${(0.94 + 0.06 * mk).toFixed(4)})`;
+    E.mockbar.style.opacity = mk.toFixed(3);
+    E.chat.style.filter = `grayscale(${(mk * 0.92).toFixed(3)}) opacity(${(1 - mk * 0.55).toFixed(3)})`;
+    E.qclock.style.color = mk > 0.5 ? 'var(--red)' : 'var(--red)';
+  },
+
+  /* ---- s8 · the room fills ---------------------------------------------- */
+  s8(u){
+    const E = FX_EL; if (!E.tiles[0]) return;
+    const JOIN = [2.70, 3.15, 3.60, 4.05, 4.50, 8.45];   // five peers, then the mentor
+    E.tiles.forEach((tl, i) => {
+      if (!tl) return;
+      const p = seg(u, JOIN[i], JOIN[i] + 0.52, outExpo);
+      tl.style.opacity = p.toFixed(3);
+      tl.style.transform = `translateY(${((1 - p) * 0.9).toFixed(3)}em) scale(${(0.9 + 0.1 * p).toFixed(4)})`;
+      const glow = Math.sin(Math.PI * seg(u, JOIN[i], JOIN[i] + 0.9));
+      tl.style.boxShadow = `0 ${(SS * 0.5).toFixed(1)}px ${(SS * 1.6).toFixed(1)}px rgba(11,18,32,.06), 0 0 0 ${(SS * 0.2 * glow).toFixed(2)}px rgba(41,95,237,.22)`;
+    });
+    const sp = seg(u, 4.80, 5.40, outExpo);
+    E.shared.style.opacity = sp.toFixed(3);
+    E.shared.style.transform = `translateY(${((1 - sp) * 0.7).toFixed(3)}em)`;
+    // answers land as the cohort works it
+    const VT = [5.70, 6.20, 6.70, 7.20];
+    E.votes.forEach((v, i) => {
+      if (!v) return;
+      const p = seg(u, VT[i], VT[i] + 0.4, outExpo);
+      const chosen = i === 2 ? p : p * 0.35;   // most of the room converges on C
+      v.style.backgroundColor = mixc([250,251,254], [238,243,255], p);
+      v.style.borderColor = mixc([226,231,241], C_BLUE, chosen);
+      v.style.transform = `scale(${(1 + 0.05 * Math.sin(Math.PI * p)).toFixed(4)})`;
+      v.querySelector('b').style.color = mixc([107,114,128], C_BLUE, chosen);
+    });
+    const np = seg(u, 7.60, 8.10, outExpo);
+    E.vnote.style.opacity = np.toFixed(3);
+    E.vnote.style.transform = `translateY(${((1 - np) * 0.6).toFixed(3)}em)`;
+  },
+
+  /* ---- s9 · the curve climbs to the line -------------------------------- */
+  s9(u){
+    const E = FX_EL; if (!E.rpath) return;
+    const draw = seg(u, 0.35, 2.85, inOut);
+    const { d, end } = rPathD(Math.max(0.02, draw));
+    E.rpath.setAttribute('d', d);
+    E.rarea.setAttribute('d', d + `L${end[0].toFixed(1)},${R_H}L0,${R_H}Z`);
+    // an SVG element reports clientWidth/offsetTop as 0 in Chromium, so the
+    // marker and the threshold label are placed from measured rects instead
+    const svg = document.getElementById('rsvg');
+    const sr = svg.getBoundingClientRect(), cr = svg.parentElement.getBoundingClientRect();
+    const sl = sr.left - cr.left, so = sr.top - cr.top, sw = sr.width, sh = sr.height;
+    E.rdot.style.opacity = (draw > 0.03 ? 1 : 0).toFixed(3);
+    E.rdot.style.transform = `translate(${(sl + end[0] / R_W * sw - SS * 0.35).toFixed(1)}px, ${(so + end[1] / R_H * sh - SS * 0.35).toFixed(1)}px)`;
+
+    // the domain bars, then the one that is short goes red
+    E.doms.forEach((dm, i) => {
+      if (!dm) return;
+      const at = 3.70 + i * 0.30;
+      const p = seg(u, at, at + 0.55, outExpo);
+      const bar = dm.querySelector('.bar i');
+      const isGap = i === GAP_I;
+      const flag = isGap ? seg(u, 6.60, 7.10, outExpo) : 0;
+      bar.style.transform = `scaleX(${(DOM_FILL[i] * p).toFixed(4)})`;
+      bar.style.backgroundColor = mixc(C_BLUE, C_RED, flag);
+      dm.style.opacity = (0.45 + 0.55 * Math.max(p, isGap ? flag : 0)).toFixed(3);
+      dm.querySelector('span').style.color = isGap && flag > 0.5 ? 'var(--red)' : 'var(--sub)';
+    });
+    const gp = seg(u, 7.00, 7.55, outExpo);
+    E.gaplab.style.opacity = gp.toFixed(3);
+    E.gaplab.style.transform = `translateY(${((1 - gp) * 0.6).toFixed(3)}em)`;
+
+    // the threshold label arrives with "whether you are ready"
+    const tp = seg(u, 8.70, 9.30, outExpo);
+    E.thrlab.style.opacity = tp.toFixed(3);
+    E.thrlab.style.top = (so + R_THR / R_H * sh - SS * 0.62).toFixed(1) + 'px';
+    const vp = seg(u, 10.30, 10.95, outExpo);
+    E.verdict.style.opacity = vp.toFixed(3);
+    E.verdict.style.transform = `translateY(${((1 - vp) * 0.7).toFixed(3)}em)`;
+  },
+};
 
 const END_AT = LAST.vs + 8.4;
 const ENDANIM = [['#endlogo',0.35],['#endcard h3',0.85],['#endcard .url',1.35],['#endcard .legal',1.9]]
@@ -596,6 +1019,11 @@ function seek(t){
         pending.push(img.decode().catch(() => {}));
       }
     }
+  }
+
+  for (const { shot, o } of wts){
+    const fx = SCENEFX[shot.el];
+    if (fx && o >= 0.002) fx(t - shot.vs);
   }
 
   FOCP.clear();
