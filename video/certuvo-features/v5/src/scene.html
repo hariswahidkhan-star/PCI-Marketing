@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — V5 Kinetic</title>
+<!--
+  V5 "KINETIC" — the silent one.
+
+  No narration and no captions, so every scrap of meaning has to be on screen.
+  That inverts the hierarchy used by the other treatments: here the TYPE is the
+  performer. Two enormous Archivo lines snap in word by word, hold, and snap
+  out; a compact product panel plays alongside them as the evidence. The panel
+  is deliberately the smaller half — in V1 the product pane is the subject and
+  the words support it, in V5 that is the other way round.
+
+  Rhythm: seven beats, two features in each. Beat n puts the panel on the right,
+  beat n+1 on the left, so the film rocks left-right instead of sitting still.
+  Inside a beat the panel arrives once and its FACE swaps at the midpoint — face
+  A demonstrates the first feature, face B the second — which keeps exactly one
+  feature animating at a time while the panel frame itself never flickers.
+
+  HARD RULE, and the reason this file draws everything by hand: no real
+  question, option, explanation or note ever appears. Every one is a `.sk`
+  skeleton bar or a `.blur` block — unreadable by construction, not by cropping.
+
+  Deterministic: seek(t) is a pure function of t. No timers, no rAF, no CSS
+  transitions or keyframes — the word-by-word type is driven span by span from
+  t, because a CSS animation would paint a different frame depending on when
+  the renderer happened to screenshot it.
+-->
+<link rel="stylesheet" href="../../common/ui.css">
+<style>
+/* ---- the kinetic frame ----------------------------------------------------
+   One band between the masthead and the progress bar. Everything — the seven
+   shots and the closing resolve — is absolutely positioned inside it, so the
+   type baseline never moves between beats and the film reads as one continuous
+   performance rather than seven slides. ------------------------------------ */
+#kin{position:absolute;left:calc(7 * var(--s) * 1px);right:calc(7 * var(--s) * 1px);
+  top:calc(10.6 * var(--s) * 1px);bottom:calc(5.8 * var(--s) * 1px)}
+
+/* The ambient wash is the one shared element whose BOX leaves the frame. E.wash
+   drifts and scales it by percentages of its own size, and from the kit's
+   inset:-30% that carries the box a full stage-width past the edge. #stage
+   clips it so no pixel escapes, but the overflow audit measures boxes, not
+   pixels. Pulling the left and right edges in keeps the whole drift inside;
+   top and bottom still bleed, so the wash reads exactly as before. */
+
+.shot{position:absolute;inset:0;display:grid;align-items:center;
+  gap:calc(3 * var(--s) * 1px);will-change:opacity,transform}
+/* .pr = panel right, .pl = panel left. The type column is always the wide one;
+   only which side it sits on changes, which is what gives the film its swing. */
+.shot.pr{grid-template-columns:calc(52 * var(--s) * 1px) calc(31 * var(--s) * 1px)}
+.shot.pl{grid-template-columns:calc(31 * var(--s) * 1px) calc(52 * var(--s) * 1px)}
+/* both children are pinned to row 1: DOM order is always type-then-panel, so on
+   a .pl beat the panel is placed in an earlier column than the item before it,
+   and sparse auto-placement would otherwise drop it onto a second row */
+.typecol,.panelcol{grid-row:1}
+.shot.pr .typecol{grid-column:1}.shot.pr .panelcol{grid-column:2}
+.shot.pl .typecol{grid-column:2}.shot.pl .panelcol{grid-column:1}
+
+/* ---- the type column ------------------------------------------------------ */
+.typecol{min-width:0;display:flex;flex-direction:column;justify-content:center;text-align:left}
+.tagrow{display:flex;align-items:center;gap:calc(.8 * var(--s) * 1px);
+  margin-bottom:calc(1.5 * var(--s) * 1px);will-change:opacity}
+/* the only red in the type column, and one of the four jobs red is allowed */
+.tagrow .rule{flex:1 1 auto;height:calc(.14 * var(--s) * 1px);background:var(--blue);
+  transform-origin:left center;will-change:transform;opacity:.55}
+
+/* both phrases of a beat occupy the same box so the second lands exactly where
+   the first left — a swap, not a scroll */
+.phwrap{position:relative;height:calc(17.4 * var(--s) * 1px)}
+.ph{position:absolute;left:0;top:0;width:100%}
+
+/* .ln is the reveal mask. A word starts a full line-height below its own line
+   and wipes up into place; on the way out it wipes up and off. Mask height is
+   the line box, so nothing ever half-shows. The probe knows this class clips on
+   purpose and does not read it as a layout fault. */
+.ln{display:block;overflow:hidden;white-space:nowrap;
+  font-family:var(--display);font-weight:800;letter-spacing:-.028em;line-height:1.12;
+  color:var(--ink);font-size:calc(var(--fs, 5) * var(--s) * 1px)}
+.ln .w{display:inline-block;font-style:normal;will-change:transform,opacity}
+.ln .w.b{color:var(--blue)}
+/* the one support line per phrase. Silent films still have to say what the
+   thing is, and the huge line alone cannot carry a qualifier. */
+.sub{margin-top:calc(1.1 * var(--s) * 1px);max-width:calc(44 * var(--s) * 1px)}
+.sub .wf{display:block;font-style:normal;font-family:var(--sans);font-weight:500;
+  font-size:calc(1.3 * var(--s) * 1px);line-height:1.4;color:var(--sub);
+  will-change:transform,opacity}
+
+/* ---- the product panel ---------------------------------------------------- */
+.panelcol{min-width:0;display:flex;align-items:center;justify-content:center}
+.pn{width:100%;will-change:transform,opacity}
+.pn .ptop{padding:calc(.72 * var(--s) * 1px) calc(.95 * var(--s) * 1px)}
+.pn .ptop .pmeta{font-size:calc(.8 * var(--s) * 1px);font-weight:600;color:var(--foot)}
+.pn .ptop .live{display:flex;align-items:center;gap:calc(.3 * var(--s) * 1px);
+  font-size:calc(.76 * var(--s) * 1px);font-weight:700;color:var(--red);letter-spacing:.1em}
+.pn .ptop .live i{width:calc(.34 * var(--s) * 1px);height:calc(.34 * var(--s) * 1px);
+  border-radius:50%;background:var(--red);display:block}
+.pn .pbody{position:relative;height:calc(21.5 * var(--s) * 1px);padding:0}
+/* the two faces sit on top of one another and cross-fade at the beat midpoint */
+/* the face centres its demonstration and hangs its one-line caption directly
+   underneath. An auto top-margin on the caption would pin it to the floor of
+   the panel and leave a hole in the middle of every face. */
+.pf{position:absolute;inset:calc(1.0 * var(--s) * 1px);display:flex;flex-direction:column;
+  justify-content:center;will-change:opacity,transform}
+.pf .tiny{margin-top:calc(.9 * var(--s) * 1px);will-change:opacity,transform}
+
+/* --- per-face furniture (compact variants of the shared parts) ------------- */
+.gates{display:flex;flex-direction:column;gap:calc(.62 * var(--s) * 1px);justify-content:center;flex:1 1 auto}
+.grow{display:flex;align-items:center;gap:calc(.7 * var(--s) * 1px)}
+.grow .tick{width:calc(1.85 * var(--s) * 1px);height:calc(1.85 * var(--s) * 1px);flex:0 0 auto}
+.grow .tick b{font-size:calc(.88 * var(--s) * 1px)}
+.grow em{font-style:normal;font-size:calc(.98 * var(--s) * 1px);font-weight:600;color:var(--sub);
+  white-space:nowrap;will-change:color}
+
+.sects{display:flex;gap:calc(.22 * var(--s) * 1px)}
+.sects i{flex:1 1 0;height:calc(.66 * var(--s) * 1px);border-radius:calc(.16 * var(--s) * 1px);
+  background:var(--line);overflow:hidden;position:relative}
+.sects i::after{content:'';position:absolute;inset:0;background:var(--blue);transform-origin:left center;
+  transform:scaleX(var(--f,0));will-change:transform}
+.mockmeta{display:flex;justify-content:space-between;align-items:baseline;margin-top:calc(.62 * var(--s) * 1px);
+  font-size:calc(.86 * var(--s) * 1px);color:var(--foot);font-weight:600}
+
+.expl{margin-top:calc(.7 * var(--s) * 1px);border-left:calc(.16 * var(--s) * 1px) solid var(--blue);
+  background:var(--tint);border-radius:calc(.3 * var(--s) * 1px);padding:calc(.6 * var(--s) * 1px);
+  will-change:opacity,transform}
+.expl .eh{font-size:calc(.74 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:calc(.4 * var(--s) * 1px)}
+.expl .blur{height:calc(2.4 * var(--s) * 1px)}
+
+.helppin{position:absolute;right:0;top:0;z-index:2;
+  width:calc(2.0 * var(--s) * 1px);height:calc(2.0 * var(--s) * 1px);border-radius:50%;background:var(--blue);
+  color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:900;
+  font-size:calc(1.1 * var(--s) * 1px);box-shadow:var(--glow);will-change:transform,opacity}
+.helpnote{margin-top:calc(.7 * var(--s) * 1px);border:1px dashed var(--blue);border-radius:calc(.34 * var(--s) * 1px);
+  background:var(--tint);padding:calc(.58 * var(--s) * 1px);will-change:opacity,transform}
+.helpnote .hn{font-size:calc(.74 * var(--s) * 1px);font-weight:700;color:var(--blue);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:calc(.4 * var(--s) * 1px)}
+
+.chathead{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);margin-bottom:calc(.6 * var(--s) * 1px)}
+.chathead .av{width:calc(1.8 * var(--s) * 1px);height:calc(1.8 * var(--s) * 1px);border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:box-shadow,transform}
+.chathead b{font-size:calc(.98 * var(--s) * 1px);font-weight:700}
+.chathead .wave{margin-left:auto;height:calc(1.35 * var(--s) * 1px)}
+.chatcol{display:flex;flex-direction:column;gap:calc(.44 * var(--s) * 1px)}
+/* a bubble sized by its contents collapses to nothing here: the skeleton bars
+   inside are percentage-width, so they have no intrinsic size to size it from.
+   Give each side an explicit share of the column instead. */
+.chatcol .bubble.them{width:84%}
+.chatcol .bubble.me{width:64%}
+
+.roomgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(.42 * var(--s) * 1px);align-content:center;flex:1 1 auto}
+.rt{position:relative;border:1px solid var(--line);border-radius:calc(.34 * var(--s) * 1px);background:var(--white);
+  aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;will-change:opacity,transform}
+.rt .face{width:calc(2.0 * var(--s) * 1px);height:calc(2.0 * var(--s) * 1px);font-size:calc(.82 * var(--s) * 1px)}
+
+.note{display:flex;flex-direction:column;gap:calc(.44 * var(--s) * 1px)}
+/* the highlighter is a background-IMAGE, not a background, so the skeleton
+   bar's own grey survives underneath and the blue reads as ink laid over it —
+   FX.k5 grows its width to sweep the marker across the line */
+.note .hl{background-image:linear-gradient(90deg, rgba(41,95,237,.42) 0 100%)}
+
+.bars{display:flex;flex-direction:column;gap:calc(.56 * var(--s) * 1px);justify-content:center;flex:1 1 auto}
+.gapflag{align-self:flex-start;margin-top:calc(.7 * var(--s) * 1px);will-change:opacity,transform}
+
+.curvewrap{position:relative;flex:1 1 auto;min-height:calc(11 * var(--s) * 1px)}
+.curvewrap svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.curvewrap .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:6 6;vector-effect:non-scaling-stroke}
+.curvewrap .cp{fill:none;stroke:var(--blue);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.curvewrap .ca{fill:rgba(41,95,237,.10)}
+.thrtag{position:absolute;left:0;top:21%;transform:translateY(-115%);
+  font-size:calc(.74 * var(--s) * 1px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--foot);background:var(--white);padding:0 calc(.24 * var(--s) * 1px);will-change:opacity}
+
+.streakwrap{display:flex;flex-direction:column;align-items:center;gap:calc(.55 * var(--s) * 1px);
+  justify-content:center;flex:1 1 auto}
+.streakwrap .streak{gap:calc(.5 * var(--s) * 1px)}
+.streakwrap .streak i{width:calc(2.3 * var(--s) * 1px);height:calc(2.3 * var(--s) * 1px);
+  border-radius:calc(.5 * var(--s) * 1px)}
+.streaklab{font-size:calc(.9 * var(--s) * 1px);color:var(--foot);font-weight:600;will-change:opacity,color}
+
+/* ---- the resolve: fourteen names collapsing into one line ------------------ */
+#resolve{position:absolute;left:calc(7 * var(--s) * 1px);right:calc(7 * var(--s) * 1px);
+  top:calc(10.6 * var(--s) * 1px);bottom:calc(5.8 * var(--s) * 1px);z-index:8;will-change:opacity}
+#rchips{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  gap:calc(.62 * var(--s) * 1px);padding:0 calc(4 * var(--s) * 1px)}
+.rchip{font-size:calc(1.16 * var(--s) * 1px);font-weight:700;color:var(--blue);background:var(--tint);
+  border:1px solid var(--tint2);border-radius:999px;white-space:nowrap;
+  padding:calc(.38 * var(--s) * 1px) calc(.9 * var(--s) * 1px);will-change:transform,opacity}
+#rline{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#rline .ln{text-align:center}
+
+/* ---- captions -------------------------------------------------------------
+   V5 has none. The block still exists, and paintCaptions is still called with
+   an empty list, so the markup matches the other variants and the probe's
+   caption audit runs against the same structure everywhere. ----------------- */
+#cc{position:absolute;left:0;right:0;bottom:calc(6.4 * var(--s) * 1px);display:flex;justify-content:center;
+  padding:0 calc(9 * var(--s) * 1px);pointer-events:none;z-index:7;opacity:0;will-change:opacity}
+#ccbox{background:rgba(255,255,255,.96);border-bottom:calc(.22 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.2 * var(--s) * 1px);padding:calc(.62 * var(--s) * 1px) calc(1.1 * var(--s) * 1px);
+  font-size:calc(1.28 * var(--s) * 1px);line-height:1.32;font-weight:500;color:var(--ink);text-align:center;
+  max-width:calc(52 * var(--s) * 1px);will-change:transform}
+
+/* ---- end card ------------------------------------------------------------- */
+#end{position:absolute;inset:0;z-index:9;background:var(--white);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:0 calc(9 * var(--s) * 1px);will-change:opacity}
+#end img{width:calc(24 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#end h3{margin-top:calc(1.8 * var(--s) * 1px);will-change:transform,opacity}
+#end .u{font-family:var(--display);font-weight:800;font-size:calc(2.1 * var(--s) * 1px);color:var(--blue);
+  margin-top:calc(1.2 * var(--s) * 1px);will-change:transform,opacity}
+#end .lg{font-size:calc(.82 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(60 * var(--s) * 1px);
+  margin-top:calc(2.0 * var(--s) * 1px);will-change:transform,opacity}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wash"></div><div id="wash2"></div>
+  <svg id="mesh" preserveAspectRatio="none"></svg>
+
+  <div id="brandbar"><img src="../../brand/certuvo-logo-blue.png" alt="Certuvo"><div class="bl">Your exam partner<br>Fourteen features, one platform</div></div>
+  <div id="count"><div class="n">01 / 07</div><div class="c">Verified</div></div>
+  <div id="barwrap"><div id="bar"></div></div>
+  <div id="footl">Inside Certuvo</div>
+  <div id="footr">certuvo.com</div>
+
+  <div id="kin">
+
+    <!-- k1 · the bank, and how new questions are cleared ---------------------- -->
+    <section class="shot pr" id="k1" data-swap="3.05">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">01</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.20" data-out="3.05" style="--fs:6.0">
+            <div class="ln"><i class="w">Thousands,</i></div>
+            <div class="ln"><i class="w">all</i> <i class="w b">verified.</i></div>
+            <div class="sub"><i class="wf">A bank of exam-style questions, every one mapped to the syllabus.</i></div>
+          </div>
+          <div class="ph" data-in="3.25" data-out="6.10" style="--fs:6.0">
+            <div class="ln"><i class="w">And AI writes</i></div>
+            <div class="ln"><i class="w b">unlimited</i> <i class="w">more.</i></div>
+            <div class="sub"><i class="wf">Four-stage validation clears every generated question first.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>Question bank</b><span class="pmeta">Illustrative</span></div>
+          <div class="pbody">
+            <div class="pf" id="k1a">
+              <div class="chipfield" id="k1chips"></div>
+              <div class="tiny">Checked before a student ever sees it.</div>
+            </div>
+            <div class="pf" id="k1b">
+              <div class="gates">
+                <div class="grow"><div class="tick"><b>1</b></div><em>Generated</em></div>
+                <div class="grow"><div class="tick"><b>2</b></div><em>Answer verified</em></div>
+                <div class="grow"><div class="tick"><b>3</b></div><em>Ambiguity checked</em></div>
+                <div class="grow"><div class="tick"><b>4</b></div><em>Blueprint matched</em></div>
+              </div>
+              <div class="tiny">Four judges, then it joins the bank.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- k2 · under timing ------------------------------------------------------ -->
+    <section class="shot pl" id="k2" data-swap="2.80">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">02</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.20" data-out="2.80" style="--fs:6.0">
+            <div class="ln"><i class="w b">Timed</i> <i class="w">quizzes.</i></div>
+            <div class="ln"><i class="w">Twenty minutes.</i></div>
+            <div class="sub"><i class="wf">Short, sharp sessions whenever you have them.</i></div>
+          </div>
+          <div class="ph" data-in="3.00" data-out="5.60" style="--fs:6.0">
+            <div class="ln"><i class="w">Or the full</i></div>
+            <div class="ln"><i class="w b">mock exam.</i></div>
+            <div class="sub"><i class="wf">Real length, real timing, every section in order.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>Practice</b><span class="pmeta">Illustrative</span></div>
+          <div class="pbody">
+            <div class="pf" id="k2a" style="align-items:center;justify-content:center">
+              <div class="ring" id="k2ring" style="width:calc(11.5*var(--s)*1px);height:calc(11.5*var(--s)*1px)">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                  <circle class="rtrack" cx="50" cy="50" r="42" stroke-width="7"></circle>
+                  <circle class="rfill" cx="50" cy="50" r="42" stroke-width="7"></circle>
+                </svg>
+                <div class="rlab" style="font-size:calc(2.3*var(--s)*1px)" id="k2clock">20:00</div>
+              </div>
+              <div class="tiny" style="text-align:center">One quiz, twenty minutes, no set-up.</div>
+            </div>
+            <div class="pf" id="k2b" style="justify-content:center">
+              <div class="sects" id="k2sects"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="mockmeta"><span id="k2left">Section 1 of 8</span><span id="k2right">4:00:00</span></div>
+              <div class="sk w100" style="margin-top:calc(1.4*var(--s)*1px)"></div>
+              <div class="sk w84"></div>
+              <div class="sk w56"></div>
+              <div class="tiny">Sat end to end, exactly like the day itself.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- k3 · why, not just what ------------------------------------------------ -->
+    <section class="shot pr" id="k3" data-swap="2.80">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">03</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.20" data-out="2.80" style="--fs:6.0">
+            <div class="ln"><i class="w">Every answer,</i></div>
+            <div class="ln"><i class="w b">explained.</i></div>
+            <div class="sub"><i class="wf">Why the right answer is right — and why the others are not.</i></div>
+          </div>
+          <div class="ph" data-in="3.00" data-out="5.60" style="--fs:6.0">
+            <div class="ln"><i class="w">Stuck? Ask</i></div>
+            <div class="ln"><i class="w b">this question.</i></div>
+            <div class="sub"><i class="wf">Help pinned to the item in front of you, not a search box.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>Review</b><span class="pmeta">Illustrative</span></div>
+          <div class="pbody">
+            <div class="pf" id="k3a">
+              <div class="sk w100 tall"></div><div class="sk w70"></div>
+              <div class="optrow">
+                <div class="opt" id="k3o1"><b>A</b><div class="sk w84"></div></div>
+                <div class="opt" id="k3o2"><b>B</b><div class="sk w70"></div></div>
+                <div class="opt" id="k3o3"><b>C</b><div class="sk w56"></div></div>
+              </div>
+              <div class="expl" id="k3expl"><div class="eh">Explanation</div><div class="blur tight"></div></div>
+              <div class="tiny">Every option accounted for, not just the right one.</div>
+            </div>
+            <div class="pf" id="k3b">
+              <div class="helppin" id="k3pin">?</div>
+              <div class="sk w70 tall"></div><div class="sk w84"></div><div class="sk w40"></div>
+              <div class="optrow">
+                <div class="opt"><b>A</b><div class="sk w70"></div></div>
+                <div class="opt"><b>B</b><div class="sk w84"></div></div>
+              </div>
+              <div class="helpnote" id="k3note"><div class="hn">Help on this question</div>
+                <div class="blur tight" style="height:calc(2.0*var(--s)*1px)"></div></div>
+              <div class="tiny">Answers about this item, in its own context.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- k4 · the coach ---------------------------------------------------------- -->
+    <section class="shot pl" id="k4" data-swap="3.05">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">04</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.20" data-out="3.05" style="--fs:6.0">
+            <div class="ln"><i class="w">An</i> <i class="w b">AI Coach.</i></div>
+            <div class="ln"><i class="w">Chat or call.</i></div>
+            <div class="sub"><i class="wf">Type it, or say it out loud and keep walking.</i></div>
+          </div>
+          <div class="ph" data-in="3.25" data-out="6.10" style="--fs:6.0">
+            <div class="ln"><i class="w">It sees</i></div>
+            <div class="ln"><i class="w b">your screen.</i></div>
+            <div class="sub"><i class="wf">Screen-aware guidance — you describe nothing to it.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>AI Coach</b><span class="pmeta">Illustrative</span></div>
+          <div class="pbody">
+            <div class="pf" id="k4a">
+              <div class="chathead"><div class="av" id="k4av"></div><b>AI Coach</b>
+                <div class="wave" id="k4wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+              <div class="chatcol">
+                <div class="bubble them" id="k4b1"><div class="sk w92" style="background:rgba(41,95,237,.16)"></div><div class="sk w70" style="background:rgba(41,95,237,.16)"></div></div>
+                <div class="bubble me" id="k4b2"><div class="sk w84" style="background:rgba(255,255,255,.5)"></div></div>
+                <div class="bubble them" id="k4b3"><div class="sk w100" style="background:rgba(41,95,237,.16)"></div><div class="sk w56" style="background:rgba(41,95,237,.16)"></div></div>
+              </div>
+              <div class="tiny">Ask in text, or call and keep your hands free.</div>
+            </div>
+            <div class="pf" id="k4b">
+              <div class="beam" id="k4beam"></div>
+              <div class="sk w100 tall"></div><div class="sk w92"></div><div class="sk w56"></div>
+              <div class="optrow">
+                <div class="opt"><b>A</b><div class="sk w70"></div></div>
+                <div class="opt"><b>B</b><div class="sk w84"></div></div>
+                <div class="opt"><b>C</b><div class="sk w56"></div></div>
+              </div>
+              <div style="margin-top:calc(.7*var(--s)*1px)"><span class="pill" id="k4pill"><i class="dot"></i>Reading your screen</span></div>
+              <div class="tiny">It reads the question you are looking at.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- k5 · together, and in one place ------------------------------------------ -->
+    <section class="shot pr" id="k5" data-swap="2.80">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">05</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.20" data-out="2.80" style="--fs:6.0">
+            <div class="ln"><i class="w">Not on</i></div>
+            <div class="ln"><i class="w b">your own.</i></div>
+            <div class="sub"><i class="wf">Peer study rooms — your cohort, on the same question.</i></div>
+          </div>
+          <div class="ph" data-in="3.00" data-out="5.60" style="--fs:6.0">
+            <div class="ln"><i class="w">Notes, kept</i></div>
+            <div class="ln"><i class="w b">in place.</i></div>
+            <div class="sub"><i class="wf">Written beside the question that prompted them.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>Study room</b><span class="live"><i></i>LIVE</span></div>
+          <div class="pbody">
+            <div class="pf" id="k5a">
+              <div class="roomgrid">
+                <div class="rt" id="k5r1"><div class="face f1">AK</div></div>
+                <div class="rt" id="k5r2"><div class="face f2">JD</div></div>
+                <div class="rt" id="k5r3"><div class="face f3">RM</div></div>
+                <div class="rt" id="k5r4"><div class="face f4">TN</div></div>
+                <div class="rt" id="k5r5"><div class="face f5">SO</div></div>
+                <div class="rt" id="k5r6"><div class="face f3">MD</div></div>
+              </div>
+              <div class="tiny">Six seats, one question, moderated.</div>
+            </div>
+            <div class="pf" id="k5b" style="justify-content:center">
+              <div class="note">
+                <div class="sk w100"></div><div class="sk w92"></div>
+                <div class="sk w84 hl" id="k5hl"></div>
+                <div class="sk w70"></div><div class="sk w56"></div>
+              </div>
+              <div style="margin-top:calc(.8*var(--s)*1px)"><span class="pill" id="k5tag">Saved to Question 14</span></div>
+              <div class="tiny">Your notes live with the question, not in another app.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- k6 · what it finds -------------------------------------------------------- -->
+    <section class="shot pl" id="k6" data-swap="2.80">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">06</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.20" data-out="2.80" style="--fs:6.0">
+            <div class="ln"><i class="w b">Analytics</i></div>
+            <div class="ln"><i class="w">that stay sharp.</i></div>
+            <div class="sub"><i class="wf">Domain by domain — not a wall of charts.</i></div>
+          </div>
+          <div class="ph" data-in="3.00" data-out="5.60" style="--fs:6.0">
+            <div class="ln"><i class="w">It names</i></div>
+            <div class="ln"><i class="w b">the gap.</i></div>
+            <div class="sub"><i class="wf">The weakness you keep falling into, found and flagged.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>Analytics</b><span class="pmeta">Illustrative</span></div>
+          <div class="pbody">
+            <div class="pf" id="k6a">
+              <div class="bars">
+                <div class="barrow" id="k6a1"><span>Domain 1</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6a2"><span>Domain 2</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6a3"><span>Domain 3</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6a4"><span>Domain 4</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6a5"><span>Domain 5</span><div class="track"><i></i></div></div>
+              </div>
+              <div class="tiny">Five domains, one screen, no digging.</div>
+            </div>
+            <div class="pf" id="k6b">
+              <div class="bars">
+                <div class="barrow" id="k6b1"><span>Domain 1</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6b2"><span>Domain 2</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6b3"><span>Domain 3</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6b4"><span>Domain 4</span><div class="track"><i></i></div></div>
+                <div class="barrow" id="k6b5"><span>Domain 5</span><div class="track"><i></i></div></div>
+              </div>
+              <span class="pill red gapflag" id="k6gap"><i class="dot"></i>Gap detected &middot; three sessions</span>
+              <div class="tiny">Flagged once it shows up three sessions running.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- k7 · where you are ---------------------------------------------------------- -->
+    <section class="shot pr" id="k7" data-swap="1.70">
+      <div class="typecol">
+        <div class="tagrow"><span class="num">07</span><i class="rule"></i></div>
+        <div class="phwrap">
+          <div class="ph" data-in="0.15" data-out="1.70" style="--fs:6.0">
+            <div class="ln"><i class="w">See exactly</i></div>
+            <div class="ln"><i class="w b">where you are.</i></div>
+            <div class="sub"><i class="wf">Readiness tracked over time — illustrative.</i></div>
+          </div>
+          <div class="ph" data-in="1.90" data-out="2.95" style="--fs:6.0">
+            <div class="ln"><i class="w">Day after day.</i></div>
+            <div class="ln"><i class="w b">Streaks stick.</i></div>
+            <div class="sub"><i class="wf">The habit that quietly does the work.</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="panelcol">
+        <div class="pane lift pn">
+          <div class="ptop"><b>Progress</b><span class="pmeta">Illustrative</span></div>
+          <div class="pbody">
+            <div class="pf" id="k7a">
+              <div class="curvewrap">
+                <svg id="k7svg" viewBox="0 0 460 200" preserveAspectRatio="none">
+                  <line class="thr" x1="0" y1="42" x2="460" y2="42"></line>
+                  <path class="ca" id="k7area" d=""></path>
+                  <path class="cp" id="k7path" d=""></path>
+                </svg>
+                <div class="thrtag" id="k7thr">Exam-ready</div>
+              </div>
+              <div class="tiny">Where you are, and where it is heading.</div>
+            </div>
+            <div class="pf" id="k7b" style="justify-content:center">
+              <div class="streakwrap">
+                <div class="streak" id="k7s1"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="streak" id="k7s2"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="streaklab" id="k7lab">Two weeks, unbroken</div>
+              </div>
+              <div class="tiny">Small sessions, kept up, beat big ones abandoned.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- the resolve: all fourteen names, then one line ---------------------------- -->
+  <div id="resolve">
+    <div id="rchips"></div>
+    <div id="rline">
+      <div class="ln" style="--fs:6.6"><i class="w">Fourteen</i> <i class="w b">features.</i></div>
+      <div class="ln" style="--fs:6.6"><i class="w">One</i> <i class="w b">platform.</i></div>
+    </div>
+  </div>
+
+  <div id="cc"><div id="ccbox"></div></div>
+
+  <div id="end">
+    <img src="../../brand/certuvo-logo-blue.png" alt="Certuvo">
+    <h3>Fourteen features. <em>One platform.</em></h3>
+    <div class="u">certuvo.com</div>
+    <div class="lg" id="endlg"></div>
+  </div>
+</div>
+
+<script src="shots.data.js"></script>
+<script src="captions.data.js"></script>
+<script src="../../common/engine.js"></script>
+<script>
+const E = window.CE;
+const { clamp, seg, pulse, outCubic, outExpo, outBack, inOut, mixc,
+        C_BLUE, C_RED, C_WHITE, C_SKEL, C_LINE2, C_MUTE, C_INK, C_SUB } = E;
+
+const { W, H, SS, CC } = E.setupStage();
+E.drawMesh(W, H, SS);
+
+const RAW  = window.__SHOTS || [];
+const DUR  = window.__DURATION || 46;
+const CAPS = window.__CAPTIONS || [];
+window.__DUR = DUR;
+const SHOTS = RAW.map(([id, label, a, b]) => ({ id, label, in: a, out: b, vs: a }));
+
+/* The tail is hand-cut rather than derived from the last shot's out, because
+   V5 spends its last three seconds on the resolve — the fourteen names landing
+   and collapsing into one line — and the end card has to start after that, not
+   after the last feature. */
+const RES_IN   = 40.30;   /* chips start snapping in                */
+const RES_COLL = 41.65;   /* they begin converging on the centre     */
+const RES_LINE = 41.90;   /* the single line snaps into their place  */
+const END_AT   = 43.10;   /* end card                                */
+/* k7 also has to clear the stage by hand: paintShots would not fade it until
+   45.7, long after the resolve has taken over the frame. */
+const K7_CLEAR = 40.05;
+
+/* ---- the type ------------------------------------------------------------
+   Every phrase is a list of word spans with its own in/out, read off the
+   markup so the timing lives next to the words it drives. A masked word
+   (inside .ln) wipes up through its mask; the small support line under it is
+   not masked, so it fades instead — a wipe on 13px type just looks like a
+   glitch. --------------------------------------------------------------- */
+const PHRASES = [];
+for (const s of SHOTS){
+  const root = document.getElementById(s.id); if (!root) continue;
+  for (const p of root.querySelectorAll('.ph')){
+    PHRASES.push({ ws: [...p.querySelectorAll('.w, .wf')],
+                   in: s.in + (+p.dataset.in), out: s.in + (+p.dataset.out) });
+  }
+}
+/* the closing line is a phrase too — same mechanism, absolute times */
+PHRASES.push({ ws: [...document.querySelectorAll('#rline .w')], in: RES_LINE, out: DUR + 9 });
+
+function paintPhrase(t, ph){
+  ph.ws.forEach((w, i) => {
+    const a = ph.in + i * 0.075, b = ph.out + i * 0.030;
+    const pi = seg(t, a, a + 0.34, outExpo);
+    const po = seg(t, b, b + 0.26, outExpo);
+    if (w.classList.contains('wf')){
+      w.style.opacity = (pi * (1 - po)).toFixed(3);
+      w.style.transform = `translateY(${((1 - pi) * 0.55).toFixed(3)}em)`;
+    } else {
+      /* opacity only guards the frame before the wipe starts; once running the
+         mask does the work, so the edge stays hard and the snap reads */
+      w.style.opacity = pi < 0.002 ? '0' : '1';
+      w.style.transform = `translateY(${(((1 - pi) * 1.18) - po * 1.35).toFixed(3)}em)`;
+    }
+  });
+}
+
+/* ---- the panels ----------------------------------------------------------
+   One panel per beat. It flies in from whichever side its column is on (so the
+   motion always comes from off-stage, never across the type), overshoots
+   slightly via outBack, and its two faces cross-fade at the beat's midpoint. */
+const PANELS = SHOTS.map(s => {
+  const root = document.getElementById(s.id);
+  const faces = [...root.querySelectorAll('.pf')];
+  return {
+    s, el: root.querySelector('.pn'), tag: root.querySelector('.tagrow'),
+    rule: root.querySelector('.tagrow .rule'), fa: faces[0], fb: faces[1],
+    dir: root.classList.contains('pl') ? -1 : 1,
+    swap: s.in + (+root.dataset.swap),
+    out: s.id === 'k7' ? K7_CLEAR : s.out - 0.30,
+  };
+});
+
+/* ---- parts ---------------------------------------------------------------- */
+const Q = s => document.querySelector(s), QA = s => [...document.querySelectorAll(s)];
+const CHIPS = E.fillChipField(Q('#k1chips'), 234, 13);
+const P = {
+  gates: QA('#k1b .grow'),
+  ring: Q('#k2ring'), clock: Q('#k2clock'), sects: QA('#k2sects i'),
+  mleft: Q('#k2left'), mright: Q('#k2right'),
+  o: [Q('#k3o1'), Q('#k3o2'), Q('#k3o3')], expl: Q('#k3expl'), pin: Q('#k3pin'), note: Q('#k3note'),
+  av: Q('#k4av'), wave: Q('#k4wave'), waves: QA('#k4wave i'),
+  bub: [Q('#k4b1'), Q('#k4b2'), Q('#k4b3')], beam: Q('#k4beam'), pill: Q('#k4pill'),
+  rooms: [1,2,3,4,5,6].map(i => Q('#k5r' + i)), hl: Q('#k5hl'), ntag: Q('#k5tag'),
+  ba: [1,2,3,4,5].map(i => Q('#k6a' + i)), bb: [1,2,3,4,5].map(i => Q('#k6b' + i)), gap: Q('#k6gap'),
+  cpath: Q('#k7path'), carea: Q('#k7area'), thr: Q('#k7thr'),
+  streak: [...QA('#k7s1 i'), ...QA('#k7s2 i')], slab: Q('#k7lab'),
+};
+const CURVE = [[6,182],[40,172],[74,160],[108,150],[142,138],[176,142],[210,124],[244,112],
+               [278,100],[312,88],[346,74],[380,62],[414,50],[440,38]];
+const BARS_A = [.82,.74,.66,.58,.71], BARS_B = [.84,.77,.31,.72,.64], GAP = 2;
+
+/* the small support line inside each face is the one reveal the engine drives
+   for us — it always does the same thing, so there is no reason to hand-write
+   it fourteen times */
+/* Addressed by face id rather than by repeating one selector: buildReveals
+   disambiguates a repeated selector by match order, which silently pairs both
+   cues onto face A the moment a face has no caption of its own. */
+const CUES = {
+  k1:[['#k1a .tiny',1.5,0],['#k1b .tiny',4.4,0]],
+  k2:[['#k2a .tiny',1.6,0],['#k2b .tiny',4.3,0]],
+  k3:[['#k3a .tiny',1.9,0],['#k3b .tiny',4.8,0]],
+  k4:[['#k4a .tiny',2.2,0],['#k4b .tiny',4.4,0]],
+  k5:[['#k5a .tiny',1.7,0],['#k5b .tiny',4.9,0]],
+  k6:[['#k6a .tiny',1.7,0],['#k6b .tiny',5.0,0]],
+  k7:[['#k7a .tiny',1.0,0],['#k7b .tiny',2.15,0]],
+};
+const ANIM = E.buildReveals(SHOTS, CUES);
+
+/* every demonstration is a pure function of u = seconds since its beat began */
+const FX = {
+  k1(u){
+    E.paintChipField(CHIPS, 13, u, 0.35, 0.055, 0.24);
+    const T = [3.55, 3.95, 4.35, 4.75];
+    T.forEach((at, i) => {
+      const p = seg(u, at, at + 0.36, outExpo);
+      const tk = P.gates[i].querySelector('.tick'), b = P.gates[i].querySelector('b');
+      tk.style.backgroundColor = mixc(C_WHITE, C_BLUE, p);
+      tk.style.borderColor = mixc(C_LINE2, C_BLUE, p);
+      tk.style.transform = `scale(${(1 + 0.16 * pulse(u, at, at + 0.4)).toFixed(4)})`;
+      b.style.color = mixc(C_MUTE, C_WHITE, p);
+      P.gates[i].querySelector('em').style.color = mixc(C_SUB, C_INK, p);
+    });
+  },
+  k2(u){
+    /* the quiz clock is compressed into the beat: it is a demonstration of a
+       countdown, not a real twenty minutes, and it goes red only at the end —
+       one of the four jobs red is allowed to do */
+    const run = clamp((u - 0.4) / 2.4);
+    E.setRing(P.ring, 1 - run, { colour: run > 0.80 ? 'rgb(229,69,63)' : 'rgb(41,95,237)' });
+    const left = Math.max(0, Math.round(1200 * (1 - run)));
+    P.clock.textContent = String((left / 60) | 0).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0');
+    P.clock.style.color = run > 0.80 ? 'rgb(229,69,63)' : 'rgb(11,18,32)';
+    const prog = clamp((u - 3.3) / 2.1) * 8;
+    P.sects.forEach((s, i) => s.style.setProperty('--f', clamp(prog - i).toFixed(3)));
+    P.mleft.textContent = `Section ${clamp(Math.ceil(prog), 1, 8)} of 8`;
+    const secs = Math.max(0, Math.round(14400 * (1 - clamp((u - 3.3) / 2.1))));
+    P.mright.textContent = `${(secs/3600)|0}:${String(((secs%3600)/60)|0).padStart(2,'0')}:${String(secs%60).padStart(2,'0')}`;
+  },
+  k3(u){
+    const pick = seg(u, 1.05, 1.45, outExpo);
+    P.o[1].style.backgroundColor = mixc(C_WHITE, [238,243,255], pick);
+    P.o[1].style.borderColor = mixc([230,235,245], C_BLUE, pick);
+    P.o[1].querySelector('b').style.color = mixc(C_MUTE, C_BLUE, pick);
+    const ex = seg(u, 1.6, 2.1, outExpo);
+    P.expl.style.opacity = ex.toFixed(3);
+    P.expl.style.transform = `translateY(${((1 - ex) * 0.6).toFixed(3)}em)`;
+    const hp = seg(u, 3.5, 3.9, outBack);
+    P.pin.style.opacity = clamp(hp).toFixed(3);
+    P.pin.style.transform = `scale(${(0.5 + 0.5 * hp).toFixed(4)})`;
+    const hn = seg(u, 4.1, 4.6, outExpo);
+    P.note.style.opacity = hn.toFixed(3);
+    P.note.style.transform = `translateY(${((1 - hn) * 0.6).toFixed(3)}em)`;
+  },
+  k4(u){
+    const live = seg(u, 0.5, 1.0, outExpo) * (1 - seg(u, 2.9, 3.2));
+    P.av.style.boxShadow = `0 0 0 ${(SS * 0.26 * live * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(u * 6)))).toFixed(2)}px rgba(41,95,237,.18)`;
+    P.av.style.transform = `scale(${(1 + 0.05 * live * (0.5 + 0.5 * Math.sin(u * 6))).toFixed(4)})`;
+    P.wave.style.opacity = live.toFixed(3);
+    E.setWave(P.waves, u, live);
+    [0.75, 1.45, 2.10].forEach((at, i) => {
+      const p = seg(u, at, at + 0.4, outExpo), b = P.bub[i];
+      b.style.opacity = p.toFixed(3);
+      b.style.transform = `translateY(${((1 - p) * 0.7).toFixed(3)}em) scale(${(0.96 + 0.04 * p).toFixed(4)})`;
+    });
+    E.setBeam(P.beam, u, 3.5, 5.7, { width: 560 });
+    const sp = seg(u, 3.7, 4.1, outExpo);
+    P.pill.style.opacity = sp.toFixed(3);
+    P.pill.style.transform = `translateY(${((1 - sp) * 0.5).toFixed(3)}em)`;
+  },
+  k5(u){
+    const J = [0.45, 0.62, 0.79, 0.96, 1.13, 1.32];
+    P.rooms.forEach((r, i) => {
+      const p = seg(u, J[i], J[i] + 0.4, outBack);
+      r.style.opacity = clamp(p).toFixed(3);
+      r.style.transform = `scale(${(0.86 + 0.14 * p).toFixed(4)})`;
+    });
+    const hl = seg(u, 3.6, 4.4, inOut);
+    P.hl.style.backgroundSize = `${(hl * 100).toFixed(1)}% 100%`;
+    P.hl.style.backgroundRepeat = 'no-repeat';
+    const nt = seg(u, 4.5, 5.0, outExpo);
+    P.ntag.style.opacity = nt.toFixed(3);
+    P.ntag.style.transform = `translateY(${((1 - nt) * 0.5).toFixed(3)}em)`;
+  },
+  k6(u){
+    P.ba.forEach((r, i) => {
+      const p = seg(u, 0.45 + i * 0.16, 0.45 + i * 0.16 + 0.45, outExpo);
+      r.querySelector('.track i').style.transform = `scaleX(${(BARS_A[i] * p).toFixed(4)})`;
+    });
+    P.bb.forEach((r, i) => {
+      const p = seg(u, 3.25 + i * 0.14, 3.25 + i * 0.14 + 0.45, outExpo);
+      /* only the detected gap turns red, and only after every bar has landed —
+         so the eye sees the set first and the fault second */
+      const flag = i === GAP ? seg(u, 4.5, 4.9, outExpo) : 0;
+      const bar = r.querySelector('.track i');
+      bar.style.transform = `scaleX(${(BARS_B[i] * p).toFixed(4)})`;
+      bar.style.backgroundColor = mixc(C_BLUE, C_RED, flag);
+      r.querySelector('span').style.color = mixc(C_SUB, C_RED, flag);
+    });
+    const gf = seg(u, 4.8, 5.2, outExpo);
+    P.gap.style.opacity = gf.toFixed(3);
+    P.gap.style.transform = `translateY(${((1 - gf) * 0.5).toFixed(3)}em)`;
+  },
+  k7(u){
+    const d = seg(u, 0.30, 1.55, inOut);
+    const { d: path, end } = E.pathTo(CURVE, Math.max(0.02, d));
+    P.cpath.setAttribute('d', path);
+    P.carea.setAttribute('d', path + `L${end[0].toFixed(1)},200L6,200Z`);
+    P.thr.style.opacity = seg(u, 1.15, 1.50, outExpo).toFixed(3);
+    P.streak.forEach((s, i) => {
+      const at = 1.85 + i * 0.050;
+      const p = seg(u, at, at + 0.28, outExpo);
+      s.style.backgroundColor = mixc(C_SKEL, C_BLUE, p);
+      s.style.transform = `scale(${(0.82 + 0.18 * p + 0.1 * pulse(u, at, at + 0.32)).toFixed(4)})`;
+    });
+    const sl = seg(u, 2.50, 2.85, outExpo);
+    P.slab.style.opacity = sl.toFixed(3);
+    P.slab.style.color = mixc(C_MUTE, C_BLUE, sl);
+  },
+};
+
+/* ---- the resolve ----------------------------------------------------------
+   The fourteen names land as chips, then converge on the centre of the frame
+   and shrink out of it while the closing line snaps into the space they leave.
+   The convergence is a scale on the CONTAINER, not a measured travel vector per
+   chip: #rchips is inset:0 over the band, so shrinking it about its own centre
+   pulls every chip toward the exact spot the closing line occupies. Measuring
+   per-chip offsets instead would read the layout at script time — before the
+   webfonts land — and bake in positions the finished frame never has. */
+const FEATURES = ['Verified questions','Four-stage validation','Timed quizzes','Full mock exams',
+  'Answer explanations','Question-specific help','AI Coach chat','Voice calls','Screen-aware guidance',
+  'Peer study rooms','Integrated notes','Focused analytics','Knowledge-gap detection','Progress & streaks'];
+const rchips = document.getElementById('rchips');
+rchips.innerHTML = FEATURES.map(f => `<span class="rchip">${f}</span>`).join('');
+const RC = [...rchips.children];
+const resolveEl = document.getElementById('resolve');
+
+const ENDLG = 'Product views are illustrative: every question, option, explanation and note shown is an abstract '
+            + 'placeholder, not real exam content. All third-party names and marks are the property of their '
+            + 'respective owners. Preparation does not guarantee a pass.';
+document.getElementById('endlg').textContent = ENDLG;
+const ENDANIM = [['#end img', 0.25], ['#end h3', 0.62], ['#end .u', 0.98], ['#end .lg', 1.34]]
+  .map(([s, d]) => ({ el: document.querySelector(s), start: END_AT + d }));
+
+const ccWrap = document.getElementById('cc'), ccBox = document.getElementById('ccbox');
+const endEl = document.getElementById('end');
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+  const endp = seg(t, END_AT, END_AT + 0.7);
+
+  E.wash(t, DUR, seg(t, DUR * 0.55, DUR));
+  /* short cross-fade and a bigger lateral push than V1: beats here snap past
+     one another rather than dissolving */
+  const { cur } = E.paintShots(t, SHOTS, DUR, 0.30, 1.8);
+  E.furniture(t, DUR, { label: cur.label, index: SHOTS.indexOf(cur) + 1, total: SHOTS.length, fade: 1 - endp });
+
+  for (const ph of PHRASES) paintPhrase(t, ph);
+
+  for (const p of PANELS){
+    const pin  = seg(t, p.s.in + 0.10, p.s.in + 0.80, outBack);
+    const pout = seg(t, p.out, p.out + 0.35, outExpo);
+    const pv = clamp(pin * (1 - pout));
+    p.el.style.opacity = pv.toFixed(3);
+    /* k7's panel leaves while its shot is still on screen, so the shot-level
+       hide never covers it — take the parked panel out of the layout's reach
+       here instead of leaving an invisible box sitting off the frame edge */
+    p.el.style.visibility = pv < 0.002 ? 'hidden' : '';
+    p.el.style.transform = `translateX(${(p.dir * (46 * (1 - pin) + 46 * pout)).toFixed(2)}%)`;
+
+    const tg = seg(t, p.s.in + 0.05, p.s.in + 0.45, outExpo) * (1 - seg(t, p.out, p.out + 0.30));
+    p.tag.style.opacity = tg.toFixed(3);
+    p.rule.style.transform = `scaleX(${seg(t, p.s.in + 0.15, p.s.in + 0.85, outExpo).toFixed(4)})`;
+
+    /* face A holds until the midpoint, then hands over — one feature is ever
+       mid-animation, which is the whole point of splitting the beat */
+    const fa = seg(t, p.s.in + 0.30, p.s.in + 0.70) * (1 - seg(t, p.swap, p.swap + 0.28));
+    const fb = seg(t, p.swap + 0.14, p.swap + 0.50);
+    /* clear rather than force 'visible': paintShots hides an inactive shot with
+       visibility:hidden, and visibility inherits — writing 'visible' here would
+       resurrect every off-screen panel for anything that walks the DOM */
+    p.fa.style.opacity = fa.toFixed(3);
+    p.fa.style.visibility = fa < 0.002 ? 'hidden' : '';
+    p.fa.style.transform = `translateY(${(-0.5 * seg(t, p.swap, p.swap + 0.28)).toFixed(3)}em)`;
+    p.fb.style.opacity = fb.toFixed(3);
+    p.fb.style.visibility = fb < 0.002 ? 'hidden' : '';
+    p.fb.style.transform = `translateY(${((1 - fb) * 0.6).toFixed(3)}em)`;
+  }
+
+  for (const s of SHOTS){ const fx = FX[s.id]; if (fx) fx(t - s.vs); }
+  E.paintReveals(t, ANIM, { rise: 0.45, lift: 0.5 });
+
+  const rv = seg(t, RES_IN - 0.10, RES_IN + 0.05);
+  resolveEl.style.opacity = rv.toFixed(3);
+  resolveEl.style.visibility = rv < 0.002 ? 'hidden' : 'visible';
+  RC.forEach((el, i) => {
+    const a  = RES_IN + i * 0.040;
+    const pi = seg(t, a, a + 0.32, outBack);
+    el.style.opacity = clamp(pi).toFixed(3);
+    el.style.transform = `translateY(${((1 - pi) * 0.7).toFixed(3)}em) `
+                       + `scale(${clamp(0.84 + 0.16 * pi, 0.2, 1.2).toFixed(3)})`;
+  });
+  const coll = seg(t, RES_COLL, RES_COLL + 0.45, inOut);
+  rchips.style.opacity = (1 - coll).toFixed(3);
+  rchips.style.transform = `scale(${(1 - 0.55 * coll).toFixed(3)})`;
+
+  endEl.style.opacity = endp.toFixed(3);
+  endEl.style.visibility = endp < 0.002 ? 'hidden' : 'visible';
+  for (const a of ENDANIM){
+    const p = seg(t, a.start, a.start + 0.55, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1 - p) * 0.8).toFixed(3)}em)`;
+  }
+  /* no narration, so no captions — but the block and the call stay, so V5 has
+     the same shape as its siblings and the caption audit runs on it too */
+  ccWrap.style.opacity = '0';
+  E.paintCaptions(t, CAPS, { box: ccBox, wrap: ccWrap, on: CC && endp < 0.5 });
+}
+window.seek = seek;
+seek(0);
+window.__READY = true;
+</script>
+</body>
+</html>

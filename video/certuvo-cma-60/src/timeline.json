@@ -1,0 +1,105 @@
+{
+  "total": 50.95,
+  "segments": {
+    "1": [
+      0.3,
+      4.07
+    ],
+    "2": [
+      5.17,
+      11.01
+    ],
+    "3": [
+      11.01,
+      15.93
+    ],
+    "4": [
+      15.93,
+      22.32
+    ],
+    "5": [
+      23.42,
+      30.55
+    ],
+    "6": [
+      30.55,
+      36.1
+    ],
+    "7": [
+      36.1,
+      40.58
+    ],
+    "8": [
+      41.68,
+      46.45
+    ]
+  },
+  "captions": [
+    [
+      0.3,
+      4.07,
+      "Preparing for the CMA? Here's how Certuvo gets\nyou ready."
+    ],
+    [
+      5.17,
+      11.01,
+      "Practice exams that mirror the real format \u00b7\ntimed quizzes \u00b7 full-length mocks."
+    ],
+    [
+      11.01,
+      15.93,
+      "Progress tracking that finds your gaps and\ntells you when you're ready."
+    ],
+    [
+      15.93,
+      22.32,
+      "Live study rooms with your cohort \u00b7 24/7 chat\nsupport from experienced mentors."
+    ],
+    [
+      23.42,
+      30.55,
+      "AI Question Forge: unlimited new questions,\neach one checked by four AI judges."
+    ],
+    [
+      30.55,
+      36.1,
+      "AI Coach: chat or call it during practice, in\nsix languages."
+    ],
+    [
+      36.1,
+      40.58,
+      "It reads your screen \u2014 and switches itself off\nduring mock exams."
+    ],
+    [
+      41.68,
+      46.45,
+      "Pick your part. Start today \u2014 at certuvo.com"
+    ]
+  ],
+  "shots": [
+    [
+      "s1",
+      "Hook",
+      0.0,
+      4.62
+    ],
+    [
+      "s2",
+      "What you get",
+      4.62,
+      22.87
+    ],
+    [
+      "s3",
+      "AI inside",
+      22.87,
+      41.13
+    ],
+    [
+      "s4",
+      "Start",
+      41.13,
+      50.95
+    ]
+  ]
+}

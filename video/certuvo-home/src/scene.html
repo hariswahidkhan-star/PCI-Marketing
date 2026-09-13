@@ -1,0 +1,1206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — one platform</title>
+<!--
+  Certuvo homepage film — deterministic scene. window.seek(t) computes every
+  style from t, so a frame is identical however long the renderer takes to grab
+  it. seek() returns a promise: the two presenter scenes show a frame sequence
+  (../build/av/<scene>/NNNNN.jpg, cut from the HeyGen Avatar IV clips) and the
+  frame must be decoded before the screenshot.
+
+  Same light treatment as the CMA films: off-white ground, white cards with a
+  blue top rule, Certuvo blue for headings, the lecture graphics' red kept to
+  numbered tags, the progress bar and one emphasised word per beat.
+
+  Cut list and captions come from sync.py / vo.py. Cue times inside a scene are
+  seconds after that scene's narration starts, measured on the takes.
+
+  ?w=1920&h=1080&cc=1&t=0&play=1
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+:root{
+  --ground:#F5F7FB; --blue:#295FED; --blue2:#1E4ED8; --red:#E5453F; --red2:#F07A72;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:19.2; --padt:11.5; --padb:16;
+  --fg:#0B1220; --sub:#4B5563; --foot:#6B7280;
+  --rule:rgba(11,18,32,.10); --card:#FFFFFF; --cardbd:#E2E7F1; --cardsub:#5B6472;
+  --ccbg:rgba(255,255,255,.95); --ccfg:#0B1220; --track:#E4E9F4;
+  --shadow:0 calc(.5 * var(--s) * 1px) calc(1.6 * var(--s) * 1px) rgba(11,18,32,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:var(--ground);font-family:var(--sans);
+  color:var(--fg);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+#glow,#glow2{position:absolute;inset:-25%;pointer-events:none;will-change:transform,opacity}
+#glow{background:radial-gradient(closest-side, rgba(41,95,237,.14), rgba(41,95,237,0) 70%)}
+#glow2{background:radial-gradient(closest-side, rgba(229,69,63,.08), rgba(229,69,63,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none}
+#glowsweep{position:absolute;top:-20%;bottom:-20%;width:38%;left:0;pointer-events:none;
+  background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.55) 50%, rgba(255,255,255,0) 100%);
+  will-change:transform,opacity}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(11,18,32,0) 45%, rgba(11,18,32,.07) 100%)}
+
+/* ---------- shots ---------- */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;
+  padding:calc(var(--padt) * var(--s) * 1px) calc(9 * var(--s) * 1px) calc(var(--padb) * var(--s) * 1px);
+  will-change:opacity,transform}
+.eyebrow{font-weight:700;font-size:calc(1.2 * var(--s) * 1px);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--blue);white-space:nowrap}
+h2,h3{font-family:var(--display);font-weight:800;line-height:1.06;letter-spacing:-.024em;color:var(--fg)}
+h2{font-size:calc(4.2 * var(--s) * 1px)}
+h3{font-size:calc(2.9 * var(--s) * 1px)}
+h2 em,h3 em{font-style:normal;color:var(--blue)}
+h2 i,h3 i{font-style:normal;color:var(--red)}
+.sub{font-weight:400;color:var(--sub);font-size:calc(1.7 * var(--s) * 1px);line-height:1.45;max-width:calc(58 * var(--s) * 1px)}
+.note{font-size:calc(1.1 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(62 * var(--s) * 1px)}
+.tag{display:inline-block;font-family:var(--display);font-weight:800;font-size:calc(.86 * var(--s) * 1px);
+  letter-spacing:.12em;color:var(--red);border:calc(.09 * var(--s) * 1px) solid rgba(229,69,63,.55);
+  border-radius:calc(.22 * var(--s) * 1px);padding:calc(.14 * var(--s) * 1px) calc(.5 * var(--s) * 1px);line-height:1.2}
+/* one big line per beat, revealed word-block by word-block */
+.lines{display:flex;flex-direction:column;gap:calc(.5 * var(--s) * 1px);align-items:center}
+.lines .l{will-change:transform,opacity}
+
+/* pills */
+.tokens{display:flex;gap:calc(.85 * var(--s) * 1px);justify-content:center;flex-wrap:wrap;max-width:calc(74 * var(--s) * 1px)}
+.tok{font-family:var(--display);font-weight:800;letter-spacing:.02em;font-size:calc(1.36 * var(--s) * 1px);
+  padding:calc(.68 * var(--s) * 1px) calc(1.1 * var(--s) * 1px);
+  border:calc(.09 * var(--s) * 1px) solid #D5DCEA;color:var(--fg);white-space:nowrap;
+  border-radius:calc(.3 * var(--s) * 1px);background:#FFFFFF;box-shadow:var(--shadow);will-change:transform,opacity}
+.tok.solid{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ---------- s3: the credential wall ---------- */
+.wall{display:flex;flex-wrap:wrap;gap:calc(.95 * var(--s) * 1px);justify-content:center;align-items:stretch;
+  max-width:calc(72 * var(--s) * 1px)}
+.lg{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.3 * var(--s) * 1px);box-shadow:var(--shadow);
+  width:calc(13.4 * var(--s) * 1px);height:calc(7.8 * var(--s) * 1px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(.3 * var(--s) * 1px);
+  padding:calc(.9 * var(--s) * 1px);will-change:transform,opacity}
+.lg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.lg.tile img{max-height:74%;border-radius:calc(.45 * var(--s) * 1px)}
+/* the four credentials with no supplied mark are set as wordmarks in the same box */
+.lg .wm{font-family:var(--display);font-weight:900;font-size:calc(2.5 * var(--s) * 1px);letter-spacing:-.02em;color:var(--fg);line-height:1}
+.lg .wm em{font-style:normal;color:var(--blue)}
+.lg .wmsub{font-size:calc(.82 * var(--s) * 1px);color:var(--cardsub);letter-spacing:.06em;text-transform:uppercase;
+  font-weight:700;line-height:1.25;text-align:center}
+
+/* ---------- s4: the partnership lockup ---------- */
+.lockup{display:flex;align-items:center;gap:calc(2.4 * var(--s) * 1px);justify-content:center;
+  background:var(--card);border:1px solid var(--cardbd);border-top:calc(.24 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.4 * var(--s) * 1px);box-shadow:var(--shadow);
+  padding:calc(2.0 * var(--s) * 1px) calc(3.2 * var(--s) * 1px);will-change:transform,opacity}
+.lockup img.cv{width:calc(15 * var(--s) * 1px);height:auto;display:block}
+.lockup img.pci{width:calc(6.4 * var(--s) * 1px);height:auto;display:block;border-radius:calc(.9 * var(--s) * 1px)}
+.lockup .x{font-family:var(--display);font-weight:800;font-size:calc(1.9 * var(--s) * 1px);color:var(--foot)}
+
+/* ---------- s10 CTA, shared language strip ---------- */
+.cta{font-family:var(--display);font-weight:800;font-size:calc(2.4 * var(--s) * 1px);letter-spacing:-.01em;color:#fff;
+  background:var(--blue);padding:calc(.85 * var(--s) * 1px) calc(2.0 * var(--s) * 1px);border-radius:calc(.35 * var(--s) * 1px);
+  will-change:transform,opacity;white-space:nowrap;box-shadow:0 calc(.6 * var(--s) * 1px) calc(1.8 * var(--s) * 1px) rgba(41,95,237,.28)}
+.langs{font-size:calc(1.0 * var(--s) * 1px);color:var(--sub);line-height:1.4;will-change:transform,opacity}
+.langs b{color:var(--blue);font-weight:700}
+
+/* ---------------------------------------------------------------------------
+   s5 · already inside — the bank of verified questions, then the other three.
+   Volume is a field of chips rather than a number: a number invites arithmetic
+   and Certuvo has published no bank size, while a field that fills in front of
+   you carries the impression honestly.
+--------------------------------------------------------------------------- */
+.inside{display:grid;grid-template-columns:1.42fr 1fr;gap:calc(1.2 * var(--s) * 1px);width:100%;align-items:stretch}
+.bank{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.1 * var(--s) * 1px) calc(1.2 * var(--s) * 1px);
+  text-align:left;display:flex;flex-direction:column;will-change:transform,opacity}
+.bank .bh b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.5 * var(--s) * 1px);color:var(--fg);line-height:1.1}
+.bank .bh span{display:block;margin-top:calc(.22 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub)}
+.chips{display:grid;grid-template-columns:repeat(16,1fr);gap:calc(.26 * var(--s) * 1px);margin-top:calc(.9 * var(--s) * 1px);
+  flex:1 1 auto;align-content:start}
+.chips i{display:block;height:calc(.6 * var(--s) * 1px);border-radius:calc(.14 * var(--s) * 1px);background:#E7ECF7;
+  will-change:background-color,opacity,transform}
+.bank .bf{margin-top:calc(.85 * var(--s) * 1px);font-size:calc(1.02 * var(--s) * 1px);color:var(--cardsub)}
+.bank .bf em{font-style:normal;font-family:var(--display);font-weight:900;font-size:calc(1.5 * var(--s) * 1px);
+  color:var(--blue);letter-spacing:-.02em}
+.stack{display:flex;flex-direction:column;gap:calc(.7 * var(--s) * 1px)}
+.mini{background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.4 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(.78 * var(--s) * 1px) calc(.95 * var(--s) * 1px);
+  text-align:left;flex:1 1 0;display:flex;flex-direction:column;justify-content:center;will-change:transform,opacity,box-shadow}
+.mini .tag{margin-bottom:calc(.32 * var(--s) * 1px);align-self:flex-start}
+.mini b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.34 * var(--s) * 1px);color:var(--fg);line-height:1.1}
+.mini span{display:block;margin-top:calc(.2 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub);line-height:1.35}
+.prov{display:flex;align-items:center;justify-content:center;gap:calc(.9 * var(--s) * 1px);flex-wrap:wrap;
+  font-size:calc(1.04 * var(--s) * 1px);color:var(--sub);font-weight:600;will-change:transform,opacity}
+.prov i{display:block;width:calc(1.5 * var(--s) * 1px);height:calc(.1 * var(--s) * 1px);background:var(--rule)}
+
+/* ---------------------------------------------------------------------------
+   s6 · the forge — one question is followed through all four judges. Watching
+   a single item pass a visible process does more for trust in the rest of the
+   bank than any adjective could.
+--------------------------------------------------------------------------- */
+.forge{display:grid;grid-template-columns:1fr 1.3fr;gap:calc(1.6 * var(--s) * 1px);width:100%;align-items:center}
+.qcard{position:relative;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.1 * var(--s) * 1px);text-align:left;
+  will-change:transform,opacity,box-shadow}
+.qh{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  font-size:calc(.82 * var(--s) * 1px);color:var(--blue)}
+.qdot{width:calc(.42 * var(--s) * 1px);height:calc(.42 * var(--s) * 1px);border-radius:50%;background:var(--blue);
+  display:inline-block;will-change:opacity,transform}
+.ql{height:calc(.5 * var(--s) * 1px);border-radius:calc(.25 * var(--s) * 1px);background:#E7ECF7;margin-top:calc(.6 * var(--s) * 1px);
+  transform-origin:left center;will-change:transform,opacity}
+.ql.l1{width:100%}.ql.l2{width:92%}.ql.l3{width:64%}
+.qo{display:grid;grid-template-columns:1fr 1fr;gap:calc(.45 * var(--s) * 1px);margin-top:calc(.95 * var(--s) * 1px)}
+.qo i{display:block;height:calc(1.5 * var(--s) * 1px);border-radius:calc(.28 * var(--s) * 1px);border:1px solid var(--cardbd);
+  background:#FAFBFE;transform-origin:left center;will-change:opacity,transform}
+.qstamp{position:absolute;right:calc(1.0 * var(--s) * 1px);bottom:calc(1.0 * var(--s) * 1px);
+  font-family:var(--display);font-weight:900;font-size:calc(1.0 * var(--s) * 1px);letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;background:var(--blue);border-radius:calc(.28 * var(--s) * 1px);
+  padding:calc(.28 * var(--s) * 1px) calc(.7 * var(--s) * 1px);will-change:transform,opacity}
+.gates{position:relative;display:flex;flex-direction:column;gap:calc(.6 * var(--s) * 1px);text-align:left}
+.spine{position:absolute;left:calc(1.03 * var(--s) * 1px);top:calc(1.0 * var(--s) * 1px);bottom:calc(1.0 * var(--s) * 1px);
+  width:calc(.14 * var(--s) * 1px);background:var(--track);border-radius:calc(.07 * var(--s) * 1px);overflow:hidden}
+.spinefill{width:100%;height:100%;background:var(--blue);transform-origin:top center;will-change:transform}
+.gate{position:relative;display:flex;align-items:flex-start;gap:calc(.85 * var(--s) * 1px);will-change:transform,opacity}
+.gtick{position:relative;z-index:1;flex:0 0 auto;width:calc(2.1 * var(--s) * 1px);height:calc(2.1 * var(--s) * 1px);border-radius:50%;
+  background:var(--card);border:calc(.14 * var(--s) * 1px) solid var(--cardbd);display:flex;align-items:center;justify-content:center;
+  will-change:background-color,border-color,transform}
+.gtick b{font-family:var(--display);font-weight:900;font-size:calc(1.0 * var(--s) * 1px);will-change:color}
+.gt{padding-top:calc(.14 * var(--s) * 1px)}
+.gt b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.3 * var(--s) * 1px);color:var(--fg);line-height:1.12}
+.gt span{display:block;margin-top:calc(.14 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--cardsub);line-height:1.35}
+
+/* ---------------------------------------------------------------------------
+   s7 · the coach — the beam makes "it reads your screen" legible in a way the
+   sentence cannot, and the mock bar is the restraint signal: a product that
+   visibly declines to help where help would be cheating.
+--------------------------------------------------------------------------- */
+.coach{display:grid;grid-template-columns:1.05fr 1fr;gap:calc(1.3 * var(--s) * 1px);width:100%;align-items:stretch}
+.qpanel{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--cardbd);
+  border-top:calc(.2 * var(--s) * 1px) solid var(--blue);border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);
+  padding:calc(1.05 * var(--s) * 1px);padding-bottom:calc(3.0 * var(--s) * 1px);text-align:left;will-change:transform,opacity}
+.qtop{display:flex;justify-content:space-between;align-items:baseline;font-size:calc(.88 * var(--s) * 1px);
+  color:var(--cardsub);font-weight:600}
+.qtop .clock{font-family:var(--display);font-weight:800;color:var(--red);letter-spacing:.04em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:calc(.5 * var(--s) * 1px);margin-top:calc(1.0 * var(--s) * 1px)}
+.opt{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);height:calc(1.85 * var(--s) * 1px);
+  border:1px solid var(--cardbd);border-radius:calc(.3 * var(--s) * 1px);background:#FAFBFE;padding:0 calc(.6 * var(--s) * 1px)}
+.opt b{font-family:var(--display);font-weight:800;font-size:calc(.94 * var(--s) * 1px);color:var(--foot)}
+.opt i{display:block;flex:1 1 auto;height:calc(.36 * var(--s) * 1px);border-radius:calc(.18 * var(--s) * 1px);background:#E7ECF7}
+.beam{position:absolute;top:0;bottom:0;width:calc(7 * var(--s) * 1px);pointer-events:none;will-change:transform,opacity;opacity:0;
+  background:linear-gradient(90deg, rgba(41,95,237,0), rgba(41,95,237,.20), rgba(41,95,237,0));
+  border-right:calc(.1 * var(--s) * 1px) solid rgba(41,95,237,.5)}
+.scanlab{position:absolute;left:calc(1.05 * var(--s) * 1px);bottom:calc(.85 * var(--s) * 1px);
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:calc(.78 * var(--s) * 1px);color:var(--blue);
+  opacity:0;will-change:opacity,transform}
+.mockbar{position:absolute;left:calc(.7 * var(--s) * 1px);right:calc(.7 * var(--s) * 1px);bottom:calc(.7 * var(--s) * 1px);
+  background:var(--red);color:#fff;text-align:center;border-radius:calc(.3 * var(--s) * 1px);
+  font-family:var(--display);font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  font-size:calc(.88 * var(--s) * 1px);padding:calc(.48 * var(--s) * 1px);opacity:0;will-change:transform,opacity;
+  box-shadow:0 calc(.3 * var(--s) * 1px) calc(1.0 * var(--s) * 1px) rgba(229,69,63,.28)}
+.chat{position:relative;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.0 * var(--s) * 1px);
+  text-align:left;display:flex;flex-direction:column;gap:calc(.5 * var(--s) * 1px);will-change:transform,opacity,filter}
+.chead{display:flex;align-items:center;gap:calc(.62 * var(--s) * 1px)}
+.cav{flex:0 0 auto;width:calc(2.2 * var(--s) * 1px);height:calc(2.2 * var(--s) * 1px);border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:transform,box-shadow}
+.cwho b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.16 * var(--s) * 1px);color:var(--fg);line-height:1.1}
+.cwho span{display:block;font-size:calc(.86 * var(--s) * 1px);color:var(--cardsub)}
+.wave{margin-left:auto;display:flex;align-items:center;gap:calc(.16 * var(--s) * 1px);height:calc(1.7 * var(--s) * 1px);
+  opacity:0;will-change:opacity}
+.wave i{display:block;width:calc(.2 * var(--s) * 1px);border-radius:calc(.1 * var(--s) * 1px);background:var(--blue);
+  height:30%;will-change:height}
+.msg{max-width:88%;font-size:calc(1.02 * var(--s) * 1px);line-height:1.4;
+  padding:calc(.55 * var(--s) * 1px) calc(.78 * var(--s) * 1px);border-radius:calc(.5 * var(--s) * 1px);
+  will-change:transform,opacity}
+.msg.them{background:#EEF3FF;color:var(--fg);border-bottom-left-radius:calc(.16 * var(--s) * 1px);align-self:flex-start}
+.msg.me{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:calc(.16 * var(--s) * 1px)}
+.chat .langs{margin-top:auto;padding-top:calc(.5 * var(--s) * 1px)}
+
+/* --- a real question, set as a real question ------------------------------
+   The film now shows a properly formed item rather than grey bars, because a
+   product that will not show you its own content is asking to be doubted. It is
+   written for the film; see the comment above s7 in the markup. --------------- */
+.qtext{font-size:calc(1.02 * var(--s) * 1px);line-height:1.5;color:var(--fg);margin-top:calc(.7 * var(--s) * 1px)}
+.qtext b{font-weight:700;color:var(--fg)}
+.qtext.sm{font-size:calc(.92 * var(--s) * 1px);line-height:1.45}
+.opts .opt span{flex:1 1 auto;font-size:calc(.94 * var(--s) * 1px);color:var(--sub);line-height:1.25}
+.opts.sm .opt{height:auto;min-height:calc(1.7 * var(--s) * 1px);padding:calc(.32 * var(--s) * 1px) calc(.6 * var(--s) * 1px)}
+.opts.sm .opt span{font-size:calc(.86 * var(--s) * 1px)}
+.opt.pick{background:var(--tint);border-color:var(--blue)}
+.opt.pick b,.opt.pick span{color:var(--blue)}
+
+/* ---------------------------------------------------------------------------
+   s8 · study with a peer. One shared screen, two people on it, and a third
+   seat left open — that third seat is the feature, so it is on screen the whole
+   time rather than arriving as an afterthought.
+--------------------------------------------------------------------------- */
+.meet{display:grid;grid-template-columns:1.6fr 1fr;gap:calc(1.2 * var(--s) * 1px);width:100%;align-items:stretch}
+.stage2{position:relative;background:var(--card);border:1px solid var(--cardbd);
+  border-top:calc(.2 * var(--s) * 1px) solid var(--blue);border-radius:calc(.5 * var(--s) * 1px);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;will-change:transform,opacity}
+.mtop{display:flex;align-items:center;justify-content:space-between;padding:calc(.62 * var(--s) * 1px) calc(.85 * var(--s) * 1px);
+  border-bottom:1px solid var(--cardbd);background:#F7F9FE}
+.mlab{display:flex;align-items:center;gap:calc(.42 * var(--s) * 1px);font-size:calc(.88 * var(--s) * 1px);
+  font-weight:700;color:var(--blue)}
+.mlab .sd{width:calc(.8 * var(--s) * 1px);height:calc(.58 * var(--s) * 1px);border:calc(.11 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.1 * var(--s) * 1px);display:block}
+.mscreen{position:relative;flex:1 1 auto;margin:calc(.7 * var(--s) * 1px);padding:calc(.8 * var(--s) * 1px);
+  border:calc(.14 * var(--s) * 1px) solid var(--blue);border-radius:calc(.36 * var(--s) * 1px);
+  background:#fff;overflow:hidden;will-change:box-shadow}
+.mscreen .qtop{border:0;padding:0;background:none;margin-bottom:calc(.2 * var(--s) * 1px)}
+/* two live cursors, because that is what shared control actually looks like */
+.cursor{position:absolute;left:0;top:0;display:flex;align-items:flex-start;gap:calc(.2 * var(--s) * 1px);
+  pointer-events:none;will-change:left,top,opacity;opacity:0}
+.cursor i{width:0;height:0;border-left:calc(.42 * var(--s) * 1px) solid var(--blue);
+  border-bottom:calc(.62 * var(--s) * 1px) solid transparent;border-right:calc(.2 * var(--s) * 1px) solid transparent;display:block}
+.cursor em{font-style:normal;font-size:calc(.66 * var(--s) * 1px);font-weight:700;color:#fff;background:var(--blue);
+  border-radius:calc(.16 * var(--s) * 1px);padding:calc(.06 * var(--s) * 1px) calc(.26 * var(--s) * 1px);
+  transform:translateY(calc(.3 * var(--s) * 1px))}
+.cursor.two i{border-left-color:#7C4DD4}
+.cursor.two em{background:#7C4DD4}
+.side2{display:flex;flex-direction:column;gap:calc(.6 * var(--s) * 1px);text-align:left}
+.peer{display:flex;align-items:center;gap:calc(.66 * var(--s) * 1px);background:var(--card);
+  border:1px solid var(--cardbd);border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);
+  padding:calc(.66 * var(--s) * 1px) calc(.8 * var(--s) * 1px);will-change:transform,opacity,box-shadow}
+.peer .face{width:calc(2.5 * var(--s) * 1px);height:calc(2.5 * var(--s) * 1px);border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:900;font-size:calc(.95 * var(--s) * 1px)}
+.peer .f1{background:#2F6BEE}.peer .f2{background:#7C4DD4}
+.peer .face.plus{background:var(--card);border:calc(.14 * var(--s) * 1px) dashed var(--blue);color:var(--blue);
+  font-size:calc(1.5 * var(--s) * 1px)}
+.peer .pn b{display:block;font-family:var(--display);font-weight:800;font-size:calc(1.1 * var(--s) * 1px);color:var(--fg);line-height:1.15}
+.peer .pn span{display:block;font-size:calc(.84 * var(--s) * 1px);color:var(--cardsub)}
+.peer .mic{margin-left:auto;width:calc(.5 * var(--s) * 1px);height:calc(.9 * var(--s) * 1px);border-radius:calc(.25 * var(--s) * 1px);
+  background:var(--cardbd);display:block;will-change:background-color,transform}
+.peer.invite{border-style:dashed;border-color:var(--blue);background:#FBFCFF;box-shadow:none}
+.mnote{margin-top:auto;font-size:calc(.98 * var(--s) * 1px);color:var(--cardsub);line-height:1.4;will-change:opacity,transform}
+
+/* ---------------------------------------------------------------------------
+   s9 · readiness. One measure, one axis, no numbers: the chart illustrates the
+   feature, it does not promise a score. Red is spent on the single flagged gap.
+--------------------------------------------------------------------------- */
+.an{display:grid;grid-template-columns:1.32fr 1fr;gap:calc(1.3 * var(--s) * 1px);width:100%;align-items:stretch}
+.chart{position:relative;background:var(--card);border:1px solid var(--cardbd);border-top:calc(.2 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.42 * var(--s) * 1px);box-shadow:var(--shadow);padding:calc(1.0 * var(--s) * 1px);text-align:left;
+  display:flex;flex-direction:column;will-change:transform,opacity}
+.ch{display:flex;align-items:baseline;justify-content:space-between}
+.ch b{font-family:var(--display);font-weight:800;font-size:calc(1.24 * var(--s) * 1px);color:var(--fg)}
+.ch span{font-size:calc(.8 * var(--s) * 1px);color:var(--foot);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+#rsvg{width:100%;flex:1 1 auto;margin-top:calc(.7 * var(--s) * 1px);display:block}
+#rsvg .thr{stroke:#C9D3E8;stroke-width:2;stroke-dasharray:7 6;vector-effect:non-scaling-stroke}
+#rpath{fill:none;stroke:var(--blue);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#rarea{fill:rgba(41,95,237,.10);stroke:none}
+.chart .dot{position:absolute;top:0;left:0;width:calc(.7 * var(--s) * 1px);height:calc(.7 * var(--s) * 1px);border-radius:50%;
+  background:var(--blue);box-shadow:0 0 0 calc(.2 * var(--s) * 1px) #fff;opacity:0;will-change:transform,opacity}
+.thrlab{position:absolute;left:calc(1.35 * var(--s) * 1px);font-weight:700;font-size:calc(.8 * var(--s) * 1px);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--foot);background:var(--card);padding:0 calc(.3 * var(--s) * 1px);
+  opacity:0;will-change:opacity}
+.doms{position:relative;display:flex;flex-direction:column;justify-content:center;gap:calc(.68 * var(--s) * 1px);text-align:left}
+.dom span{display:block;font-size:calc(.98 * var(--s) * 1px);color:var(--sub);font-weight:600;margin-bottom:calc(.26 * var(--s) * 1px)}
+.dom .bar{height:calc(.6 * var(--s) * 1px);border-radius:calc(.3 * var(--s) * 1px);background:var(--track);overflow:hidden}
+.dom .bar i{display:block;height:100%;border-radius:calc(.3 * var(--s) * 1px);background:var(--blue);
+  transform-origin:left center;transform:scaleX(0);will-change:transform,background-color}
+.gaplab{font-size:calc(.9 * var(--s) * 1px);color:var(--red);font-weight:700;opacity:0;will-change:opacity,transform}
+.verdict{margin-top:calc(1.1 * var(--s) * 1px);font-family:var(--display);font-weight:800;line-height:1.14;
+  font-size:calc(1.85 * var(--s) * 1px);letter-spacing:-.02em;color:var(--sub);will-change:transform,opacity}
+.verdict em{font-style:normal;color:var(--blue)}
+.verdict em{font-style:normal;color:var(--blue)}
+
+/* ---------- presenter ---------- */
+.shot.presenter{flex-direction:row;align-items:center;justify-content:center;gap:calc(3.0 * var(--s) * 1px);text-align:left}
+.pres{position:relative;overflow:hidden;flex:0 0 auto;width:calc(50 * var(--s) * 1px);aspect-ratio:16 / 9;
+  border-radius:calc(.6 * var(--s) * 1px);background:#0B1B3F;will-change:transform,opacity;
+  box-shadow:0 calc(1.2 * var(--s) * 1px) calc(3 * var(--s) * 1px) rgba(11,18,32,.18)}
+.pres img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pres .live{position:absolute;left:calc(1 * var(--s) * 1px);top:calc(.9 * var(--s) * 1px);display:flex;align-items:center;gap:calc(.45 * var(--s) * 1px);
+  font-weight:700;font-size:calc(.85 * var(--s) * 1px);letter-spacing:.12em;color:#fff;background:rgba(11,18,32,.55);
+  border-radius:calc(1 * var(--s) * 1px);padding:calc(.25 * var(--s) * 1px) calc(.7 * var(--s) * 1px)}
+.pres .live i{width:calc(.55 * var(--s) * 1px);height:calc(.55 * var(--s) * 1px);border-radius:50%;background:var(--red);display:inline-block}
+.side{display:flex;flex-direction:column;gap:calc(.7 * var(--s) * 1px);align-items:flex-start;flex:0 1 auto;max-width:calc(30 * var(--s) * 1px)}
+.side .t{font-family:var(--display);font-weight:800;font-size:calc(1.0 * var(--s) * 1px);letter-spacing:.18em;color:var(--blue);text-transform:uppercase;will-change:transform,opacity}
+.side h3{font-size:calc(2.15 * var(--s) * 1px);will-change:transform,opacity}
+.side h3.b{color:var(--fg)}
+.side h3.a{color:var(--sub);font-weight:800}
+.side h3.a em{color:var(--fg)}
+.side .sub{font-size:calc(1.4 * var(--s) * 1px);max-width:none;will-change:transform,opacity}
+
+/* ---------- end card ---------- */
+#endcard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;background:var(--ground);padding:0 calc(9 * var(--s) * 1px);will-change:opacity}
+#endcard #glowend{position:absolute;inset:-20%;background:radial-gradient(closest-side, rgba(41,95,237,.13), rgba(41,95,237,0) 70%);transform:translate(0,-16%)}
+#endcard > *{position:relative}
+#endlogo{width:calc(28 * var(--s) * 1px);height:auto;will-change:transform,opacity}
+#endcard h3{margin-top:calc(2.0 * var(--s) * 1px);will-change:transform,opacity}
+#endcard .url{font-family:var(--display);font-weight:800;font-size:calc(2.5 * var(--s) * 1px);color:var(--blue);margin-top:calc(1.4 * var(--s) * 1px);will-change:transform,opacity}
+#endcard .legal{font-weight:400;font-size:calc(.9 * var(--s) * 1px);color:var(--foot);line-height:1.5;max-width:calc(72 * var(--s) * 1px);margin-top:calc(2.2 * var(--s) * 1px);will-change:transform,opacity}
+
+/* ---------- furniture ---------- */
+#topbar{position:absolute;left:calc(9 * var(--s) * 1px);top:calc(5.4 * var(--s) * 1px);will-change:opacity;display:flex;align-items:center;gap:calc(1.0 * var(--s) * 1px)}
+#topbar img{width:calc(11.5 * var(--s) * 1px);height:auto;display:block}
+#topbar .s{font-weight:600;font-size:calc(.88 * var(--s) * 1px);color:var(--foot);line-height:1.3;border-left:calc(.1 * var(--s) * 1px) solid var(--rule);padding-left:calc(.8 * var(--s) * 1px);text-align:left}
+#chapter{position:absolute;right:calc(9 * var(--s) * 1px);top:calc(6.0 * var(--s) * 1px);text-align:right;will-change:opacity}
+#chapter .n{font-family:var(--display);font-weight:800;font-size:calc(1.0 * var(--s) * 1px);color:var(--red);letter-spacing:.18em}
+#chapter .c{font-weight:700;font-size:calc(1.16 * var(--s) * 1px);color:var(--fg);letter-spacing:.03em;margin-top:calc(.2 * var(--s) * 1px)}
+#footrule{position:absolute;left:calc(9 * var(--s) * 1px);right:calc(9 * var(--s) * 1px);bottom:calc(4.6 * var(--s) * 1px);height:calc(.2 * var(--s) * 1px);background:var(--track);border-radius:calc(.1 * var(--s) * 1px);overflow:hidden}
+#progress{height:100%;width:100%;background:var(--red);transform-origin:left center}
+#footl{position:absolute;left:calc(9 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;color:var(--foot);font-weight:700}
+#footr{position:absolute;right:calc(9 * var(--s) * 1px);bottom:calc(2.7 * var(--s) * 1px);font-size:calc(.94 * var(--s) * 1px);color:var(--foot);font-weight:500}
+
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;padding:0 calc(10 * var(--s) * 1px);pointer-events:none}
+#ccbox{background:var(--ccbg);border-bottom:calc(.26 * var(--s) * 1px) solid var(--blue);box-shadow:0 calc(.4 * var(--s) * 1px) calc(1.4 * var(--s) * 1px) rgba(11,18,32,.10);
+  padding:calc(.85 * var(--s) * 1px) calc(1.5 * var(--s) * 1px);font-weight:600;color:var(--ccfg);
+  text-align:center;white-space:pre-line;font-size:calc(1.66 * var(--s) * 1px);line-height:1.35;max-width:100%;border-radius:calc(.3 * var(--s) * 1px) calc(.3 * var(--s) * 1px) 0 0}
+
+/* ---------- square ---------- */
+#stage.sq h2{font-size:calc(3.2 * var(--s) * 1px)}
+#stage.sq h3{font-size:calc(2.4 * var(--s) * 1px)}
+#stage.sq .wall{max-width:calc(52 * var(--s) * 1px);gap:calc(.8 * var(--s) * 1px)}
+#stage.sq .lg{width:calc(12.4 * var(--s) * 1px);height:calc(7.0 * var(--s) * 1px)}
+#stage.sq .lg .wm{font-size:calc(2.0 * var(--s) * 1px)}
+#stage.sq .lockup{flex-direction:column;gap:calc(1.2 * var(--s) * 1px);padding:calc(1.8 * var(--s) * 1px) calc(2.2 * var(--s) * 1px)}
+#stage.sq .flow .step,#stage.sq .cards .card{width:calc(24.6 * var(--s) * 1px)}
+#stage.sq .cards.three .card{width:calc(24.6 * var(--s) * 1px)}
+#stage.sq .ai{grid-template-columns:1fr;gap:calc(.9 * var(--s) * 1px)}
+#stage.sq .meet{grid-template-columns:1fr;gap:calc(.9 * var(--s) * 1px)}
+#stage.sq .panel{padding:calc(1.0 * var(--s) * 1px) calc(1.2 * var(--s) * 1px)}
+#stage.sq .panel h4{font-size:calc(1.5 * var(--s) * 1px)}
+#stage.sq .steps li{font-size:calc(.98 * var(--s) * 1px)}
+#stage.sq .price .big{font-size:calc(6.4 * var(--s) * 1px)}
+#stage.sq .shot.presenter{flex-direction:column;gap:calc(1.4 * var(--s) * 1px);text-align:center}
+#stage.sq .pres{width:calc(44 * var(--s) * 1px)}
+#stage.sq .side{align-items:center;max-width:calc(46 * var(--s) * 1px);text-align:center}
+#stage.sq #endlogo{width:calc(24 * var(--s) * 1px)}
+
+/* ---------- vertical ---------- */
+#stage.pt .shot{padding-left:calc(4.5 * var(--s) * 1px);padding-right:calc(4.5 * var(--s) * 1px)}
+#stage.pt h2{font-size:calc(3.4 * var(--s) * 1px)}
+#stage.pt h3{font-size:calc(2.5 * var(--s) * 1px)}
+#stage.pt .wall{max-width:calc(45 * var(--s) * 1px);gap:calc(.8 * var(--s) * 1px)}
+#stage.pt .lg{width:calc(21.6 * var(--s) * 1px);height:calc(10.4 * var(--s) * 1px)}
+#stage.pt .lg .wm{font-size:calc(2.6 * var(--s) * 1px)}
+#stage.pt .lockup{flex-direction:column;gap:calc(1.4 * var(--s) * 1px)}
+#stage.pt .flow .step,#stage.pt .cards .card,#stage.pt .cards.three .card{width:calc(46 * var(--s) * 1px)}
+#stage.pt .ai{grid-template-columns:1fr;gap:calc(1.1 * var(--s) * 1px);width:calc(50 * var(--s) * 1px)}
+#stage.pt .meet{grid-template-columns:1fr;gap:calc(1.1 * var(--s) * 1px);width:calc(50 * var(--s) * 1px)}
+#stage.pt .price{flex-direction:column;align-items:center;gap:calc(.8 * var(--s) * 1px)}
+#stage.pt .price .lbl{text-align:center;max-width:calc(40 * var(--s) * 1px)}
+#stage.pt .shot.presenter{flex-direction:column;gap:calc(2.0 * var(--s) * 1px);text-align:center}
+#stage.pt .pres{width:calc(52 * var(--s) * 1px)}
+#stage.pt .side{align-items:center;max-width:calc(50 * var(--s) * 1px);text-align:center}
+#stage.pt .sub,#stage.pt .note{max-width:calc(50 * var(--s) * 1px)}
+#stage.pt #chapter{display:none}
+#stage.pt #cc{padding:0 calc(4.5 * var(--s) * 1px)}
+#stage.pt #endcard .legal{max-width:calc(50 * var(--s) * 1px)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div><div id="glow2"></div>
+  <svg id="grid" preserveAspectRatio="none"></svg>
+  <div id="glowsweep"></div>
+  <div id="vig"></div>
+
+  <!-- 1 · late (presenter) -->
+  <section class="shot presenter" id="s1">
+    <div class="pres" data-a="1"><img id="pres1" src="../assets/presenter-a.png" alt=""><div class="live"><i></i>CERTUVO</div></div>
+    <div class="side">
+      <div class="t" data-a="1">Still here</div>
+      <h3 class="a" data-a="1">Reading the same page. <em>For the third time.</em></h3>
+      <h3 class="b" data-a="1">Everyone who ever earned those letters <em>did exactly this.</em></h3>
+    </div>
+  </section>
+
+  <!-- 2 · what it is worth -->
+  <section class="shot" id="s2">
+    <div class="eyebrow" data-a="1">The difference</div>
+    <div class="lines" style="margin-top:calc(1.6*var(--s)*1px)">
+      <h3 class="l" style="color:var(--sub);font-weight:800">Here's the thing nobody tells you.</h3>
+      <h2 class="l" style="margin-top:calc(1.1*var(--s)*1px)">The ones who pass and the ones<br>who keep re-sitting</h2>
+      <h2 class="l"><i>aren't divided by effort.</i></h2>
+      <h3 class="l" style="margin-top:calc(1.5*var(--s)*1px)">They all work hard.</h3>
+    </div>
+  </section>
+
+  <!-- 3 · the credential wall -->
+  <section class="shot" id="s3">
+    <div class="eyebrow" data-a="1">Ten credentials</div>
+    <div class="wall" style="margin-top:calc(1.8*var(--s)*1px)">
+      <div class="lg"><img src="../assets/logos/trim-cma.png" alt="CMA"></div>
+      <div class="lg"><img src="../assets/logos/trim-cpa.png" alt="CPA"></div>
+      <div class="lg"><img src="../assets/logos/trim-cfa.png" alt="CFA Institute"></div>
+      <div class="lg"><img src="../assets/logos/trim-cia.png" alt="Certified Internal Auditor"></div>
+      <div class="lg"><img src="../assets/logos/trim-cisa.png" alt="CISA"></div>
+      <div class="lg"><div class="wm">PMP<sup style="font-size:.32em;vertical-align:super">®</sup></div><div class="wmsub">Project Management Professional</div></div>
+      <div class="lg"><img src="../assets/logos/trim-nclex.png" alt="NCLEX"></div>
+      <div class="lg"><div class="wm">PCL<em>-AI</em></div><div class="wmsub">Project Controls Leader</div></div>
+      <div class="lg"><div class="wm">PML<em>-AI</em></div><div class="wmsub">Project Management Leader</div></div>
+      <div class="lg"><div class="wm">PFL<em>-AI</em></div><div class="wmsub">Project Finance Leader</div></div>
+    </div>
+    <h3 data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Ten credentials. <em>One platform.</em></h3>
+  </section>
+
+  <!-- 4 · official partner -->
+  <section class="shot" id="s4">
+    <div class="eyebrow" data-a="1">Official training partner</div>
+    <div class="lockup" data-a="1" style="margin-top:calc(1.8*var(--s)*1px)">
+      <img class="cv" src="../brand/certuvo-logo-blue.png" alt="Certuvo">
+      <div class="x">×</div>
+      <img class="pci" src="../assets/logos/trim-pci.png" alt="PCI AI">
+    </div>
+    <h3 data-a="1" style="margin-top:calc(2.0*var(--s)*1px)">Certuvo is the official training partner of <em>PCI AI</em></h3>
+    <div class="note" data-a="1" style="margin-top:calc(1.0*var(--s)*1px)">The Project Controls Institute — PCL-AI, PML-AI and PFL-AI</div>
+  </section>
+
+  <!-- 5 · already inside — the bank fills, then the other three land -->
+  <section class="shot" id="s5">
+    <div class="eyebrow" data-a="1">Already inside every course</div>
+    <div class="inside" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="bank" data-a="1">
+        <div class="bh"><b>Verified questions</b><span>every one checked before a student sees it</span></div>
+        <div class="chips" id="chips"></div>
+        <div class="bf"><em id="bankn">Thousands</em> already in the bank</div>
+      </div>
+      <div class="stack">
+        <div class="mini" data-a="1"><div class="tag">01</div><b>Mock exams</b><span>Full-length, under real timing</span></div>
+        <div class="mini" data-a="1"><div class="tag">02</div><b>Video lectures</b><span>Every domain, taught end to end</span></div>
+        <div class="mini" data-a="1"><div class="tag">03</div><b>Course notes</b><span>The ones you'll actually keep</span></div>
+      </div>
+    </div>
+    <div class="prov" data-a="1" style="margin-top:calc(1.3*var(--s)*1px)">
+      <span>Researched</span><i></i><span>Mapped to the blueprint</span><i></i><span>In the exam's own weightings</span>
+    </div>
+  </section>
+
+  <!-- 6 · the forge — one question walks four judges -->
+  <section class="shot" id="s6">
+    <div class="eyebrow" data-a="1">AI Question Forge</div>
+    <h3 data-a="1" style="margin-top:calc(.9*var(--s)*1px)">Unlimited new questions. <em>Four AI judges.</em></h3>
+    <div class="forge" style="margin-top:calc(1.5*var(--s)*1px)">
+      <div class="qcard" id="qcard">
+        <div class="qh"><span id="qstate">Writing…</span><i class="qdot" id="qdot"></i></div>
+        <div class="ql l1"></div><div class="ql l2"></div><div class="ql l3"></div>
+        <div class="qo"><i></i><i></i><i></i><i></i></div>
+        <div class="qstamp" id="qstamp">Approved</div>
+      </div>
+      <div class="gates">
+        <div class="spine"><div class="spinefill" id="spinefill"></div></div>
+        <div class="gate" id="g1"><div class="gtick"><b>1</b></div><div class="gt"><b>Generated</b><span>the question, four options and the explanation</span></div></div>
+        <div class="gate" id="g2"><div class="gtick"><b>2</b></div><div class="gt"><b>Answer verified</b><span>re-solved independently</span></div></div>
+        <div class="gate" id="g3"><div class="gtick"><b>3</b></div><div class="gt"><b>Checked for ambiguity</b><span>anything unclear is rejected</span></div></div>
+        <div class="gate" id="g4"><div class="gtick"><b>4</b></div><div class="gt"><b>Matched to the blueprint</b><span>the exam's current weighting</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · the coach — reads a REAL question, then stands down for a mock.
+
+       The question below is written for this film, not lifted from any awarding
+       body's published paper: reproducing an institute's question would be their
+       copyright even where it is free to read. It is a properly formed
+       absorption-costing item and it works out: $480,000 / 60,000 = $8 a unit,
+       applied 54,000 x $8 = $432,000, under-absorbed by $48,000, so B. Anyone
+       who pauses the film and does the arithmetic finds it correct — which is
+       the whole point of showing a real one. -->
+  <section class="shot" id="s7">
+    <div class="eyebrow" data-a="1">AI Coach</div>
+    <div class="coach" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="qpanel" id="qpanel">
+        <div class="qtop"><span>Question 14 of 40 · Cost management</span><span class="clock" id="qclock">23:07</span></div>
+        <p class="qtext">A company applies fixed manufacturing overhead using a rate based on budgeted
+          production of <b>60,000 units</b>. Budgeted fixed overhead is <b>$480,000</b>. Actual production
+          was <b>54,000 units</b>.<br>Under absorption costing, what is the fixed overhead <b>volume variance</b>?</p>
+        <div class="opts">
+          <div class="opt" id="oA"><b>A</b><span>$48,000 favourable</span></div>
+          <div class="opt" id="oB"><b>B</b><span>$48,000 unfavourable</span></div>
+          <div class="opt" id="oC"><b>C</b><span>$54,000 unfavourable</span></div>
+          <div class="opt" id="oD"><b>D</b><span>Nil — no volume variance arises</span></div>
+        </div>
+        <div class="beam" id="beam"></div>
+        <div class="scanlab" id="scanlab">Reading your screen</div>
+        <div class="mockbar" id="mockbar">Mock exam — Coach off</div>
+      </div>
+      <div class="chat" id="chat">
+        <div class="chead">
+          <div class="cav" id="cav"></div>
+          <div class="cwho"><b>AI Coach</b><span id="cstat">Connecting…</span></div>
+          <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="msg them" id="m1">I can see it — $480,000 over 60,000 budgeted units.</div>
+        <div class="msg me" id="m2">Do I use budgeted units or actual?</div>
+        <div class="msg them" id="m3">Before I answer: the rate is set once, in advance. Which of the two numbers was known then?</div>
+        <div class="langs" id="langs"><b>Six languages</b> · English · العربية · Français · Español · हिन्दी · Русский</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · study with a peer.
+
+       CORRECTED FEATURE. There are no chat rooms and no cohort lobby. What
+       Certuvo has is a two-person study session: one student shares their
+       screen the way they would on a call, the other sees the same question at
+       the same second, and either can invite a friend in. The scene is built to
+       show exactly that and nothing more, because the previous version showed a
+       feature that does not exist. -->
+  <section class="shot" id="s8">
+    <div class="eyebrow" data-a="1">Study with a peer</div>
+    <div class="meet" style="margin-top:calc(1.3*var(--s)*1px)">
+      <div class="stage2" id="stage2">
+        <div class="mtop">
+          <span class="mlab"><i class="sd"></i>Amara is sharing her screen</span>
+          <span class="live2" id="mlive"><i></i>Live</span>
+        </div>
+        <div class="mscreen" id="mscreen">
+          <div class="qtop"><span>Question 14 of 40 · Cost management</span><span>Shared</span></div>
+          <p class="qtext sm">Budgeted fixed overhead <b>$480,000</b> over <b>60,000 units</b>.
+            Actual production <b>54,000 units</b>. What is the fixed overhead <b>volume variance</b>?</p>
+          <div class="opts sm">
+            <div class="opt" id="mA"><b>A</b><span>$48,000 favourable</span></div>
+            <div class="opt" id="mB"><b>B</b><span>$48,000 unfavourable</span></div>
+          </div>
+          <div class="cursor" id="cur1"><i></i><em>Amara</em></div>
+          <div class="cursor two" id="cur2"><i></i><em>Jonas</em></div>
+        </div>
+      </div>
+      <div class="side2">
+        <div class="peer" id="pr1"><div class="face f1">AK</div><div class="pn"><b>Amara</b><span>presenting</span></div><i class="mic on"></i></div>
+        <div class="peer" id="pr2"><div class="face f2">JD</div><div class="pn"><b>Jonas</b><span>speaking</span></div><i class="mic on"></i></div>
+        <div class="peer invite" id="pr3"><div class="face plus">+</div><div class="pn"><b>Bring a friend</b><span>send them a link</span></div></div>
+        <div class="mnote" id="mnote">Screen share · both cursors live</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · readiness — the curve, the gap, the line -->
+  <section class="shot" id="s9">
+    <div class="eyebrow" data-a="1">Readiness</div>
+    <div class="an" style="margin-top:calc(1.4*var(--s)*1px)">
+      <div class="chart">
+        <div class="ch"><b>Readiness over time</b><span>illustrative</span></div>
+        <svg id="rsvg" viewBox="0 0 620 250" preserveAspectRatio="none" aria-hidden="true">
+          <line class="thr" x1="0" y1="52" x2="620" y2="52"/>
+          <path id="rarea" d=""/>
+          <path id="rpath" d=""/>
+        </svg>
+        <div class="dot" id="rdot"></div>
+        <div class="thrlab" id="thrlab">Exam-ready</div>
+      </div>
+      <div class="doms">
+        <div class="dom" id="d1"><span>Planning &amp; budgeting</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d2"><span>Performance</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d3"><span>Cost management</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d4"><span>Internal controls</span><div class="bar"><i></i></div></div>
+        <div class="dom" id="d5"><span>Technology &amp; analytics</span><div class="bar"><i></i></div></div>
+        <div class="gaplab" id="gaplab">the gap you keep falling into</div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict">The question isn't how much you've read.<br><em>It's whether you're ready.</em></div>
+  </section>
+
+  <!-- 10 · price, then the smallest next step -->
+  <section class="shot" id="s10">
+    <div class="eyebrow" data-a="1">The price</div>
+    <h2 data-a="1" style="margin-top:calc(1.2*var(--s)*1px)">Less than the market asks.</h2>
+    <div class="sub" data-a="1" style="margin-top:calc(1.5*var(--s)*1px)">And if you're new — start free.</div>
+    <div class="cta" data-a="1" style="margin-top:calc(1.7*var(--s)*1px)">certuvo.com</div>
+  </section>
+
+  <!-- 11 · one platform (presenter → end card) -->
+  <section class="shot presenter" id="s11">
+    <div class="pres" data-a="1"><img id="pres11" src="../assets/presenter-a.png" alt=""><div class="live"><i></i>CERTUVO</div></div>
+    <div class="side">
+      <div class="t" data-a="1">The difference</div>
+      <h3 class="a" data-a="1">It was never how hard you work.</h3>
+      <h3 class="b" data-a="1">It's <em>what you work with.</em></h3>
+      <div class="sub" data-a="1" style="margin-top:calc(.5*var(--s)*1px)">Ten credentials. One platform. That's enough.</div>
+      <div class="tokens" data-a="1" style="margin-top:calc(.5*var(--s)*1px)">
+        <div class="tok solid">certuvo.com</div>
+      </div>
+    </div>
+  </section>
+
+  <div id="topbar"><img src="../brand/certuvo-logo-blue.png" alt="Certuvo">
+    <div class="s">Your exam partner<br>Official training partner of PCI AI</div></div>
+  <div id="chapter"><div class="n">01 / 11</div><div class="c">Late</div></div>
+  <div id="footrule"><div id="progress"></div></div>
+  <div id="footl">One platform. That's enough.</div>
+  <div id="footr">certuvo.com</div>
+
+  <div id="endcard">
+    <div id="glowend"></div>
+    <img id="endlogo" src="../brand/certuvo-logo-blue.png" alt="Certuvo" data-a="1">
+    <h3 data-a="1">Ten credentials. One platform.<br><em>That's enough.</em></h3>
+    <div class="url" data-a="1">certuvo.com</div>
+    <div class="legal" data-a="1">All third-party names and marks shown are the property of their respective owners. Certuvo is an independent preparation provider and is not affiliated with, sponsored by or endorsed by any of them, except PCI AI, whose official training partner it is. Preparation does not guarantee a pass.</div>
+  </div>
+
+  <div id="cc"><div id="ccbox"></div></div>
+</div>
+
+<script src="captions.data.js"></script>
+<script src="shots.data.js"></script>
+<script src="presenter.data.js"></script>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
+const CC = Q.get('cc') !== '0';
+const DUR = window.__DURATION;
+const RAW = window.__SHOTS, CAPS = window.__CAPTIONS || [];
+const PRES = window.__PRESENTER || {};
+
+const R = W / H;
+const ASPECT = R >= 1.40 ? '169' : (R >= 0.85 ? 'sq' : 'pt');
+const NOMINAL = ASPECT === '169' ? 1920 : ASPECT === 'sq' ? 1350 : 1180;
+const stage = document.getElementById('stage'), root = document.documentElement;
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+root.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+const SS = W / NOMINAL * 19.2;   // the px value of one --s unit, for JS-driven shadows
+if (ASPECT === 'sq'){ stage.classList.add('sq'); root.style.setProperty('--padb','20'); root.style.setProperty('--padt','12'); }
+if (ASPECT === 'pt'){ stage.classList.add('pt');
+  root.style.setProperty('--padb','30'); root.style.setProperty('--padt','14'); }
+
+/* Ground: the site's off-white, a shade cooler on the proof beats and warmer on
+   the human and closing beats, so two minutes does not sit on one flat wash. */
+const GROUND = {
+  s1:[247,248,251], s2:[245,247,251], s3:[243,246,252], s4:[244,246,252], s5:[243,246,252], s6:[245,247,251],
+  s7:[243,246,252], s8:[250,247,246], s9:[250,246,245], s10:[245,247,251], s11:[249,247,246]
+};
+const WARM = { s1:.2, s2:.3, s3:.1, s4:.15, s5:.1, s6:.2, s7:.1, s8:.7, s9:.8, s10:.25, s11:.5 };
+
+const SHOTS = RAW.map(([el, chap, a, b]) => {
+  const vs = (CAPS.find(c => c[0] >= a - 0.01) || [a])[0];
+  return { el, chap, in: a, out: b, vs, bg: GROUND[el] || [245,247,251], warm: WARM[el] ?? .2 };
+});
+
+(function grid(){
+  const g = document.getElementById('grid');
+  g.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const step = W / (ASPECT === 'pt' ? 12 : 24);
+  let d = '';
+  for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
+  for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
+  g.innerHTML = `<path d="${d}" stroke="rgba(11,18,32,.045)" stroke-width="1" fill="none"/>`
+    + `<path id="spark" d="" stroke="rgba(41,95,237,.16)" stroke-width="${(W/640).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
+  const pts = [], n = 140;
+  for (let i = 0; i <= n; i++){
+    const p = i / n, x = p * W;
+    const y = H * (0.82 - 0.56 * (1 / (1 + Math.exp(-(p - 0.5) * 8)))) + Math.sin(p * 9.3) * H * 0.014;
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const sp = g.querySelector('#spark');
+  sp.setAttribute('d', 'M' + pts.join('L'));
+  sp.__len = sp.getTotalLength(); sp.style.strokeDasharray = sp.__len;
+})();
+
+const LAST = SHOTS[SHOTS.length - 1];
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const outCubic=x=>1-Math.pow(1-x,3), outExpo=x=>x>=1?1:1-Math.pow(2,-10*x);
+const inOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const seg=(t,a,b,e)=>{const p=clamp((t-a)/(b-a),0,1);return (e||outCubic)(p);};
+const rgb=c=>`rgb(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)})`;
+const XF = 0.45;
+
+/* Cue sheet. Times are seconds after the scene's narration starts, measured
+   against the pauses in each take, so an item lands as it is spoken.
+   [selector, delay, stagger]; a repeated selector with stagger 0 addresses the
+   next matching element each time. */
+const CUES = {
+  s1:[['.pres',-0.7,0],['.side .t',0.4,0],['.side h3.a',1.1,0],['.side h3.b',8.5,0]],
+  /* s2 holds the loop open: the last line lands alone, then the film moves on */
+  s2:[['.eyebrow',-0.1,0],['.lines .l',0.1,0],['.lines .l',2.6,0],['.lines .l',5.2,0],['.lines .l',8.8,0]],
+  /* the wall lands one card per spoken acronym, then the PCI three */
+  s3:[['.eyebrow',-0.1,0],['.lg',0.25,0],['.lg',1.45,0],['.lg',2.75,0],['.lg',4.05,0],['.lg',5.30,0],['.lg',6.80,0],['.lg',8.10,0],
+      ['.lg',12.10,0],['.lg',13.85,0],['.lg',15.85,0],['h3',20.25,0]],
+  s4:[['.eyebrow',-0.1,0],['.lockup',0.2,0],['h3',1.6,0],['.note',3.4,0]],
+  s5:[['.eyebrow',-0.1,0],['.bank',0.05,0],['.mini',4.05,0],['.mini',7.35,0],['.mini',8.70,0],['.prov',11.45,0]],
+  s6:[['.eyebrow',-0.1,0],['h3',0.1,0],['.qcard',0.35,0]],
+  s7:[['.eyebrow',-0.1,0],['.qpanel',0.1,0],['.chat',1.6,0]],
+  s8:[['.eyebrow',-0.1,0]],
+  s9:[['.eyebrow',-0.1,0],['.chart',0.1,0],['.doms',3.5,0]],
+  s10:[['.eyebrow',-0.1,0],['h2',0.1,0],['.sub',3.55,0],['.cta',5.0,0]],
+  s11:[['.pres',-0.7,0],['.side .t',-0.1,0],['.side h3.a',2.40,0],['.side h3.b',4.90,0],['.side .sub',7.10,0],['.side .tokens',12.35,0]]
+};
+const ANIM = [];
+for (const shot of SHOTS){
+  const rootEl = document.getElementById(shot.el);
+  const seen = new Map();
+  for (const [sel, delay, stagger] of (CUES[shot.el] || [])){
+    const els = [...rootEl.querySelectorAll(sel.trim())];
+    if (stagger === 0 && els.length > 1){
+      const k = seen.get(sel) || 0; seen.set(sel, k + 1);
+      if (els[k]) ANIM.push({ el: els[k], start: shot.vs + delay });
+    } else {
+      els.forEach((el, i) => ANIM.push({ el, start: shot.vs + delay + i * stagger }));
+    }
+  }
+}
+/* FOCUS — the card being spoken about is raised: red top rule, filled tag, a
+   little lift. The whole row lands early (above), so the composition is never a
+   half-empty grid; the voice then walks across it. */
+const FOCUS_W = 0.42;
+const FOCUS = {
+  s5:[['.mini',0,4.05,6.85],['.mini',1,7.35,8.35],['.mini',2,8.70,10.90]]
+};
+const C_BLUE=[41,95,237], C_RED=[229,69,63], C_WHITE=[255,255,255];
+const mixc=(a,b,p)=>`rgb(${Math.round(a[0]+(b[0]-a[0])*p)},${Math.round(a[1]+(b[1]-a[1])*p)},${Math.round(a[2]+(b[2]-a[2])*p)})`;
+const FOC = [];
+for (const shot of SHOTS){
+  const rootEl = document.getElementById(shot.el);
+  for (const [sel, i, a, b] of (FOCUS[shot.el] || [])){
+    const el = rootEl.querySelectorAll(sel)[i];
+    if (el) FOC.push({ el, tag: el.querySelector('.tag'), a: shot.vs + a, b: shot.vs + b });
+  }
+}
+const FOCP = new Map();
+
+/* ---------------------------------------------------------------------------
+   SCENEFX — the four demonstration scenes. Each function is a pure function of
+   u (seconds since its scene's narration started) so every frame is still
+   reproducible from t alone; nothing here holds state between frames.
+
+   Times come from ffmpeg silencedetect on the takes, so a gate ticks on the
+   word that names it and a peer arrives on the beat the voice leaves.
+--------------------------------------------------------------------------- */
+const CHIP_N = 240;
+(function buildChips(){
+  const g = document.getElementById('chips'); if (!g) return;
+  for (let i = 0; i < CHIP_N; i++) g.appendChild(document.createElement('i'));
+})();
+
+const $1 = sel => document.querySelector(sel);
+const $$ = sel => [...document.querySelectorAll(sel)];
+
+const FX_EL = {
+  chips: $$('#chips i'),
+  bankn: $1('#bankn'),
+  qcard: $1('#qcard'), qstate: $1('#qstate'), qdot: $1('#qdot'), qstamp: $1('#qstamp'),
+  qls: $$('#qcard .ql'), qos: $$('#qcard .qo i'),
+  spinefill: $1('#spinefill'),
+  gates: [$1('#g1'), $1('#g2'), $1('#g3'), $1('#g4')],
+  beam: $1('#beam'), scanlab: $1('#scanlab'), mockbar: $1('#mockbar'), qclock: $1('#qclock'),
+  chat: $1('#chat'), cav: $1('#cav'), cstat: $1('#cstat'), wave: $1('#wave'), waves: $$('#wave i'),
+  msgs: [$1('#m1'), $1('#m2'), $1('#m3')], langs: $1('#langs'), oB: $1('#oB'),
+  stage2: $1('#stage2'), mscreen: $1('#mscreen'), mlive: $1('#mlive'),
+  peers: [$1('#pr1'), $1('#pr2'), $1('#pr3')], mics: $$('#s8 .mic'),
+  cur1: $1('#cur1'), cur2: $1('#cur2'), mB: $1('#mB'), mnote: $1('#mnote'),
+  rpath: $1('#rpath'), rarea: $1('#rarea'), rdot: $1('#rdot'), thrlab: $1('#thrlab'),
+  doms: [$1('#d1'), $1('#d2'), $1('#d3'), $1('#d4'), $1('#d5')], gaplab: $1('#gaplab'),
+  verdict: $1('#verdict'),
+};
+
+/* the readiness curve: a rising, flattening path with a small dip at the gap.
+   No numbers anywhere — it illustrates the feature, it does not promise a score. */
+const R_W = 620, R_H = 250, R_THR = 52;
+const RPTS = (() => {
+  const ys = [232, 224, 210, 196, 188, 176, 158, 150, 156, 140, 122, 110, 96, 84, 74, 62, 52, 44];
+  const L = 8, R = R_W - 26;
+  return ys.map((y, i) => [L + i * ((R - L) / (ys.length - 1)), y]);
+})();
+function rPathD(frac){
+  const n = RPTS.length, last = 1 + frac * (n - 1);
+  const k = Math.floor(last), f = last - k;
+  const pts = RPTS.slice(0, Math.max(2, k + 1)).map(p => p.slice());
+  if (k > 0 && k < n){
+    const a = RPTS[k - 1], b = RPTS[k];
+    pts[pts.length - 1] = [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+  }
+  return { d: 'M' + pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('L'), end: pts[pts.length - 1] };
+}
+
+const DOM_FILL = [0.86, 0.78, 0.34, 0.71, 0.64];   // index 2 is the flagged gap
+const GAP_I = 2;
+
+const SCENEFX = {
+  /* ---- s5 · the bank fills, then the other three land ------------------- */
+  s5(u){
+    const E = FX_EL; if (!E.chips.length) return;
+    // 0.20 -> 3.40: the field fills, left to right, with a slight row lag
+    for (let i = 0; i < E.chips.length; i++){
+      const col = i % 16, row = (i / 16) | 0;
+      const at = 0.20 + col * 0.115 + row * 0.055;
+      const p = seg(u, at, at + 0.30, outCubic);
+      const c = E.chips[i];
+      c.style.backgroundColor = p > 0.5 ? mixc([231,236,247], C_BLUE, (p - 0.5) * 2 * 0.82) : '#E7ECF7';
+      c.style.transform = `scaleY(${(0.55 + 0.45 * p).toFixed(3)})`;
+    }
+    const bp = seg(u, 2.60, 3.40, outExpo);
+    E.bankn.style.opacity = bp.toFixed(3);
+    E.bankn.style.transform = `translateY(${((1 - bp) * 0.5).toFixed(3)}em)`;
+  },
+
+  /* ---- s6 · one question, four judges ----------------------------------- */
+  s6(u){
+    const E = FX_EL; if (!E.qcard) return;
+    // the card writes itself while "the Forge writes more" is said
+    const write = [[0.55, 'l1'], [1.15, 'l2'], [1.70, 'l3']];
+    E.qls.forEach((el, i) => {
+      const p = seg(u, write[i][0], write[i][0] + 0.5, outExpo);
+      el.style.transform = `scaleX(${p.toFixed(3)})`; el.style.opacity = (0.35 + 0.65 * p).toFixed(3);
+    });
+    E.qos.forEach((el, i) => {
+      const p = seg(u, 2.30 + i * 0.22, 2.30 + i * 0.22 + 0.45, outExpo);
+      el.style.opacity = p.toFixed(3); el.style.transform = `scaleX(${(0.7 + 0.3 * p).toFixed(3)})`;
+    });
+    const blink = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(u * 7.5));
+    const writing = 1 - seg(u, 4.60, 5.10);
+    E.qdot.style.opacity = (blink * writing + (1 - writing)).toFixed(3);
+    E.qstate.textContent = u < 4.8 ? 'Writing…' : (u < 15.9 ? 'In review' : 'Cleared');
+
+    // the four gates, on the words that name them
+    const GT = [11.40, 12.44, 13.91, 15.71];
+    let done = 0;
+    GT.forEach((at, i) => {
+      const p = seg(u, at, at + 0.42, outExpo);
+      done += p;
+      const g = E.gates[i]; if (!g) return;
+      const tick = g.querySelector('.gtick'), num = g.querySelector('.gtick b');
+      tick.style.backgroundColor = mixc([255,255,255], C_BLUE, p);
+      tick.style.borderColor = mixc([226,231,241], C_BLUE, p);
+      tick.style.transform = `scale(${(1 + 0.12 * Math.sin(Math.PI * p)).toFixed(4)})`;
+      num.style.color = mixc([107,114,128], C_WHITE, p);
+      g.style.opacity = (0.42 + 0.58 * Math.max(p, seg(u, 4.90 + i * 0.14, 5.50 + i * 0.14))).toFixed(3);
+    });
+    E.spinefill.style.transform = `scaleY(${(done / 4).toFixed(4)})`;
+    const sp = seg(u, 16.20, 16.70, outExpo);
+    E.qstamp.style.opacity = sp.toFixed(3);
+    E.qstamp.style.transform = `scale(${(0.8 + 0.2 * sp).toFixed(3)}) rotate(${((1 - sp) * -6).toFixed(2)}deg)`;
+    const lift = seg(u, 16.20, 16.70, outExpo);
+    E.qcard.style.borderTopColor = mixc(C_BLUE, [30,158,134], lift);
+  },
+
+  /* ---- s7 · the coach reads the screen, then stands down ----------------- */
+  s7(u){
+    const E = FX_EL; if (!E.beam) return;
+    // 0.0-2.5 the call connects
+    const conn = seg(u, 2.10, 2.60, outExpo);
+    E.cstat.textContent = u < 2.3 ? 'Connecting…' : (u < 14.2 ? 'On a call' : 'Off for this mock');
+    E.cav.style.transform = `scale(${(1 + 0.06 * conn * (0.5 + 0.5 * Math.sin(u * 6))).toFixed(4)})`;
+    E.cav.style.boxShadow = `0 0 0 ${(SS * 0.28 * conn * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(u * 6)))).toFixed(2)}px rgba(41,95,237,.18)`;
+    const live = conn * (1 - seg(u, 14.20, 14.70));
+    E.wave.style.opacity = live.toFixed(3);
+    E.waves.forEach((b, i) => {
+      const h = 22 + 66 * Math.abs(Math.sin(u * 5.2 + i * 0.85)) * live;
+      b.style.height = h.toFixed(1) + '%';
+    });
+
+    // 4.30-8.70 the beam sweeps the question: "it reads your screen"
+    const sw = seg(u, 4.30, 8.70, inOut);
+    const scan = seg(u, 4.30, 4.60) * (1 - seg(u, 8.50, 8.95));
+    E.beam.style.opacity = scan.toFixed(3);
+    E.beam.style.transform = `translateX(${(-40 + sw * 640).toFixed(1)}%)`;
+    E.scanlab.style.opacity = scan.toFixed(3);
+    E.scanlab.style.transform = `translateY(${((1 - scan) * 0.6).toFixed(3)}em)`;
+
+    // the option the exchange is walking toward lights only after the Socratic
+    // line, so the film never hands over the answer before the reasoning
+    const pick = seg(u, 13.60, 14.10, outExpo);
+    if (E.oB){
+      E.oB.style.backgroundColor = mixc([255,255,255], [238,243,255], pick);
+      E.oB.style.borderColor = mixc([226,231,241], C_BLUE, pick);
+      E.oB.querySelector('b').style.color = mixc([107,114,128], C_BLUE, pick);
+      E.oB.querySelector('span').style.color = mixc([75,85,99], C_BLUE, pick);
+    }
+
+    // the exchange — the third line is Socratic, which is the actual claim
+    const MT = [5.20, 7.10, 11.10];
+    E.msgs.forEach((m, i) => {
+      if (!m) return;
+      const p = seg(u, MT[i], MT[i] + 0.5, outExpo);
+      m.style.opacity = p.toFixed(3);
+      m.style.transform = `translateY(${((1 - p) * 0.8).toFixed(3)}em) scale(${(0.96 + 0.04 * p).toFixed(4)})`;
+    });
+    const lp = seg(u, 9.20, 9.80, outExpo);
+    E.langs.style.opacity = lp.toFixed(3);
+    E.langs.style.transform = `translateY(${((1 - lp) * 0.8).toFixed(3)}em)`;
+
+    // 14.40 the mock starts and the coach switches itself off
+    // in place, not sliding in from outside the panel: the panel clips, and a
+    // banner that is briefly half outside its own card reads as a glitch
+    const mk = seg(u, 14.40, 15.00, outExpo);
+    E.mockbar.style.transform = `translateY(${((1 - mk) * 0.45).toFixed(3)}em) scale(${(0.94 + 0.06 * mk).toFixed(4)})`;
+    E.mockbar.style.opacity = mk.toFixed(3);
+    E.chat.style.filter = `grayscale(${(mk * 0.92).toFixed(3)}) opacity(${(1 - mk * 0.55).toFixed(3)})`;
+    E.qclock.style.color = mk > 0.5 ? 'var(--red)' : 'var(--red)';
+  },
+
+  /* ---- s8 · study with a peer -------------------------------------------
+     Beat order matches the line: the screen is shared, the second person is
+     already on it, then the empty third seat is offered. The two cursors are
+     the whole point — one person's pointer moving on another person's screen
+     is what "share your screen, live" actually looks like, and no amount of
+     avatar tiles says it.                                                    */
+  s8(u){
+    const E = FX_EL; if (!E.stage2) return;
+
+    // the shared screen arrives first: this is a screen, not a room
+    const sp = seg(u, 0.15, 0.85, outExpo);
+    E.stage2.style.opacity = sp.toFixed(3);
+    E.stage2.style.transform = `translateY(${((1 - sp) * 0.7).toFixed(3)}em) scale(${(0.97 + 0.03 * sp).toFixed(4)})`;
+
+    // the blue ring on the shared area breathes while it is being presented
+    const shareOn = seg(u, 1.10, 1.70, outExpo);
+    if (E.mscreen)
+      E.mscreen.style.boxShadow = `0 0 0 ${(SS * 0.16 * shareOn * (0.55 + 0.45 * Math.sin(u * 3.1))).toFixed(2)}px rgba(41,95,237,.20)`;
+    if (E.mlive) E.mlive.style.opacity = shareOn.toFixed(3);
+
+    // Amara is presenting, Jonas is already there, the third seat is the offer
+    const JOIN = [0.60, 3.60, 9.30];
+    E.peers.forEach((pr, i) => {
+      if (!pr) return;
+      const p = seg(u, JOIN[i], JOIN[i] + 0.55, outExpo);
+      pr.style.opacity = p.toFixed(3);
+      pr.style.transform = `translateX(${((1 - p) * 1.1).toFixed(3)}em)`;
+      const ring = Math.sin(Math.PI * seg(u, JOIN[i], JOIN[i] + 1.0));
+      pr.style.boxShadow = `0 ${(SS * 0.55).toFixed(1)}px ${(SS * 1.8).toFixed(1)}px rgba(11,18,32,.06), 0 0 0 ${(SS * 0.2 * ring).toFixed(2)}px rgba(41,95,237,.20)`;
+    });
+    // the invite seat keeps pulsing after it lands: it is the call to action
+    if (E.peers[2]){
+      const inv = seg(u, 9.30, 9.90, outExpo);
+      E.peers[2].style.transform =
+        `translateX(${((1 - inv) * 1.1).toFixed(3)}em) scale(${(1 + 0.02 * inv * (0.5 + 0.5 * Math.sin(u * 3.4))).toFixed(4)})`;
+    }
+
+    // whoever is talking has the live mic; they trade it, as people do
+    E.mics.forEach((m, i) => {
+      const talking = i === 0 ? (u > 1.0 && u < 4.6) : (u > 4.6 && u < 9.0);
+      const lvl = talking ? (0.45 + 0.55 * Math.abs(Math.sin(u * 6.2 + i))) : 0.12;
+      m.style.backgroundColor = mixc([226,231,241], C_BLUE, lvl);
+      m.style.transform = `scaleY(${(0.7 + 0.3 * lvl).toFixed(3)})`;
+    });
+
+    // two cursors on one screen — the feature, stated in motion
+    const path = (t0, t1, pts) => {
+      // clamp/3 — called with one argument it returns v untouched, and a
+      // negative k then indexes off the front of the point list
+      const k = clamp((u - t0) / Math.max(0.001, t1 - t0), 0, 1);
+      const n = pts.length - 1, f = k * n, i = Math.max(0, Math.min(n - 1, Math.floor(f))), r = f - i;
+      const e = outCubic(r);
+      return [pts[i][0] + (pts[i+1][0] - pts[i][0]) * e, pts[i][1] + (pts[i+1][1] - pts[i][1]) * e];
+    };
+    // they read the stem, then converge on the same option from opposite
+    // sides — close enough to be together, far enough apart to stay two people
+    // they land at the two clear ends of the option row, not across its text:
+    // a name badge sitting on the words reads as a rendering fault, not a peer
+    const c1 = path(1.6, 8.4, [[58,14],[40,30],[22,44],[50,60],[55,64]]);
+    const c2 = path(4.2, 9.0, [[92,82],[74,50],[50,32],[84,60],[88,64]]);
+    const place = (el, c, t0) => {
+      if (!el) return;
+      el.style.opacity = (seg(u, t0, t0 + 0.4) * (1 - seg(u, 9.6, 10.1))).toFixed(3);
+      el.style.left = c[0].toFixed(1) + '%';
+      el.style.top  = c[1].toFixed(1) + '%';
+    };
+    place(E.cur1, c1, 1.6);
+    place(E.cur2, c2, 4.2);
+
+    // they land on the same option, together — the point of studying in pairs
+    const agree = seg(u, 8.20, 8.70, outExpo);
+    for (const el of [E.mB]) {
+      if (!el) continue;
+      el.style.backgroundColor = mixc([255,255,255], [238,243,255], agree);
+      el.style.borderColor = mixc([226,231,241], C_BLUE, agree);
+      el.querySelector('b').style.color = mixc([107,114,128], C_BLUE, agree);
+      el.querySelector('span').style.color = mixc([75,85,99], C_BLUE, agree);
+    }
+
+    const np = seg(u, 10.10, 10.70, outExpo);
+    if (E.mnote){
+      E.mnote.style.opacity = np.toFixed(3);
+      E.mnote.style.transform = `translateY(${((1 - np) * 0.6).toFixed(3)}em)`;
+    }
+  },
+
+  /* ---- s9 · the curve climbs to the line -------------------------------- */
+  s9(u){
+    const E = FX_EL; if (!E.rpath) return;
+    const draw = seg(u, 0.35, 2.85, inOut);
+    const { d, end } = rPathD(Math.max(0.02, draw));
+    E.rpath.setAttribute('d', d);
+    E.rarea.setAttribute('d', d + `L${end[0].toFixed(1)},${R_H}L0,${R_H}Z`);
+    // an SVG element reports clientWidth/offsetTop as 0 in Chromium, so the
+    // marker and the threshold label are placed from measured rects instead
+    const svg = document.getElementById('rsvg');
+    const sr = svg.getBoundingClientRect(), cr = svg.parentElement.getBoundingClientRect();
+    const sl = sr.left - cr.left, so = sr.top - cr.top, sw = sr.width, sh = sr.height;
+    E.rdot.style.opacity = (draw > 0.03 ? 1 : 0).toFixed(3);
+    E.rdot.style.transform = `translate(${(sl + end[0] / R_W * sw - SS * 0.35).toFixed(1)}px, ${(so + end[1] / R_H * sh - SS * 0.35).toFixed(1)}px)`;
+
+    // the domain bars, then the one that is short goes red
+    E.doms.forEach((dm, i) => {
+      if (!dm) return;
+      const at = 3.70 + i * 0.30;
+      const p = seg(u, at, at + 0.55, outExpo);
+      const bar = dm.querySelector('.bar i');
+      const isGap = i === GAP_I;
+      const flag = isGap ? seg(u, 6.60, 7.10, outExpo) : 0;
+      bar.style.transform = `scaleX(${(DOM_FILL[i] * p).toFixed(4)})`;
+      bar.style.backgroundColor = mixc(C_BLUE, C_RED, flag);
+      dm.style.opacity = (0.45 + 0.55 * Math.max(p, isGap ? flag : 0)).toFixed(3);
+      dm.querySelector('span').style.color = isGap && flag > 0.5 ? 'var(--red)' : 'var(--sub)';
+    });
+    const gp = seg(u, 7.00, 7.55, outExpo);
+    E.gaplab.style.opacity = gp.toFixed(3);
+    E.gaplab.style.transform = `translateY(${((1 - gp) * 0.6).toFixed(3)}em)`;
+
+    // the threshold label arrives with "whether you are ready"
+    const tp = seg(u, 8.70, 9.30, outExpo);
+    E.thrlab.style.opacity = tp.toFixed(3);
+    E.thrlab.style.top = (so + R_THR / R_H * sh - SS * 0.62).toFixed(1) + 'px';
+    const vp = seg(u, 10.30, 10.95, outExpo);
+    E.verdict.style.opacity = vp.toFixed(3);
+    E.verdict.style.transform = `translateY(${((1 - vp) * 0.7).toFixed(3)}em)`;
+  },
+};
+
+const END_AT = LAST.vs + 8.4;
+const ENDANIM = [['#endlogo',0.35],['#endcard h3',0.85],['#endcard .url',1.35],['#endcard .legal',1.9]]
+  .map(([sel, d]) => ({ el: document.querySelector(sel), start: END_AT + d }));
+
+const E = {
+  glow:document.getElementById('glow'), glow2:document.getElementById('glow2'),
+  sweep:document.getElementById('glowsweep'), spark:document.getElementById('spark'),
+  topbar:document.getElementById('topbar'), chapter:document.getElementById('chapter'),
+  chN:document.querySelector('#chapter .n'), chC:document.querySelector('#chapter .c'),
+  progress:document.getElementById('progress'), footrule:document.getElementById('footrule'),
+  footl:document.getElementById('footl'), footr:document.getElementById('footr'),
+  cc:document.getElementById('cc'), ccbox:document.getElementById('ccbox'),
+  endcard:document.getElementById('endcard'),
+  pres:{ s1:document.getElementById('pres1'), s11:document.getElementById('pres11') }
+};
+E.cc.style.bottom = (ASPECT === 'pt' ? H*0.175 : H*0.115) + 'px';
+const PRES_SRC = {};
+
+function presenterFrame(shot, t){
+  const cfg = PRES[shot.el];
+  if (!cfg) return null;
+  const vt = t - shot.vs + (cfg.lead || 0);
+  const f = clamp(Math.round(vt * cfg.fps), 0, cfg.frames - 1);
+  return `${cfg.dir}/${String(f).padStart(5,'0')}.jpg`;
+}
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+  const pending = [];
+
+  let wsum = 0;
+  const wts = SHOTS.map(shot => {
+    const fi = shot.in <= 0 ? 1 : seg(t, shot.in, shot.in + XF);
+    const fo = shot.out >= DUR ? 1 : 1 - seg(t, shot.out - XF, shot.out);
+    const o = fi * fo; wsum += o; return { shot, o, fi, fo };
+  });
+  const norm = wsum > 0.0001 ? wsum : 1;
+
+  let bg=[0,0,0], warm=0, cur=SHOTS[0], best=-1;
+  for (const {shot,o} of wts){
+    const k=o/norm;
+    bg=[bg[0]+shot.bg[0]*k, bg[1]+shot.bg[1]*k, bg[2]+shot.bg[2]*k];
+    warm+=shot.warm*k;
+    if (o>best){ best=o; cur=shot; }
+  }
+  stage.style.background = rgb(bg);
+
+  const drift = t / DUR;
+  E.glow.style.transform =
+    `translate(${(-12+drift*34).toFixed(2)}%, ${(-16+Math.sin(drift*7.5)*10).toFixed(2)}%) scale(${(1.05+drift*.2).toFixed(3)})`;
+  E.glow.style.opacity = (0.5 + 0.5*(1-warm)).toFixed(3);
+  E.glow2.style.transform =
+    `translate(${(30-drift*26).toFixed(2)}%, ${(22-Math.cos(drift*6.1)*12).toFixed(2)}%) scale(${(1.15-drift*.1).toFixed(3)})`;
+  E.glow2.style.opacity = (0.2 + 0.8*warm).toFixed(3);
+  const sw = (t % 14) / 14;
+  E.sweep.style.transform = `translateX(${(-60 + sw * 340).toFixed(2)}%) skewX(-12deg)`;
+  E.sweep.style.opacity = (Math.sin(sw * Math.PI) * 0.9).toFixed(3);
+
+  const sp = E.spark;
+  sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 1.0, DUR-14, inOut))).toFixed(1);
+
+  const endp = seg(t, END_AT, END_AT + 0.9);
+  const furn = seg(t, 0.15, 1.0) * (1 - endp);
+  const f = clamp(furn,0,1).toFixed(3);
+  E.topbar.style.opacity=f; E.footrule.style.opacity=f; E.footl.style.opacity=f; E.footr.style.opacity=f;
+  E.chapter.style.opacity = f;
+  const ci = SHOTS.indexOf(cur);
+  E.chN.textContent = String(ci+1).padStart(2,'0') + ' / ' + String(SHOTS.length).padStart(2,'0');
+  E.chC.textContent = cur.chap;
+  E.progress.style.transform = `scaleX(${(t/DUR).toFixed(4)})`;
+
+  for (const { shot, o, fi, fo } of wts){
+    const el = document.getElementById(shot.el);
+    el.style.opacity = o.toFixed(3);
+    el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    const push = (1-fi)*1.4 - (shot.out >= DUR ? 0 : (1-fo)*1.4);
+    el.style.transform = `translateX(${push.toFixed(3)}%)`;
+    if (E.pres[shot.el] && o >= 0.002){
+      const src = presenterFrame(shot, t);
+      if (src && PRES_SRC[shot.el] !== src){
+        PRES_SRC[shot.el] = src;
+        const img = E.pres[shot.el];
+        img.src = src;
+        pending.push(img.decode().catch(() => {}));
+      }
+    }
+  }
+
+  for (const { shot, o } of wts){
+    const fx = SCENEFX[shot.el];
+    if (fx && o >= 0.002) fx(t - shot.vs);
+  }
+
+  FOCP.clear();
+  for (const f of FOC){
+    const p = seg(t, f.a - FOCUS_W, f.a, outCubic) * (1 - seg(t, f.b, f.b + FOCUS_W, outCubic));
+    FOCP.set(f.el, p);
+    f.el.style.borderTopColor = mixc(C_BLUE, C_RED, p);
+    f.el.style.boxShadow = `0 ${(SS*0.5 + p*SS*1.3).toFixed(2)}px ${(SS*1.6 + p*SS*2.2).toFixed(2)}px rgba(11,18,32,${(0.06 + p*0.07).toFixed(3)})`;
+    if (f.tag){
+      f.tag.style.backgroundColor = `rgba(229,69,63,${p.toFixed(3)})`;
+      f.tag.style.color = mixc(C_RED, C_WHITE, p);
+      f.tag.style.borderColor = mixc([246,197,195], C_RED, p);
+    }
+  }
+
+  const RISE = 0.68;
+  for (const a of ANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    const fp = FOCP.get(a.el) || 0;
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*1.1).toFixed(3)}em) scale(${(1 + fp*0.028).toFixed(4)})`;
+  }
+
+  E.endcard.style.opacity = endp.toFixed(3);
+  E.endcard.style.visibility = endp < 0.002 ? 'hidden' : 'visible';
+  for (const a of ENDANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1-p)*1.1).toFixed(3)}em)`;
+  }
+  const lg = document.getElementById('endlogo');
+  const lp = seg(t, END_AT + 0.35, END_AT + 1.4, outExpo);
+  lg.style.transform = `translateY(${((1-lp)*1.1).toFixed(3)}em) scale(${(0.9 + 0.1*lp).toFixed(4)})`;
+
+  if (!CC){ E.cc.style.opacity = '0'; }
+  else {
+    const cue = CAPS.find(c => t >= c[0] - 0.14 && t <= c[1] + 0.14);
+    if (!cue){ E.cc.style.opacity = '0'; }
+    else {
+      E.ccbox.textContent = cue[2];
+      const fi2 = seg(t, cue[0]-0.14, cue[0]+0.06);
+      const fo2 = 1 - seg(t, cue[1]-0.02, cue[1]+0.14);
+      E.cc.style.opacity = (fi2*fo2).toFixed(3);
+    }
+  }
+  return pending.length ? Promise.all(pending).then(() => undefined) : undefined;
+}
+window.seek = seek; window.__DUR = DUR;
+seek(+(Q.get('t') || 0));
+if (Q.get('play') === '1'){
+  const t0 = performance.now();
+  (function loop(){ seek(((performance.now()-t0)/1000) % DUR); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
