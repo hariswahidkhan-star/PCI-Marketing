@@ -63,8 +63,14 @@ function furniture(t, DUR, { label, index, total, fade = 1 }){
     bar: document.getElementById('bar'), barwrap: document.getElementById('barwrap'),
     fl: document.getElementById('footl'), fr: document.getElementById('footr'),
   });
+  // The logo is required on EVERY frame, so the brandbar gets its own faster
+  // ramp than the rest of the furniture. On the common ramp it was still at
+  // zero for the first few frames of every film, which broke the one rule the
+  // brief states twice.
   const f = clamp(seg(t, 0.15, 1.0) * fade).toFixed(3);
-  for (const el of [E.brand, E.count, E.barwrap, E.fl, E.fr]) if (el) el.style.opacity = f;
+  const fb = clamp(seg(t, 0.02, 0.45) * fade).toFixed(3);
+  if (E.brand) E.brand.style.opacity = fb;
+  for (const el of [E.count, E.barwrap, E.fl, E.fr]) if (el) el.style.opacity = f;
   if (E.n) E.n.textContent = String(index).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
   if (E.c) E.c.textContent = label;
   if (E.bar) E.bar.style.transform = `scaleX(${(t / DUR).toFixed(4)})`;

@@ -112,6 +112,11 @@
 
 /* coach ------------------------------------------------------------------- */
 .chatcol{display:flex;flex-direction:column;gap:calc(.42 * var(--s) * 1px);flex:1 1 auto}
+/* A bubble is a shrink-wrapped column flex child whose only content is a
+   percentage-width skeleton bar, which gives it no intrinsic width at all — it
+   collapsed to a sliver. It has to state its own width. */
+.chatcol .bubble{width:82%}
+.chatcol .bubble.me{width:64%}
 .chathead{display:flex;align-items:center;gap:calc(.5 * var(--s) * 1px);margin-bottom:calc(.2 * var(--s) * 1px)}
 .chathead .av{width:calc(1.7 * var(--s) * 1px);height:calc(1.7 * var(--s) * 1px);border-radius:50%;
   background:radial-gradient(circle at 35% 32%, #6C9BFF, var(--blue) 70%);will-change:box-shadow,transform}
@@ -127,7 +132,7 @@
 
 /* notes ------------------------------------------------------------------- */
 .note{flex:1 1 auto;display:flex;flex-direction:column;gap:calc(.4 * var(--s) * 1px)}
-.note .hl{background:linear-gradient(180deg, rgba(41,95,237,0) 55%, rgba(41,95,237,.18) 55%);
+.note .hl{background-image:linear-gradient(180deg, rgba(41,95,237,0) 55%, rgba(41,95,237,.18) 55%);
   border-radius:calc(.1 * var(--s) * 1px)}
 .notetag{align-self:flex-start;margin-top:calc(.5 * var(--s) * 1px)}
 
