@@ -45,15 +45,28 @@ if [[ "${MIX:-1}" == "1" ]]; then
   BED="${BED:-0.42}"; BEDFX="equalizer=f=1800:t=q:w=0.9:g=-3,"
   DUCK="threshold=0.035:ratio=10:attack=8:release=400"
 
-  echo "==> mix (bed side-chained under the voice)"
+  echo "==> mix (voice ridden by scene, bed side-chained under it)"
+  # Every TTS take returns at its own normalised level, so the narration is one
+  # loudness for the whole film however it is directed. VOXENV rides it by
+  # scene along the arc in narrative-design.md, stepping in the silent gaps
+  # between scenes so no step is audible. Without it the mix measures LRA 2.4 —
+  # flatter than the bed (11.0) or the voice (2.8) alone, because the voice is
+  # the louder element and the mix inherits its flatness. With it, 3.6.
+  # See voxenv.py for why the duck is not the cause.
+  VOXENV="$(python3 voxenv.py)"
+  [[ -n "$VOXENV" ]] || { echo "voxenv.py produced nothing" >&2; exit 1; }
+
   # -14 LUFS / -1.5 dBTP: what YouTube and LinkedIn normalise to. LRA 11 keeps
   # the bare opening from being pulled up into the body of the film.
   # alimiter level=disabled matters: left on, it renormalises back to 0 dB and
   # pushes true peak past what the platforms expect.
+  # asplit is required: the ridden voice feeds both the sidechain key and the
+  # mix, and a filter output label can only be consumed once.
   "$FFMPEG" -hide_banner -loglevel error -y -i "$BUILD/bed.wav" -i ../audio/vo-track.wav \
-    -filter_complex "[0:a]${BEDFX}volume=$BED[bed];\
-[bed][1:a]sidechaincompress=$DUCK[duck];\
-[duck][1:a]amix=inputs=2:normalize=0:duration=longest,\
+    -filter_complex "[1:a]volume='$VOXENV':eval=frame,asplit=2[vx1][vx2];\
+[0:a]${BEDFX}volume=$BED[bed];\
+[bed][vx1]sidechaincompress=$DUCK[duck];\
+[duck][vx2]amix=inputs=2:normalize=0:duration=longest,\
 loudnorm=I=-14:TP=-1.5:LRA=11,alimiter=limit=0.85:level=disabled[mix]" \
     -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
 fi
