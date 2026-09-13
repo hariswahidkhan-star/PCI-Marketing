@@ -34,8 +34,12 @@ echo "=== poster and thumbnails (from the clean cut) ==="
 CLEAN="$DIST/$NAME-1920x1080-clean.mp4"
 if [[ -s "$CLEAN" ]]; then
   # 3s: the presenter mid-line. 40s: the credential wall complete.
-  # 92s: the two AI panels. 130s: the close.
-  for t in 3 40 92 130; do
+  # 104s: the Coach exchange complete, with the candidate's option lit — 92s
+  # used to be used here and lands 1.2s into the scene, before the panel has
+  # assembled. 116s: the peer screen-share with both cursors on the question.
+  # 130s: the readiness curve. All chosen against the conformed timeline, so
+  # they move if the read is re-recorded.
+  for t in 3 40 104 116 130; do
     "$FFMPEG" -hide_banner -loglevel error -y -ss "$t" -i "$CLEAN" -frames:v 1 -q:v 2 \
       "$DIST/$NAME-still-${t}s.jpg"
   done
