@@ -27,3 +27,11 @@ video/*/build.log
 video/*/build-*.log
 video/*/*/build.log
 video/*/*/build-*.log
+
+# Scratch harnesses written while authoring a scene — determinism checks,
+# one-off measurement scripts. They are throwaway by convention: anything
+# worth keeping gets a real name.
+video/*/*/src/_*.mjs
+video/*/*/src/_*.py
+video/*/src/_*.mjs
+video/*/src/_*.py
