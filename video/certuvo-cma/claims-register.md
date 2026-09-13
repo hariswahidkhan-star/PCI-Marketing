@@ -133,8 +133,13 @@ The end-frame legal text, verbatim in `src/vo.py` (`LEGAL`) and `src/scene.html`
 
 - "CMA®" is written with the ® on its first prominent on-screen use (s3) and in
   the furniture ("CMA® preparation"). The IMA CMA badge supplied as a reference
-  (`assets/cma-badge-reference.png`) is **not** used in the film — it is IMA's
-  mark and Certuvo is not an IMA partner.
+  (`assets/cma-badge-reference.png`) is **not** used in this film. It *is* used,
+  at Certuvo's instruction, on the certifications card of the one-minute cut
+  (`../certuvo-cma-60`), alongside the CPA, CFA, CIA, CISA and NCLEX marks and
+  under an explicit line stating that all third-party names and marks belong to
+  their respective owners and that Certuvo is an independent preparation
+  provider, unaffiliated and unendorsed. Certuvo should satisfy itself that it
+  is entitled to reproduce each of those marks.
 - The presenter is a synthetic person (an ElevenLabs Seedream portrait animated by
   HeyGen Avatar IV). No real person's likeness or voice is used; the voice is
   ElevenLabs' stock "Nassim" voice.
