@@ -44,7 +44,8 @@ and −14 LUFS mix as the full film.
 ## Certifications card (0:55–0:59)
 
 A four-second card between the film and the outro shows the credentials Certuvo
-covers: CPA, CFA Institute, Certified Internal Auditor, CISA, NCLEX and PCI. Source
+covers: CMA, CPA, CFA Institute, Certified Internal Auditor, CISA, NCLEX and PCI
+(four then three in 16:9, three by two in 1:1, two per row in 9:16). Source
 logos are in `assets/logos/` (`trim-*.png` are the same files cropped to their
 ink so the row reads at even weight — the supplied CPA and CFA files carry heavy
 white padding, and the CFA PNG has an alpha channel that must be flattened onto
@@ -56,6 +57,6 @@ holds it for four seconds over a soft continuation of the music bed.
 carrying, the line: "All third-party names and marks shown are the property of
 their respective owners. Certuvo is an independent preparation provider and is
 not affiliated with, sponsored by or endorsed by any of them." If Certuvo would
-rather not reproduce the marks at all, replace the six `.lg` blocks in
+rather not reproduce the marks at all, replace the seven `.lg` blocks in
 `card.html` with the credential names set in Archivo and re-run `card.mjs` and
 `join.sh`; nothing else changes.
