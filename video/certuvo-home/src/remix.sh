@@ -15,20 +15,8 @@ FFMPEG=node_modules/ffmpeg-static/ffmpeg
 
 [[ -s "$BUILD/bed.wav" ]] || { echo "no $BUILD/bed.wav — run build-serial.sh first" >&2; exit 1; }
 
-VOXENV="$(python3 voxenv.py)"
-[[ -n "$VOXENV" ]] || { echo "voxenv.py produced nothing" >&2; exit 1; }
-
-BED="${BED:-0.42}"; BEDFX="equalizer=f=1800:t=q:w=0.9:g=-3,"
-DUCK="threshold=0.035:ratio=10:attack=8:release=400"
-
 echo "==> remix (voice ridden by scene)"
-"$FFMPEG" -hide_banner -loglevel error -y -i "$BUILD/bed.wav" -i ../audio/vo-track.wav \
-  -filter_complex "[1:a]volume='$VOXENV':eval=frame,asplit=2[vx1][vx2];\
-[0:a]${BEDFX}volume=$BED[bed];\
-[bed][vx1]sidechaincompress=$DUCK[duck];\
-[duck][vx2]amix=inputs=2:normalize=0:duration=longest,\
-loudnorm=I=-14:TP=-1.5:LRA=11,alimiter=limit=0.85:level=disabled[mix]" \
-  -map "[mix]" -ar 48000 -ac 2 -c:a pcm_s16le "$BUILD/mixed.wav"
+./mixdown.sh
 
 # ffmpeg refuses to write its own input, so each master is rebuilt beside itself
 # and moved into place only after ffmpeg has exited cleanly. A partial file that
