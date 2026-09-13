@@ -67,6 +67,7 @@ looking half-empty for seconds at a time.
 ```bash
 cd src && ./build-serial.sh          # mix, then 1080p ×2, 9:16, 1:1 — one at a time
 MIX=0 ./build-serial.sh              # reuse the existing build/mixed.wav
+./finish.sh                          # verify, join the stings, verify again, pull the stills
 ```
 
 **Serial, always.** Four Chromium renders on this four-core box take the load
@@ -90,6 +91,17 @@ cd src && ./run-probes.sh && tail -6 ../build/probe-*.txt
 `certuvo-home-1080x1920-captions.mp4` (9:16),
 `certuvo-home-1080x1080-captions.mp4` (1:1), plus `.srt` / `.vtt` in
 `captions/`. H.264 High, yuv420p, `+faststart`, AAC 192 kbps 48 kHz.
+
+`-FULL-` versions of each are the same cut with the Certuvo intro and outro
+stings joined on (2:34 rather than 2:17). There is no certifications card
+between the film and the outro, unlike the one-minute cut: scene 3 of this film
+is already the credential wall, so a card would only repeat it.
+
+`certuvo-home-poster.jpg` is the frame at 40 s, the complete credential wall —
+the right still for a page that shows a poster before play. `-still-3s`,
+`-still-92s` and `-still-130s` are the presenter, the AI panels and the close,
+for wherever else the film is promoted. All are pulled from the clean cut, so
+none carries a burned-in caption.
 
 The `-clean` cut has no burned-in captions — use it on the page with the `.vtt`
 as a `<track>`, so the captions are selectable and indexable. The captioned cuts
