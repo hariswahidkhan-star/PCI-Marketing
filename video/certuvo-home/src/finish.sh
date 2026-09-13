@@ -7,11 +7,15 @@ DIST=../dist; NAME=certuvo-home
 FFMPEG="$PWD/node_modules/ffmpeg-static/ffmpeg"
 
 verify(){ # one file -> "name: Duration · size · errors=N"
+  # `ffmpeg -i` with no output file exits 1 by design, and grep exits 1 when it
+  # matches nothing. Under `set -euo pipefail` either one kills the script mid
+  # audit — which is exactly what happened the first time this ran, silently,
+  # after a 50-minute render. Both are contained here.
   local f="$1" e d s
-  e=$("$FFMPEG" -hide_banner -v error -i "$f" -f null - 2>&1 | wc -l)
-  d=$("$FFMPEG" -hide_banner -i "$f" 2>&1 | grep -o 'Duration: [0-9:.]*' | head -1)
+  e=$({ "$FFMPEG" -hide_banner -v error -i "$f" -f null - 2>&1 || true; } | wc -l)
+  d=$({ "$FFMPEG" -hide_banner -i "$f" 2>&1 || true; } | { grep -o 'Duration: [0-9:.]*' || true; } | head -1)
   s=$(du -h "$f" | cut -f1)
-  printf '%-52s %s · %s · errors=%s\n' "$(basename "$f")" "$d" "$s" "$e"
+  printf '%-52s %s · %s · errors=%s\n' "$(basename "$f")" "${d:-?}" "$s" "$e"
 }
 
 echo "=== verify renders ==="

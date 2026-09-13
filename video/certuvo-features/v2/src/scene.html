@@ -816,9 +816,14 @@ function seek(t){
     const c = CARDS[i];
     const wIn  = i === 0 ? 1 : seg(t, c.at, c.at + WIPE, inOut);
     const wOut = CARDS[i + 1] ? seg(t, CARDS[i + 1].at, CARDS[i + 1].at + WIPE, inOut) : 0;
-    const on = wIn > 0.001 && wOut < 0.999;
-    c.win.style.visibility = on ? 'visible' : 'hidden';
-    if (!on) continue;
+    /* Every card is written on every frame, including the twelve that are hidden.
+       An earlier version skipped the hidden ones, which left their inline styles
+       holding whatever the last frame that showed them had set — so the DOM after
+       seek(5) depended on which frames had been asked for before it. That is the
+       one thing this file may not do, so nothing here is conditional: the cost is
+       thirteen sets of writes nobody sees, and the gain is that seek(t) leaves the
+       document in exactly one state for a given t. */
+    c.win.style.visibility = (wIn > 0.001 && wOut < 0.999) ? 'visible' : 'hidden';
     c.win.style.clipPath = (wIn > 0.999 && wOut < 0.001)
       ? 'none'
       : `inset(0 ${(wOut * 100 + PAD * clamp((1 - wIn) * 6)).toFixed(2)}% 0 ${((1 - wIn) * 100 + PAD * clamp(wOut * 6)).toFixed(2)}%)`;
