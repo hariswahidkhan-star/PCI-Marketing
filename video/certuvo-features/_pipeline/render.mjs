@@ -21,7 +21,13 @@ import { existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 
-const HERE = path.dirname(fileURLToPath(import.meta.url));
+// Node resolves a symlinked module to its REAL path, so when this file is
+// shared across variants by symlink, import.meta.url points at _pipeline and
+// not at the variant being built — it went looking for _pipeline/scene.html and
+// rendered nothing. Everything the renderer touches belongs to the variant, so
+// it all hangs off the working directory, the way probe.mjs already did.
+const HERE = process.cwd();
+const SELF = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Locate a Chromium. The npm playwright package pins a build number that often
