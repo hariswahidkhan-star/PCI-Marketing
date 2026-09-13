@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Join the Certuvo intro sting + film + outro sting into one file per aspect.
+# Join the Certuvo intro sting + film + certifications card + outro sting into
+# one file per aspect.
 #
 # The stings are 832x464 @ 60 fps, 44.1 kHz; the film is the target size @ 30 fps,
 # 48 kHz. Each sting is fitted inside the frame and padded with the film's own
@@ -16,16 +17,20 @@ GROUND=0xF5F7FB
 join(){ # w h in out
   local W=$1 H=$2 IN=$3 OUT=$4
   [[ -s "$IN" ]] || { echo "skip (missing) $IN"; return 0; }
+  local CARD="../build/card-${W}x${H}.mp4"
+  [[ -s "$CARD" ]] || { echo "no $CARD — run card.mjs and the card encode first" >&2; return 1; }
   echo "==> ${W}x${H}  $(basename "$OUT")"
   local fit="scale=$W:$H:force_original_aspect_ratio=decrease,pad=$W:$H:(ow-iw)/2:(oh-ih)/2:color=$GROUND,fps=30,setsar=1,format=yuv420p"
-  "$FFMPEG" -hide_banner -loglevel error -y -i "$INTRO" -i "$IN" -i "$OUTRO" -filter_complex "\
+  "$FFMPEG" -hide_banner -loglevel error -y -i "$INTRO" -i "$IN" -i "$CARD" -i "$OUTRO" -filter_complex "\
 [0:v]$fit[v0];\
 [1:v]scale=$W:$H,fps=30,setsar=1,format=yuv420p[v1];\
-[2:v]$fit[v2];\
+[2:v]scale=$W:$H,fps=30,setsar=1,format=yuv420p[v2];\
+[3:v]$fit[v3];\
 [0:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=out:st=7.5:d=0.5[a0];\
 [1:a]aresample=48000,aformat=channel_layouts=stereo[a1];\
-[2:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.4[a2];\
-[v0][a0][v1][a1][v2][a2]concat=n=3:v=1:a=1[v][a]" \
+[2:a]aresample=48000,aformat=channel_layouts=stereo[a2];\
+[3:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.4[a3];\
+[v0][a0][v1][a1][v2][a2][v3][a3]concat=n=4:v=1:a=1[v][a]" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -pix_fmt yuv420p -movflags +faststart \
     -c:a aac -b:a 192k -ar 48000 -ac 2 "$OUT"
 }

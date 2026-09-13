@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certuvo — certifications covered</title>
+<!--
+  Static end card: the certifications Certuvo prepares candidates for.
+
+  Each third-party mark sits inside a white card, the same card language the
+  film uses, so the supplied logos (all of which have white backgrounds) read as
+  intentional against the off-white ground rather than as pasted-in boxes. The
+  footnote is required: reproducing a certifying body's mark without it invites
+  the reading that they endorse Certuvo.
+
+  Rendered to a still by card.mjs, then held for four seconds with a fade at
+  each end by join.sh.  ?w=1920&h=1080
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+:root{
+  --ground:#F5F7FB; --blue:#295FED; --red:#E5453F;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:19.2; --fg:#0B1220; --sub:#4B5563; --foot:#6B7280; --cardbd:#E2E7F1;
+  --shadow:0 calc(.5 * var(--s) * 1px) calc(1.6 * var(--s) * 1px) rgba(11,18,32,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ground);overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:var(--ground);font-family:var(--sans);color:var(--fg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:calc(6 * var(--s) * 1px) calc(7 * var(--s) * 1px);-webkit-font-smoothing:antialiased}
+#glow{position:absolute;inset:-20%;pointer-events:none;
+  background:radial-gradient(closest-side, rgba(41,95,237,.12), rgba(41,95,237,0) 70%);transform:translate(0,-14%)}
+#stage > *{position:relative}
+.eyebrow{font-weight:700;font-size:calc(1.2 * var(--s) * 1px);letter-spacing:.2em;text-transform:uppercase;color:var(--blue)}
+h3{font-family:var(--display);font-weight:800;font-size:calc(3.0 * var(--s) * 1px);line-height:1.05;
+  letter-spacing:-.024em;margin-top:calc(1.1 * var(--s) * 1px)}
+h3 em{font-style:normal;color:var(--blue)}
+.logos{display:flex;flex-wrap:wrap;gap:calc(1.2 * var(--s) * 1px);justify-content:center;align-items:stretch;
+  margin-top:calc(2.6 * var(--s) * 1px);max-width:calc(84 * var(--s) * 1px)}
+.lg{background:#FFFFFF;border:1px solid var(--cardbd);border-top:calc(.22 * var(--s) * 1px) solid var(--blue);
+  border-radius:calc(.35 * var(--s) * 1px);box-shadow:var(--shadow);
+  width:calc(15.2 * var(--s) * 1px);height:calc(9.4 * var(--s) * 1px);
+  display:flex;align-items:center;justify-content:center;padding:calc(1.2 * var(--s) * 1px)}
+.lg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.lg.tile img{max-height:78%;border-radius:calc(.5 * var(--s) * 1px)}
+.note{font-size:calc(1.0 * var(--s) * 1px);color:var(--foot);line-height:1.5;
+  max-width:calc(66 * var(--s) * 1px);margin-top:calc(2.4 * var(--s) * 1px)}
+#rule{width:calc(7 * var(--s) * 1px);height:calc(.24 * var(--s) * 1px);background:var(--red);
+  border-radius:calc(.12 * var(--s) * 1px);margin-top:calc(1.8 * var(--s) * 1px)}
+
+/* square: three then two */
+#stage.sq .logos{max-width:calc(50 * var(--s) * 1px)}
+#stage.sq h3{font-size:calc(2.4 * var(--s) * 1px)}
+#stage.sq .lg{width:calc(14.6 * var(--s) * 1px);height:calc(9 * var(--s) * 1px)}
+#stage.sq .note{max-width:calc(50 * var(--s) * 1px)}
+
+/* vertical: two per row */
+#stage.pt{padding-left:calc(4.5 * var(--s) * 1px);padding-right:calc(4.5 * var(--s) * 1px)}
+#stage.pt .logos{max-width:calc(46 * var(--s) * 1px)}
+#stage.pt h3{font-size:calc(2.6 * var(--s) * 1px)}
+#stage.pt .lg{width:calc(21 * var(--s) * 1px);height:calc(12 * var(--s) * 1px)}
+#stage.pt .note{max-width:calc(46 * var(--s) * 1px);font-size:calc(1.05 * var(--s) * 1px)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div>
+  <div class="eyebrow">One platform</div>
+  <h3>Certuvo also prepares you for <em>your next credential.</em></h3>
+  <div class="logos">
+    <div class="lg"><img src="../assets/logos/trim-cpa.png" alt="CPA"></div>
+    <div class="lg"><img src="../assets/logos/trim-cfa.png" alt="CFA Institute"></div>
+    <div class="lg"><img src="../assets/logos/trim-cia.png" alt="Certified Internal Auditor"></div>
+    <div class="lg"><img src="../assets/logos/trim-cisa.png" alt="CISA"></div>
+    <div class="lg tile"><img src="../assets/logos/trim-pci.png" alt="PCI"></div>
+  </div>
+  <div id="rule"></div>
+  <div class="note">All third-party names and marks shown are the property of their respective owners. Certuvo is an independent preparation provider and is not affiliated with, sponsored by or endorsed by any of them.</div>
+</div>
+<script>
+const Q = new URLSearchParams(location.search);
+const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
+const R = W / H, ASPECT = R >= 1.40 ? '169' : (R >= 0.85 ? 'sq' : 'pt');
+const NOMINAL = ASPECT === '169' ? 1920 : ASPECT === 'sq' ? 1350 : 1180;
+const stage = document.getElementById('stage');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+document.documentElement.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+if (ASPECT === 'sq') stage.classList.add('sq');
+if (ASPECT === 'pt') stage.classList.add('pt');
+window.__READY = true;
+</script>
+</body>
+</html>
