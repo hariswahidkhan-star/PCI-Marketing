@@ -1,0 +1,240 @@
+<meta charset="utf-8">
+<title>PCI AI · R5 · Founding enrolment</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  /* R5 — the offer film. The only one of the ten that leads toward the code,
+     and the one with the legal floor under it.
+
+     16 CFR § 251.1 (the FTC Free Guide) requires the terms of a free offer to
+     appear clearly and conspicuously IN CLOSE CONJUNCTION with the offer, and
+     says expressly that a footnote does not satisfy it. Translated to video:
+     the condition has to be in the same shot, at the same moment, at the same
+     size as the word "free" — not a later card and not small grey type.
+
+     So the condition is a second .what line INSIDE the shared .offer lockup.
+     Same element, same class, same type size as the line that says "free", so
+     the tier relationship is structural and cannot drift. The only local rule
+     applied to the component scales BOTH .what lines together for legibility
+     at 1080 wide; it cannot make the condition smaller than the grants,
+     because they are the same selector. */
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.028em;line-height:1.0;
+       font-size:calc(var(--s)*5.8px);margin-top:calc(var(--s)*1.4px)}
+  #stage.wide .big{font-size:calc(var(--s)*5.4px)}
+  .mid{font-family:var(--display);font-weight:800;letter-spacing:-.024em;line-height:1.06;
+       font-size:calc(var(--s)*4.3px);margin-top:calc(var(--s)*1.35px)}
+  #stage.wide .mid{font-size:calc(var(--s)*3.8px)}
+  .big .hl,.mid .hl{color:var(--accent)}
+  .big .crim,.mid .crim{color:#E4785F}
+
+  .creds{display:flex;flex-direction:column;align-items:flex-start;
+         gap:calc(var(--s)*.72px);margin-top:calc(var(--s)*1.6px)}
+  #stage.wide .creds{flex-direction:row;flex-wrap:wrap}
+  .facts{display:flex;gap:calc(var(--s)*1.6px);margin-top:calc(var(--s)*1.5px);flex-wrap:wrap}
+  .fact{border-left:calc(var(--s)*.22px) solid var(--accent);padding-left:calc(var(--s)*.8px)}
+  .fact b{display:block;font-family:var(--display);font-weight:800;
+          font-size:calc(var(--s)*2.5px);line-height:1}
+  .fact span{font-size:calc(var(--s)*.95px);color:var(--mute)}
+
+  /* the offer shot ------------------------------------------------------- */
+  /* Both .what lines move together. Grants and condition are one selector,
+     so no future edit can shrink the condition without shrinking the grants. */
+  #stage.tall .offer .what{font-size:calc(var(--s)*1.34px);line-height:1.34;
+       margin-top:calc(var(--s)*.5px)}
+  .offer .cond{margin-top:calc(var(--s)*.7px);padding-top:calc(var(--s)*.62px);
+       border-top:calc(var(--s)*.06px) solid rgba(59,130,246,.45)}
+  .offer .cond em{font-style:normal;font-weight:700;color:var(--accent)}
+  .offer .what b{color:#fff;font-weight:700}
+
+  /* how to use it --------------------------------------------------------- */
+  .steps{display:flex;flex-direction:column;gap:calc(var(--s)*.78px);
+         margin-top:calc(var(--s)*1.6px)}
+  .step{display:flex;align-items:baseline;gap:calc(var(--s)*.9px);will-change:transform,opacity}
+  .step b{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*1.9px);
+          line-height:1;color:var(--accent);min-width:calc(var(--s)*1.9px)}
+  .step span{font-size:calc(var(--s)*1.62px);color:var(--soft);line-height:1.25}
+  .step span i{font-style:normal;color:#fff;font-weight:700}
+  .mailwrap{margin-top:calc(var(--s)*2.0px);will-change:transform,opacity}
+  .mailwrap .lead{font-size:calc(var(--s)*1.1px);color:var(--mute);
+          text-transform:uppercase;letter-spacing:.15em;font-weight:700}
+  .mailwrap .addr{font-family:var(--display);font-weight:800;letter-spacing:-.018em;
+          font-size:calc(var(--s)*2.9px);line-height:1.1;margin-top:calc(var(--s)*.4px)}
+  .attrib{font-size:calc(var(--s)*1.2px);color:var(--mute);margin-top:calc(var(--s)*1.4px)}
+</style>
+
+<div id="stage">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <!-- 1 · why it exists -->
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">Project controls, right now</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">The model wrote the forecast.<br>A <span class="crim">person</span> signs it.</div>
+    <div class="sub" id="s1">The skill that decides careers has moved — from producing the plan to judging what was produced.</div>
+  </section>
+
+  <!-- 2 · what PCI is -->
+  <section class="beat" id="b2">
+    <div class="eyebrow" id="e2">What this institute is</div>
+    <div class="rule" id="u2"></div>
+    <div class="mid" id="h2">Three credentials<br>for that <span class="hl">judgement.</span></div>
+    <div class="creds">
+      <span class="pill" id="c1"><b>PCL-AI</b> Project Controls Leader</span>
+      <span class="pill" id="c2"><b>PFL-AI</b> Project Finance Leader</span>
+      <span class="pill" id="c3"><b>PML-AI</b> Project Management Leader</span>
+    </div>
+  </section>
+
+  <!-- 3 · what sits behind them -->
+  <section class="beat" id="b3">
+    <div class="eyebrow" id="e3">What sits behind them</div>
+    <div class="rule" id="u3"></div>
+    <div class="mid" id="h3">One body of knowledge.<br>Assessed, then <span class="hl">checkable.</span></div>
+    <div class="facts">
+      <div class="fact" id="f1"><b id="fn1">13</b><span>knowledge domains</span></div>
+      <div class="fact" id="f2"><b>Public</b><span>credential verification</span></div>
+    </div>
+  </section>
+
+  <!-- 4 · why a founding offer exists at all -->
+  <section class="beat" id="b4">
+    <div class="eyebrow" id="e4">Why there is a founding offer</div>
+    <div class="rule" id="u4"></div>
+    <div class="big" id="h4">Because it is <span class="hl">early.</span></div>
+    <div class="sub" id="s4">The institute is at its founding stage. Founding enrolment exists for that reason and no other.</div>
+  </section>
+
+  <!-- 5 · and what it is not -->
+  <section class="beat" id="b5">
+    <div class="eyebrow" id="e5">And to be plain about it</div>
+    <div class="rule" id="u5"></div>
+    <div class="mid" id="h5">No countdown.<br>No last places.</div>
+    <div class="sub" id="s5">We are not going to invent a deadline. Nothing here runs out while you decide.</div>
+  </section>
+
+  <!-- 6 · THE OFFER — code, what it grants and the condition, one shot -->
+  <section class="beat" id="b6">
+    <div class="eyebrow" id="e6">Founding enrolment</div>
+    <div class="rule" id="u6"></div>
+    <div class="offer" id="of">
+      <div class="lab">Apply code</div>
+      <div class="code">FOUNDINGFREE</div>
+      <div class="what">Grants <b>free membership</b>, <b>free study access</b> and <b>free exam enrolment</b>.</div>
+      <div class="what cond"><em>Condition:</em> it is applied to a PCI account. Create an account, sign in, then apply the code.</div>
+    </div>
+  </section>
+
+  <!-- 7 · how to use it, then contact -->
+  <section class="beat" id="b7">
+    <div class="eyebrow" id="e7">How to use it</div>
+    <div class="rule" id="u7"></div>
+    <div class="steps">
+      <div class="step" id="p1"><b>1</b><span>Create a PCI account</span></div>
+      <div class="step" id="p2"><b>2</b><span>Sign in</span></div>
+      <div class="step" id="p3"><b>3</b><span>Apply code <i>FOUNDINGFREE</i></span></div>
+    </div>
+    <div class="mailwrap" id="ml">
+      <div class="lead">Questions first?</div>
+      <div class="addr">info@pciai.org</div>
+    </div>
+  </section>
+
+  <div id="foot"><span>pciai.org</span><span>AI PROPOSES. THE PROFESSIONAL DISPOSES.</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P  = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+/* 34.0s. Two-thirds falls at 22.67s; the offer shot opens at 23.10s, so the
+   code cannot be on screen before the film has earned it. The code then holds
+   for 6.1s and the address for 2.6s — both well past the 3s / 2s floors. */
+const BEATS = [
+  { id:'b1', in: 0.00, out: 4.70 },   // why it exists
+  { id:'b2', in: 4.70, out: 9.70 },   // what PCI is
+  { id:'b3', in: 9.70, out:14.30 },   // what sits behind it
+  { id:'b4', in:14.30, out:19.10 },   // why a founding offer exists
+  { id:'b5', in:19.10, out:23.10 },   // and what it is not
+  { id:'b6', in:23.10, out:29.20 },   // THE OFFER — code + grants + condition
+  { id:'b7', in:29.20, out:34.00 },   // how to use it, then contact
+];
+const DUR = 34.00;
+window.__DUR = DUR;
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
+  e2:$('#e2'), u2:$('#u2'), h2:$('#h2'), creds:[$('#c1'),$('#c2'),$('#c3')],
+  e3:$('#e3'), u3:$('#u3'), h3:$('#h3'), f1:$('#f1'), f2:$('#f2'), fn1:$('#fn1'),
+  e4:$('#e4'), u4:$('#u4'), h4:$('#h4'), s4:$('#s4'),
+  e5:$('#e5'), u5:$('#u5'), h5:$('#h5'), s5:$('#s5'),
+  e6:$('#e6'), u6:$('#u6'), of:$('#of'),
+  e7:$('#e7'), u7:$('#u7'), steps:[$('#p1'),$('#p2'),$('#p3')], ml:$('#ml'),
+};
+window.__EL = EL;
+
+const rise = (el, u, t0, d = 0.50, em = 0.65) => {
+  if (!el) return;
+  const p = P.seg(u, t0, t0 + d, P.outExpo);
+  el.style.opacity = p.toFixed(3);
+  el.style.transform = `translateY(${((1 - p) * em).toFixed(2)}em)`;
+};
+const head = (e, u, u0) => { e.style.opacity = P.seg(u, u0, u0 + 0.30).toFixed(3); };
+
+const FX = {
+  b1(u){ head(EL.e1,u,0.04); P.rule(EL.u1,u,0.14);
+         P.revealWords(EL.h1,u,0.28,{stagger:0.050,dur:0.40}); rise(EL.s1,u,1.05); },
+
+  b2(u){ head(EL.e2,u,0.04); P.rule(EL.u2,u,0.14);
+         P.revealWords(EL.h2,u,0.26,{stagger:0.058,dur:0.40});
+         EL.creds.forEach((c,i)=>{
+           const p = P.seg(u, 1.05+i*0.19, 1.57+i*0.19, P.outBack);
+           c.style.opacity = Math.min(1,p*1.4).toFixed(3);
+           c.style.transform = `translateY(${((1-p)*0.8).toFixed(2)}em)`;
+         }); },
+
+  b3(u){ head(EL.e3,u,0.04); P.rule(EL.u3,u,0.14);
+         P.revealWords(EL.h3,u,0.26,{stagger:0.058,dur:0.40});
+         rise(EL.f1,u,1.30,0.50,0.5); rise(EL.f2,u,1.52,0.50,0.5);
+         // counted from t, never accumulated, so a scrub back shows the same 13
+         P.countTo(EL.fn1,u,1.30,2.20,13); },
+
+  b4(u){ head(EL.e4,u,0.04); P.rule(EL.u4,u,0.14);
+         P.revealWords(EL.h4,u,0.28,{stagger:0.070,dur:0.44}); rise(EL.s4,u,1.15); },
+
+  b5(u){ head(EL.e5,u,0.04); P.rule(EL.u5,u,0.14);
+         P.revealWords(EL.h5,u,0.26,{stagger:0.060,dur:0.40}); rise(EL.s5,u,1.05); },
+
+  /* The whole lockup enters as ONE object. The condition cannot arrive late,
+     because it is inside the element that is being animated. */
+  b6(u){ head(EL.e6,u,0.04); P.rule(EL.u6,u,0.14);
+         const p = P.seg(u,0.30,0.98,P.outBack);
+         EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
+         EL.of.style.transform =
+           `translateY(${((1-p)*0.55).toFixed(2)}em) scale(${(0.965+0.035*Math.min(1,p)).toFixed(4)})`; },
+
+  b7(u){ head(EL.e7,u,0.04); P.rule(EL.u7,u,0.14);
+         EL.steps.forEach((s,i)=>{
+           const q = P.seg(u, 0.32+i*0.24, 0.86+i*0.24, P.outExpo);
+           s.style.opacity = q.toFixed(3);
+           s.style.transform = `translateY(${((1-q)*0.55).toFixed(2)}em)`;
+         });
+         rise(EL.ml,u,2.00,0.50,0.45); },
+};
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+};
+window.seek(0);
+</script>

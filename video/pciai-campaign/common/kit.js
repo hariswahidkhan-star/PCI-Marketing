@@ -55,6 +55,12 @@
     stage.style.width = W + 'px';
     stage.style.height = H + 'px';
     stage.classList.add(ASPECT);
+    // A film picks its ground in its own markup (class="light"); ?theme= is
+    // here so either treatment can be previewed from the same file without
+    // editing it, which is how the set was balanced.
+    const th = Q.get('theme');
+    if (th === 'light') stage.classList.add('light');
+    if (th === 'dark') stage.classList.remove('light');
     const SS = (W / nominal[ASPECT]) * base;
     document.documentElement.style.setProperty('--s', SS.toFixed(4));
     return { W, H, R, ASPECT, SS, CC: Q.get('cc') !== '0' };
@@ -68,7 +74,9 @@
     for (let x = 0; x <= W; x += step) ns.push(`<line x1="${x.toFixed(1)}" y1="0" x2="${x.toFixed(1)}" y2="${H}"/>`);
     for (let y = 0; y <= H; y += step) ns.push(`<line x1="0" y1="${y.toFixed(1)}" x2="${W}" y2="${y.toFixed(1)}"/>`);
     m.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    m.innerHTML = `<g stroke="#18243C" stroke-width="1">${ns.join('')}</g>`;
+    const stroke = getComputedStyle(document.getElementById('stage'))
+      .getPropertyValue('--mesh').trim() || '#18243C';
+    m.innerHTML = `<g stroke="${stroke}" stroke-width="1">${ns.join('')}</g>`;
   }
 
   /* ---- kinetic type ------------------------------------------------------ */

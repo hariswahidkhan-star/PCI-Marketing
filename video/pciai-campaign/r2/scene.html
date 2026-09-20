@@ -21,8 +21,11 @@
              background:linear-gradient(90deg,var(--crimson),var(--blue))}
 
   /* the credential lockup */
-  .ccode{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1;
-         font-size:calc(var(--s)*8.4px);margin-top:calc(var(--s)*1.45px);
+  /* line-height 1 clips the Archivo content box: the glyph box is taller than
+     1em, so the element's own scrollHeight exceeds its clientHeight and the
+     probe reads it (correctly) as clipped text. 1.1 gives the box room. */
+  .ccode{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1.1;
+         font-size:calc(var(--s)*8.4px);margin-top:calc(var(--s)*1.1px);
          will-change:transform,opacity}
   .cname{font-weight:600;font-size:calc(var(--s)*1.62px);line-height:1.25;color:var(--soft);
          margin-top:calc(var(--s)*.6px);letter-spacing:.004em;will-change:transform,opacity}
@@ -32,7 +35,7 @@
      credential gets them. */
   .who{margin-top:calc(var(--s)*2.0px);border-left:calc(var(--s)*.26px) solid var(--accent);
        padding-left:calc(var(--s)*1.1px);max-width:calc(var(--s)*30px);
-       will-change:transform,opacity}
+       min-height:calc(var(--s)*8.4px);will-change:transform,opacity}
   .who .wl{font-size:calc(var(--s)*.98px);font-weight:700;text-transform:uppercase;
            letter-spacing:.16em;color:var(--accent)}
   .who .wt{font-size:calc(var(--s)*1.62px);line-height:1.38;color:var(--soft);
@@ -81,8 +84,8 @@
     <div class="ccode" id="c3">PFL-AI</div>
     <div class="cname" id="n3">PCI AI Project Finance Leader</div>
     <div class="who" id="w3">
-      <div class="wt">the forecast, the cash flow and the cost report carry your name — <b>forecast owner, cost controller, commercial manager.</b></div>
-      <div class="wl" id="l3">This is for you if</div>
+      <div class="wl">This is for you if</div>
+      <div class="wt">the forecast and the cost report carry your name — <b>forecast owner, cost controller, commercial lead.</b></div>
     </div>
   </section>
 
@@ -96,7 +99,7 @@
     <div class="cname" id="n4">PCI Project Management Leader – AI</div>
     <div class="who" id="w4">
       <div class="wl">This is for you if</div>
-      <div class="wt">you run the delivery itself — scope, risk, change, and the team absorbing it. <b>Project and programme managers.</b></div>
+      <div class="wt">you run the delivery itself — scope, risk, change. <b>Project and programme managers, delivery leads.</b></div>
     </div>
   </section>
 
@@ -159,11 +162,6 @@ const head = (e, u, u0) => { e.style.opacity = P.seg(u, u0, u0 + 0.30).toFixed(3
 /* One animator for all three credential beats: identical shape, identical
    timing. The code and its full name move as a single lockup so the beat
    reads as three changes (header, lockup, who-line), not six. */
-const cred = (e, u, dots, code, name, who) => {
-  head(e, u, 0.04);
-  P.rule(u === undefined ? null : arguments, 0, 0); // placeholder, replaced below
-};
-
 const credBeat = (E, u) => {
   head(E.e, u, 0.04);
   P.rule(E.u, u, 0.14);

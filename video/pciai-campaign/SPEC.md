@@ -20,6 +20,32 @@ own organic benchmark puts native documents at 7.00% engagement, multi-image at
 mobile feed. 4:5 keeps nearly the mobile height of 9:16, survives desktop and
 leaves a text column. 16:9 is rendered too, for YouTube and the website.
 
+## Two grounds
+
+PCI asked for some of the set to be bright. Both treatments are the same
+brand — crimson, blue and the crimson-to-blue rule are identical in each; only
+the ground, the ink and the panel surfaces move. A film picks its ground with
+`class="light"` on `#stage`, and nothing else changes.
+
+| Concept | Reel | 4:5 / 16:9 | Ground | Why |
+|---|---|---|---|---|
+| 1 · Manifesto | r1 | v1 | **dark** | declarative — navy carries authority |
+| 2 · The three credentials | r2 | v2 | **dark** | same register as the manifesto |
+| 3 · What it assesses | r3 | v3 | **light** | explanatory — light reads open, and a syllabus should feel legible, not solemn |
+| 4 · Verification | r4 | v4 | **dark** | it is a challenge, and it should feel like one |
+| 5 · The offer | r5 | v5 | **light** | open and generous, and a light CTA is the cheapest pattern interrupt in a feed of dark thumbnails |
+
+Four of ten bright, paired by concept so the reel and the long cut of the same
+argument always match.
+
+Preview either without editing the file: `?theme=light` / `?theme=dark`, or
+`node ../_pipeline/theme-still.mjs 1080 1920 <tag> "2,10,20" light`.
+
+**Light grounds fail differently.** Anything hardcoded to `#fff` disappears;
+use `var(--fg)`. The accent blue `#3B82F6` is too pale for small text on white,
+so `.eyebrow` is switched to `--blue` under `.light` — if you introduce new
+small text in an accent colour, check it.
+
 ## Hard rules
 
 1. **Frame 1 carries the meaning.** No logo sting, no "welcome to", no

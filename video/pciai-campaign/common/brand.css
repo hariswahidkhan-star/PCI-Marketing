@@ -9,15 +9,17 @@
   --ink:#0F172A; --ink2:#111D33; --panel:#16213A;
   --crimson:#C13329; --blue:#1D4ED8; --accent:#3B82F6;
   --soft:#B9C6DA; --mute:#7E90AC; --line:#22304C;
+  --fg:#FFFFFF; --ground:#0F172A; --mesh:#18243C;
+  --ccfg:#FFFFFF; --ccbg:rgba(8,13,24,.82);
   --display:Archivo,"Archivo",system-ui,sans-serif;
   --text:Inter,"Inter",system-ui,sans-serif;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{background:var(--ink)}
+html,body{background:var(--ground)}
 body{font-family:var(--text);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
 
-#stage{position:relative;overflow:hidden;background:var(--ink);color:#fff;
+#stage{position:relative;overflow:hidden;background:var(--ground);color:var(--fg);
   font-size:calc(var(--s)*1px)}
 #mesh{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
 
@@ -101,7 +103,7 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
   border:1px solid var(--line);background:var(--ink2);
   border-radius:calc(var(--s)*4px);padding:calc(var(--s)*.55px) calc(var(--s)*1.15px);
   font-size:calc(var(--s)*1.02px);color:var(--soft);will-change:transform,opacity}
-.pill b{color:#fff;font-weight:600}
+.pill b{color:var(--fg);font-weight:600}
 
 /* the offer lockup — one component, so the code looks identical in all ten */
 .offer{border:calc(var(--s)*.13px) dashed var(--accent);border-radius:calc(var(--s)*.75px);
@@ -115,7 +117,7 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
 #stage.tall .offer .code{font-size:calc(var(--s)*2.7px)}
 
 .mail{font-size:calc(var(--s)*1.1px);color:var(--soft);letter-spacing:.01em}
-.mail b{color:#fff;font-weight:600}
+.mail b{color:var(--fg);font-weight:600}
 
 /* ---- burned captions ---------------------------------------------------- */
 /* Vertical feeds are watched muted, so captions are burned rather than
@@ -128,8 +130,8 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
 /* reels are text-led: no narration, so no caption band to duplicate the type */
 #stage.tall #cc.off{display:none}
 #ccbox{font-weight:700;text-align:center;line-height:1.28;
-  font-size:calc(var(--s)*1.6px);color:#fff;
-  background:rgba(8,13,24,.82);border-radius:calc(var(--s)*.45px);
+  font-size:calc(var(--s)*1.6px);color:var(--ccfg);
+  background:var(--ccbg);border-radius:calc(var(--s)*.45px);
   padding:calc(var(--s)*.6px) calc(var(--s)*1.0px);
   border-bottom:calc(var(--s)*.18px) solid var(--blue);max-width:100%}
 #stage.tall #ccbox{font-size:calc(var(--s)*1.85px)}
@@ -147,5 +149,36 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
 .build .li i{flex:0 0 auto;width:calc(var(--s)*.42px);height:calc(var(--s)*1.35px);
   border-radius:calc(var(--s)*.2px);background:linear-gradient(180deg,var(--crimson),var(--blue));
   margin-top:calc(var(--s)*.18px)}
-.build .li b{color:#fff;font-weight:600}
+.build .li b{color:var(--fg);font-weight:600}
 #stage.tall .build .li{font-size:calc(var(--s)*1.5px)}
+
+
+/* ===========================================================================
+   LIGHT TREATMENT — #stage.light
+   Same brand, inverted ground. Not a second palette: crimson, blue and accent
+   are unchanged, and the crimson-to-blue rule is still the signature device.
+   Only the ground, the ink and the panel surfaces move.
+
+   It exists for two reasons. Some of these films are explanatory rather than
+   declarative, and light reads as open where navy reads as authoritative. And
+   in a feed of dark thumbnails a light one is the cheapest pattern interrupt
+   available, which matters more than any transition effect.
+   =========================================================================== */
+#stage.light{
+  --ground:#F5F7FB; --fg:#0F172A; --ink2:#FFFFFF; --panel:#FFFFFF;
+  --soft:#475569; --mute:#64748B; --line:#E2E8F0; --mesh:#E6EBF4;
+  --ccfg:#0F172A; --ccbg:rgba(255,255,255,.92);
+  color:var(--fg);
+}
+/* the accent has to darken on white or the eyebrow fails contrast */
+#stage.light .eyebrow{color:var(--blue)}
+#stage.light .offer{border-color:var(--blue);background:rgba(29,78,216,.06)}
+#stage.light .offer .lab{color:var(--blue)}
+#stage.light .card,#stage.light .pill{box-shadow:0 calc(var(--s)*.1px) calc(var(--s)*.5px) rgba(15,23,42,.06)}
+#stage.light #barwrap{background:rgba(15,23,42,.08)}
+#stage.light #ccbox{border-bottom-color:var(--blue);
+  box-shadow:0 calc(var(--s)*.2px) calc(var(--s)*.9px) rgba(15,23,42,.10)}
+#stage.light #wash{
+  background:radial-gradient(45% 40% at 28% 22%,rgba(29,78,216,.14),transparent 70%),
+             radial-gradient(40% 35% at 80% 72%,rgba(193,51,41,.09),transparent 72%)}
+#stage.light .fact{border-left-color:var(--blue)}
