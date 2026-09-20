@@ -155,7 +155,8 @@ for (let t = 0; t <= DUR + 0.001; t = +(t + 0.25).toFixed(2)) {
        line is all it takes, and it fails silently in a still you did not
        happen to render. */
     const hit = [];
-    const chrome = [document.getElementById('brandbar'), document.getElementById('foot')].filter(Boolean);
+    const chrome = [document.getElementById('brandbar'), document.getElementById('foot'),
+                    document.getElementById('ccbox')].filter(Boolean);
     for (const el of document.querySelectorAll('.beat')) {
       if (getComputedStyle(el).display === 'none') continue;
       for (const kid of el.querySelectorAll('*')) {

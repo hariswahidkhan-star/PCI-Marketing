@@ -62,7 +62,12 @@
   .fact{border-left:calc(var(--s)*.22px) solid var(--hi);padding-left:calc(var(--s)*.85px)}
   .fact b{display:block;font-family:var(--display);font-weight:800;
           font-size:calc(var(--s)*2.5px);line-height:1}
-  .fact span{font-size:calc(var(--s)*1.0px);color:var(--mute)}
+  /* --mute (#64748B) measures 4.44:1 on the light ground — just under AA
+     for text this size. Every label in this film therefore uses --soft
+     (#475569, 7.1:1) instead. Nothing legally load-bearing was ever on
+     --mute, but a small grey label is exactly how a light ground quietly
+     loses a line, so none of them are left on it. */
+  .fact span{font-size:calc(var(--s)*1.0px);color:var(--soft)}
 
   /* ---- the offer lockup -------------------------------------------------
      .offer is the shared component and its structure is unchanged: label,
@@ -89,7 +94,7 @@
 
   /* ---- contact ---------------------------------------------------------- */
   .mailwrap{margin-top:calc(var(--s)*1.5px);align-self:flex-start;will-change:transform,opacity}
-  .mailwrap .lead{font-size:calc(var(--s)*1.0px);color:var(--mute);
+  .mailwrap .lead{font-size:calc(var(--s)*1.0px);color:var(--soft);
           text-transform:uppercase;letter-spacing:.15em;font-weight:700}
   .mailwrap .addr{font-family:var(--display);font-weight:800;letter-spacing:-.018em;
           font-size:calc(var(--s)*3.0px);line-height:1.1;margin-top:calc(var(--s)*.4px);

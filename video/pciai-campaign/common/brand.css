@@ -171,7 +171,7 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
    =========================================================================== */
 #stage.light{
   --ground:#F5F7FB; --fg:#0F172A; --ink2:#FFFFFF; --panel:#FFFFFF;
-  --soft:#475569; --mute:#64748B; --line:#E2E8F0; --mesh:#E6EBF4;
+  --soft:#475569; --mute:#5A677D; --line:#E2E8F0; --mesh:#E6EBF4;
   --ccfg:#0F172A; --ccbg:rgba(255,255,255,.92);
   color:var(--fg);
 }
