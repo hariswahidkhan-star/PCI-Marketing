@@ -30,7 +30,7 @@ function findChrome() {
 }
 
 const W = +process.argv[2], H = +process.argv[3], tag = process.argv[4] || 'probe';
-const TALL = W / H < 0.85;
+const TALL = W / H < 0.70;   // 9:16 only. 4:5 (0.800) and 1:1 carry no platform chrome.
 
 /* Reserved bands as a fraction of height/width. Platforms move their UI, so
    these are deliberately generous: the cost of a wide margin is a slightly

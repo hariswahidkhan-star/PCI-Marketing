@@ -1,0 +1,175 @@
+<meta charset="utf-8">
+<title>PCI AI · V1 · The case for a standard</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.028em;line-height:1.02;
+       font-size:calc(var(--s)*4.6px);margin-top:calc(var(--s)*1.3px)}
+  #stage.wide .big{font-size:calc(var(--s)*5.4px)}
+  .big .crim{color:#E4785F} .big .hl{color:var(--accent)}
+  .principle{font-family:var(--display);font-weight:800;letter-spacing:-.022em;line-height:1.07;
+       font-size:calc(var(--s)*4.0px);margin-top:calc(var(--s)*1.3px)}
+  .creds{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*.7px);margin-top:calc(var(--s)*1.5px)}
+  #stage.wide .creds{flex-direction:row;flex-wrap:wrap}
+  .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.2px)}
+  .attrib{font-size:calc(var(--s)*1.1px);color:var(--mute);margin-top:calc(var(--s)*1.3px)}
+</style>
+
+<div id="stage">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">Project controls, 2026</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">AI just wrote your schedule.</div>
+    <div class="sub" id="s1">Cost-loaded. Resource-levelled. In about four seconds.</div>
+  </section>
+
+  <section class="beat" id="b2">
+    <div class="eyebrow" id="e2">And then</div>
+    <div class="rule" id="u2"></div>
+    <div class="big" id="h2">It will not <span class="crim">sign</span> it.</div>
+    <div class="sub" id="s2">A person does. The one whose name is on the forecast when the board asks why.</div>
+  </section>
+
+  <section class="beat" id="b3">
+    <div class="eyebrow" id="e3">What the model cannot do for you</div>
+    <div class="rule" id="u3"></div>
+    <div class="build">
+      <div class="li" id="l1"><i></i><span>Know which <b>assumption</b> nobody wrote down</span></div>
+      <div class="li" id="l2"><i></i><span>Tell you the <b>float</b> is not really there</span></div>
+      <div class="li" id="l3"><i></i><span>Carry a <b>forecast</b> you would defend under questioning</span></div>
+    </div>
+  </section>
+
+  <section class="beat" id="b4">
+    <div class="eyebrow" id="e4">Our governing principle</div>
+    <div class="rule" id="u4"></div>
+    <div class="principle" id="h4">AI proposes.<br>The professional <span class="hl">disposes.</span></div>
+    <div class="attrib" id="a4">Project Controls Institute</div>
+  </section>
+
+  <section class="beat" id="b5">
+    <div class="eyebrow" id="e5">So we built the standard for it</div>
+    <div class="rule" id="u5"></div>
+    <div class="creds">
+      <span class="pill" id="c1"><b>PCL-AI</b> Project Controls Leader</span>
+      <span class="pill" id="c2"><b>PFL-AI</b> Project Finance Leader</span>
+      <span class="pill" id="c3"><b>PML-AI</b> Project Management Leader</span>
+    </div>
+    <div class="build">
+      <div class="li" id="l4"><i></i><span>Assessed against a <b>13-domain</b> body of knowledge</span></div>
+      <div class="li" id="l5"><i></i><span>Every credential <b>publicly verifiable</b></span></div>
+    </div>
+  </section>
+
+  <section class="beat" id="b6">
+    <div class="stack">
+      <div>
+        <div class="eyebrow" id="e6">Founding enrolment is open</div>
+        <div class="rule" id="u6"></div>
+      </div>
+      <div class="offer" id="of">
+        <div class="lab">Create an account and apply code</div>
+        <div class="code">FOUNDINGFREE</div>
+        <div class="what">Free membership · free study access · free exam enrolment</div>
+      </div>
+      <div class="mail" id="ml"><b>info@pciai.org</b> · pciai.org</div>
+    </div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+  <div id="foot"><span>pciai.org</span><span>AI PROPOSES. THE PROFESSIONAL DISPOSES.</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+const BEATS = [
+  { id:'b1', in:0.00,  out:4.20 },
+  { id:'b2', in:4.20,  out:9.00 },
+  { id:'b3', in:9.00,  out:17.40 },
+  { id:'b4', in:17.40, out:23.60 },
+  { id:'b5', in:23.60, out:33.40 },
+  { id:'b6', in:33.40, out:44.00 },
+];
+const DUR = 44.00;
+window.__DUR = DUR;
+
+/* These double as the narration script. The film is delivered silent and works
+   silent; if a read is commissioned the lines already match frame for frame. */
+const CAPS = [
+  [0.30, 4.10,  "AI just wrote your schedule."],
+  [4.40, 8.90,  "It will not sign it. A person does."],
+  [9.30, 13.20, "A model cannot know the assumption nobody wrote down,"],
+  [13.30,17.30, "or tell you the float is not really there."],
+  [17.70,23.50, "AI proposes. The professional disposes."],
+  [23.90,28.40, "So we built the standard for that judgement."],
+  [28.50,33.30, "Three credentials. Thirteen domains. Publicly verifiable."],
+  [33.70,39.20, "Founding enrolment is open."],
+  [39.30,43.90, "Apply FOUNDINGFREE — membership, study and exam, free."],
+];
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'),u1:$('#u1'),h1:$('#h1'),s1:$('#s1'),
+  e2:$('#e2'),u2:$('#u2'),h2:$('#h2'),s2:$('#s2'),
+  e3:$('#e3'),u3:$('#u3'),lis:[$('#l1'),$('#l2'),$('#l3')],
+  e4:$('#e4'),u4:$('#u4'),h4:$('#h4'),a4:$('#a4'),
+  e5:$('#e5'),u5:$('#u5'),creds:[$('#c1'),$('#c2'),$('#c3')],lis2:[$('#l4'),$('#l5')],
+  e6:$('#e6'),u6:$('#u6'),of:$('#of'),ml:$('#ml'),
+  cc:$('#cc'),ccbox:$('#ccbox'),
+};
+window.__EL = EL;
+
+const rise = (el,u,t0,d=0.50,em=0.6)=>{ if(!el) return;
+  const p=P.seg(u,t0,t0+d,P.outExpo);
+  el.style.opacity=p.toFixed(3); el.style.transform=`translateY(${((1-p)*em).toFixed(2)}em)`; };
+const head=(e,u,u0)=>{ e.style.opacity=P.seg(u,u0,u0+0.30).toFixed(3); };
+/* the list accumulates: once an item is in, it stays in */
+const build=(els,u,t0,gap)=>els.forEach((el,i)=>rise(el,u,t0+i*gap,0.48,0.5));
+
+const FX = {
+  b1(u){ head(EL.e1,u,0.04); P.rule(EL.u1,u,0.14);
+         P.revealWords(EL.h1,u,0.28,{stagger:0.050,dur:0.40}); rise(EL.s1,u,1.05); },
+  b2(u){ head(EL.e2,u,0.04); P.rule(EL.u2,u,0.14);
+         P.revealWords(EL.h2,u,0.24,{stagger:0.052,dur:0.38}); rise(EL.s2,u,0.95); },
+  b3(u){ head(EL.e3,u,0.04); P.rule(EL.u3,u,0.14);
+         build(EL.lis,u,0.55,1.35); },
+  b4(u){ head(EL.e4,u,0.04); P.rule(EL.u4,u,0.14);
+         P.revealWords(EL.h4,u,0.30,{stagger:0.072,dur:0.46}); rise(EL.a4,u,1.80,0.55,0.45); },
+  b5(u){ head(EL.e5,u,0.04); P.rule(EL.u5,u,0.14);
+         EL.creds.forEach((c,i)=>{ const p=P.seg(u,0.34+i*0.20,0.86+i*0.20,P.outBack);
+           c.style.opacity=Math.min(1,p*1.4).toFixed(3);
+           c.style.transform=`translateY(${((1-p)*0.75).toFixed(2)}em)`; });
+         build(EL.lis2,u,1.55,1.25); },
+  b6(u){ head(EL.e6,u,0.04); P.rule(EL.u6,u,0.14);
+         const p=P.seg(u,0.30,0.95,P.outBack);
+         EL.of.style.opacity=Math.min(1,p*1.3).toFixed(3);
+         EL.of.style.transform=`translateY(${((1-p)*0.6).toFixed(2)}em) scale(${(0.96+0.04*Math.min(1,p)).toFixed(4)})`;
+         rise(EL.ml,u,1.40,0.50,0.45); },
+};
+
+function caption(t){
+  let txt=''; for (const [a,b,s] of CAPS) if (t>=a && t<b) txt=s;
+  EL.ccbox.textContent=txt; EL.cc.style.opacity = txt ? '1':'0';
+}
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+  if (ST.CC) caption(t); else { EL.cc.style.opacity='0'; EL.ccbox.textContent=''; }
+};
+window.seek(0);
+</script>

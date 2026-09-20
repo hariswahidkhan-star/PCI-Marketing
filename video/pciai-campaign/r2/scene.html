@@ -1,0 +1,196 @@
+<meta charset="utf-8">
+<title>PCI AI · R2 · Three letters — what each credential is for</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  /* R2 — the demystification reel. Three credentials, one beat each, each
+     beat identical in shape so the only thing that changes is the content.
+     That repetition is the argument: there is nothing being hidden between
+     them. No narration; the type carries it on a muted feed. */
+
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.026em;line-height:1.02;
+       font-size:calc(var(--s)*4.95px);margin-top:calc(var(--s)*1.4px)}
+  .big .hl{color:var(--accent)}
+
+  /* the eyebrow row: label on the left, position-in-three on the right, so a
+     viewer always knows how much is left without a countdown */
+  .hd{display:flex;align-items:center;gap:calc(var(--s)*1.2px)}
+  .dots{display:flex;gap:calc(var(--s)*.38px);will-change:opacity}
+  .dots i{display:block;width:calc(var(--s)*1.3px);height:calc(var(--s)*.26px);
+          border-radius:calc(var(--s)*.2px);background:#2B3B5D}
+  .dots i.on{width:calc(var(--s)*2.7px);
+             background:linear-gradient(90deg,var(--crimson),var(--blue))}
+
+  /* the credential lockup */
+  .ccode{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1;
+         font-size:calc(var(--s)*8.4px);margin-top:calc(var(--s)*1.45px);
+         will-change:transform,opacity}
+  .cname{font-weight:600;font-size:calc(var(--s)*1.62px);line-height:1.25;color:var(--soft);
+         margin-top:calc(var(--s)*.6px);letter-spacing:.004em;will-change:transform,opacity}
+
+  /* "this is for you if…" — a description of who the credential is aimed at.
+     Deliberately a statement about the reader's job, never about what the
+     credential gets them. */
+  .who{margin-top:calc(var(--s)*2.0px);border-left:calc(var(--s)*.26px) solid var(--accent);
+       padding-left:calc(var(--s)*1.1px);max-width:calc(var(--s)*30px);
+       will-change:transform,opacity}
+  .who .wl{font-size:calc(var(--s)*.98px);font-weight:700;text-transform:uppercase;
+           letter-spacing:.16em;color:var(--accent)}
+  .who .wt{font-size:calc(var(--s)*1.62px);line-height:1.38;color:var(--soft);
+           margin-top:calc(var(--s)*.5px)}
+  .who .wt b{color:#fff;font-weight:600}
+
+  .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.25px)}
+</style>
+
+<div id="stage">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">PCI AI · Three credentials</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">Three codes.<br>One job <span class="hl">each.</span></div>
+    <div class="sub" id="s1">PCL-AI, PFL-AI, PML-AI — and who each one is for.</div>
+  </section>
+
+  <section class="beat" id="b2">
+    <div class="hd">
+      <div class="eyebrow" id="e2">01 / 03 · The flagship</div>
+      <div class="dots" id="d2"><i class="on"></i><i></i><i></i></div>
+    </div>
+    <div class="rule" id="u2"></div>
+    <div class="ccode" id="c2">PCL-AI</div>
+    <div class="cname" id="n2">PCI AI Project Controls Leader</div>
+    <div class="who" id="w2">
+      <div class="wl">This is for you if</div>
+      <div class="wt">you own the schedule and the cost picture together — <b>planner, cost engineer, programme controls lead.</b></div>
+    </div>
+  </section>
+
+  <section class="beat" id="b3">
+    <div class="hd">
+      <div class="eyebrow" id="e3">02 / 03 · The money side</div>
+      <div class="dots" id="d3"><i></i><i class="on"></i><i></i></div>
+    </div>
+    <div class="rule" id="u3"></div>
+    <div class="ccode" id="c3">PFL-AI</div>
+    <div class="cname" id="n3">PCI AI Project Finance Leader</div>
+    <div class="who" id="w3">
+      <div class="wt">the forecast, the cash flow and the cost report carry your name — <b>forecast owner, cost controller, commercial manager.</b></div>
+      <div class="wl" id="l3">This is for you if</div>
+    </div>
+  </section>
+
+  <section class="beat" id="b4">
+    <div class="hd">
+      <div class="eyebrow" id="e4">03 / 03 · The delivery side</div>
+      <div class="dots" id="d4"><i></i><i></i><i class="on"></i></div>
+    </div>
+    <div class="rule" id="u4"></div>
+    <div class="ccode" id="c4">PML-AI</div>
+    <div class="cname" id="n4">PCI Project Management Leader – AI</div>
+    <div class="who" id="w4">
+      <div class="wl">This is for you if</div>
+      <div class="wt">you run the delivery itself — scope, risk, change, and the team absorbing it. <b>Project and programme managers.</b></div>
+    </div>
+  </section>
+
+  <section class="beat" id="b5">
+    <div class="stack">
+      <div>
+        <div class="eyebrow" id="e5">Whichever one is yours</div>
+        <div class="rule" id="u5"></div>
+      </div>
+      <div class="offer" id="of">
+        <div class="lab">Apply code</div>
+        <div class="code">FOUNDINGFREE</div>
+        <div class="what">Free membership · free study access · free exam enrolment</div>
+      </div>
+      <div class="mail" id="ml"><b>info@pciai.org</b></div>
+    </div>
+  </section>
+
+  <div id="foot"><span>pciai.org</span><span>PCL-AI · PFL-AI · PML-AI</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+/* Three credential beats of equal length, then the offer. The offer opens at
+   24.20s of 30.40 — past the two-thirds point (20.27s), as the spec requires,
+   so the film is an explanation that ends with an offer rather than an ad. */
+const BEATS = [
+  { id:'b1', in:0.00,  out:4.40  },
+  { id:'b2', in:4.40,  out:11.00 },
+  { id:'b3', in:11.00, out:17.60 },
+  { id:'b4', in:17.60, out:24.20 },
+  { id:'b5', in:24.20, out:30.40 },
+];
+const DUR = 30.40;
+window.__DUR = DUR;
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
+  e2:$('#e2'), u2:$('#u2'), d2:$('#d2'), c2:$('#c2'), n2:$('#n2'), w2:$('#w2'),
+  e3:$('#e3'), u3:$('#u3'), d3:$('#d3'), c3:$('#c3'), n3:$('#n3'), w3:$('#w3'),
+  e4:$('#e4'), u4:$('#u4'), d4:$('#d4'), c4:$('#c4'), n4:$('#n4'), w4:$('#w4'),
+  e5:$('#e5'), u5:$('#u5'), of:$('#of'), ml:$('#ml'),
+};
+window.__EL = EL;
+
+const rise = (el, u, t0, d = 0.50, em = 0.65) => {
+  if (!el) return;
+  const p = P.seg(u, t0, t0 + d, P.outExpo);
+  el.style.opacity = p.toFixed(3);
+  el.style.transform = `translateY(${((1 - p) * em).toFixed(2)}em)`;
+};
+const head = (e, u, u0) => { e.style.opacity = P.seg(u, u0, u0 + 0.30).toFixed(3); };
+
+/* One animator for all three credential beats: identical shape, identical
+   timing. The code and its full name move as a single lockup so the beat
+   reads as three changes (header, lockup, who-line), not six. */
+const cred = (e, u, dots, code, name, who) => {
+  head(e, u, 0.04);
+  P.rule(u === undefined ? null : arguments, 0, 0); // placeholder, replaced below
+};
+
+const credBeat = (E, u) => {
+  head(E.e, u, 0.04);
+  P.rule(E.u, u, 0.14);
+  E.d.style.opacity = P.seg(u, 0.20, 0.56).toFixed(3);
+  rise(E.c, u, 0.34, 0.58, 0.40);
+  rise(E.n, u, 0.50, 0.52, 0.55);
+  rise(E.w, u, 1.14, 0.56, 0.45);
+};
+
+const FX = {
+  b1(u){ head(EL.e1,u,0.04); P.rule(EL.u1,u,0.14);
+         P.revealWords(EL.h1,u,0.28,{stagger:0.058,dur:0.42}); rise(EL.s1,u,1.10); },
+  b2(u){ credBeat({e:EL.e2,u:EL.u2,d:EL.d2,c:EL.c2,n:EL.n2,w:EL.w2}, u); },
+  b3(u){ credBeat({e:EL.e3,u:EL.u3,d:EL.d3,c:EL.c3,n:EL.n3,w:EL.w3}, u); },
+  b4(u){ credBeat({e:EL.e4,u:EL.u4,d:EL.d4,c:EL.c4,n:EL.n4,w:EL.w4}, u); },
+  b5(u){ head(EL.e5,u,0.04); P.rule(EL.u5,u,0.14);
+         const p = P.seg(u,0.30,0.94,P.outBack);
+         EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
+         EL.of.style.transform = `translateY(${((1-p)*0.6).toFixed(2)}em) scale(${(0.96+0.04*Math.min(1,p)).toFixed(4)})`;
+         rise(EL.ml,u,1.30,0.52,0.45); },
+};
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+};
+window.seek(0);
+</script>

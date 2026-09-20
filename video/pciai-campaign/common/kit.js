@@ -46,11 +46,11 @@
   /* One nominal width per aspect, so a 19.2px base unit scales to any output
      size and the same film reads correctly at 1920x1080 and 1080x1920 without
      a second layout. */
-  function setupStage({ nominal = { wide: 1920, sq: 1220, tall: 940 }, base = 19.2 } = {}) {
+  function setupStage({ nominal = { wide: 1920, sq: 1050, tall: 940 }, base = 19.2 } = {}) {
     const Q = new URLSearchParams(location.search);
     const W = +(Q.get('w') || 1920), H = +(Q.get('h') || 1080);
     const R = W / H;
-    const ASPECT = R >= 1.4 ? 'wide' : R >= 0.85 ? 'sq' : 'tall';
+    const ASPECT = R >= 1.4 ? 'wide' : R >= 0.70 ? 'sq' : 'tall';
     const stage = document.getElementById('stage');
     stage.style.width = W + 'px';
     stage.style.height = H + 'px';

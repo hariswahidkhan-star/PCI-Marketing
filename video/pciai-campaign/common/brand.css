@@ -133,3 +133,19 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
   padding:calc(var(--s)*.6px) calc(var(--s)*1.0px);
   border-bottom:calc(var(--s)*.18px) solid var(--blue);max-width:100%}
 #stage.tall #ccbox{font-size:calc(var(--s)*1.85px)}
+
+/* ---- accumulating key-line list ----------------------------------------
+   LinkedIn's own creative study (13,000 B2B ads) found bulleted captions
+   carry ~30% longer dwell. So on the 4:5 cuts the key lines ACCUMULATE into a
+   visible list rather than replacing one another — the viewer can see the
+   argument being assembled, and a late arrival can still read the whole of it.
+   Reels do the opposite and replace, because there is no room and no dwell to
+   win. Same content, two behaviours. */
+.build{display:flex;flex-direction:column;gap:calc(var(--s)*.85px);margin-top:calc(var(--s)*1.4px)}
+.build .li{display:flex;align-items:flex-start;gap:calc(var(--s)*.75px);
+  font-size:calc(var(--s)*1.35px);line-height:1.35;color:var(--soft);will-change:opacity,transform}
+.build .li i{flex:0 0 auto;width:calc(var(--s)*.42px);height:calc(var(--s)*1.35px);
+  border-radius:calc(var(--s)*.2px);background:linear-gradient(180deg,var(--crimson),var(--blue));
+  margin-top:calc(var(--s)*.18px)}
+.build .li b{color:#fff;font-weight:600}
+#stage.tall .build .li{font-size:calc(var(--s)*1.5px)}
