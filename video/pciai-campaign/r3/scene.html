@@ -31,25 +31,25 @@
   #stage.wide .bignum{font-size:calc(var(--s)*8px)}
   .numlab{font-size:calc(var(--s)*1.62px);line-height:1.34;color:var(--soft);
           margin-top:calc(var(--s)*.55px);max-width:100%;will-change:transform,opacity}
-  .numlab b{color:#fff;font-weight:600}
+  .numlab b{color:var(--fg);font-weight:600}
 
   .note{font-size:calc(var(--s)*1.28px);line-height:1.4;color:var(--mute);
-        margin-top:calc(var(--s)*1.35px);will-change:transform,opacity}
+        margin-top:calc(var(--s)*1.7px);will-change:transform,opacity}
 
   /* the named domains — a list, typeset like a syllabus rather than a feature grid */
   .doms{list-style:none;margin-top:calc(var(--s)*1.9px);display:flex;flex-direction:column;
         gap:calc(var(--s)*.82px)}
-  .doms li{display:flex;align-items:baseline;gap:calc(var(--s)*.85px);
-           border-left:calc(var(--s)*.2px) solid var(--line);
+  .doms li{display:flex;align-items:baseline;gap:calc(var(--s)*.6px);
+           border-left:calc(var(--s)*.2px) solid var(--accent);
            padding:calc(var(--s)*.18px) 0 calc(var(--s)*.18px) calc(var(--s)*.85px);
            will-change:transform,opacity}
-  .doms b{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*1.5px);
-          color:var(--accent);letter-spacing:.01em;min-width:calc(var(--s)*2.7px);flex:0 0 auto}
-  .doms em{font-style:normal;font-size:calc(var(--s)*1.5px);color:#fff;font-weight:500;
-           line-height:1.25}
+  .doms b{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*1.4px);
+          color:var(--accent);letter-spacing:.01em;min-width:calc(var(--s)*3.05px);flex:0 0 auto}
+  .doms em{font-style:normal;font-size:calc(var(--s)*1.4px);color:var(--fg);font-weight:500;
+           line-height:1.3}
 
   .quote{font-family:var(--display);font-weight:800;letter-spacing:-.018em;line-height:1.1;
-         font-size:calc(var(--s)*2.1px);margin-top:calc(var(--s)*1.8px);color:#fff;
+         font-size:calc(var(--s)*2.1px);margin-top:calc(var(--s)*1.8px);color:var(--fg);
          will-change:transform,opacity}
   .quote .hl{color:var(--accent)}
   .attrib{font-size:calc(var(--s)*1.1px);color:var(--mute);margin-top:calc(var(--s)*.7px);
@@ -57,9 +57,21 @@
 
   .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.35px)}
   .stack .note{margin-top:0}
+
+  /* --- light ground corrections -----------------------------------------
+     #E4785F and #3B82F6 are tuned for the navy: on #F5F7FB the first goes
+     washed and the second falls under 3:1. The kit already darkens the
+     eyebrow to --blue for exactly this reason; these are the same move for
+     the three accents r3 adds of its own. Crimson→blue on the thirteen marks
+     needs no correction — both ends are brand ink and read on either ground. */
+  #stage.light .big .crim,#stage.light .big2 .crim{color:var(--crimson)}
+  #stage.light .big .hl,#stage.light .big2 .hl{color:var(--blue)}
+  #stage.light .quote .hl{color:var(--blue)}
+  #stage.light .doms b{color:var(--blue)}
+  #stage.light .doms li{border-left-color:var(--blue)}
 </style>
 
-<div id="stage">
+<div id="stage" class="light">
   <div id="wash" data-decor></div>
   <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
 
@@ -107,7 +119,7 @@
   <section class="beat" id="b4">
     <div class="eyebrow" id="e4">And what all thirteen are testing</div>
     <div class="rule" id="u4"></div>
-    <div class="big2" id="h4">Judgement over<br>AI output.<br><span class="crim">Not recall.</span></div>
+    <div class="big2" id="h4">Judgement<br>over AI output.<br><span class="crim">Not recall.</span></div>
     <div class="quote" id="q4">“AI proposes.<br>The professional <span class="hl">disposes.</span>”</div>
     <div class="attrib" id="a4">Project Controls Institute · governing principle</div>
   </section>

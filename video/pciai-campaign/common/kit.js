@@ -61,6 +61,12 @@
     const th = Q.get('theme');
     if (th === 'light') stage.classList.add('light');
     if (th === 'dark') stage.classList.remove('light');
+    // The caption band is for the narrated 4:5 / 16:9 cuts. On a vertical
+    // render it would sit under type that is already saying the same words,
+    // and with ?cc=0 it should not paint at all. #cc.off existed and was
+    // never applied by anything, so this was latent rather than visible.
+    const CCON = Q.get('cc') !== '0';
+    document.getElementById('cc')?.classList.toggle('off', ASPECT === 'tall' || !CCON);
     const SS = (W / nominal[ASPECT]) * base;
     document.documentElement.style.setProperty('--s', SS.toFixed(4));
     return { W, H, R, ASPECT, SS, CC: Q.get('cc') !== '0' };

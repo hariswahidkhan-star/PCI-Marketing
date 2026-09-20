@@ -128,7 +128,7 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
 #stage.sq   #cc{bottom:calc(var(--s)*6.5px)}
 #stage.tall #cc{bottom:calc(var(--s)*36px);padding:0 calc(var(--s)*8.1px)}
 /* reels are text-led: no narration, so no caption band to duplicate the type */
-#stage.tall #cc.off{display:none}
+#cc.off{display:none}
 #ccbox{font-weight:700;text-align:center;line-height:1.28;
   font-size:calc(var(--s)*1.6px);color:var(--ccfg);
   background:var(--ccbg);border-radius:calc(var(--s)*.45px);

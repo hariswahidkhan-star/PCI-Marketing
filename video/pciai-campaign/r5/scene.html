@@ -2,8 +2,8 @@
 <title>PCI AI · R5 · Founding enrolment</title>
 <link rel="stylesheet" href="../common/brand.css">
 <style>
-  /* R5 — the offer film. The only one of the ten that leads toward the code,
-     and the one with the legal floor under it.
+  /* R5 — the offer film, on the LIGHT ground. The only one of the ten that
+     leads toward the code, and the one with the legal floor under it.
 
      16 CFR § 251.1 (the FTC Free Guide) requires the terms of a free offer to
      appear clearly and conspicuously IN CLOSE CONJUNCTION with the offer, and
@@ -12,56 +12,72 @@
      size as the word "free" — not a later card and not small grey type.
 
      So the condition is a second .what line INSIDE the shared .offer lockup.
-     Same element, same class, same type size as the line that says "free", so
-     the tier relationship is structural and cannot drift. The only local rule
-     applied to the component scales BOTH .what lines together for legibility
-     at 1080 wide; it cannot make the condition smaller than the grants,
-     because they are the same selector. */
+     Same element, same class, same type size, same colour as the line that
+     says "free", so the tier relationship is structural and cannot drift. The
+     only local rule touching the component scales BOTH .what lines together
+     for legibility at 1080 wide; it cannot make the condition smaller or
+     fainter than the grants, because they are one selector.
+
+     Light-ground contrast: #3B82F6 accent sits at ~3.1:1 on #F5F7FB, which is
+     the floor for large text and below it for anything else. So every accent
+     in this film resolves through --hi, which is the darker --blue (#1D4ED8,
+     ~6.5:1) on light and the brighter --accent on the dark preview. Same for
+     the crimson highlight: #E4785F is a dark-ground tint and disappears on
+     white, so light uses the true --crimson. */
+  #stage{--hi:var(--blue); --crimtone:var(--crimson)}
+  #stage:not(.light){--hi:var(--accent); --crimtone:#E4785F}
+
   .big{font-family:var(--display);font-weight:800;letter-spacing:-.028em;line-height:1.0;
        font-size:calc(var(--s)*5.8px);margin-top:calc(var(--s)*1.4px)}
   #stage.wide .big{font-size:calc(var(--s)*5.4px)}
+  /* b1 carries the longest headline in the film; at the shared .big size it
+     ran to five lines and pushed the block into the brand bar above and the
+     footer below. One step down is the whole fix. */
+  #stage.tall #b1 .big{font-size:calc(var(--s)*5.4px)}
   .mid{font-family:var(--display);font-weight:800;letter-spacing:-.024em;line-height:1.06;
        font-size:calc(var(--s)*4.3px);margin-top:calc(var(--s)*1.35px)}
   #stage.wide .mid{font-size:calc(var(--s)*3.8px)}
-  .big .hl,.mid .hl{color:var(--accent)}
-  .big .crim,.mid .crim{color:#E4785F}
+  .big .hl,.mid .hl{color:var(--hi)}
+  .big .crim,.mid .crim{color:var(--crimtone)}
 
   .creds{display:flex;flex-direction:column;align-items:flex-start;
          gap:calc(var(--s)*.72px);margin-top:calc(var(--s)*1.6px)}
   #stage.wide .creds{flex-direction:row;flex-wrap:wrap}
   .facts{display:flex;gap:calc(var(--s)*1.6px);margin-top:calc(var(--s)*1.5px);flex-wrap:wrap}
-  .fact{border-left:calc(var(--s)*.22px) solid var(--accent);padding-left:calc(var(--s)*.8px)}
+  .fact{border-left:calc(var(--s)*.22px) solid var(--hi);padding-left:calc(var(--s)*.8px)}
   .fact b{display:block;font-family:var(--display);font-weight:800;
           font-size:calc(var(--s)*2.5px);line-height:1}
   .fact span{font-size:calc(var(--s)*.95px);color:var(--mute)}
 
   /* the offer shot ------------------------------------------------------- */
-  /* Both .what lines move together. Grants and condition are one selector,
-     so no future edit can shrink the condition without shrinking the grants. */
+  /* Both .what lines move together: grants and condition are one selector, so
+     no later edit can shrink or fade the condition without doing the same to
+     the sentence containing the word "free". */
   #stage.tall .offer .what{font-size:calc(var(--s)*1.34px);line-height:1.34;
        margin-top:calc(var(--s)*.5px)}
+  #b6 .offer{margin-top:calc(var(--s)*1.5px)}
   .offer .cond{margin-top:calc(var(--s)*.7px);padding-top:calc(var(--s)*.62px);
-       border-top:calc(var(--s)*.06px) solid rgba(59,130,246,.45)}
-  .offer .cond em{font-style:normal;font-weight:700;color:var(--accent)}
-  .offer .what b{color:#fff;font-weight:700}
+       border-top:calc(var(--s)*.07px) solid var(--line)}
+  .offer .cond em{font-style:normal;font-weight:700;color:var(--hi)}
+  .offer .what b{color:var(--fg);font-weight:700}
 
   /* how to use it --------------------------------------------------------- */
   .steps{display:flex;flex-direction:column;gap:calc(var(--s)*.78px);
          margin-top:calc(var(--s)*1.6px)}
   .step{display:flex;align-items:baseline;gap:calc(var(--s)*.9px);will-change:transform,opacity}
   .step b{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*1.9px);
-          line-height:1;color:var(--accent);min-width:calc(var(--s)*1.9px)}
+          line-height:1;color:var(--hi);min-width:calc(var(--s)*1.9px)}
   .step span{font-size:calc(var(--s)*1.62px);color:var(--soft);line-height:1.25}
-  .step span i{font-style:normal;color:#fff;font-weight:700}
+  .step span i{font-style:normal;color:var(--fg);font-weight:700}
   .mailwrap{margin-top:calc(var(--s)*2.0px);will-change:transform,opacity}
   .mailwrap .lead{font-size:calc(var(--s)*1.1px);color:var(--mute);
           text-transform:uppercase;letter-spacing:.15em;font-weight:700}
   .mailwrap .addr{font-family:var(--display);font-weight:800;letter-spacing:-.018em;
-          font-size:calc(var(--s)*2.9px);line-height:1.1;margin-top:calc(var(--s)*.4px)}
-  .attrib{font-size:calc(var(--s)*1.2px);color:var(--mute);margin-top:calc(var(--s)*1.4px)}
+          font-size:calc(var(--s)*2.9px);line-height:1.1;margin-top:calc(var(--s)*.4px);
+          color:var(--fg)}
 </style>
 
-<div id="stage">
+<div id="stage" class="light">
   <div id="wash" data-decor></div>
   <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
 
@@ -74,8 +90,8 @@
   <section class="beat" id="b1">
     <div class="eyebrow" id="e1">Project controls, right now</div>
     <div class="rule" id="u1"></div>
-    <div class="big" id="h1">The model wrote the forecast.<br>A <span class="crim">person</span> signs it.</div>
-    <div class="sub" id="s1">The skill that decides careers has moved — from producing the plan to judging what was produced.</div>
+    <div class="big" id="h1">The forecast<br>is written.<br>You still<br><span class="crim">sign</span> it.</div>
+    <div class="sub" id="s1">The skill that matters has moved — from producing the plan to judging what the machine produced.</div>
   </section>
 
   <!-- 2 · what PCI is -->
@@ -94,7 +110,7 @@
   <section class="beat" id="b3">
     <div class="eyebrow" id="e3">What sits behind them</div>
     <div class="rule" id="u3"></div>
-    <div class="mid" id="h3">One body of knowledge.<br>Assessed, then <span class="hl">checkable.</span></div>
+    <div class="mid" id="h3">One body of knowledge.<br>Assessed, then <span class="hl">verifiable.</span></div>
     <div class="facts">
       <div class="fact" id="f1"><b id="fn1">13</b><span>knowledge domains</span></div>
       <div class="fact" id="f2"><b>Public</b><span>credential verification</span></div>

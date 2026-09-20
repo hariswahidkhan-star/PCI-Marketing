@@ -79,21 +79,51 @@ for (let t = 0; t <= DUR + 0.001; t = +(t + 0.25).toFixed(2)) {
   const r = await pg.evaluate(({ SAFE }) => {
     const st = document.getElementById('stage'), sb = st.getBoundingClientRect();
     const over = [], clip = [], un = [];
-    const SKIP = /^(wash|mesh|stage|barwrap)$/;
+    const SKIP = /^(wash|mesh|stage|barwrap|bar)$/;
     const safeBox = {
       top: sb.top + sb.height * SAFE.top, bottom: sb.bottom - sb.height * SAFE.bottom,
       left: sb.left + sb.width * SAFE.left, right: sb.right - sb.width * SAFE.right,
     };
+    /* What matters is where an element is PAINTED, not where its box is. A
+       sweep inside a card with overflow:hidden has a box wider than the card
+       and paints none of it — measuring the box reports a violation that does
+       not exist on screen. So each rect is intersected with every clipping
+       ancestor before it is judged. */
+    const painted = (el) => {
+      let r = el.getBoundingClientRect();
+      for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+        const pcs = getComputedStyle(p);
+        if (!/hidden|clip|auto|scroll/.test(pcs.overflow + pcs.overflowX + pcs.overflowY)) continue;
+        const pr = p.getBoundingClientRect();
+        r = { top: Math.max(r.top, pr.top), bottom: Math.min(r.bottom, pr.bottom),
+              left: Math.max(r.left, pr.left), right: Math.min(r.right, pr.right) };
+      }
+      return { ...r, width: r.right - r.left, height: r.bottom - r.top };
+    };
+
     for (const el of document.querySelectorAll('#stage *')) {
       const cs = getComputedStyle(el);
       if (cs.visibility === 'hidden' || +cs.opacity < 0.05 || cs.display === 'none') continue;
       if (SKIP.test(el.id)) continue;
       if (el.closest('[data-decor]')) continue;
-      const b = el.getBoundingClientRect();
+      const b = painted(el);
       if (b.width < 1 || b.height < 1) continue;
       if (b.right > sb.right + 2 || b.left < sb.left - 2 || b.bottom > sb.bottom + 2 || b.top < sb.top - 2)
         over.push(`${el.className || el.tagName}`);
       // only leaf text is safe-zone checked; a full-bleed wrapper legitimately spans the frame
+      // A painted container with no text of its own — a card, a panel, a rule
+      // — was invisible to this check, because only leaf text was tested. Its
+      // text children could all sit inside the box while the box it is drawn
+      // in hangs outside. So anything that actually paints is checked too.
+      const paints = cs.backgroundImage !== 'none'
+        || (cs.backgroundColor && !/^rgba\(0, 0, 0, 0\)$|^transparent$/.test(cs.backgroundColor))
+        || (parseFloat(cs.borderTopWidth) + parseFloat(cs.borderLeftWidth)
+          + parseFloat(cs.borderBottomWidth) + parseFloat(cs.borderRightWidth)) > 0.5;
+      if (paints && !el.classList.contains('beat')
+          && (b.top < safeBox.top - 1 || b.bottom > safeBox.bottom + 1
+           || b.left < safeBox.left - 1 || b.right > safeBox.right + 1))
+        un.push(`<${el.id ? '#'+el.id : (el.className||el.tagName).toString().split(' ')[0]}> painted outside`);
+
       const txt = el.textContent && el.textContent.trim();
       const leaf = txt && ![...el.children].some(c => c.textContent && c.textContent.trim());
       if (leaf) {
