@@ -34,6 +34,12 @@
   .principle .hl{color:var(--accent)}
   .attrib{font-size:calc(var(--s)*1.1px);color:var(--mute);margin-top:calc(var(--s)*1.5px)}
 
+  /* the accumulating lists carry two whole beats on their own here, so they
+     are set larger than the shared default rather than padded out with an
+     extra reveal the pacing budget cannot afford */
+  .build .li{font-size:calc(var(--s)*1.55px)}
+  .build .li i{height:calc(var(--s)*1.55px)}
+
   /* a column flex container stretches its children, so any column that holds
      a shrink-to-fit lockup (the offer card) must opt out explicitly */
   .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.2px)}
@@ -103,7 +109,7 @@
       <div class="li" id="l2"><i></i><span>The <b>body</b> it is said to come from</span></div>
       <div class="li" id="l3"><i></i><span>A <b>date</b>, and nothing standing behind it</span></div>
     </div>
-    <div class="sub" id="s2">None of that is evidence. It is formatting.</div>
+    <div class="mid" id="h2">None of that<br>is evidence.<br>It is <span class="crim">formatting.</span></div>
   </section>
 
   <!-- 3 · the diagnosis, second person, structural -->
@@ -148,8 +154,9 @@
 
   <!-- 6 · the honest half: it protects the holder too. Accumulating build. -->
   <section class="beat" id="b6">
-    <div class="eyebrow" id="e6">And it cuts both ways</div>
+    <div class="eyebrow" id="e6">Verification cuts both ways</div>
     <div class="rule" id="u6"></div>
+    <div class="mid" id="h6">It protects<br>you as much as<br>it protects <span class="hl">them.</span></div>
     <div class="build">
       <div class="li" id="l4"><i></i><span>An <b>employer</b> is not asked to take your word for it</span></div>
       <div class="li" id="l5"><i></i><span>And <b>you</b> are not left hoping you are believed</span></div>
@@ -185,9 +192,9 @@ const P = PCI;
 const ST = P.setupStage();
 P.drawMesh(ST.W, ST.H, ST.SS);
 
-/* 50.00s — inside the 45–52s window.
-   The offer beat opens at 44.00 and the code lands at 45.60; two-thirds of
-   the film is 33.33, so the commercial arrives only once the argument has
+/* 50.60s — inside the 45–52s window.
+   The offer beat opens at 44.60 and the code lands at 46.20; two-thirds of
+   the film is 33.73, so the commercial arrives only once the argument has
    been made in full, which is the whole point of running this one long. */
 const BEATS = [
   { id:'b1', in: 0.00, out: 6.60 },   // anyone can type a credential
@@ -195,10 +202,10 @@ const BEATS = [
   { id:'b3', in:15.60, out:21.40 },   // you are trusting the typing
   { id:'b4', in:21.40, out:27.60 },   // the principle — payoff hold
   { id:'b5', in:27.60, out:36.00 },   // the illustrative lookup
-  { id:'b6', in:36.00, out:44.00 },   // it cuts both ways  (build)
-  { id:'b7', in:44.00, out:50.00 },   // offer + address
+  { id:'b6', in:36.00, out:44.60 },   // it cuts both ways  (build)
+  { id:'b7', in:44.60, out:50.60 },   // offer + address
 ];
-const DUR = 50.00;
+const DUR = 50.60;
 window.__DUR = DUR;
 
 /* These double as the narration script. The film is delivered silent and
@@ -218,22 +225,22 @@ const CAPS = [
   [27.95, 31.40, "So ours can be checked — publicly, by anyone."],
   [31.50, 34.00, "Look up the reference, and the record answers."],
   [34.10, 35.90, "This example is invented. It is not a real record."],
-  [36.30, 38.90, "And verification cuts both ways."],
-  [39.00, 41.10, "An employer is not asked to take your word for it,"],
-  [41.20, 43.90, "and you are not left hoping a stranger believes you."],
-  [44.35, 47.00, "Founding enrolment is open. Get one that checks out."],
-  [47.10, 49.95, "Apply code FOUNDINGFREE — membership, study and exam, free."],
+  [36.30, 38.60, "And verification cuts both ways."],
+  [38.70, 41.60, "An employer is not asked to take your word for it,"],
+  [41.70, 44.50, "and you are not left hoping a stranger believes you."],
+  [44.95, 47.50, "Founding enrolment is open. Get one that checks out."],
+  [47.60, 50.55, "Apply code FOUNDINGFREE — membership, study and exam, free."],
 ];
 
 const $ = s => document.querySelector(s);
 const EL = {
   e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
-  e2:$('#e2'), u2:$('#u2'), s2:$('#s2'), lis:[$('#l1'),$('#l2'),$('#l3')],
+  e2:$('#e2'), u2:$('#u2'), h2:$('#h2'), lis:[$('#l1'),$('#l2'),$('#l3')],
   e3:$('#e3'), u3:$('#u3'), h3:$('#h3'), s3:$('#s3'),
   e4:$('#e4'), u4:$('#u4'), h4:$('#h4'), a4:$('#a4'),
   e5:$('#e5'), u5:$('#u5'), h5:$('#h5'),
   vc:$('#vc'), vs:$('#vs'), vref:$('#vref'), tk:$('#tk'), tkp:$('#tkp'), vstat:$('#vstat'), vn:$('#vn'),
-  e6:$('#e6'), u6:$('#u6'), lis2:[$('#l4'),$('#l5'),$('#l6')],
+  e6:$('#e6'), u6:$('#u6'), h6:$('#h6'), lis2:[$('#l4'),$('#l5'),$('#l6')],
   e7:$('#e7'), u7:$('#u7'), h7:$('#h7'), of:$('#of'), ml:$('#ml'),
   cc:$('#cc'), ccbox:$('#ccbox'),
 };
@@ -270,7 +277,7 @@ const FX = {
   /* 6.60 cut · 0.80/2.80/4.80 the three lines accumulate · 6.80 the verdict */
   b2(u){ head(EL.e2,u,0.04); P.rule(EL.u2,u,0.14);
          build(EL.lis,u,0.80,2.00);
-         rise(EL.s2,u,6.80,0.55,0.45); },
+         P.revealWords(EL.h2,u,6.80,{stagger:0.062,dur:0.42}); },
 
   /* 15.60 cut · 0.50 headline rolls to ≈17.2 · 3.10 the closing line.
      Held to 21.40. */
@@ -311,13 +318,15 @@ const FX = {
     rise(EL.vn,u,1.82,0.65,0.4);
   },
 
-  /* 36.00 cut · 0.80/3.00/5.20 the three lines accumulate, held to 44.00 */
+  /* 36.00 cut · 0.50 headline · 2.00/4.00/6.00 the three lines accumulate.
+     Held to 44.60. */
   b6(u){ head(EL.e6,u,0.04); P.rule(EL.u6,u,0.14);
-         build(EL.lis2,u,0.80,2.20); },
+         P.revealWords(EL.h6,u,0.50,{stagger:0.068,dur:0.42});
+         build(EL.lis2,u,2.00,2.00); },
 
-  /* 44.00 cut · 0.60 headline · 1.60 the offer · 3.00 the address.
-     FOUNDINGFREE is up 45.60→50.00 (4.4s) and info@pciai.org 47.00→50.00
-     (3.0s, fully opaque from ≈47.5) — both clear of the 2s floor. */
+  /* 44.60 cut · 0.60 headline · 1.60 the offer · 3.00 the address.
+     FOUNDINGFREE is up 46.20→50.60 (4.4s) and info@pciai.org 47.60→50.60
+     (3.0s, fully opaque from ≈48.1) — both clear of the 2s floor. */
   b7(u){
     head(EL.e7,u,0.04); P.rule(EL.u7,u,0.14);
     P.revealWords(EL.h7,u,0.60,{stagger:0.070,dur:0.42});
