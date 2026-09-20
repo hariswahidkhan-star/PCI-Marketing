@@ -44,7 +44,13 @@
      about what holding the credential would get them. */
   .who{margin-top:calc(var(--s)*1.6px);border-left:calc(var(--s)*.26px) solid var(--accent);
        padding-left:calc(var(--s)*1.1px);max-width:calc(var(--s)*36px);
-       min-height:calc(var(--s)*8.0px);will-change:transform,opacity}
+       will-change:transform,opacity}
+  /* No min-height here on purpose. Pinning it kept the three credential
+     beats exactly the same height, but the accent rule is this block's left
+     border, so any beat whose text ran short left the rule hanging
+     below its own last line — and it reads at 16:9, where the wider column
+     turns three lines into two. Letting the block size to its content costs
+     about 20px of drift between cuts, which nobody sees. */
   #stage.wide .who{max-width:calc(var(--s)*44px)}
   .who .wl{font-size:calc(var(--s)*.95px);font-weight:700;text-transform:uppercase;
            letter-spacing:.16em;color:var(--accent);line-height:1.3}

@@ -314,8 +314,14 @@ const FX = {
      is not — it is inside the element being animated, and there is exactly
      one opacity for all of it. */
   b7(u){ head(EL.e7,u,0.04); P.rule(EL.u7,u,0.14);
-         P.revealWords(EL.h7,u,0.26,{stagger:0.060,dur:0.40});
-         const p = P.seg(u,1.05,1.75,P.outBack);
+         /* The card LEADS the headline, and it is not a stylistic choice.
+            The headline's last word is "free."; it completes at u=0.88. The
+            card is fully opaque by u=0.62. So there is no frame in this film
+            in which the word "free" is legible and the condition under it is
+            not — which is the whole of what 16 CFR 251.1 asks for, expressed
+            as an ordering constraint instead of a note in a brief. */
+         P.revealWords(EL.h7,u,0.30,{stagger:0.060,dur:0.40});
+         const p = P.seg(u,0.10,0.78,P.outBack);
          EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
          EL.of.style.transform =
            `translateY(${((1-p)*0.50).toFixed(2)}em) scale(${(0.968+0.032*Math.min(1,p)).toFixed(4)})`; },

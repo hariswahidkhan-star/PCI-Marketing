@@ -39,6 +39,8 @@
      extra reveal the pacing budget cannot afford */
   .build .li{font-size:calc(var(--s)*1.55px)}
   .build .li i{height:calc(var(--s)*1.55px)}
+  /* a display line and a list read as one block otherwise */
+  .build + .mid,.mid + .build{margin-top:calc(var(--s)*1.95px)}
 
   /* a column flex container stretches its children, so any column that holds
      a shrink-to-fit lockup (the offer card) must opt out explicitly */

@@ -114,7 +114,7 @@
       for (const ch of [...node.childNodes]) {
         if (ch.nodeType === 3) emit(ch.textContent, cls);
         else if (ch.nodeName === 'BR') frag.appendChild(document.createElement('br'));
-        else if (ch.nodeType === 1) walk(ch, ch.className || cls);
+        else if (ch.nodeType === 1) walk(ch, ch.getAttribute('class') || cls);
       }
     };
     walk(el, '');
