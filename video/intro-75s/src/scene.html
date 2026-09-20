@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCI AI — Introductory Film (75s)</title>
+<!--
+  PCI AI 75-second institutional film — deterministic scene.
+
+  Same contract as the 15-second post-launch film: nothing animates on a
+  real-time clock. window.seek(tSeconds) computes every style from t, so frame N
+  is identical whether the renderer grabs it in 40 ms or 4 seconds.
+
+  Query params:  ?w=1920&h=1080&cc=1&t=0&play=1
+    w,h  stage size   cc  1 = burned-in captions, 0 = clean plate
+    t    seek time    play=1  live preview when opened by hand
+
+  Three aspects are supported from one source: 16:9, 1:1 and 9:16. The vertical
+  cut is not a centre-crop -- rows become columns and the type scale changes,
+  because a 5-across row of chips is illegible at 1080 wide.
+-->
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+
+:root{
+  /* Brand tokens lifted verbatim from backend/wwwroot/assets/styles.css */
+  --ink:#0F172A; --crimson:#C13329; --blue:#1D4ED8; --magenta:#3B82F6;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:19.2;    /* scale unit in px, set by JS from stage width */
+  --padb:19;   /* bottom safe area: must clear a 3-line caption band */
+  --h1:6.4;    /* headline size in units */
+  --h2:5.4;
+  /* Palette slots re-computed every frame by JS so a scene can go light. */
+  --fg:#FFFFFF; --sub:#B9C6DA; --eyeb:#E4785F; --foot:#7E90AC;
+  --rule:rgba(148,180,230,.20); --chipbg:#111D33; --chipbd:rgba(59,130,246,.42);
+  --chipsub:#8FA6C4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+
+#stage{position:relative;overflow:hidden;background:#0F172A;
+  font-family:var(--sans);color:var(--fg);-webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision}
+
+/* ---------- ambient background ---------- */
+#glow,#glow2{position:absolute;inset:-25%;pointer-events:none;will-change:transform,opacity}
+#glow{background:radial-gradient(closest-side, rgba(37,99,235,.34), rgba(37,99,235,0) 70%)}
+#glow2{background:radial-gradient(closest-side, rgba(193,51,41,.24), rgba(193,51,41,0) 70%)}
+#grid{position:absolute;inset:0;pointer-events:none}
+#vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%)}
+#scrim{position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,rgba(6,9,18,.72) 0%,rgba(6,9,18,.46) 38%,rgba(6,9,18,.62) 72%,rgba(6,9,18,.86) 100%)}
+#sheen{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;
+  background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.10) 50%,rgba(255,255,255,0) 62%)}
+
+/* ---------- shot scaffolding ---------- */
+.shot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;
+  padding:calc(12 * var(--s) * 1px) calc(9.5 * var(--s) * 1px) calc(var(--padb) * var(--s) * 1px);
+  will-change:opacity,transform}
+.shot.left{align-items:flex-start;text-align:left}
+
+.eyebrow{font-weight:600;font-size:calc(1.32 * var(--s) * 1px);letter-spacing:.19em;
+  text-transform:uppercase;color:var(--eyeb);white-space:nowrap}
+.uline{height:calc(.42 * var(--s) * 1px);width:calc(7.2 * var(--s) * 1px);
+  background:linear-gradient(90deg,var(--crimson),var(--magenta));
+  border-radius:calc(.3 * var(--s) * 1px);transform-origin:center;will-change:transform}
+.shot.left .uline{transform-origin:left center}
+
+h1,h2{font-family:var(--display);font-weight:800;line-height:1.03;letter-spacing:-.023em;
+  color:var(--fg)}
+h1{font-size:calc(var(--h1) * var(--s) * 1px)}
+h2{font-size:calc(var(--h2) * var(--s) * 1px)}
+.sub{font-weight:400;color:var(--sub);font-size:calc(1.92 * var(--s) * 1px);line-height:1.5;
+  max-width:calc(54 * var(--s) * 1px)}
+.ln{display:block;overflow:hidden;padding-bottom:calc(.55 * var(--s) * 1px)}
+.w{display:inline-block;will-change:transform,opacity}
+
+/* ---------- chip rows (disciplines, credentials) ---------- */
+.chips{display:flex;gap:calc(1.35 * var(--s) * 1px);justify-content:center;flex-wrap:nowrap}
+.chip{background:var(--chipbg);border:calc(.115 * var(--s) * 1px) solid var(--chipbd);
+  padding:calc(1.6 * var(--s) * 1px) calc(2.1 * var(--s) * 1px);
+  text-align:left;will-change:transform,opacity;border-radius:calc(.2 * var(--s) * 1px)}
+.chip b{display:block;font-family:var(--display);font-weight:800;
+  font-size:calc(2.95 * var(--s) * 1px);letter-spacing:-.02em;color:var(--fg);line-height:1}
+.chip span{display:block;margin-top:calc(.7 * var(--s) * 1px);font-size:calc(1.12 * var(--s) * 1px);
+  color:var(--chipsub);letter-spacing:.055em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+.chip.cred{min-width:calc(15.2 * var(--s) * 1px)}
+
+/* discipline pills — lighter weight than a credential chip, deliberately */
+.pills{display:flex;gap:calc(1.05 * var(--s) * 1px);justify-content:center;flex-wrap:nowrap}
+.pill{font-family:var(--display);font-weight:800;letter-spacing:.02em;
+  font-size:calc(2.15 * var(--s) * 1px);
+  padding:calc(.9 * var(--s) * 1px) calc(1.6 * var(--s) * 1px);
+  border:calc(.115 * var(--s) * 1px) solid var(--chipbd);color:var(--fg);
+  white-space:nowrap;will-change:transform,opacity;border-radius:calc(.2 * var(--s) * 1px)}
+
+/* four-up capability row (shot 3) and requirement list (shot 4) */
+.caps4{display:flex;gap:calc(1.5 * var(--s) * 1px);justify-content:center;flex-wrap:nowrap}
+.cap4{font-size:calc(1.5 * var(--s) * 1px);color:var(--sub);font-weight:500;
+  padding-top:calc(.85 * var(--s) * 1px);border-top:calc(.18 * var(--s) * 1px) solid var(--chipbd);
+  min-width:calc(12.6 * var(--s) * 1px);text-align:left;white-space:nowrap;
+  will-change:transform,opacity}
+.reqs{display:flex;gap:calc(1.15 * var(--s) * 1px);justify-content:center;flex-wrap:nowrap}
+.req{font-size:calc(1.38 * var(--s) * 1px);color:var(--sub);font-weight:500;line-height:1.35;
+  border-left:calc(.18 * var(--s) * 1px) solid var(--chipbd);
+  padding:calc(.15 * var(--s) * 1px) 0 calc(.15 * var(--s) * 1px) calc(.95 * var(--s) * 1px);
+  width:calc(11.4 * var(--s) * 1px);text-align:left;will-change:transform,opacity}
+
+.status{font-size:calc(1.06 * var(--s) * 1px);color:var(--foot);line-height:1.5;
+  max-width:calc(56 * var(--s) * 1px)}
+
+/* ---------- identity + end card ---------- */
+#mark,#mark8{width:calc(8.4 * var(--s) * 1px);height:calc(8.4 * var(--s) * 1px);display:block}
+.wordmark{display:flex;align-items:center;gap:calc(1.05 * var(--s) * 1px);justify-content:center}
+.wordmark .wm-t{font-family:var(--display);font-weight:800;letter-spacing:-.01em;
+  font-size:calc(3.2 * var(--s) * 1px);line-height:1;color:var(--fg)}
+.wordmark .wm-t em{font-style:normal;color:var(--magenta)}
+.wordmark .wm-s{font-weight:500;color:var(--sub);font-size:calc(1.16 * var(--s) * 1px);
+  line-height:1.3;text-align:left;
+  border-left:calc(.115 * var(--s) * 1px) solid var(--rule);padding-left:calc(.95 * var(--s) * 1px)}
+.url{font-weight:600;font-size:calc(1.86 * var(--s) * 1px);color:var(--fg);letter-spacing:.005em}
+.url em{font-style:normal;color:var(--sub);padding:0 calc(.7 * var(--s) * 1px)}
+.legal{font-weight:400;font-size:calc(1.0 * var(--s) * 1px);color:var(--foot);line-height:1.55;
+  max-width:calc(60 * var(--s) * 1px)}
+
+/* ---------- persistent brand furniture ---------- */
+#topbar{position:absolute;display:flex;align-items:center;gap:calc(.85 * var(--s) * 1px);
+  left:calc(9.5 * var(--s) * 1px);top:calc(6.2 * var(--s) * 1px);will-change:opacity}
+#topbar img{width:calc(3.0 * var(--s) * 1px);height:calc(3.0 * var(--s) * 1px)}
+#topbar .t{font-family:var(--display);font-weight:800;font-size:calc(1.6 * var(--s) * 1px);
+  letter-spacing:-.01em;color:var(--fg)}
+#topbar .t em{font-style:normal;color:var(--magenta)}
+#topbar .s{font-weight:500;font-size:calc(.9 * var(--s) * 1px);color:var(--foot);line-height:1.28;
+  text-align:left;border-left:calc(.1 * var(--s) * 1px) solid var(--rule);
+  padding-left:calc(.7 * var(--s) * 1px)}
+#footrule{position:absolute;left:calc(9.5 * var(--s) * 1px);right:calc(9.5 * var(--s) * 1px);
+  bottom:calc(5.0 * var(--s) * 1px);height:1px;background:var(--rule)}
+#footl{position:absolute;left:calc(9.5 * var(--s) * 1px);bottom:calc(3.0 * var(--s) * 1px);
+  font-size:calc(1.0 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;
+  color:var(--foot);font-weight:600}
+#footr{position:absolute;right:calc(9.5 * var(--s) * 1px);bottom:calc(3.0 * var(--s) * 1px);
+  font-size:calc(1.0 * var(--s) * 1px);color:var(--foot);font-weight:500;letter-spacing:.03em}
+
+/* ---------- captions ---------- */
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;
+  padding:0 calc(10 * var(--s) * 1px);pointer-events:none}
+#ccbox{background:rgba(6,12,24,.82);
+  border-bottom:calc(.28 * var(--s) * 1px) solid var(--crimson);
+  padding:calc(.9 * var(--s) * 1px) calc(1.6 * var(--s) * 1px);
+  font-weight:600;color:#fff;text-align:center;white-space:pre-line;
+  font-size:calc(1.78 * var(--s) * 1px);line-height:1.35;letter-spacing:.004em;max-width:100%}
+
+/* ---------- square overrides ---------- */
+#stage.sq .pills{gap:calc(.78 * var(--s) * 1px);flex-wrap:wrap;max-width:calc(44 * var(--s) * 1px)}
+#stage.sq .pill{font-size:calc(1.72 * var(--s) * 1px);padding:calc(.75 * var(--s) * 1px) calc(1.1 * var(--s) * 1px)}
+#stage.sq .chips{gap:calc(1.0 * var(--s) * 1px)}
+#stage.sq .chip{padding:calc(1.4 * var(--s) * 1px) calc(1.5 * var(--s) * 1px)}
+#stage.sq .chip.cred{min-width:0}
+#stage.sq .chip b{font-size:calc(2.5 * var(--s) * 1px)}
+#stage.sq .caps4{gap:calc(.95 * var(--s) * 1px)}
+#stage.sq .cap4{font-size:calc(1.24 * var(--s) * 1px);min-width:0;width:calc(10.4 * var(--s) * 1px);white-space:normal}
+#stage.sq .reqs{gap:calc(.85 * var(--s) * 1px)}
+#stage.sq .req{font-size:calc(1.18 * var(--s) * 1px);width:calc(9.0 * var(--s) * 1px)}
+
+/* ---------- vertical overrides: rows become columns ---------- */
+#stage.pt .shot{padding-left:calc(5.5 * var(--s) * 1px);padding-right:calc(5.5 * var(--s) * 1px)}
+#stage.pt .pills,#stage.pt .chips,#stage.pt .caps4,#stage.pt .reqs{
+  flex-direction:column;align-items:stretch;gap:calc(1.15 * var(--s) * 1px);
+  width:calc(40 * var(--s) * 1px)}
+#stage.pt .pill{text-align:center;font-size:calc(2.6 * var(--s) * 1px)}
+#stage.pt .chip{padding:calc(1.7 * var(--s) * 1px) calc(2.2 * var(--s) * 1px)}
+#stage.pt .chip.cred{min-width:0}
+#stage.pt .chip b{font-size:calc(3.4 * var(--s) * 1px)}
+#stage.pt .chip span{font-size:calc(1.3 * var(--s) * 1px)}
+#stage.pt .cap4{min-width:0;width:auto;font-size:calc(1.85 * var(--s) * 1px);white-space:normal}
+#stage.pt .req{width:auto;font-size:calc(1.72 * var(--s) * 1px)}
+#stage.pt .sub{max-width:calc(43 * var(--s) * 1px)}
+#stage.pt .legal,#stage.pt .status{max-width:calc(43 * var(--s) * 1px)}
+#stage.pt .wordmark{gap:calc(.9 * var(--s) * 1px)}
+#stage.pt #cc{padding:0 calc(4.5 * var(--s) * 1px)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div>
+  <div id="glow2"></div>
+  <svg id="grid" preserveAspectRatio="none"></svg>
+  <div id="vig"></div>
+  <div id="sheen"></div>
+  <div id="scrim"></div>
+
+  <div id="topbar">
+    <img src="../brand/logo.svg" alt="">
+    <div class="t">PCI <em>AI</em></div>
+    <div class="s">Project Controls<br>Institute Global, Inc.</div>
+  </div>
+  <div id="footrule"></div>
+  <div id="footl">Project Controls Institute</div>
+  <div id="footr">pciai.org</div>
+
+  <!-- ===== S1 — AMBITION (0.00–8.50) ===== -->
+  <section class="shot left" id="s1">
+    <div class="eyebrow" data-a="1">An introduction</div>
+    <div class="uline" data-a="1" style="margin:calc(1.5*var(--s)*1px) 0 calc(3.0*var(--s)*1px)"></div>
+    <h1 data-aspect="169">
+      <span class="ln"><span class="w">Ambition</span> <span class="w">requires</span></span>
+      <span class="ln"><span class="w">control.</span></span>
+    </h1>
+    <h1 data-aspect="sq">
+      <span class="ln"><span class="w">Ambition</span></span>
+      <span class="ln"><span class="w">requires</span></span>
+      <span class="ln"><span class="w">control.</span></span>
+    </h1>
+    <h1 data-aspect="pt">
+      <span class="ln"><span class="w">Ambition</span></span>
+      <span class="ln"><span class="w">requires</span></span>
+      <span class="ln"><span class="w">control.</span></span>
+    </h1>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      A controlled, financeable and deliverable outcome takes
+      more than information.
+    </div>
+  </section>
+
+  <!-- ===== S2 — THE DISCIPLINES (8.50–16.60) ===== -->
+  <section class="shot" id="s2">
+    <div class="eyebrow" data-a="1">The integrated discipline</div>
+    <div class="pills" style="margin-top:calc(3.0*var(--s)*1px)">
+      <div class="pill" data-a="1">SCOPE</div>
+      <div class="pill" data-a="1">SCHEDULE</div>
+      <div class="pill" data-a="1">COST</div>
+      <div class="pill" data-a="1">FINANCE</div>
+      <div class="pill" data-a="1">RISK</div>
+    </div>
+    <div class="sub" data-a="1" style="margin-top:calc(3.0*var(--s)*1px)">
+      Connected — and answerable for performance — while making
+      accountable decisions in increasingly complex environments.
+    </div>
+  </section>
+
+  <!-- ===== S3 — WHAT AI CHANGES (16.60–26.90) ===== -->
+  <section class="shot" id="s3">
+    <div class="eyebrow" data-a="1">What AI changes — and what it does not</div>
+    <div class="caps4" style="margin-top:calc(2.7*var(--s)*1px)">
+      <div class="cap4" data-a="1">Accelerate analysis</div>
+      <div class="cap4" data-a="1">Identify patterns</div>
+      <div class="cap4" data-a="1">Compare scenarios</div>
+      <div class="cap4" data-a="1">Support forecasting</div>
+    </div>
+    <h2 style="margin-top:calc(3.2*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">Faster</span> <span class="w" data-a="1">analysis</span> <span class="w" data-a="1">does</span> <span class="w" data-a="1">not</span></span>
+      <span class="ln"><span class="w" data-a="1">remove</span> <span class="w" data-a="1">accountability.</span></span>
+    </h2>
+  </section>
+
+  <!-- ===== S4 — RESPONSIBLE ADOPTION (26.90–36.30) ===== -->
+  <section class="shot" id="s4">
+    <div class="eyebrow" data-a="1">Responsible adoption</div>
+    <h2 style="margin-top:calc(2.3*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">Evidence.</span> <span class="w" data-a="1">Governance.</span> <span class="w" data-a="1">Human</span> <span class="w" data-a="1">judgment.</span></span>
+    </h2>
+    <div class="reqs" style="margin-top:calc(3.0*var(--s)*1px)">
+      <div class="req" data-a="1">Verified data</div>
+      <div class="req" data-a="1">Transparent assumptions</div>
+      <div class="req" data-a="1">Meaningful human review</div>
+      <div class="req" data-a="1">Clear decision rights</div>
+      <div class="req" data-a="1">An evidence trail that withstands challenge</div>
+    </div>
+  </section>
+
+  <!-- ===== S5 — PCI AI (36.30–47.40) ===== -->
+  <section class="shot" id="s5">
+    <img id="mark" src="../brand/logo.svg" alt="" data-a="1">
+    <div class="wordmark" data-a="1" style="margin-top:calc(2.2*var(--s)*1px)">
+      <div class="wm-t">PCI <em>AI</em></div>
+      <div class="wm-s">Project Controls<br>Institute Global, Inc.</div>
+    </div>
+    <div class="uline" data-a="1" style="margin:calc(2.4*var(--s)*1px) 0 0"></div>
+    <div class="sub" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      The professional competence needed to govern AI-supported work
+      across project controls, project finance and project management.
+    </div>
+  </section>
+
+  <!-- ===== S6 — THE CREDENTIAL SUITE (47.40–57.60) ===== -->
+  <section class="shot" id="s6">
+    <div class="eyebrow" data-a="1">The credential framework</div>
+    <div class="chips" style="margin-top:calc(2.9*var(--s)*1px)">
+      <div class="chip cred" data-a="1"><b>PCL-AI</b><span>Project Controls</span></div>
+      <div class="chip cred" data-a="1"><b>PFL-AI</b><span>Project Finance</span></div>
+      <div class="chip cred" data-a="1"><b>PML-AI</b><span>Project Management</span></div>
+    </div>
+    <div class="status" data-a="1" style="margin-top:calc(3.0*var(--s)*1px)">
+      PCI is not accredited by ANAB, IAS or any ISO/IEC 17024 accreditation body.
+      Its certification framework is developed with reference to ISO/IEC 17024
+      personnel-certification principles.
+    </div>
+  </section>
+
+  <!-- ===== S7 — THE CLOSE (57.60–70.80) — LIGHT GROUND ===== -->
+  <section class="shot" id="s7">
+    <div class="eyebrow" data-a="1">The professional judgment</div>
+    <h2 style="margin-top:calc(2.5*var(--s)*1px)">
+      <span class="ln"><span class="w" data-a="1">Trust</span> <span class="w" data-a="1">responsibly.</span></span>
+      <span class="ln"><span class="w" data-a="1">Challenge</span> <span class="w" data-a="1">professionally.</span></span>
+      <span class="ln"><span class="w" data-a="1">Remain</span> <span class="w" data-a="1">accountable.</span></span>
+    </h2>
+    <div class="uline" data-a="1" style="margin:calc(2.6*var(--s)*1px) 0 0"></div>
+  </section>
+
+  <!-- ===== S8 — END CARD (70.80–75.00) ===== -->
+  <section class="shot" id="s8">
+    <img id="mark8" src="../brand/logo.svg" alt="" data-a="1">
+    <div class="wordmark" data-a="1" style="margin-top:calc(2.1*var(--s)*1px)">
+      <div class="wm-t">PCI <em>AI</em></div>
+      <div class="wm-s">Project Controls<br>Institute Global, Inc.</div>
+    </div>
+    <div class="url" data-a="1" style="margin-top:calc(2.4*var(--s)*1px)">
+      pciai.org<em>·</em>projectcontrolsinstitute.org
+    </div>
+    <div class="legal" data-a="1" style="margin-top:calc(2.3*var(--s)*1px)">
+      Project Controls Institute Global, Inc. — a Delaware Non-Stock Corporation.
+      Not accredited by ANAB, IAS or any ISO/IEC 17024 accreditation body;
+      framework developed with reference to ISO/IEC 17024 principles.
+    </div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+</div>
+
+<script src="captions.data.js"></script>
+<script>
+'use strict';
+const Q  = new URLSearchParams(location.search);
+const W  = +(Q.get('w') || 1920);
+const H  = +(Q.get('h') || 1080);
+const CC = Q.get('cc') !== '0';
+/* plate=1 renders the TYPE LAYER ONLY on transparency, so B-roll can be
+   composited underneath in ffmpeg without touching the verified timing. */
+const PLATE = Q.get('plate') === '1';
+const DUR = 75.0;
+
+/* Three aspects, three type scales. A nominal width per aspect is what keeps
+   the type reading at the same optical size in a feed as on a desktop. */
+const R = W / H;
+const ASPECT  = R >= 1.40 ? '169' : (R >= 0.85 ? 'sq' : 'pt');
+const NOMINAL = ASPECT === '169' ? 1920 : ASPECT === 'sq' ? 1350 : 1180;
+
+const stage = document.getElementById('stage');
+stage.style.width = W + 'px';
+stage.style.height = H + 'px';
+const root = document.documentElement;
+root.style.setProperty('--s', (W / NOMINAL * 19.2).toFixed(4));
+if (PLATE){ document.documentElement.style.background='transparent'; document.body.style.background='transparent'; }
+if (ASPECT === 'sq'){ stage.classList.add('sq');
+  root.style.setProperty('--padb','20'); root.style.setProperty('--h1','5.3'); root.style.setProperty('--h2','4.6'); }
+if (ASPECT === 'pt'){ stage.classList.add('pt');
+  root.style.setProperty('--padb','30'); root.style.setProperty('--h1','5.8'); root.style.setProperty('--h2','5.0'); }
+
+/* Drop the headline variants this aspect does not use BEFORE the cue sheet is
+   resolved, or their words join the stagger and skew every delay. */
+document.querySelectorAll('h1[data-aspect]').forEach((h) => {
+  if (h.dataset.aspect !== ASPECT) h.remove();
+});
+
+/* ---------- background grid + the S-curve through-line ---------- */
+(function grid(){
+  const g = document.getElementById('grid');
+  g.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const step = W / (ASPECT === 'pt' ? 14 : 26);
+  let d = '';
+  for (let x = step; x < W; x += step) d += `M${x.toFixed(1)} 0V${H} `;
+  for (let y = step; y < H; y += step) d += `M0 ${y.toFixed(1)}H${W} `;
+  g.innerHTML =
+    `<path id="mesh" d="${d}" stroke="rgba(148,180,230,.075)" stroke-width="1" fill="none"/>` +
+    `<path id="spark" d="" stroke="rgba(59,130,246,.5)" stroke-width="${(W/620).toFixed(2)}" fill="none" stroke-linecap="round"/>`;
+  /* an S-curve: the shape of a project's cumulative progress. A controls motif,
+     not decoration for its own sake. It draws once, across the whole film. */
+  const pts = [], n = 110;
+  for (let i = 0; i <= n; i++){
+    const p = i / n, x = p * W;
+    const y = H * (0.80 - 0.52 * (1 / (1 + Math.exp(-(p - 0.5) * 9)))) + Math.sin(p * 7.1) * H * 0.012;
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const sp = g.querySelector('#spark');
+  sp.setAttribute('d', 'M' + pts.join('L'));
+  sp.__len = sp.getTotalLength();
+  sp.style.strokeDasharray = sp.__len;
+})();
+
+/* ---------- easing ---------- */
+const clamp = (v,a,b) => v < a ? a : v > b ? b : v;
+const outCubic = x => 1 - Math.pow(1 - x, 3);
+const outExpo  = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const inOut    = x => x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
+const seg = (t,a,b,e) => { const p = clamp((t - a) / (b - a), 0, 1); return (e||outCubic)(p); };
+const lerp = (a,b,p) => a + (b - a) * p;
+const mix  = (A,B,p) => [lerp(A[0],B[0],p), lerp(A[1],B[1],p), lerp(A[2],B[2],p)];
+const rgb  = c => `rgb(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)})`;
+const rgba = (c,a) => `rgba(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)},${a})`;
+
+/* ---------- the cut list ----------
+   `bg`   the ground for this scene. Deliberately NOT all blue: the film moves
+          from a warm charcoal, through slate and umber, to ink, and opens out
+          into a light scene before the end card. A single blue wash for 75
+          seconds reads as a template.
+   `warm` 0..1 weight of the crimson ambient glow over the blue one.
+   `light` 1 = inverted (dark type on a pale ground).                        */
+const SHOTS = [
+  { el:'s1', in:  0.00, out:  7.75, bg:[20,18,26], warm:0.75, light:0 },
+  { el:'s2', in:  7.75, out: 15.94, bg:[16,25,35], warm:0.25, light:0 },
+  { el:'s3', in: 15.94, out: 26.51, bg:[30,21,18], warm:0.90, light:0 },
+  { el:'s4', in: 26.51, out: 35.85, bg:[15,23,42], warm:0.15, light:0 },
+  { el:'s5', in: 35.85, out: 49.99, bg:[10,15,28], warm:0.20, light:0 },
+  { el:'s6', in: 49.99, out: 61.66, bg:[24,20,29], warm:0.55, light:0 },
+  { el:'s7', in: 61.66, out: 70.93, bg:[233,237,244], warm:0.35, light:1 },
+  { el:'s8', in: 70.93, out: 75.00, bg:[15,23,42], warm:0.25, light:0 }
+];
+const XF = 0.42; /* cross-dissolve length — restrained, no wipes or spins */
+
+/* Per-shot element cue sheet: [selector, delayAfterShotIn, stagger] */
+const CUES = {
+  s1: [['.eyebrow',0.20,0],['.uline',0.36,0],['h1 .w',0.50,0.085],['.sub',1.55,0]],
+  s2: [['.eyebrow',0.16,0],['.pill',0.36,0.115],['.sub',1.30,0]],
+  s3: [['.eyebrow',0.16,0],['.cap4',0.38,0.135],['h2 .w',1.35,0.080]],
+  s4: [['.eyebrow',0.16,0],['h2 .w',0.34,0.095],['.req',1.10,0.125]],
+  s5: [['#mark',0.16,0],['.wordmark',0.40,0],['.uline',0.66,0],['.sub',0.90,0]],
+  s6: [['.eyebrow',0.16,0],['.chip',0.36,0.165],['.status',1.35,0]],
+  s7: [['.eyebrow',0.18,0],['h2 .w',0.40,0.105],['.uline',1.65,0]],
+  s8: [['#mark8',0.14,0],['.wordmark',0.34,0],['.url',0.60,0],['.legal',0.86,0]]
+};
+
+const ANIM = [];
+for (const shot of SHOTS){
+  const rootEl = document.getElementById(shot.el);
+  for (const [sel, delay, stagger] of (CUES[shot.el] || [])){
+    rootEl.querySelectorAll(sel).forEach((el, i) => {
+      ANIM.push({ el, start: shot.in + delay + i * stagger });
+    });
+  }
+}
+
+const CAPS = window.__CAPS || [];
+
+const E = {
+  glow: document.getElementById('glow'), glow2: document.getElementById('glow2'),
+  sheen: document.getElementById('sheen'), spark: document.getElementById('spark'),
+  mesh: document.getElementById('mesh'), vig: document.getElementById('vig'),
+  scrim: document.getElementById('scrim'),
+  topbar: document.getElementById('topbar'), footrule: document.getElementById('footrule'),
+  footl: document.getElementById('footl'), footr: document.getElementById('footr'),
+  cc: document.getElementById('cc'), ccbox: document.getElementById('ccbox')
+};
+E.cc.style.bottom = (ASPECT === 'pt' ? H * 0.175 : ASPECT === 'sq' ? H * 0.135 : H * 0.148) + 'px';
+
+/* Two complete palettes. Every colour the film uses is interpolated between
+   them by the blended `light` weight, so the shot-7 inversion is a real
+   transition rather than a hard swap. */
+const DARK  = { fg:[255,255,255], sub:[185,198,218], eyeb:[228,120,95], foot:[126,144,172],
+                rule:[148,180,230], ruleA:.20, chipbg:[17,29,51], chipbd:[59,130,246], chipbdA:.42,
+                chipsub:[143,166,196], ccbg:[6,12,24], ccbgA:.82, ccfg:[255,255,255], mesh:.075, vig:.55 };
+const LIGHT = { fg:[15,23,42], sub:[71,85,105], eyeb:[193,51,41], foot:[100,116,139],
+                rule:[15,23,42], ruleA:.16, chipbg:[255,255,255], chipbd:[15,23,42], chipbdA:.18,
+                chipsub:[100,116,139], ccbg:[255,255,255], ccbgA:.92, ccfg:[15,23,42], mesh:.05, vig:.10 };
+
+function seek(t){
+  t = clamp(t, 0, DUR);
+
+  /* --- shot weights: one pass, reused for opacity AND for the palette --- */
+  let wsum = 0;
+  const wts = SHOTS.map(shot => {
+    const fadeIn  = shot.in  <= 0   ? 1 : seg(t, shot.in, shot.in + XF);
+    const fadeOut = shot.out >= DUR ? 1 : 1 - seg(t, shot.out - XF, shot.out);
+    const o = fadeIn * fadeOut;
+    wsum += o;
+    return { shot, o, fadeIn, fadeOut };
+  });
+  const norm = wsum > 0.0001 ? wsum : 1;
+
+  /* --- ground + palette, blended across whatever shots are on screen --- */
+  let bg = [0,0,0], light = 0, warm = 0;
+  for (const { shot, o } of wts){
+    const k = o / norm;
+    bg = [bg[0] + shot.bg[0]*k, bg[1] + shot.bg[1]*k, bg[2] + shot.bg[2]*k];
+    light += (PLATE ? 0 : shot.light) * k;
+    warm  += shot.warm  * k;
+  }
+  if (PLATE){
+    /* transparent ground; the scrim carries legibility over the footage */
+    stage.style.background = 'transparent';
+    E.scrim.style.opacity = (0.82 + 0.18 * (1 - light)).toFixed(3);
+    E.glow.style.display = E.glow2.style.display = E.mesh.style.display = 'none';
+    E.vig.style.display = 'none';
+  } else {
+    stage.style.background = rgb(bg);
+  }
+
+  const P = {};
+  for (const k of ['fg','sub','eyeb','foot','rule','chipbg','chipbd','chipsub','ccbg','ccfg'])
+    P[k] = mix(DARK[k], LIGHT[k], light);
+  for (const k of ['ruleA','chipbdA','ccbgA','mesh','vig'])
+    P[k] = lerp(DARK[k], LIGHT[k], light);
+
+  root.style.setProperty('--fg', rgb(P.fg));
+  root.style.setProperty('--sub', rgb(P.sub));
+  root.style.setProperty('--eyeb', rgb(P.eyeb));
+  root.style.setProperty('--foot', rgb(P.foot));
+  root.style.setProperty('--rule', rgba(P.rule, P.ruleA.toFixed(3)));
+  root.style.setProperty('--chipbg', rgba(P.chipbg, light > .5 ? 0.72 : 1));
+  root.style.setProperty('--chipbd', rgba(P.chipbd, P.chipbdA.toFixed(3)));
+  root.style.setProperty('--chipsub', rgb(P.chipsub));
+  E.mesh.setAttribute('stroke', `rgba(${light > .5 ? '15,23,42' : '148,180,230'},${P.mesh.toFixed(3)})`);
+  E.vig.style.background =
+    `radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,${P.vig.toFixed(3)}) 100%)`;
+
+  /* --- ambient drift --- */
+  const drift = t / DUR;
+  E.glow.style.transform =
+    `translate(${(-10 + drift * 30).toFixed(2)}%, ${(-14 + Math.sin(drift * 5.2) * 9).toFixed(2)}%) scale(${(1.05 + drift * .25).toFixed(3)})`;
+  E.glow.style.opacity  = ((0.30 + 0.42 * (1 - warm)) * (1 - light * 0.72)).toFixed(3);
+  E.glow2.style.transform =
+    `translate(${(28 - drift * 24).toFixed(2)}%, ${(20 - Math.cos(drift * 4.1) * 11).toFixed(2)}%) scale(${(1.15 - drift * .10).toFixed(3)})`;
+  E.glow2.style.opacity = ((0.18 + 0.52 * warm) * (1 - light * 0.80)).toFixed(3);
+
+  const sp = E.spark;
+  sp.style.strokeDashoffset = (sp.__len * (1 - seg(t, 1.0, 62.0, inOut))).toFixed(1);
+  sp.style.opacity = ((0.28 + 0.40 * seg(t, 1.0, 20.0)) * (1 - light * 0.55)).toFixed(3);
+  sp.setAttribute('stroke', light > .5 ? 'rgba(29,78,216,.38)' : 'rgba(59,130,246,.5)');
+
+  /* --- furniture: retires for the identity shot and the end card, which
+         carry the mark at full size themselves --- */
+  const furn = seg(t, 0.10, 0.95)
+             * (1 - seg(t, 35.85, 36.27)) + seg(t, 49.99, 50.41) * (1 - seg(t, 70.93, 71.35));
+  const f = clamp(furn, 0, 1).toFixed(3);
+  E.topbar.style.opacity = f; E.footrule.style.opacity = f;
+  E.footl.style.opacity = f;  E.footr.style.opacity = f;
+
+  /* --- shots --- */
+  for (const { shot, o, fadeIn, fadeOut } of wts){
+    const el = document.getElementById(shot.el);
+    el.style.opacity = o.toFixed(3);
+    el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    const push = (1 - fadeIn) * 1.6 - (shot.out >= DUR ? 0 : (1 - fadeOut) * 1.6);
+    el.style.transform = `translateX(${push.toFixed(3)}%)`;
+  }
+
+  /* --- element reveals --- */
+  const RISE = 0.66;
+  for (const a of ANIM){
+    const p = seg(t, a.start, a.start + RISE, outExpo);
+    a.el.style.opacity = p.toFixed(3);
+    a.el.style.transform = `translateY(${((1 - p) * 1.15).toFixed(3)}em)`;
+  }
+  document.querySelectorAll('.uline').forEach(u => {
+    u.style.transform = `scaleX(${u.style.opacity || 0})`;
+  });
+  for (const id of ['mark','mark8']){
+    const mk = document.getElementById(id);
+    const p = seg(t, id === 'mark' ? 36.01 : 71.07, id === 'mark' ? 36.85 : 71.83, outExpo);
+    mk.style.transform = `translateY(0) scale(${(0.88 + 0.12 * p).toFixed(4)})`;
+  }
+
+  /* --- one sheen sweep, over the credential chips only --- */
+  const sh = seg(t, 51.19, 52.59, inOut);
+  E.sheen.style.opacity = (sh > 0 && sh < 1 ? Math.sin(sh * Math.PI) * 0.9 : 0).toFixed(3);
+  E.sheen.style.transform = `translateX(${(-60 + sh * 120).toFixed(2)}%)`;
+
+  /* --- captions --- */
+  if (!CC){ E.cc.style.opacity = '0'; }
+  else {
+    const cue = CAPS.find(c => t >= c[0] - 0.14 && t <= c[1] + 0.14);
+    if (!cue){ E.cc.style.opacity = '0'; }
+    else {
+      E.ccbox.textContent = cue[2];
+      E.ccbox.style.background = rgba(P.ccbg, P.ccbgA.toFixed(3));
+      E.ccbox.style.color = rgb(P.ccfg);
+      const fi = seg(t, cue[0] - 0.14, cue[0] + 0.06);
+      const fo = 1 - seg(t, cue[1] - 0.02, cue[1] + 0.14);
+      E.cc.style.opacity = (fi * fo).toFixed(3);
+    }
+  }
+}
+window.seek = seek;
+window.__DUR = DUR;
+seek(+(Q.get('t') || 0));
+
+if (Q.get('play') === '1'){
+  const t0 = performance.now();
+  (function loop(){ seek(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>

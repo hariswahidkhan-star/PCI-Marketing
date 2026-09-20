@@ -1,0 +1,177 @@
+{
+  "total": 64.73,
+  "segments": {
+    "1": [
+      0.3,
+      5.27
+    ],
+    "2": [
+      5.27,
+      11.61
+    ],
+    "3": [
+      12.16,
+      15.08
+    ],
+    "4": [
+      15.08,
+      18.78
+    ],
+    "5": [
+      19.33,
+      22.63
+    ],
+    "6": [
+      22.63,
+      29.13
+    ],
+    "7": [
+      29.68,
+      33.78
+    ],
+    "8": [
+      33.78,
+      38.46
+    ],
+    "9": [
+      39.01,
+      41.11
+    ],
+    "10": [
+      41.11,
+      45.9
+    ],
+    "11": [
+      46.45,
+      51.56
+    ],
+    "12": [
+      51.56,
+      52.59
+    ],
+    "13": [
+      53.14,
+      56.88
+    ],
+    "14": [
+      56.88,
+      59.23
+    ]
+  },
+  "captions": [
+    [
+      0.3,
+      5.27,
+      "Thousands of verified questions, aligned to\nthe syllabus."
+    ],
+    [
+      5.27,
+      11.61,
+      "And when you've worked through them, more \u2014\neach one through four stages of validation."
+    ],
+    [
+      12.16,
+      15.08,
+      "Timed quizzes, when you have twenty minutes."
+    ],
+    [
+      15.08,
+      18.78,
+      "Full mock exams, when you're ready for the\nreal length."
+    ],
+    [
+      19.33,
+      22.63,
+      "Every answer comes with the explanation."
+    ],
+    [
+      22.63,
+      29.13,
+      "And on any question, help on that question \u2014\nnot a search box."
+    ],
+    [
+      29.68,
+      33.78,
+      "Chat with your AI Coach, or call it and keep\nwalking."
+    ],
+    [
+      33.78,
+      38.46,
+      "It reads your screen, so you never describe\nwhat you're looking at."
+    ],
+    [
+      39.01,
+      41.11,
+      "Study rooms with your cohort, live."
+    ],
+    [
+      41.11,
+      45.9,
+      "And your notes in the same place as the\nquestions that prompted them."
+    ],
+    [
+      46.45,
+      51.56,
+      "Analytics that stay on what matters."
+    ],
+    [
+      51.56,
+      52.59,
+      "Certuvo finds the gap you keep falling into,\nand says so."
+    ],
+    [
+      53.14,
+      56.88,
+      "Progress you can see. Streaks that keep you\nhonest."
+    ],
+    [
+      56.88,
+      59.23,
+      "One platform. Certuvo."
+    ]
+  ],
+  "shots": [
+    [
+      "f1",
+      "The bank",
+      0.0,
+      11.885
+    ],
+    [
+      "f2",
+      "Under timing",
+      11.885,
+      19.055
+    ],
+    [
+      "f3",
+      "Why, not just what",
+      19.055,
+      29.405
+    ],
+    [
+      "f4",
+      "The Coach",
+      29.405,
+      38.735
+    ],
+    [
+      "f5",
+      "Together, and in one place",
+      38.735,
+      46.175
+    ],
+    [
+      "f6",
+      "What it finds",
+      46.175,
+      52.865
+    ],
+    [
+      "f7",
+      "Where you are",
+      52.865,
+      64.73
+    ]
+  ]
+}

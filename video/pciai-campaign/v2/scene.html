@@ -1,0 +1,306 @@
+<meta charset="utf-8">
+<title>PCI AI · V2 · Which of the three</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  /* V2 — the long demystification cut. 4:5 primary, 16:9 secondary, DARK
+     ground (same register as the manifesto, per SPEC "Two grounds").
+
+     Three credentials, one beat each, every beat identical in shape: code,
+     full name, "this is you if", "not this one if". The repetition is the
+     argument — nothing is being hidden between them, and each beat hands the
+     viewer off to the sibling credential that actually fits, so the film
+     answers "which one is mine" AND "why not the other two".
+
+     Then one accumulating .build list puts all three side by side, which is
+     the beat a viewer screenshots. */
+
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.026em;line-height:1.04;
+       font-size:calc(var(--s)*4.5px);margin-top:calc(var(--s)*1.35px)}
+  #stage.wide .big{font-size:calc(var(--s)*5.2px)}
+  .big .hl{color:var(--accent)}
+
+  /* header row: label left, position-in-three right, so a viewer always knows
+     how much is left without a countdown or a scarcity device */
+  .hd{display:flex;align-items:center;gap:calc(var(--s)*1.2px)}
+  .dots{display:flex;gap:calc(var(--s)*.38px);will-change:opacity}
+  .dots i{display:block;width:calc(var(--s)*1.25px);height:calc(var(--s)*.26px);
+          border-radius:calc(var(--s)*.2px);background:#2B3B5D}
+  .dots i.on{width:calc(var(--s)*2.6px);
+             background:linear-gradient(90deg,var(--crimson),var(--blue))}
+
+  /* the credential lockup.
+     line-height 1 clips the Archivo content box — the glyph box is taller
+     than 1em, so the element's own scrollHeight exceeds clientHeight and the
+     probe reads it (correctly) as clipped text. 1.1 gives the box room. */
+  .ccode{font-family:var(--display);font-weight:800;letter-spacing:-.022em;line-height:1.1;
+         font-size:calc(var(--s)*7.2px);margin-top:calc(var(--s)*1.05px);
+         will-change:transform,opacity}
+  #stage.wide .ccode{font-size:calc(var(--s)*7.6px)}
+  .cname{font-weight:600;font-size:calc(var(--s)*1.55px);line-height:1.3;color:var(--soft);
+         margin-top:calc(var(--s)*.55px);letter-spacing:.004em;will-change:transform,opacity}
+
+  /* "this is you if…" — a description of who the credential is aimed at.
+     Deliberately a statement about the reader's own responsibilities, never
+     about what holding the credential would get them. */
+  .who{margin-top:calc(var(--s)*1.6px);border-left:calc(var(--s)*.26px) solid var(--accent);
+       padding-left:calc(var(--s)*1.1px);max-width:calc(var(--s)*36px);
+       will-change:transform,opacity}
+  /* No min-height here on purpose. Pinning it kept the three credential
+     beats exactly the same height, but the accent rule is this block's left
+     border, so any beat whose text ran short left the rule hanging
+     below its own last line — and it reads at 16:9, where the wider column
+     turns three lines into two. Letting the block size to its content costs
+     about 20px of drift between cuts, which nobody sees. */
+  #stage.wide .who{max-width:calc(var(--s)*44px)}
+  .who .wl{font-size:calc(var(--s)*.95px);font-weight:700;text-transform:uppercase;
+           letter-spacing:.16em;color:var(--accent);line-height:1.3}
+  .who .wt{font-size:calc(var(--s)*1.5px);line-height:1.38;color:var(--soft);
+           margin-top:calc(var(--s)*.45px)}
+  .who .wt b{color:var(--fg);font-weight:600}
+
+  /* the ruling-out line. Muted, because it is the smaller half of the job. */
+  .nots{margin-top:calc(var(--s)*1.35px);font-size:calc(var(--s)*1.18px);line-height:1.4;
+        color:var(--mute);max-width:calc(var(--s)*36px);min-height:calc(var(--s)*3.4px);
+        will-change:opacity,transform}
+  #stage.wide .nots{max-width:calc(var(--s)*44px)}
+  .nots b{color:var(--soft);font-weight:600}
+
+  /* the accumulating recap. .build is the shared component; the only addition
+     is a right-hung code column, which is why each row is a flex row that is
+     allowed to stretch. */
+  #bl5{max-width:calc(var(--s)*40px);gap:calc(var(--s)*1.35px);margin-top:calc(var(--s)*1.6px)}
+  #stage.wide #bl5{max-width:calc(var(--s)*46px)}
+  #bl5 .li{font-size:calc(var(--s)*1.72px)}
+  #bl5 .li i{height:calc(var(--s)*1.72px)}
+  /* margin-left:auto pins the box to the right edge and min-width fixes its
+     width, so the codes start on one shared x instead of raggedly ending on
+     one — a table, not three right-aligned labels */
+  .build .li .k{font-family:var(--display);font-weight:800;letter-spacing:-.012em;
+       font-size:calc(var(--s)*2.3px);line-height:1.15;color:var(--fg);
+       margin-left:auto;min-width:calc(var(--s)*9.2px);text-align:left;white-space:nowrap}
+
+  .attrib{font-size:calc(var(--s)*1.12px);line-height:1.4;color:var(--mute);
+          margin-top:calc(var(--s)*1.35px);max-width:calc(var(--s)*36px);
+          will-change:opacity,transform}
+
+  /* a column flex container stretches its children, and .offer is a
+     shrink-wrap card — without this it would run the full text column */
+  .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.25px)}
+
+  /* The shared .beat centres its content in the padding box, but this cut
+     carries a burned caption band that the reels do not, so the real visible
+     field stops well above the padding box and every beat centred "correctly"
+     sits low. Extra bottom padding re-centres each beat in the field the
+     viewer actually sees, at both aspects. Tried top-anchoring instead, which
+     locks the signature rule across all six cuts but strands the closing
+     offer frame in a third of empty navy — the last frame is the one that has
+     to feel finished. */
+  #stage.sq   .beat{padding-bottom:calc(var(--s)*12.2px)}
+  #stage.wide .beat{padding-bottom:calc(var(--s)*9.4px)}
+</style>
+
+<div id="stage">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">PCI AI · Three credentials</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">Three credentials.<br>Which one is <span class="hl">yours?</span></div>
+    <div class="sub" id="s1">PCL-AI, PFL-AI, PML-AI — what each one is for, and who each one is for.</div>
+  </section>
+
+  <section class="beat" id="b2">
+    <div class="hd">
+      <div class="eyebrow" id="e2">01 / 03 · The flagship</div>
+      <div class="dots" id="d2"><i class="on"></i><i></i><i></i></div>
+    </div>
+    <div class="rule" id="u2"></div>
+    <div class="ccode" id="c2">PCL-AI</div>
+    <div class="cname" id="n2">PCI AI Project Controls Leader</div>
+    <div class="who" id="w2">
+      <div class="wl">This is you if</div>
+      <div class="wt">you own the <b>cost baseline</b> and the schedule under it — planner, cost engineer, project controls lead.</div>
+    </div>
+    <div class="nots" id="x2">Not this one if you sign the forecast rather than build the baseline it rests on — that is <b>PFL-AI</b>.</div>
+  </section>
+
+  <section class="beat" id="b3">
+    <div class="hd">
+      <div class="eyebrow" id="e3">02 / 03 · The money</div>
+      <div class="dots" id="d3"><i></i><i class="on"></i><i></i></div>
+    </div>
+    <div class="rule" id="u3"></div>
+    <div class="ccode" id="c3">PFL-AI</div>
+    <div class="cname" id="n3">PCI AI Project Finance Leader</div>
+    <div class="who" id="w3">
+      <div class="wl">This is you if</div>
+      <div class="wt">the <b>forecast goes out with your name on it</b> — cost controller, commercial lead, the one who explains the variance.</div>
+    </div>
+    <div class="nots" id="x3">Not this one if the programme itself is the thing you answer for — that is <b>PML-AI</b>.</div>
+  </section>
+
+  <section class="beat" id="b4">
+    <div class="hd">
+      <div class="eyebrow" id="e4">03 / 03 · The delivery</div>
+      <div class="dots" id="d4"><i></i><i></i><i class="on"></i></div>
+    </div>
+    <div class="rule" id="u4"></div>
+    <div class="ccode" id="c4">PML-AI</div>
+    <div class="cname" id="n4">PCI Project Management Leader – AI</div>
+    <div class="who" id="w4">
+      <div class="wl">This is you if</div>
+      <div class="wt">the <b>programme is yours to answer for</b> — scope, risk, change, and the call to carry on or stop. Project managers, delivery leads.</div>
+    </div>
+    <div class="nots" id="x4">Not this one if you build the baseline or own the forecast others report against — <b>PCL-AI</b> or <b>PFL-AI</b>.</div>
+  </section>
+
+  <section class="beat" id="b5">
+    <div class="eyebrow" id="e5">So — which of the three</div>
+    <div class="rule" id="u5"></div>
+    <div class="build" id="bl5">
+      <div class="li" id="l1"><i></i><span>You own the <b>cost baseline</b></span><b class="k">PCL-AI</b></div>
+      <div class="li" id="l2"><i></i><span>You sign the <b>forecast</b></span><b class="k">PFL-AI</b></div>
+      <div class="li" id="l3"><i></i><span>You answer for the <b>programme</b></span><b class="k">PML-AI</b></div>
+    </div>
+    <div class="attrib" id="a5">All three are assessed against the same 13-domain body of knowledge, and every credential is publicly verifiable.</div>
+  </section>
+
+  <section class="beat" id="b6">
+    <div class="stack">
+      <div>
+        <div class="eyebrow" id="e6">Founding enrolment is open</div>
+        <div class="rule" id="u6"></div>
+      </div>
+      <div class="offer" id="of">
+        <div class="lab">Create an account and apply code</div>
+        <div class="code">FOUNDINGFREE</div>
+        <div class="what">Free membership · free study access · free exam enrolment</div>
+      </div>
+      <div class="attrib" id="a6">Apply it to whichever of the three is yours.</div>
+      <div class="mail" id="ml"><b>info@pciai.org</b> · pciai.org</div>
+    </div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+  <div id="foot"><span>pciai.org</span><span>PCL-AI · PFL-AI · PML-AI</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+/* Three credential beats of identical length, the recap, then the offer.
+   The offer opens at 39.00s of 48.60 — past the two-thirds point (32.40s), as
+   the spec requires, so this is an explanation that ends with an offer rather
+   than an ad that pretends to explain. */
+const BEATS = [
+  { id:'b1', in:0.00,  out:4.60  },
+  { id:'b2', in:4.60,  out:13.20 },
+  { id:'b3', in:13.20, out:21.80 },
+  { id:'b4', in:21.80, out:30.40 },
+  { id:'b5', in:30.40, out:39.00 },
+  { id:'b6', in:39.00, out:48.60 },
+];
+const DUR = 48.60;
+window.__DUR = DUR;
+
+/* These double as the narration script. The film is delivered silent and
+   works silent; if a read is commissioned later the lines already match the
+   picture frame for frame. */
+const CAPS = [
+  [0.30,  2.35, "Three credentials. Which one is yours?"],
+  [2.40,  4.50, "PCL-AI, PFL-AI, PML-AI — what each one is for."],
+  [4.85,  8.10, "PCL-AI. The PCI AI Project Controls Leader, and the flagship."],
+  [8.15, 11.80, "This is you if you own the cost baseline and the schedule under it."],
+  [11.85,13.10, "Not you if you sign the forecast rather than build it."],
+  [13.45,16.50, "PFL-AI. The PCI AI Project Finance Leader."],
+  [16.55,20.40, "This is you if the forecast goes out with your name on it."],
+  [20.45,21.70, "Not you if the programme itself is what you answer for."],
+  [22.05,25.10, "PML-AI. The PCI Project Management Leader for AI."],
+  [25.15,29.00, "This is you if the programme is yours: scope, risk, change."],
+  [29.05,30.30, "Not you if you build the baseline others deliver against."],
+  [30.70,33.40, "So. You own the baseline — PCL-AI."],
+  [33.45,36.10, "You sign the forecast — PFL-AI. You answer for the programme — PML-AI."],
+  [36.15,38.90, "All three against the same thirteen domains, all publicly verifiable."],
+  [39.30,43.00, "Whichever one is yours, founding enrolment is open."],
+  [43.05,46.10, "Create an account and apply code FOUNDINGFREE."],
+  [46.15,48.50, "Membership, study access and exam enrolment. Questions: info@pciai.org."],
+];
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
+  e2:$('#e2'), u2:$('#u2'), d2:$('#d2'), c2:$('#c2'), n2:$('#n2'), w2:$('#w2'), x2:$('#x2'),
+  e3:$('#e3'), u3:$('#u3'), d3:$('#d3'), c3:$('#c3'), n3:$('#n3'), w3:$('#w3'), x3:$('#x3'),
+  e4:$('#e4'), u4:$('#u4'), d4:$('#d4'), c4:$('#c4'), n4:$('#n4'), w4:$('#w4'), x4:$('#x4'),
+  e5:$('#e5'), u5:$('#u5'), lis:[$('#l1'), $('#l2'), $('#l3')], a5:$('#a5'),
+  e6:$('#e6'), u6:$('#u6'), of:$('#of'), a6:$('#a6'), ml:$('#ml'),
+  cc:$('#cc'), ccbox:$('#ccbox'),
+};
+window.__EL = EL;
+
+const rise = (el, u, t0, d = 0.50, em = 0.60) => {
+  if (!el) return;
+  const p = P.seg(u, t0, t0 + d, P.outExpo);
+  el.style.opacity = p.toFixed(3);
+  el.style.transform = `translateY(${((1 - p) * em).toFixed(2)}em)`;
+};
+const head = (e, u, u0) => { e.style.opacity = P.seg(u, u0, u0 + 0.30).toFixed(3); };
+/* the list accumulates: once a row is in, it stays in, so the whole argument
+   is legible at once to anyone who arrived late */
+const build = (els, u, t0, gap) => els.forEach((el, i) => rise(el, u, t0 + i * gap, 0.50, 0.50));
+
+/* One animator for all three credential beats: identical shape, identical
+   timing. Five reveals across 8.6s — about 5.8 changes per 10s, inside the
+   5-6 band. The code and its full name land 0.28s apart so they read as one
+   lockup arriving, not as two separate events. */
+const credBeat = (E, u) => {
+  head(E.e, u, 0.04);
+  P.rule(E.u, u, 0.14);
+  E.d.style.opacity = P.seg(u, 0.18, 0.54).toFixed(3);
+  rise(E.c, u, 0.34, 0.58, 0.38);
+  rise(E.n, u, 0.62, 0.52, 0.55);
+  rise(E.w, u, 1.35, 0.56, 0.45);
+  rise(E.x, u, 3.35, 0.56, 0.40);
+};
+
+const FX = {
+  b1(u){ head(EL.e1,u,0.04); P.rule(EL.u1,u,0.14);
+         P.revealWords(EL.h1,u,0.28,{stagger:0.055,dur:0.42}); rise(EL.s1,u,1.15); },
+  b2(u){ credBeat({e:EL.e2,u:EL.u2,d:EL.d2,c:EL.c2,n:EL.n2,w:EL.w2,x:EL.x2}, u); },
+  b3(u){ credBeat({e:EL.e3,u:EL.u3,d:EL.d3,c:EL.c3,n:EL.n3,w:EL.w3,x:EL.x3}, u); },
+  b4(u){ credBeat({e:EL.e4,u:EL.u4,d:EL.d4,c:EL.c4,n:EL.n4,w:EL.w4,x:EL.x4}, u); },
+  b5(u){ head(EL.e5,u,0.04); P.rule(EL.u5,u,0.14);
+         build(EL.lis,u,0.62,1.40); rise(EL.a5,u,5.55,0.56,0.40); },
+  b6(u){ head(EL.e6,u,0.04); P.rule(EL.u6,u,0.14);
+         const p = P.seg(u,0.40,1.02,P.outBack);
+         EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
+         EL.of.style.transform = `translateY(${((1-p)*0.55).toFixed(2)}em) scale(${(0.965+0.035*Math.min(1,p)).toFixed(4)})`;
+         rise(EL.a6,u,1.55,0.52,0.45); rise(EL.ml,u,3.10,0.52,0.45); },
+};
+
+function caption(t){
+  let txt = '';
+  for (const [a,b,s] of CAPS) if (t >= a && t < b) txt = s;
+  EL.ccbox.textContent = txt;
+  EL.cc.style.opacity = txt ? '1' : '0';
+}
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+  if (ST.CC) caption(t); else { EL.cc.style.opacity = '0'; EL.ccbox.textContent = ''; }
+};
+window.seek(0);
+</script>

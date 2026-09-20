@@ -1,23 +1,35 @@
 #!/usr/bin/env python3
 """
-Original ambient score for the PCI post-launch film — 15 seconds, 48 kHz stereo.
+Original score for the PCI post-launch film — 15 seconds, 48 kHz stereo.
 
 Written from scratch (no samples, no external library, no third-party loop), so
 the cue is PCI's own work and carries no licence obligation. Pure standard
 library: additive synthesis -> WAV.
 
 Musical intent, matched to the cut:
-  D minor, 66 bpm. A low sustained bed under the whole film; a soft bell on each
-  cut so the picture edit has an audible reason; a gentle lift under the
-  invitation (shot 4); a warm resolve to the tonic on the end card. It sits at
-  roughly -23 LUFS so a voiceover reads over the top without ducking.
+  D minor. A low sustained bed under the whole film; a soft bell on each cut so
+  the picture edit has an audible reason; a gentle lift under the invitation
+  (shot 4); a warm resolve to the tonic on the end card.
+
+  Fifteen seconds has no time to build, so the kit is in from the first bar and
+  simply tightens: eighths to sixteenths under the ask, then out of the way for
+  the resolve. 104 bpm and the same kit as the 75-second film and the explainer,
+  so the three read as one body of work.
+
+  Drive comes from rhythm, not level. The kit lives below ~120 Hz and above
+  ~6 kHz, leaving the mid-range thin so the narration reads over the top; the
+  mix side-chains it under the voice on top of that.
 
   python3 music.py ../build/score.wav
 """
 import array
 import math
+import os
 import struct
 import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'lib'))
+from score_kit import Kit          # noqa: E402
 
 SR = 48_000
 DUR = 15.0
@@ -69,6 +81,50 @@ def pad(t: float, f: float, detune: float) -> float:
     c = math.sin(2.0 * math.pi * f * 2.0 * t + 1.3) * 0.16
     return (a + b) * 0.5 + c
 
+BPM = 104.0
+BEAT = 60.0 / BPM
+
+# Drive keyframes: in from the top, tightening under the ask at 9.90, then
+# stepping aside for the resolve so the end card is harmony and not drums.
+DRIVE = [(0.00, 0.55), (3.40, 0.72), (6.80, 0.86), (9.90, 1.00),
+         (12.60, 0.85), (13.10, 0.30), (DUR, 0.0)]
+
+
+def intensity(t: float) -> float:
+    if t <= DRIVE[0][0]:
+        return DRIVE[0][1]
+    for (t0, v0), (t1, v1) in zip(DRIVE, DRIVE[1:]):
+        if t <= t1:
+            return v0 + (v1 - v0) * fade((t - t0) / (t1 - t0))
+    return DRIVE[-1][1]
+
+
+# --- the kit, on a sixteenth grid -----------------------------------------
+# k counts sixteenths from the downbeat: a bar is 16, a beat is 4.
+kit = Kit(sr=SR, n_samples=N)
+_k, _t = 0, 0.0
+while _t < DUR:
+    _v = intensity(_t)
+    _pos = _k % 16
+    if _v >= 0.22 and _pos in (0, 8):
+        kit.place(kit.KICK, _t, 0.58 * (0.55 + 0.45 * _v))
+    if _v >= 0.86 and _pos == 14:
+        kit.place(kit.KICK, _t, 0.30 * _v)
+    if _v >= 0.66 and _pos in (4, 12):
+        kit.place(kit.SNARE, _t, 0.22 * _v)
+    if _v >= 0.45 and (_k % 2 == 0 or _v >= 0.90):
+        _open = (_pos == 14)
+        kit.place(kit.HATO if _open else kit.HAT, _t,
+                  (0.19 if _open else 0.13) * _v, pan=0.35 if (_k % 4 == 2) else -0.25)
+    if _v >= 0.40 and _k % 2 == 0:
+        _f = (D4, A3, F3, A3)[(_k // 2) % 4]
+        kit.place(kit.pluck(_f, 0.32, 0.22), _t, 0.14 * _v, pan=-0.30 if (_k % 4) else 0.30)
+    _t += BEAT / 4.0
+    _k += 1
+kit.place(kit.SUB, 0.10, 0.40)
+kit.place(kit.RISER, 7.90, 0.09)
+evL, evR = kit.buses()
+
 left = array.array("h", bytes(2 * N))
 right = array.array("h", bytes(2 * N))
 
@@ -107,15 +163,22 @@ for i in range(N):
                 + 0.13 * math.sin(2.0 * math.pi * f * 3.01 * t)
             )
 
+    # The sustained material follows the drive curve, so the kit is not fighting
+    # a drone that never gets out of its way.
+    sig *= 0.50 + 0.50 * intensity(t)
+
     # Master fades.
     sig *= fade(t / 0.9) * (1.0 - fade((t - 13.9) / 1.1))
+    sig += (evL[i] + evR[i]) * 0.5 * fade(t / 0.4) * (1.0 - fade((t - 13.9) / 1.1))
 
     # Soft saturation keeps peaks polite without a limiter.
     sig = math.tanh(sig * 1.15) * 0.62
 
     # Cheap stereo width: a few samples of inter-channel delay on the pad.
-    l = sig
-    r = sig * 0.94 + 0.06 * math.sin(2.0 * math.pi * D3 * (t - 0.0009)) * body * 0.115
+    _kenv = fade(t / 0.4) * (1.0 - fade((t - 13.9) / 1.1))
+    l = sig + (evL[i] - (evL[i] + evR[i]) * 0.5) * _kenv
+    r = (sig * 0.94 + 0.06 * math.sin(2.0 * math.pi * D3 * (t - 0.0009)) * body * 0.115
+         + (evR[i] - (evL[i] + evR[i]) * 0.5) * _kenv)
 
     left[i] = max(-32768, min(32767, int(l * 32767)))
     right[i] = max(-32768, min(32767, int(r * 32767)))

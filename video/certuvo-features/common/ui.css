@@ -1,0 +1,150 @@
+/* ===========================================================================
+   Certuvo feature films — the shared visual kit.
+
+   One rule governs everything in here: NOTHING ON SCREEN IS A REAL QUESTION.
+   Every question, option, explanation and note is drawn as an abstract skeleton
+   — grey bars and blurred blocks — so the films demonstrate the product without
+   ever publishing exam content or implying a specific item is real.
+
+   Ground is white. Blue is the working colour and does almost all the lifting.
+   Red is rationed to four jobs and nothing else: a timer running down, a
+   detected knowledge gap, a live indicator, and the numbered tag on the feature
+   currently being described.
+   =========================================================================== */
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700 900;font-display:block;
+  src:url(../brand/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:block;
+  src:url(../brand/inter-latin.woff2) format('woff2')}
+
+:root{
+  --white:#FFFFFF; --ground:#FFFFFF; --panel:#F7F9FE; --tint:#EEF3FF; --tint2:#E4ECFF;
+  --blue:#295FED; --blue2:#1E4ED8; --blue3:#6C9BFF;
+  --red:#E5453F; --red2:#F07A72; --redtint:#FDECEB;
+  --ink:#0B1220; --sub:#4B5563; --foot:#6B7280; --mute:#9AA4B2;
+  --line:#E6EBF5; --line2:#D8E0F0; --skel:#E7ECF7; --skel2:#EFF3FB;
+  --display:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --s:19.2;
+  --card:0 calc(.55 * var(--s) * 1px) calc(1.8 * var(--s) * 1px) rgba(11,18,32,.07);
+  --card2:0 calc(1.1 * var(--s) * 1px) calc(3.2 * var(--s) * 1px) rgba(11,18,32,.10);
+  --glow:0 calc(.7 * var(--s) * 1px) calc(2.2 * var(--s) * 1px) rgba(41,95,237,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--white);overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+#stage{position:relative;overflow:hidden;background:var(--white);font-family:var(--sans);color:var(--ink);
+  -webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+/* --- the room the product sits in: a white sheet with a whisper of blue ---- */
+#wash{position:absolute;inset:-30%;pointer-events:none;will-change:transform,opacity;
+  background:radial-gradient(closest-side, rgba(41,95,237,.075), rgba(41,95,237,0) 70%)}
+#wash2{position:absolute;inset:-30%;pointer-events:none;will-change:transform,opacity;
+  background:radial-gradient(closest-side, rgba(229,69,63,.045), rgba(229,69,63,0) 70%)}
+#mesh{position:absolute;inset:0;pointer-events:none;opacity:.5}
+
+/* --- furniture: the logo is on every frame, by instruction ----------------- */
+#brandbar{position:absolute;left:calc(7 * var(--s) * 1px);top:calc(5 * var(--s) * 1px);
+  display:flex;align-items:center;gap:calc(.9 * var(--s) * 1px);will-change:opacity;z-index:6}
+#brandbar img{width:calc(10.6 * var(--s) * 1px);height:auto;display:block}
+#brandbar .bl{border-left:calc(.1 * var(--s) * 1px) solid var(--line2);padding-left:calc(.8 * var(--s) * 1px);
+  font-size:calc(.84 * var(--s) * 1px);font-weight:600;color:var(--foot);line-height:1.3}
+#count{position:absolute;right:calc(7 * var(--s) * 1px);top:calc(5.3 * var(--s) * 1px);text-align:right;z-index:6;will-change:opacity}
+#count .n{font-family:var(--display);font-weight:800;font-size:calc(.96 * var(--s) * 1px);color:var(--red);letter-spacing:.18em}
+#count .c{font-weight:700;font-size:calc(1.06 * var(--s) * 1px);color:var(--ink);letter-spacing:.02em;margin-top:calc(.18 * var(--s) * 1px)}
+#barwrap{position:absolute;left:calc(7 * var(--s) * 1px);right:calc(7 * var(--s) * 1px);bottom:calc(4.2 * var(--s) * 1px);
+  height:calc(.18 * var(--s) * 1px);background:var(--line);border-radius:calc(.09 * var(--s) * 1px);overflow:hidden;z-index:6;will-change:opacity}
+#bar{height:100%;width:100%;background:var(--blue);transform-origin:left center}
+#footl{position:absolute;left:calc(7 * var(--s) * 1px);bottom:calc(2.5 * var(--s) * 1px);z-index:6;will-change:opacity;
+  font-size:calc(.88 * var(--s) * 1px);letter-spacing:.17em;text-transform:uppercase;color:var(--foot);font-weight:700}
+#footr{position:absolute;right:calc(7 * var(--s) * 1px);bottom:calc(2.5 * var(--s) * 1px);z-index:6;will-change:opacity;
+  font-size:calc(.88 * var(--s) * 1px);color:var(--foot);font-weight:500}
+
+/* --- type ------------------------------------------------------------------ */
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.05;letter-spacing:-.026em;color:var(--ink)}
+h1{font-size:calc(5.2 * var(--s) * 1px)}
+h2{font-size:calc(3.6 * var(--s) * 1px)}
+h3{font-size:calc(2.5 * var(--s) * 1px)}
+h4{font-size:calc(1.7 * var(--s) * 1px)}
+em{font-style:normal;color:var(--blue)}
+i.r{font-style:normal;color:var(--red)}
+.kicker{font-weight:700;font-size:calc(1.02 * var(--s) * 1px);letter-spacing:.22em;text-transform:uppercase;color:var(--blue)}
+.lede{font-weight:400;color:var(--sub);font-size:calc(1.35 * var(--s) * 1px);line-height:1.45}
+.tiny{font-size:calc(.86 * var(--s) * 1px);color:var(--foot);line-height:1.45}
+.num{display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;
+  font-size:calc(.82 * var(--s) * 1px);letter-spacing:.08em;color:var(--red);background:var(--redtint);
+  border:1px solid rgba(229,69,63,.28);border-radius:calc(.24 * var(--s) * 1px);
+  padding:calc(.16 * var(--s) * 1px) calc(.44 * var(--s) * 1px)}
+
+/* --- the panel every demonstration is drawn on ----------------------------- */
+.pane{position:relative;background:var(--white);border:1px solid var(--line);border-radius:calc(.7 * var(--s) * 1px);
+  box-shadow:var(--card);overflow:hidden;will-change:transform,opacity}
+.pane.lift{box-shadow:var(--card2)}
+.pane .ptop{display:flex;align-items:center;justify-content:space-between;padding:calc(.8 * var(--s) * 1px) calc(1.0 * var(--s) * 1px);
+  border-bottom:1px solid var(--line);background:var(--panel)}
+.pane .ptop b{font-weight:700;font-size:calc(.86 * var(--s) * 1px);letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.pane .pbody{padding:calc(1.0 * var(--s) * 1px)}
+
+/* --- ABSTRACT CONTENT. Nothing here ever carries real exam text. ----------- */
+.sk{height:calc(.5 * var(--s) * 1px);border-radius:calc(.25 * var(--s) * 1px);background:var(--skel);
+  transform-origin:left center;will-change:transform,opacity}
+.sk + .sk{margin-top:calc(.44 * var(--s) * 1px)}
+.sk.w100{width:100%}.sk.w92{width:92%}.sk.w84{width:84%}.sk.w70{width:70%}.sk.w56{width:56%}.sk.w40{width:40%}
+.sk.tall{height:calc(.66 * var(--s) * 1px)}
+.sk.dark{background:var(--line2)}
+.sk.blue{background:var(--tint2)}
+
+/* a blurred placeholder: unreadable by construction, not by cropping */
+.blur{position:relative;overflow:hidden;border-radius:calc(.3 * var(--s) * 1px);background:var(--skel2)}
+.blur::before{content:'';position:absolute;inset:calc(-.4 * var(--s) * 1px);filter:blur(calc(.42 * var(--s) * 1px));
+  background:repeating-linear-gradient(180deg, var(--line2) 0 calc(.34 * var(--s) * 1px),
+    rgba(0,0,0,0) calc(.34 * var(--s) * 1px) calc(.78 * var(--s) * 1px))}
+.blur.tight::before{background:repeating-linear-gradient(180deg, var(--line2) 0 calc(.26 * var(--s) * 1px),
+    rgba(0,0,0,0) calc(.26 * var(--s) * 1px) calc(.6 * var(--s) * 1px))}
+
+/* an answer option: a letter and an abstract bar, never a real option */
+.optrow{display:flex;flex-direction:column;gap:calc(.42 * var(--s) * 1px);margin-top:calc(.9 * var(--s) * 1px)}
+.opt{display:flex;align-items:center;gap:calc(.6 * var(--s) * 1px);height:calc(1.85 * var(--s) * 1px);
+  border:1px solid var(--line);border-radius:calc(.32 * var(--s) * 1px);background:var(--white);
+  padding:0 calc(.7 * var(--s) * 1px);will-change:background-color,border-color,transform}
+.opt b{font-family:var(--display);font-weight:800;font-size:calc(.9 * var(--s) * 1px);color:var(--mute);
+  width:calc(1.0 * var(--s) * 1px);will-change:color}
+.opt .sk{flex:1 1 auto;margin:0}
+.opt.on{background:var(--tint);border-color:var(--blue)}
+.opt.on b{color:var(--blue)}
+
+/* --- small parts shared across treatments ---------------------------------- */
+.chipfield{display:grid;gap:calc(.24 * var(--s) * 1px)}
+.chipfield i{display:block;height:calc(.56 * var(--s) * 1px);border-radius:calc(.13 * var(--s) * 1px);
+  background:var(--skel);will-change:background-color,transform,opacity}
+.ring{position:relative;display:grid;place-items:center;will-change:transform,opacity}
+.ring svg{display:block;transform:rotate(-90deg)}
+.ring .rtrack{fill:none;stroke:var(--line);stroke-linecap:round}
+.ring .rfill{fill:none;stroke:var(--blue);stroke-linecap:round;will-change:stroke-dashoffset,stroke}
+.ring .rlab{position:absolute;font-family:var(--display);font-weight:800;color:var(--ink);text-align:center;line-height:1.05}
+.pill{display:inline-flex;align-items:center;gap:calc(.4 * var(--s) * 1px);border-radius:999px;
+  padding:calc(.34 * var(--s) * 1px) calc(.8 * var(--s) * 1px);font-weight:700;
+  font-size:calc(.88 * var(--s) * 1px);background:var(--tint);color:var(--blue);will-change:transform,opacity}
+.pill.red{background:var(--redtint);color:var(--red)}
+.pill i.dot{width:calc(.38 * var(--s) * 1px);height:calc(.38 * var(--s) * 1px);border-radius:50%;background:currentColor;display:block}
+.tick{display:grid;place-items:center;border-radius:50%;background:var(--white);
+  border:calc(.13 * var(--s) * 1px) solid var(--line2);will-change:background-color,border-color,transform}
+.tick b{font-family:var(--display);font-weight:900;color:var(--mute);will-change:color}
+.face{display:grid;place-items:center;border-radius:50%;color:#fff;font-family:var(--display);font-weight:900;letter-spacing:.02em}
+.f1{background:#2F6BEE}.f2{background:#5B8AF5}.f3{background:#7C4DD4}
+.f4{background:#1E9E86}.f5{background:#C4661F}.f6{background:var(--red)}
+.streak{display:flex;gap:calc(.32 * var(--s) * 1px)}
+.streak i{display:block;width:calc(1.0 * var(--s) * 1px);height:calc(1.0 * var(--s) * 1px);border-radius:calc(.28 * var(--s) * 1px);
+  background:var(--skel);will-change:background-color,transform}
+.beam{position:absolute;top:0;bottom:0;width:calc(6.5 * var(--s) * 1px);pointer-events:none;opacity:0;
+  will-change:transform,opacity;border-right:calc(.09 * var(--s) * 1px) solid rgba(41,95,237,.55);
+  background:linear-gradient(90deg, rgba(41,95,237,0), rgba(41,95,237,.17), rgba(41,95,237,0))}
+.wave{display:flex;align-items:center;gap:calc(.15 * var(--s) * 1px);will-change:opacity}
+.wave i{display:block;width:calc(.19 * var(--s) * 1px);border-radius:calc(.1 * var(--s) * 1px);background:var(--blue);height:30%;will-change:height}
+.bubble{max-width:86%;font-size:calc(.98 * var(--s) * 1px);line-height:1.4;padding:calc(.5 * var(--s) * 1px) calc(.72 * var(--s) * 1px);
+  border-radius:calc(.5 * var(--s) * 1px);will-change:transform,opacity}
+.bubble.them{background:var(--tint);border-bottom-left-radius:calc(.14 * var(--s) * 1px);align-self:flex-start}
+.bubble.me{background:var(--blue);color:#fff;border-bottom-right-radius:calc(.14 * var(--s) * 1px);align-self:flex-end}
+.barrow{display:flex;align-items:center;gap:calc(.7 * var(--s) * 1px)}
+.barrow span{flex:0 0 auto;font-size:calc(.92 * var(--s) * 1px);color:var(--sub);font-weight:600}
+.barrow .track{flex:1 1 auto;height:calc(.56 * var(--s) * 1px);border-radius:calc(.28 * var(--s) * 1px);background:var(--line);overflow:hidden}
+.barrow .track i{display:block;height:100%;border-radius:calc(.28 * var(--s) * 1px);background:var(--blue);
+  transform-origin:left center;transform:scaleX(0);will-change:transform,background-color}
