@@ -117,6 +117,10 @@ h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height
 #stage.tall .offer .code{font-size:calc(var(--s)*2.7px)}
 
 .mail{font-size:calc(var(--s)*1.1px);color:var(--soft);letter-spacing:.01em}
+/* the closing contact is the only call to action in the set and was the
+   one type token with no vertical override, so it shipped smaller than
+   the body text next to it */
+#stage.tall .mail{font-size:calc(var(--s)*1.45px)}
 .mail b{color:var(--fg);font-weight:600}
 
 /* ---- burned captions ---------------------------------------------------- */

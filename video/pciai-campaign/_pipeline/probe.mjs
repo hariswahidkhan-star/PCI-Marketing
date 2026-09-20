@@ -50,7 +50,7 @@ const SAFE = TALL
 const url = pathToFileURL(path.resolve('scene.html'));
 url.searchParams.set('w', W); url.searchParams.set('h', H); url.searchParams.set('cc', '1');
 
-const errs = [], out = [], clipped = [], unsafe = [];
+const errs = [], out = [], clipped = [], unsafe = [], collide = [];
 const browser = await chromium.launch({ executablePath: findChrome(), args: ['--force-color-profile=srgb', '--font-render-hinting=none', '--hide-scrollbars'] });
 const pg = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
 pg.on('pageerror', e => errs.push('pageerror: ' + e.message));
@@ -129,19 +129,56 @@ for (let t = 0; t <= DUR + 0.001; t = +(t + 0.25).toFixed(2)) {
       if (leaf) {
         if (b.top < safeBox.top - 1 || b.bottom > safeBox.bottom + 1 || b.left < safeBox.left - 1 || b.right > safeBox.right + 1)
           un.push(`"${txt.slice(0, 28)}"`);
-        // .w is the word-reveal box: overflow:hidden is the mechanism that
-        // makes a word rise out of its own clip, so mid-reveal it is supposed
-        // to be clipped. Everything else that overflows its box is a fault.
+        /* Text only counts as clipped if something actually clips it.
+           Archivo 800's content box is ~1.084 x its font-size, so any display
+           type set tighter than that reports scrollHeight > clientHeight —
+           but with overflow visible the glyphs paint in full and nothing is
+           lost. Testing the overflow alone made the check demand a looser
+           line-height than the design wants, and two films had already been
+           loosened to satisfy it before the check itself was the suspect.
+           .w is excluded for the opposite reason: it clips deliberately, and
+           that clip is the mechanism of the word reveal. */
+        let clipper = null;
+        for (let p = el; p && p.id !== 'stage'; p = p.parentElement) {
+          const c = getComputedStyle(p);
+          if (/hidden|clip|auto|scroll/.test(c.overflow + c.overflowX + c.overflowY)) { clipper = p; break; }
+        }
         const deliberate = el.classList.contains('w') || el.closest('.w');
-        if (!deliberate && (el.scrollWidth > el.clientWidth + 2 || el.scrollHeight > el.clientHeight + 2))
-          clip.push(`"${txt.slice(0, 28)}"`);
+        if (clipper && !deliberate
+            && (el.scrollWidth > el.clientWidth + 2 || el.scrollHeight > el.clientHeight + 2))
+          clip.push(`"${txt.slice(0, 28)}" clipped by ${clipper.id || clipper.className}`);
       }
     }
-    return { over, clip, un };
+    /* Content colliding with the brand bar or the footer is invisible to every
+       check above: the chrome is inside the safe box and so is the content, so
+       both pass while overlapping each other on screen. A beat that grows one
+       line is all it takes, and it fails silently in a still you did not
+       happen to render. */
+    const hit = [];
+    const chrome = [document.getElementById('brandbar'), document.getElementById('foot')].filter(Boolean);
+    for (const el of document.querySelectorAll('.beat')) {
+      if (getComputedStyle(el).display === 'none') continue;
+      for (const kid of el.querySelectorAll('*')) {
+        const kcs = getComputedStyle(kid);
+        if (kcs.visibility === 'hidden' || +kcs.opacity < 0.05 || kcs.display === 'none') continue;
+        const k = kid.getBoundingClientRect();
+        if (k.width < 1 || k.height < 1) continue;
+        const t = (kid.textContent || '').trim();
+        if (t && [...kid.children].some(c => (c.textContent || '').trim())) continue; // leaves only
+        for (const c of chrome) {
+          const r = c.getBoundingClientRect();
+          if (k.left < r.right && k.right > r.left && k.top < r.bottom && k.bottom > r.top)
+            hit.push(`"${(t || kid.className || kid.tagName).slice(0, 24)}" over #${c.id}`);
+        }
+      }
+    }
+
+    return { over, clip, un, hit };
   }, { SAFE });
   if (r.over.length) out.push(`t=${t}: ${[...new Set(r.over)].join(', ')}`);
   if (r.clip.length) clipped.push(`t=${t}: ${[...new Set(r.clip)].join(', ')}`);
   if (r.un.length) unsafe.push(`t=${t}: ${[...new Set(r.un)].join(', ')}`);
+  if (r.hit.length) collide.push(`t=${t}: ${[...new Set(r.hit)].join(', ')}`);
 }
 await browser.close();
 
@@ -151,4 +188,5 @@ show('errors', errs);
 show('overflow', out);
 show('clipped text', clipped);
 show(TALL ? 'outside reels safe area' : 'outside safe margin', unsafe);
-process.exit(errs.length || out.length || clipped.length || unsafe.length ? 1 : 0);
+show('content over brand bar / footer', collide);
+process.exit(errs.length || out.length || clipped.length || unsafe.length || collide.length ? 1 : 0);
