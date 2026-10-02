@@ -93,14 +93,18 @@ const P = PCI;
 const ST = P.setupStage();
 P.drawMesh(ST.W, ST.H, ST.SS);
 
+/* Beat timings are cut to the recorded narration, not the other way round:
+   each beat starts where its paragraph starts in vo/audio/r1.mp3, measured
+   with silencedetect. Every animation here is keyed to beat-relative time, so
+   a longer beat simply holds at the end — the choreography is untouched. */
 const BEATS = [
-  { id:'b1', in:0.00,  out:3.30 },
-  { id:'b2', in:3.30,  out:7.60 },
-  { id:'b3', in:7.60,  out:12.90 },
-  { id:'b4', in:12.90, out:19.30 },
-  { id:'b5', in:19.30, out:26.00 },
+  { id:'b1', in:0.00,  out:4.11 },
+  { id:'b2', in:4.11,  out:9.91 },
+  { id:'b3', in:9.91,  out:16.63 },
+  { id:'b4', in:16.63, out:23.49 },
+  { id:'b5', in:23.49, out:31.85 },
 ];
-const DUR = 26.00;
+const DUR = 31.85;
 window.__DUR = DUR;
 
 const $ = s => document.querySelector(s);
