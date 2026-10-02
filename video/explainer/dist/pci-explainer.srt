@@ -1,0 +1,163 @@
+1
+00:00:00,350 --> 00:00:06,000
+Project controls is the discipline
+that turns intent into delivery.
+
+2
+00:00:06,000 --> 00:00:16,100
+Planning, cost, earned value, forecasting,
+risk and project finance — practised as one
+integrated whole, not as separate techniques.
+
+3
+00:00:16,720 --> 00:00:25,670
+Project management has PMI.
+Accountancy has ACCA. Finance has CFA.
+
+4
+00:00:25,670 --> 00:00:32,150
+Project controls has had no equivalent — no
+shared standard, and no professional home.
+
+5
+00:00:32,770 --> 00:00:40,040
+And the discipline is changing. Schedules, forecasts
+and cost reports are increasingly supported by AI.
+
+6
+00:00:40,040 --> 00:00:49,250
+It can accelerate analysis. It can also create false
+confidence. Technology does not remove accountability.
+
+7
+00:00:49,870 --> 00:01:02,260
+PCI AI exists to close that gap: to give
+project controls a shared standard, an
+independent credential and a professional home.
+
+8
+00:01:02,260 --> 00:01:08,320
+Built for how the discipline is practised
+now, with AI governance at its core.
+
+9
+00:01:08,940 --> 00:01:20,110
+Its mission is to advance the profession through
+certification, research, professional development,
+standards, publications and the responsible adoption
+of AI.
+
+10
+00:01:20,730 --> 00:01:28,730
+Its position on that adoption is
+explicit. It certifies professionals
+who govern AI — not who defer to it.
+
+11
+00:01:29,350 --> 00:01:37,270
+The framework is the PCI AI Project
+Leadership Certification Suite —
+three AI-era leadership credentials.
+
+12
+00:01:37,890 --> 00:01:50,600
+PCL-AI, for project controls. PFL-AI, for
+project finance. PML-AI, for project management.
+
+13
+00:01:50,600 --> 00:01:56,130
+Finance intelligently. Control
+predictively. Deliver successfully.
+
+14
+00:01:56,750 --> 00:02:00,360
+Each credential rests on a
+published Body of Knowledge.
+
+15
+00:02:00,360 --> 00:02:08,270
+Its first edition defines thirteen
+domains and sixty-one knowledge
+areas, weighted forty, forty, twenty.
+
+16
+00:02:08,890 --> 00:02:12,890
+Project accounting and finance. Project
+management principles. And governed AI.
+
+17
+00:02:12,890 --> 00:02:22,650
+AI is not an appendix. It is a domain in its own
+right, and it is embedded through the other twelve.
+
+18
+00:02:23,270 --> 00:02:27,170
+The examination is scenario-based
+and criterion-referenced.
+
+19
+00:02:27,170 --> 00:02:39,590
+It asks whether you can read a cost position,
+interpret an earned-value index, judge a risk
+response, and decide whether an AI-generated forecast
+can be trusted.
+
+20
+00:02:40,210 --> 00:02:45,980
+There are two routes in — an experience route
+for practitioners, and a Foundation route.
+
+21
+00:02:45,980 --> 00:02:55,470
+The credential renews on a three-year CPD
+cycle with a mandatory AI-currency component,
+and every credential can be verified publicly.
+
+22
+00:02:56,090 --> 00:03:07,190
+The discipline is the same wherever
+capital is deployed at scale, so the
+credential is written to travel.
+
+23
+00:03:07,190 --> 00:03:15,300
+Energy and utilities. Rail and
+transportation. Aerospace and defence. Oil
+and gas. Construction and infrastructure.
+
+24
+00:03:15,300 --> 00:03:19,780
+Aviation. Manufacturing. Data centres.
+Smart cities. And government programmes.
+
+25
+00:03:20,400 --> 00:03:30,820
+For organisations, the same standard supports team
+enrolment at scale through corporate programmes, and
+curriculum alignment through university partnerships.
+
+26
+00:03:31,440 --> 00:03:48,610
+PCI is candid about what it is not.
+It is not accredited by ANAB, IAS, or
+any ISO/IEC 17024 accreditation body.
+
+27
+00:03:48,610 --> 00:03:54,190
+Its framework is developed with reference
+to those personnel-certification
+principles, and it says so plainly.
+
+28
+00:03:54,190 --> 00:04:04,140
+For a body whose value rests on trust, that
+restraint is the foundation — not a weakness.
+
+29
+00:04:04,760 --> 00:04:08,970
+AI proposes. The professional disposes.
+
+30
+00:04:08,970 --> 00:04:15,140
+Discover PCI AI at pciai.org
+

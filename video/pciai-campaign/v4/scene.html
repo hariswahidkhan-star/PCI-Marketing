@@ -1,0 +1,355 @@
+<meta charset="utf-8">
+<title>PCI AI · V4 · A credential nobody can check</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  /* V4 — verification, long form. Dark ground (no `light` class): this beat of
+     the campaign is a challenge aimed at the person reading a CV, and navy
+     carries the challenge better than white does.
+
+     The argument here is STRUCTURAL, never statistical. There is no fraud
+     rate on screen or in the read, because we have no data for one; no other
+     awarding body is named or implied, because none was studied. What is on
+     screen is true by construction: a line of text on a page is the same line
+     of text whether or not anything stands behind it, so the only thing that
+     distinguishes a credential from a claim is whether a stranger can check
+     it. That holds without a single number.
+
+     It also runs the honest half of the argument, which most verification
+     copy skips: checking protects the holder as much as the employer. A
+     credential you can prove is a credential nobody gets to doubt. */
+
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.028em;line-height:1.02;
+       font-size:calc(var(--s)*4.6px);margin-top:calc(var(--s)*1.3px)}
+  #stage.wide .big{font-size:calc(var(--s)*5.2px)}
+  .big .crim{color:#E4785F} .big .hl{color:var(--accent)}
+
+  .mid{font-family:var(--display);font-weight:800;letter-spacing:-.024em;line-height:1.04;
+       font-size:calc(var(--s)*3.6px);margin-top:calc(var(--s)*1.3px)}
+  #stage.wide .mid{font-size:calc(var(--s)*3.8px)}
+  .mid .crim{color:#E4785F} .mid .hl{color:var(--accent)}
+
+  .principle{font-family:var(--display);font-weight:800;letter-spacing:-.022em;line-height:1.05;
+       font-size:calc(var(--s)*4.0px);margin-top:calc(var(--s)*1.3px)}
+  #stage.wide .principle{font-size:calc(var(--s)*4.2px)}
+  .principle .hl{color:var(--accent)}
+  .attrib{font-size:calc(var(--s)*1.1px);color:var(--mute);margin-top:calc(var(--s)*1.5px)}
+
+  /* the accumulating lists carry two whole beats on their own here, so they
+     are set larger than the shared default rather than padded out with an
+     extra reveal the pacing budget cannot afford */
+  .build .li{font-size:calc(var(--s)*1.55px)}
+  .build .li i{height:calc(var(--s)*1.55px)}
+  /* a display line and a list read as one block otherwise */
+  .build + .mid,.mid + .build{margin-top:calc(var(--s)*1.95px)}
+
+  /* a column flex container stretches its children, so any column that holds
+     a shrink-to-fit lockup (the offer card) must opt out explicitly */
+  .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.2px)}
+
+  /* ---- the verification motif --------------------------------------------
+     A reference being looked up and confirmed. Four things keep it from
+     reading as a real lookup of a real person:
+       1. there is no holder field at all — no name, no photograph, no initials;
+       2. the reference is visibly hollow — the literal word EXAMPLE and 0000,
+          a shape nobody could mistake for an issued number or be tempted to
+          type into verify.html;
+       3. the card labels itself ILLUSTRATIVE in its own header, on every
+          frame the reference is up, not in a end-card disclaimer; and
+       4. a plain-English note under it says what it is and is not.
+     Nothing in the card is a quantity, so it cannot be read as a statistic. */
+  .vcard{position:relative;overflow:hidden;width:100%;max-width:calc(var(--s)*46px);
+    background:var(--ink2);border:1px solid var(--line);
+    border-radius:calc(var(--s)*.7px);
+    padding:calc(var(--s)*1.15px) calc(var(--s)*1.45px) calc(var(--s)*.5px);
+    margin-top:calc(var(--s)*1.5px);will-change:transform,opacity}
+  .vscan{position:absolute;top:0;bottom:0;width:calc(var(--s)*5px);pointer-events:none;
+    background:linear-gradient(90deg,rgba(59,130,246,0),rgba(59,130,246,.22),rgba(59,130,246,0))}
+  .vhead{position:relative;display:flex;align-items:center;justify-content:space-between;
+    gap:calc(var(--s)*1px);padding-bottom:calc(var(--s)*.85px)}
+  .vhead span{font-size:calc(var(--s)*.9px);text-transform:uppercase;letter-spacing:.15em;
+    color:var(--mute);font-weight:700;white-space:nowrap}
+  .vhead .ill{color:#E4785F}
+  .vrow{position:relative;display:flex;align-items:baseline;justify-content:space-between;
+    gap:calc(var(--s)*1px);padding:calc(var(--s)*.72px) 0;border-top:1px solid var(--line)}
+  .vrow .lk{font-size:calc(var(--s)*1.1px);color:var(--mute);white-space:nowrap}
+  .vrow .vv{font-family:var(--display);font-weight:800;letter-spacing:-.005em;
+    font-size:calc(var(--s)*1.5px);line-height:1.1;white-space:nowrap}
+  .vst{display:flex;align-items:center;gap:calc(var(--s)*.55px)}
+  .vst b{font-family:var(--display);font-weight:800;letter-spacing:.01em;
+    font-size:calc(var(--s)*1.5px);line-height:1.1;white-space:nowrap}
+  .tick{width:calc(var(--s)*1.65px);height:calc(var(--s)*1.65px);display:block;flex:none}
+  .vnote{font-size:calc(var(--s)*1.0px);line-height:1.42;color:var(--mute);
+    margin-top:calc(var(--s)*1.0px);max-width:calc(var(--s)*44px)}
+
+  /* dark is this film's ground; the ?theme=light preview should still be legible */
+  #stage.light .big .crim,#stage.light .mid .crim,#stage.light .vhead .ill{color:var(--crimson)}
+</style>
+
+<div id="stage">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <!-- 1 · the hook. No statistic, no accusation: just what typing costs. -->
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">A line on a CV</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">Anyone can<br>type a<br><span class="crim">credential.</span></div>
+    <div class="sub" id="s1">Typing one takes a second. Earning one does not. On the page, the two look exactly the same.</div>
+  </section>
+
+  <!-- 2 · what a CV can and cannot carry. Accumulating build. -->
+  <section class="beat" id="b2">
+    <div class="eyebrow" id="e2">What the page can show you</div>
+    <div class="rule" id="u2"></div>
+    <div class="build">
+      <div class="li" id="l1"><i></i><span>The <b>name</b> of a credential</span></div>
+      <div class="li" id="l2"><i></i><span>The <b>body</b> it is said to come from</span></div>
+      <div class="li" id="l3"><i></i><span>A <b>date</b>, and nothing standing behind it</span></div>
+    </div>
+    <div class="mid" id="h2">None of that<br>is evidence.<br>It is <span class="crim">formatting.</span></div>
+  </section>
+
+  <!-- 3 · the diagnosis, second person, structural -->
+  <section class="beat" id="b3">
+    <div class="eyebrow" id="e3">So when you read it</div>
+    <div class="rule" id="u3"></div>
+    <div class="mid" id="h3">You are not<br>checking a<br>credential.<br>You are trusting<br><span class="crim">the typing.</span></div>
+    <div class="sub" id="s3">Nothing on the page changes if it is not true.</div>
+  </section>
+
+  <!-- 4 · the principle. The share line, and a definition rather than a claim. -->
+  <section class="beat" id="b4">
+    <div class="eyebrow" id="e4">The rule we hold ourselves to</div>
+    <div class="rule" id="u4"></div>
+    <div class="principle" id="h4">A credential<br>that cannot<br>be checked<br><span class="hl">is just a claim.</span></div>
+    <div class="attrib" id="a4">Project Controls Institute</div>
+  </section>
+
+  <!-- 5 · so ours can be. An illustrative lookup: no holder, hollow reference. -->
+  <section class="beat" id="b5">
+    <div class="eyebrow" id="e5">Public verification</div>
+    <div class="rule" id="u5"></div>
+    <div class="mid" id="h5">So ours<br>can be<br><span class="hl">checked.</span></div>
+
+    <div class="vcard" id="vc">
+      <div class="vscan" id="vs"></div>
+      <div class="vhead"><span>Credential lookup</span><span class="ill">Illustrative</span></div>
+      <div class="vrow"><span class="lk">Reference</span><span class="vv" id="vref">PCL-AI-EXAMPLE-0000</span></div>
+      <div class="vrow"><span class="lk">Credential</span><span class="vv">PCL-AI</span></div>
+      <div class="vrow"><span class="lk">Status</span>
+        <span class="vst">
+          <svg class="tick" id="tk" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path id="tkp"
+            d="M3.5 12.6 L9.6 18.7 L20.5 6.2" stroke="#3B82F6" stroke-width="3.1"
+            stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <b id="vstat">Checking</b>
+        </span>
+      </div>
+    </div>
+
+    <div class="vnote" id="vn">A made-up example, not a real record. No holder is named, and that reference belongs to nobody.</div>
+  </section>
+
+  <!-- 6 · the honest half: it protects the holder too. Accumulating build. -->
+  <section class="beat" id="b6">
+    <div class="eyebrow" id="e6">Verification cuts both ways</div>
+    <div class="rule" id="u6"></div>
+    <div class="mid" id="h6">It protects<br>you as much as<br>it protects <span class="hl">them.</span></div>
+    <div class="build">
+      <div class="li" id="l4"><i></i><span>An <b>employer</b> is not asked to take your word for it</span></div>
+      <div class="li" id="l5"><i></i><span>And <b>you</b> are not left hoping you are believed</span></div>
+      <div class="li" id="l6"><i></i><span>Someone who has <b>never heard of PCI</b> can still check</span></div>
+    </div>
+  </section>
+
+  <!-- 7 · the offer, well past the two-thirds point, then the address -->
+  <section class="beat" id="b7">
+    <div class="stack">
+      <div>
+        <div class="eyebrow" id="e7">Founding enrolment is open</div>
+        <div class="rule" id="u7"></div>
+        <div class="mid" id="h7">Get one that<br><span class="hl">checks out.</span></div>
+      </div>
+      <div class="offer" id="of">
+        <div class="lab">Create an account and apply code</div>
+        <div class="code">FOUNDINGFREE</div>
+        <div class="what">Free membership · free study access · free exam enrolment</div>
+      </div>
+      <div class="mail" id="ml"><b>info@pciai.org</b> · pciai.org</div>
+    </div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+  <div id="foot"><span>pciai.org</span><span>A CREDENTIAL YOU CAN CHECK</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+/* 50.60s — inside the 45–52s window.
+   The offer beat opens at 44.60 and the code lands at 46.20; two-thirds of
+   the film is 33.73, so the commercial arrives only once the argument has
+   been made in full, which is the whole point of running this one long. */
+const BEATS = [
+  { id:'b1', in: 0.00, out: 6.60 },   // anyone can type a credential
+  { id:'b2', in: 6.60, out:15.60 },   // what the page can show you  (build)
+  { id:'b3', in:15.60, out:21.40 },   // you are trusting the typing
+  { id:'b4', in:21.40, out:27.60 },   // the principle — payoff hold
+  { id:'b5', in:27.60, out:36.00 },   // the illustrative lookup
+  { id:'b6', in:36.00, out:44.60 },   // it cuts both ways  (build)
+  { id:'b7', in:44.60, out:50.60 },   // offer + address
+];
+const DUR = 50.60;
+window.__DUR = DUR;
+
+/* These double as the narration script. The film is delivered silent and
+   works silent; if a read is commissioned the lines already match frame for
+   frame. Nothing here states a rate, a proportion or a count, and no other
+   awarding body is named or alluded to. */
+const CAPS = [
+  [ 0.35,  3.40, "Anyone can type a credential."],
+  [ 3.50,  6.50, "Typing one takes a second. Earning one does not."],
+  [ 6.90, 10.30, "A CV can show you the name of a credential."],
+  [10.40, 13.30, "The body it is said to come from. A date."],
+  [13.60, 15.50, "None of that is evidence. It is formatting."],
+  [15.95, 18.60, "So when you read it, you are not checking a credential."],
+  [18.80, 21.30, "You are trusting the typing."],
+  [21.85, 24.80, "A credential that cannot be checked"],
+  [24.90, 27.50, "is just a claim. That is the rule we hold ourselves to."],
+  [27.95, 31.40, "So ours can be checked — publicly, by anyone."],
+  [31.50, 34.00, "Look up the reference, and the record answers."],
+  [34.10, 35.90, "This example is invented. It is not a real record."],
+  [36.30, 38.60, "And verification cuts both ways."],
+  [38.70, 41.60, "An employer is not asked to take your word for it,"],
+  [41.70, 44.50, "and you are not left hoping a stranger believes you."],
+  [44.95, 47.50, "Founding enrolment is open. Get one that checks out."],
+  [47.60, 50.55, "Apply code FOUNDINGFREE — membership, study and exam, free."],
+];
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
+  e2:$('#e2'), u2:$('#u2'), h2:$('#h2'), lis:[$('#l1'),$('#l2'),$('#l3')],
+  e3:$('#e3'), u3:$('#u3'), h3:$('#h3'), s3:$('#s3'),
+  e4:$('#e4'), u4:$('#u4'), h4:$('#h4'), a4:$('#a4'),
+  e5:$('#e5'), u5:$('#u5'), h5:$('#h5'),
+  vc:$('#vc'), vs:$('#vs'), vref:$('#vref'), tk:$('#tk'), tkp:$('#tkp'), vstat:$('#vstat'), vn:$('#vn'),
+  e6:$('#e6'), u6:$('#u6'), h6:$('#h6'), lis2:[$('#l4'),$('#l5'),$('#l6')],
+  e7:$('#e7'), u7:$('#u7'), h7:$('#h7'), of:$('#of'), ml:$('#ml'),
+  cc:$('#cc'), ccbox:$('#ccbox'),
+};
+window.__EL = EL;
+
+/* fade-and-rise, the one motion every beat shares */
+const rise = (el, u, t0, d = 0.50, em = 0.60) => {
+  if (!el) return;
+  const p = P.seg(u, t0, t0 + d, P.outExpo);
+  el.style.opacity = p.toFixed(3);
+  el.style.transform = `translateY(${((1 - p) * em).toFixed(2)}em)`;
+};
+const head = (e, u, u0) => { if (e) e.style.opacity = P.seg(u, u0, u0 + 0.30).toFixed(3); };
+/* the list accumulates: once an item is in, it stays in for the whole beat */
+const build = (els, u, t0, gap) => els.forEach((el, i) => rise(el, u, t0 + i * gap, 0.48, 0.5));
+
+/* The tick is drawn, not faded: its dash offset is a function of t, so the
+   stroke writes itself exactly once and scrubs backwards identically.
+   40 is a comfortable over-estimate of the path length in viewBox units. */
+const LEN = 40;
+const drawTick = (svg, path, p) => {
+  svg.style.opacity = (p > 0 ? 1 : 0).toFixed(3);
+  path.style.strokeDasharray = LEN;
+  path.style.strokeDashoffset = (LEN * (1 - p)).toFixed(2);
+};
+
+const FX = {
+  /* 0.00 cut+eyebrow · 0.30 headline · 2.00 sub — hook typeset by t≈0.9s, so
+     frame one already carries the argument for a muted autoplay. */
+  b1(u){ head(EL.e1,u,0.00); P.rule(EL.u1,u,0.08);
+         P.revealWords(EL.h1,u,0.30,{stagger:0.050,dur:0.40});
+         rise(EL.s1,u,2.00,0.55,0.5); },
+
+  /* 6.60 cut · 0.80/2.80/4.80 the three lines accumulate · 6.80 the verdict */
+  b2(u){ head(EL.e2,u,0.04); P.rule(EL.u2,u,0.14);
+         build(EL.lis,u,0.80,2.00);
+         P.revealWords(EL.h2,u,6.80,{stagger:0.062,dur:0.42}); },
+
+  /* 15.60 cut · 0.50 headline rolls to ≈17.2 · 3.10 the closing line.
+     Held to 21.40. */
+  b3(u){ head(EL.e3,u,0.04); P.rule(EL.u3,u,0.14);
+         P.revealWords(EL.h3,u,0.50,{stagger:0.068,dur:0.44});
+         rise(EL.s3,u,3.10,0.55,0.45); },
+
+  /* 21.40 cut · 0.55 the principle (complete ≈23.5) · 3.20 attribution.
+     The definition then holds ~4.0s: this is the payoff of the film. */
+  b4(u){ head(EL.e4,u,0.04); P.rule(EL.u4,u,0.14);
+         P.revealWords(EL.h4,u,0.55,{stagger:0.075,dur:0.46});
+         rise(EL.a4,u,3.20,0.55,0.45); },
+
+  /* 27.60 cut · 0.60 headline · 1.70 card + caveat · 3.00–4.00 the sweep ·
+     4.00 the record resolves. The reference is on screen 29.3→36.0 (6.7s)
+     and the word ILLUSTRATIVE is on screen for every frame of it. */
+  b5(u){
+    head(EL.e5,u,0.04); P.rule(EL.u5,u,0.14);
+    P.revealWords(EL.h5,u,0.60,{stagger:0.070,dur:0.42});
+
+    const c = P.seg(u,1.70,2.35,P.outBack);
+    EL.vc.style.opacity = Math.min(1,c*1.35).toFixed(3);
+    EL.vc.style.transform = `translateY(${((1-c)*0.5).toFixed(2)}em)`;
+
+    /* one lookup sweep crosses the card, u 3.00 → 4.00. Its travel stops at
+       the card's right edge so the unclipped box never leaves the stage. */
+    const sp = P.seg(u,3.00,4.00,P.inOut);
+    EL.vs.style.opacity = (u > 2.98 && u < 4.02 ? P.pulse(u,3.00,4.00) * 0.95 : 0).toFixed(3);
+    EL.vs.style.left = (-8 + sp * 108).toFixed(2) + '%';
+
+    /* and it resolves. The text is chosen from t, so the frame stays pure. */
+    const done = u >= 4.00;
+    EL.vstat.textContent = done ? 'Active' : 'Checking';
+    EL.vstat.style.color = done ? '#fff' : '#7E90AC';
+    drawTick(EL.tk, EL.tkp, P.seg(u,4.00,4.55,P.outCubic));
+
+    /* the caveat arrives with the card, never after it */
+    rise(EL.vn,u,1.82,0.65,0.4);
+  },
+
+  /* 36.00 cut · 0.50 headline · 2.00/4.00/6.00 the three lines accumulate.
+     Held to 44.60. */
+  b6(u){ head(EL.e6,u,0.04); P.rule(EL.u6,u,0.14);
+         P.revealWords(EL.h6,u,0.50,{stagger:0.068,dur:0.42});
+         build(EL.lis2,u,2.00,2.00); },
+
+  /* 44.60 cut · 0.60 headline · 1.60 the offer · 3.00 the address.
+     FOUNDINGFREE is up 46.20→50.60 (4.4s) and info@pciai.org 47.60→50.60
+     (3.0s, fully opaque from ≈48.1) — both clear of the 2s floor. */
+  b7(u){
+    head(EL.e7,u,0.04); P.rule(EL.u7,u,0.14);
+    P.revealWords(EL.h7,u,0.60,{stagger:0.070,dur:0.42});
+    const p = P.seg(u,1.60,2.25,P.outBack);
+    EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
+    EL.of.style.transform = `translateY(${((1-p)*0.5).toFixed(2)}em) scale(${(0.965+0.035*Math.min(1,p)).toFixed(4)})`;
+    rise(EL.ml,u,3.00,0.50,0.45);
+  },
+};
+
+function caption(t){
+  let txt = ''; for (const [a,b,s] of CAPS) if (t >= a && t < b) txt = s;
+  EL.ccbox.textContent = txt; EL.cc.style.opacity = txt ? '1' : '0';
+}
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+  if (ST.CC) caption(t); else { EL.cc.style.opacity = '0'; EL.ccbox.textContent = ''; }
+};
+window.seek(0);
+</script>

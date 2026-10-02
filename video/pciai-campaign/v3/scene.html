@@ -1,0 +1,316 @@
+<meta charset="utf-8">
+<title>PCI AI · V3 · What the exam actually assesses</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  /* V3 — the 4:5 explainer, LIGHT ground.
+     The piece demystifies the syllabus, so it is the one film that should feel
+     legible rather than solemn. Everything below that carries colour is
+     checked against #F5F7FB, not against the navy: the two accents this film
+     adds of its own (.hl and .crim) are corrected at the bottom of this block,
+     and nothing is hardcoded to #fff. */
+
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.026em;line-height:1.04;
+       font-size:calc(var(--s)*4.5px);margin-top:calc(var(--s)*1.4px)}
+  .big2{font-family:var(--display);font-weight:800;letter-spacing:-.026em;line-height:1.05;
+       font-size:calc(var(--s)*3.9px);margin-top:calc(var(--s)*1.3px)}
+  #stage.wide .big{font-size:calc(var(--s)*4.4px)}
+  #stage.wide .big2{font-size:calc(var(--s)*3.6px)}
+  .big .crim,.big2 .crim{color:#E4785F}
+  .big .hl,.big2 .hl{color:var(--accent)}
+
+  /* The thirteen. The signature crimson→blue rule exploded into one mark per
+     domain, so the structure of the syllabus IS the brand device. flex:1 1 0
+     on every mark means the row can never be wider than its container —
+     which is the obvious way a 13-item layout escapes the safe box. */
+  .spine{display:flex;align-items:flex-end;gap:calc(var(--s)*.6px);width:100%;
+         max-width:calc(var(--s)*40px);
+         margin-top:calc(var(--s)*1.9px);height:calc(var(--s)*4.6px)}
+  .spine span{flex:1 1 0;display:block;height:100%;
+              border-radius:calc(var(--s)*.16px);transform-origin:bottom center;
+              will-change:transform,opacity}
+  #stage.wide .spine{height:calc(var(--s)*3.6px)}
+
+  /* the number. var(--fg), never a hardcoded ink — it has to invert with the
+     ground or it is a black number on navy in the dark cut. */
+  .bignum{font-family:var(--display);font-weight:800;letter-spacing:-.045em;color:var(--fg);
+          font-size:calc(var(--s)*9.5px);line-height:1.08;margin-top:calc(var(--s)*1.2px);
+          will-change:transform,opacity}
+  #stage.wide .bignum{font-size:calc(var(--s)*7.4px)}
+  .numlab{font-size:calc(var(--s)*1.55px);line-height:1.36;color:var(--soft);
+          margin-top:calc(var(--s)*.5px);max-width:calc(var(--s)*40px);
+          will-change:transform,opacity}
+  .numlab b{color:var(--fg);font-weight:600}
+
+  .note{font-size:calc(var(--s)*1.22px);line-height:1.42;color:var(--mute);
+        margin-top:calc(var(--s)*1.3px);max-width:calc(var(--s)*40px);
+        will-change:transform,opacity}
+
+  /* the named domains — typeset as a syllabus, not as a feature grid */
+  .doms{list-style:none;margin-top:calc(var(--s)*1.8px);display:flex;flex-direction:column;
+        align-items:flex-start;gap:calc(var(--s)*.85px)}
+  .doms li{display:flex;align-items:baseline;gap:calc(var(--s)*.85px);
+           border-left:calc(var(--s)*.2px) solid var(--accent);
+           padding:calc(var(--s)*.16px) 0 calc(var(--s)*.16px) calc(var(--s)*.85px);
+           will-change:transform,opacity}
+  .doms b{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*1.5px);
+          color:var(--accent);letter-spacing:.01em;min-width:calc(var(--s)*2.7px);flex:0 0 auto}
+  .doms em{font-style:normal;font-size:calc(var(--s)*1.5px);color:var(--fg);font-weight:500;
+           line-height:1.25}
+
+  .principle{font-family:var(--display);font-weight:800;letter-spacing:-.022em;line-height:1.06;
+             font-size:calc(var(--s)*3.8px);will-change:transform,opacity}
+  #p1{margin-top:calc(var(--s)*1.4px)}
+  #stage.wide .principle{font-size:calc(var(--s)*3.5px)}
+  .principle .hl{color:var(--accent)}
+  .attrib{font-size:calc(var(--s)*1.08px);color:var(--mute);margin-top:calc(var(--s)*1.1px);
+          letter-spacing:.03em;will-change:transform,opacity}
+
+  /* a column flex container stretches its children unless told not to */
+  .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.25px)}
+  .stack .note{margin-top:0}
+  .tail{font-size:calc(var(--s)*1.1px);color:var(--mute);letter-spacing:.02em;
+        will-change:transform,opacity}
+  /* the closing address is the last thing on screen for seven seconds and is
+     the one string a viewer may have to copy, so it is scoped up from the
+     shared .mail size rather than left at caption scale */
+  #ml{font-size:calc(var(--s)*1.45px)}
+  #stage.wide #ml{font-size:calc(var(--s)*1.3px)}
+
+  /* --- light-ground corrections ------------------------------------------
+     #E4785F and #3B82F6 are tuned for the navy: on #F5F7FB the first washes
+     out and the second falls under 3:1 at these sizes. brand.css already
+     darkens .eyebrow to --blue for exactly this reason; these are the same
+     move for the accents this film introduces. The crimson→blue gradient on
+     the thirteen marks needs no correction — both ends are brand ink and hold
+     on either ground. */
+  #stage.light .big .crim,#stage.light .big2 .crim{color:var(--crimson)}
+  #stage.light .big .hl,#stage.light .big2 .hl{color:var(--blue)}
+  #stage.light .principle .hl{color:var(--blue)}
+  #stage.light .doms b{color:var(--blue)}
+  #stage.light .doms li{border-left-color:var(--blue)}
+</style>
+
+<div id="stage" class="light">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <!-- 1 · the question almost no certification film answers -->
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">Before you pay for any credential</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">What does the exam<br><span class="hl">actually assess?</span></div>
+    <div class="sub" id="s1">Most certification marketing never answers that.<br>Here is the answer.</div>
+  </section>
+
+  <!-- 2 · the structure, and the number that comes out of it -->
+  <section class="beat" id="b2">
+    <div class="eyebrow" id="e2">The PCL-AI body of knowledge</div>
+    <div class="rule" id="u2"></div>
+    <div class="spine" id="sp">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="bignum" id="n2">0</div>
+    <div class="numlab" id="l2"><b>domains</b>, published in full — and the examination is sampled from them.</div>
+  </section>
+
+  <!-- 3 · name some, because a real syllabus can be named -->
+  <section class="beat" id="b3">
+    <div class="eyebrow" id="e3">Four of the thirteen, named</div>
+    <div class="rule" id="u3"></div>
+    <ul class="doms">
+      <li id="d1"><b>D3</b><em>Budgeting &amp; Forecasting</em></li>
+      <li id="d2"><b>D10</b><em>Project Scheduling</em></li>
+      <li id="d3"><b>D12</b><em>Risk Management</em></li>
+      <li id="d4"><b>D13</b><em>AI for Project Controls &amp; PM</em></li>
+    </ul>
+    <div class="note" id="p3">Each one carries its own task statements.</div>
+  </section>
+
+  <!-- 4 · the argument, assembled in front of the viewer -->
+  <section class="beat" id="b4">
+    <div class="eyebrow" id="e4">What all thirteen are testing</div>
+    <div class="rule" id="u4"></div>
+    <div class="big2" id="h4">Judgement over<br>AI output.<br><span class="crim">Not recall.</span></div>
+    <div class="build">
+      <div class="li" id="l1"><i></i><span>A model produces the <b>schedule</b>, the <b>forecast</b>, the <b>estimate</b></span></div>
+      <div class="li" id="l2b"><i></i><span>You are the one who can tell when it is <b>wrong</b></span></div>
+      <div class="li" id="l3"><i></i><span>And the one who has to <b>defend the call</b></span></div>
+    </div>
+    <div class="note" id="p4">That judgement is what thirteen domains are built to examine.</div>
+  </section>
+
+  <!-- 5 · the governing principle, quoted as such -->
+  <section class="beat" id="b5">
+    <div class="eyebrow" id="e5">Our governing principle</div>
+    <div class="rule" id="u5"></div>
+    <div class="principle" id="p1">AI proposes.</div>
+    <div class="principle" id="p2">The professional <span class="hl">disposes.</span></div>
+    <div class="attrib" id="a5">Project Controls Institute</div>
+  </section>
+
+  <!-- 6 · the offer, after the two-thirds point, terms in the same card -->
+  <section class="beat" id="b6">
+    <div class="stack">
+      <div>
+        <div class="eyebrow" id="e6">Founding enrolment is open</div>
+        <div class="rule" id="u6"></div>
+      </div>
+      <div class="offer" id="of">
+        <div class="lab">Create an account and apply code</div>
+        <div class="code">FOUNDINGFREE</div>
+        <div class="what">Free membership · free study access · free exam enrolment</div>
+      </div>
+      <div class="note" id="p6">The thirteen domains are published. Read them before you enrol.</div>
+      <div class="mail" id="ml"><b>info@pciai.org</b></div>
+      <div class="tail" id="tl">Ask every institute the same question.</div>
+    </div>
+  </section>
+
+  <div id="cc"><div id="ccbox"></div></div>
+  <div id="foot"><span>pciai.org</span><span>AI PROPOSES. THE PROFESSIONAL DISPOSES.</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+/* 46.0s · six beats. The offer opens at 35.2s — the two-thirds point is
+   30.67s, so the film is an argument that ends in an offer, never an ad that
+   opens with a code. */
+const BEATS = [
+  { id:'b1', in:0.00,  out:5.40  },
+  { id:'b2', in:5.40,  out:12.60 },
+  { id:'b3', in:12.60, out:19.00 },
+  { id:'b4', in:19.00, out:28.60 },
+  { id:'b5', in:28.60, out:35.20 },
+  { id:'b6', in:35.20, out:46.00 },
+];
+const DUR = 46.00;
+window.__DUR = DUR;
+
+/* These double as the narration script. The film is delivered silent and
+   works silent; if a read is commissioned the lines already match the cut
+   frame for frame, and the burned captions are what a muted feed sees. */
+const CAPS = [
+  [0.35,  3.05,  "There is one question worth asking before you pay for a credential."],
+  [3.15,  5.30,  "What does the exam actually assess?"],
+  [5.75,  8.60,  "For PCL-AI, the body of knowledge is published in full."],
+  [8.70,  12.50, "Thirteen of them, published in full, and the exam is drawn from that structure."],
+  [12.95, 15.80, "You can read them. Budgeting and forecasting."],
+  [15.90, 18.90, "Scheduling. Risk. And AI for project controls itself."],
+  [19.35, 22.40, "Every one of them is testing the same thing, and it is not memory."],
+  [22.50, 25.60, "A model will hand you a schedule, a forecast, an estimate."],
+  [25.70, 28.50, "The work is knowing when it is wrong, and defending the call."],
+  [29.05, 32.30, "AI proposes. The professional disposes."],
+  [32.40, 35.10, "That principle is why the syllabus looks like this."],
+  [35.55, 38.20, "Founding enrolment is open."],
+  [38.30, 42.00, "Create an account, then apply code FOUNDINGFREE."],
+  [42.10, 45.90, "Membership, study access and exam enrolment, free. info at pciai.org."],
+];
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
+  e2:$('#e2'), u2:$('#u2'), bars:[...document.querySelectorAll('#sp span')],
+  n2:$('#n2'), l2:$('#l2'),
+  e3:$('#e3'), u3:$('#u3'), doms:[$('#d1'),$('#d2'),$('#d3'),$('#d4')], p3:$('#p3'),
+  e4:$('#e4'), u4:$('#u4'), h4:$('#h4'), lis:[$('#l1'),$('#l2b'),$('#l3')], p4:$('#p4'),
+  e5:$('#e5'), u5:$('#u5'), pr1:$('#p1'), pr2:$('#p2'), a5:$('#a5'),
+  e6:$('#e6'), u6:$('#u6'), of:$('#of'), p6:$('#p6'), ml:$('#ml'), tl:$('#tl'),
+  cc:$('#cc'), ccbox:$('#ccbox'),
+};
+window.__EL = EL;
+
+/* Static, so it is assigned once rather than per frame: the thirteen marks
+   carry the brand's crimson→blue rule across their own width. Both ends are
+   brand ink, so this needs no light-ground correction. */
+EL.bars.forEach((b, i) => {
+  b.style.background = P.mixc(P.C_CRIM, P.C_BLUE, i / (EL.bars.length - 1));
+});
+
+const rise = (el, u, t0, d = 0.50, em = 0.60) => {
+  if (!el) return;
+  const p = P.seg(u, t0, t0 + d, P.outExpo);
+  el.style.opacity = p.toFixed(3);
+  el.style.transform = `translateY(${((1 - p) * em).toFixed(2)}em)`;
+};
+const head = (e, u, u0) => { e.style.opacity = P.seg(u, u0, u0 + 0.30).toFixed(3); };
+/* the list accumulates: once an item is in, it stays in. LinkedIn's own
+   creative study found bulleted captions carry markedly longer dwell, so the
+   4:5 cuts assemble the argument in front of the viewer rather than replacing
+   one line with the next. */
+const build = (els, u, t0, gap) => els.forEach((el, i) => rise(el, u, t0 + i * gap, 0.48, 0.50));
+
+const FX = {
+  b1(u){ head(EL.e1,u,0.05); P.rule(EL.u1,u,0.15);
+         P.revealWords(EL.h1,u,0.30,{stagger:0.052,dur:0.40});
+         rise(EL.s1,u,1.55,0.52,0.50); },
+
+  b2(u){ head(EL.e2,u,0.05); P.rule(EL.u2,u,0.15);
+         /* thirteen marks on one stagger — this reads as a single build, not
+            as thirteen separate changes */
+         EL.bars.forEach((b,i)=>{
+           const p = P.seg(u, 0.35 + i*0.055, 0.70 + i*0.055, P.outQuint);
+           b.style.transform = `scaleY(${Math.max(0.02,p).toFixed(4)})`;
+           b.style.opacity = Math.min(1, p*1.6).toFixed(3);
+         });
+         rise(EL.n2,u,1.00,0.45,0.28);
+         /* computed from t, never accumulated: scrubbing back shows the same
+            value. Lands on 13 at u=3.15 (t=8.55) and holds to 12.60 — 4.05s. */
+         P.countTo(EL.n2,u,1.05,3.15,13);
+         rise(EL.l2,u,4.90,0.52,0.45); },
+
+  b3(u){ head(EL.e3,u,0.05); P.rule(EL.u3,u,0.15);
+         EL.doms.forEach((d,i)=>{
+           const p = P.seg(u, 0.45 + i*0.36, 0.93 + i*0.36, P.outExpo);
+           d.style.opacity = p.toFixed(3);
+           d.style.transform = `translateX(${((1-p)*-1.1).toFixed(2)}em)`;
+         });
+         rise(EL.p3,u,3.70,0.52,0.45); },
+
+  b4(u){ head(EL.e4,u,0.05); P.rule(EL.u4,u,0.15);
+         P.revealWords(EL.h4,u,0.35,{stagger:0.056,dur:0.42});
+         build(EL.lis,u,2.10,1.80);
+         rise(EL.p4,u,7.70,0.52,0.45); },
+
+  b5(u){ head(EL.e5,u,0.05); P.rule(EL.u5,u,0.15);
+         P.revealWords(EL.pr1,u,0.40,{stagger:0.070,dur:0.46});
+         P.revealWords(EL.pr2,u,2.10,{stagger:0.070,dur:0.46});
+         rise(EL.a5,u,3.90,0.52,0.40); },
+
+  b6(u){ head(EL.e6,u,0.05); P.rule(EL.u6,u,0.15);
+         const p = P.seg(u,0.50,1.15,P.outBack);
+         EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
+         EL.of.style.transform = `translateY(${((1-p)*0.55).toFixed(2)}em) scale(${(0.965+0.035*Math.min(1,p)).toFixed(4)})`;
+         /* FOUNDINGFREE lands at t=36.35 and holds 9.65s */
+         rise(EL.p6,u,2.10,0.52,0.45);
+         /* info@pciai.org lands at t=39.02 and holds 6.98s */
+         rise(EL.ml,u,3.50,0.52,0.45);
+         rise(EL.tl,u,5.60,0.52,0.40); },
+};
+
+function caption(t){
+  let txt = '';
+  for (const [a,b,s] of CAPS) if (t >= a && t < b) txt = s;
+  EL.ccbox.textContent = txt;
+  EL.cc.style.opacity = txt ? '1' : '0';
+}
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+  if (ST.CC) caption(t); else { EL.cc.style.opacity='0'; EL.ccbox.textContent=''; }
+};
+window.seek(0);
+</script>

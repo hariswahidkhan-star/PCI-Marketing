@@ -1,0 +1,189 @@
+/* ===========================================================================
+   PCI AI campaign — the one stylesheet all ten films share.
+   Tokens are the platform's own (repository README → backend styles.css).
+   =========================================================================== */
+@font-face{font-family:Archivo;src:url(../brand/archivo-latin.woff2)format('woff2');font-weight:800;font-display:block}
+@font-face{font-family:Inter;src:url(../brand/inter-latin.woff2)format('woff2');font-weight:400 700;font-display:block}
+
+:root{
+  --ink:#0F172A; --ink2:#111D33; --panel:#16213A;
+  --crimson:#C13329; --blue:#1D4ED8; --accent:#3B82F6;
+  --soft:#B9C6DA; --mute:#7E90AC; --line:#22304C;
+  --fg:#FFFFFF; --ground:#0F172A; --mesh:#18243C;
+  --ccfg:#FFFFFF; --ccbg:rgba(8,13,24,.82);
+  --display:Archivo,"Archivo",system-ui,sans-serif;
+  --text:Inter,"Inter",system-ui,sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--ground)}
+body{font-family:var(--text);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+#stage{position:relative;overflow:hidden;background:var(--ground);color:var(--fg);
+  font-size:calc(var(--s)*1px)}
+#mesh{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
+
+/* A slow wash so the navy has depth. Purely decorative and deliberately
+   larger than the stage, which clips it — the probe is told to ignore it. */
+#wash{position:absolute;left:-20%;top:-30%;width:140%;height:160%;pointer-events:none;
+  background:radial-gradient(45% 40% at 30% 25%,rgba(29,78,216,.30),transparent 70%),
+             radial-gradient(40% 35% at 78% 70%,rgba(193,51,41,.16),transparent 72%)}
+
+/* ---- the beat ----------------------------------------------------------- */
+.beat{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  will-change:opacity,transform}
+
+/* Safe area. Reels put the account name, caption and action rail over the
+   frame, so nothing that must be read may sit in those bands. The class is set
+   per aspect and every film inherits it rather than guessing its own margins.
+   Vertical reserves: 11% top, 20% bottom, 13% right for the action rail. The
+   probe enforces exactly these, so a layout that drifts fails the build rather
+   than shipping under somebody's Follow button. */
+#stage.wide .beat{padding:calc(var(--s)*6.5px) calc(var(--s)*7px)}
+#stage.sq   .beat{padding:calc(var(--s)*6px) calc(var(--s)*6px)}
+#stage.tall .beat{padding:calc(var(--s)*17px) calc(var(--s)*8.1px) calc(var(--s)*36px)}
+
+/* ---- type --------------------------------------------------------------- */
+.eyebrow{font-family:var(--text);font-weight:700;text-transform:uppercase;
+  letter-spacing:.17em;font-size:calc(var(--s)*.95px);color:var(--accent)}
+#stage.tall .eyebrow{font-size:calc(var(--s)*1.2px)}
+
+/* the signature crimson→blue rule */
+.rule{height:calc(var(--s)*.28px);border-radius:calc(var(--s)*.2px);transform-origin:left center;
+  background:linear-gradient(90deg,var(--crimson),var(--blue));
+  margin-top:calc(var(--s)*.85px);width:calc(var(--s)*13px)}
+#stage.tall .rule{width:calc(var(--s)*11px);height:calc(var(--s)*.34px)}
+
+h1{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height:1.02;
+  font-size:calc(var(--s)*5.1px);margin-top:calc(var(--s)*1.5px)}
+h2{font-family:var(--display);font-weight:800;letter-spacing:-.023em;line-height:1.06;
+  font-size:calc(var(--s)*3.4px);margin-top:calc(var(--s)*1.2px)}
+#stage.tall h1{font-size:calc(var(--s)*5.5px)}
+#stage.tall h2{font-size:calc(var(--s)*3.9px)}
+
+.sub{font-size:calc(var(--s)*1.45px);line-height:1.45;color:var(--soft);
+  margin-top:calc(var(--s)*1.15px);max-width:calc(var(--s)*42px);font-weight:400}
+#stage.tall .sub{font-size:calc(var(--s)*1.72px);max-width:100%;line-height:1.4}
+
+/* word-reveal boxes: each word clips its own rise */
+.w{display:inline-block;overflow:hidden;vertical-align:bottom}
+.w>i{display:inline-block;font-style:normal;will-change:transform,opacity}
+
+/* ---- furniture ---------------------------------------------------------- */
+#brandbar{position:absolute;display:flex;align-items:center;gap:calc(var(--s)*.8px);
+  left:calc(var(--s)*7px);top:calc(var(--s)*4.2px);will-change:opacity}
+#stage.tall #brandbar{left:calc(var(--s)*8.1px);top:calc(var(--s)*13px)}
+#stage.sq   #brandbar{left:calc(var(--s)*6px);top:calc(var(--s)*4px)}
+#brandbar img{width:calc(var(--s)*2.5px);height:calc(var(--s)*2.5px);display:block}
+#brandbar .wm{font-family:var(--display);font-weight:800;letter-spacing:-.02em;
+  font-size:calc(var(--s)*1.5px);line-height:1}
+#brandbar .tag{font-size:calc(var(--s)*.82px);color:var(--mute);letter-spacing:.04em;
+  margin-top:calc(var(--s)*.12px)}
+
+#foot{position:absolute;left:calc(var(--s)*7px);right:calc(var(--s)*7px);
+  bottom:calc(var(--s)*3.6px);display:flex;align-items:center;justify-content:space-between;
+  font-size:calc(var(--s)*.9px);color:var(--mute);letter-spacing:.06em;will-change:opacity}
+#stage.tall #foot{left:calc(var(--s)*8.1px);right:calc(var(--s)*8.1px);bottom:calc(var(--s)*32px)}
+#stage.sq   #foot{left:calc(var(--s)*6px);right:calc(var(--s)*6px);bottom:calc(var(--s)*3.4px)}
+
+#barwrap{position:absolute;left:0;right:0;bottom:0;height:calc(var(--s)*.24px);
+  background:rgba(255,255,255,.07)}
+#bar{height:100%;transform-origin:left center;
+  background:linear-gradient(90deg,var(--crimson),var(--blue))}
+
+/* ---- reusable pieces ---------------------------------------------------- */
+.card{background:var(--ink2);border:1px solid var(--line);
+  border-radius:calc(var(--s)*.7px);padding:calc(var(--s)*1.5px) calc(var(--s)*1.7px);
+  will-change:transform,opacity}
+.card .k{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*2.6px);
+  letter-spacing:-.02em;line-height:1}
+.card .v{font-size:calc(var(--s)*1.05px);color:var(--mute);margin-top:calc(var(--s)*.35px)}
+
+.pill{display:inline-flex;align-items:center;gap:calc(var(--s)*.5px);
+  border:1px solid var(--line);background:var(--ink2);
+  border-radius:calc(var(--s)*4px);padding:calc(var(--s)*.55px) calc(var(--s)*1.15px);
+  font-size:calc(var(--s)*1.02px);color:var(--soft);will-change:transform,opacity}
+.pill b{color:var(--fg);font-weight:600}
+
+/* the offer lockup — one component, so the code looks identical in all ten */
+.offer{border:calc(var(--s)*.13px) dashed var(--accent);border-radius:calc(var(--s)*.75px);
+  background:rgba(29,78,216,.13);padding:calc(var(--s)*1.25px) calc(var(--s)*1.7px);
+  display:inline-block;will-change:transform,opacity}
+.offer .lab{font-size:calc(var(--s)*.88px);text-transform:uppercase;letter-spacing:.17em;
+  color:var(--accent);font-weight:700}
+.offer .code{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*3.0px);
+  letter-spacing:.02em;line-height:1.05;margin-top:calc(var(--s)*.3px)}
+.offer .what{font-size:calc(var(--s)*1.05px);color:var(--soft);margin-top:calc(var(--s)*.3px)}
+#stage.tall .offer .code{font-size:calc(var(--s)*2.7px)}
+
+.mail{font-size:calc(var(--s)*1.1px);color:var(--soft);letter-spacing:.01em}
+/* the closing contact is the only call to action in the set and was the
+   one type token with no vertical override, so it shipped smaller than
+   the body text next to it */
+#stage.tall .mail{font-size:calc(var(--s)*1.45px)}
+.mail b{color:var(--fg);font-weight:600}
+
+/* ---- burned captions ---------------------------------------------------- */
+/* Vertical feeds are watched muted, so captions are burned rather than
+   offered as a track. They sit above the platform's own caption band. */
+#cc{position:absolute;left:0;right:0;display:flex;justify-content:center;
+  padding:0 calc(var(--s)*5px);pointer-events:none}
+#stage.wide #cc{bottom:calc(var(--s)*6.2px)}
+#stage.sq   #cc{bottom:calc(var(--s)*6.5px)}
+#stage.tall #cc{bottom:calc(var(--s)*36px);padding:0 calc(var(--s)*8.1px)}
+/* reels are text-led: no narration, so no caption band to duplicate the type */
+#cc.off{display:none}
+#ccbox{font-weight:700;text-align:center;line-height:1.28;
+  font-size:calc(var(--s)*1.6px);color:var(--ccfg);
+  background:var(--ccbg);border-radius:calc(var(--s)*.45px);
+  padding:calc(var(--s)*.6px) calc(var(--s)*1.0px);
+  border-bottom:calc(var(--s)*.18px) solid var(--blue);max-width:100%}
+#stage.tall #ccbox{font-size:calc(var(--s)*1.85px)}
+
+/* ---- accumulating key-line list ----------------------------------------
+   LinkedIn's own creative study (13,000 B2B ads) found bulleted captions
+   carry ~30% longer dwell. So on the 4:5 cuts the key lines ACCUMULATE into a
+   visible list rather than replacing one another — the viewer can see the
+   argument being assembled, and a late arrival can still read the whole of it.
+   Reels do the opposite and replace, because there is no room and no dwell to
+   win. Same content, two behaviours. */
+.build{display:flex;flex-direction:column;gap:calc(var(--s)*.85px);margin-top:calc(var(--s)*1.4px)}
+.build .li{display:flex;align-items:flex-start;gap:calc(var(--s)*.75px);
+  font-size:calc(var(--s)*1.35px);line-height:1.35;color:var(--soft);will-change:opacity,transform}
+.build .li i{flex:0 0 auto;width:calc(var(--s)*.42px);height:calc(var(--s)*1.35px);
+  border-radius:calc(var(--s)*.2px);background:linear-gradient(180deg,var(--crimson),var(--blue));
+  margin-top:calc(var(--s)*.18px)}
+.build .li b{color:var(--fg);font-weight:600}
+#stage.tall .build .li{font-size:calc(var(--s)*1.5px)}
+#stage.tall .build .li i{height:calc(var(--s)*1.5px)}
+
+
+/* ===========================================================================
+   LIGHT TREATMENT — #stage.light
+   Same brand, inverted ground. Not a second palette: crimson, blue and accent
+   are unchanged, and the crimson-to-blue rule is still the signature device.
+   Only the ground, the ink and the panel surfaces move.
+
+   It exists for two reasons. Some of these films are explanatory rather than
+   declarative, and light reads as open where navy reads as authoritative. And
+   in a feed of dark thumbnails a light one is the cheapest pattern interrupt
+   available, which matters more than any transition effect.
+   =========================================================================== */
+#stage.light{
+  --ground:#F5F7FB; --fg:#0F172A; --ink2:#FFFFFF; --panel:#FFFFFF;
+  --soft:#475569; --mute:#5A677D; --line:#E2E8F0; --mesh:#E6EBF4;
+  --ccfg:#0F172A; --ccbg:rgba(255,255,255,.92);
+  color:var(--fg);
+}
+/* the accent has to darken on white or the eyebrow fails contrast */
+#stage.light .eyebrow{color:var(--blue)}
+#stage.light .offer{border-color:var(--blue);background:rgba(29,78,216,.06)}
+#stage.light .offer .lab{color:var(--blue)}
+#stage.light .card,#stage.light .pill{box-shadow:0 calc(var(--s)*.1px) calc(var(--s)*.5px) rgba(15,23,42,.06)}
+#stage.light #barwrap{background:rgba(15,23,42,.08)}
+#stage.light #ccbox{border-bottom-color:var(--blue);
+  box-shadow:0 calc(var(--s)*.2px) calc(var(--s)*.9px) rgba(15,23,42,.10)}
+#stage.light #wash{
+  background:radial-gradient(45% 40% at 28% 22%,rgba(29,78,216,.14),transparent 70%),
+             radial-gradient(40% 35% at 80% 72%,rgba(193,51,41,.09),transparent 72%)}
+#stage.light .fact{border-left-color:var(--blue)}

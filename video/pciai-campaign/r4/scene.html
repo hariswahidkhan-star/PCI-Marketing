@@ -1,0 +1,264 @@
+<meta charset="utf-8">
+<title>PCI AI · R4 · Can anyone check it?</title>
+<link rel="stylesheet" href="../common/brand.css">
+<style>
+  /* R4 — the verification reel. The diagnostic piece: it names a problem the
+     viewer already has (a credential on a CV they cannot check) and answers it
+     structurally, not statistically. There is no fraud rate on screen and no
+     other body is named or implied, because neither is available to us and
+     neither is needed — the argument is that an unverifiable claim is not a
+     credential, which is true by definition.
+
+     Text-led, no narration, no caption band: the type is the message. */
+
+  .big{font-family:var(--display);font-weight:800;letter-spacing:-.028em;line-height:1.0;
+       font-size:calc(var(--s)*5.6px);margin-top:calc(var(--s)*1.4px)}
+  #stage.tall .big{font-size:calc(var(--s)*5.3px)}
+  .big .hl{color:var(--accent)} .big .crim{color:#E4785F}
+
+  .mid{font-family:var(--display);font-weight:800;letter-spacing:-.024em;line-height:1.03;
+       font-size:calc(var(--s)*4.4px);margin-top:calc(var(--s)*1.4px)}
+  #stage.tall .mid{font-size:calc(var(--s)*4.3px)}
+  .mid .crim{color:#E4785F} .mid .hl{color:var(--accent)}
+
+  .principle{font-family:var(--display);font-weight:800;letter-spacing:-.022em;
+       line-height:1.05;font-size:calc(var(--s)*4.6px);margin-top:calc(var(--s)*1.3px)}
+  #stage.tall .principle{font-size:calc(var(--s)*4.5px)}
+  .principle .hl{color:var(--accent)}
+  .attrib{font-size:calc(var(--s)*1.15px);color:var(--mute);margin-top:calc(var(--s)*1.5px)}
+  #stage.tall .attrib{font-size:calc(var(--s)*1.25px)}
+
+  /* ---- the verification motif -------------------------------------------
+     A record being looked up and confirmed. It is deliberately NOT a person:
+     no name, no photograph, no holder field. The reference is a visibly
+     hollow placeholder (0000 / SAMPLE), the card is labelled ILLUSTRATIVE in
+     its own header, and a caption under it says in plain words that it is not
+     a real record. Nothing in it is a statistic. */
+  .vcard{position:relative;overflow:hidden;width:100%;
+    background:var(--ink2);border:1px solid var(--line);
+    border-radius:calc(var(--s)*.7px);
+    padding:calc(var(--s)*1.15px) calc(var(--s)*1.45px) calc(var(--s)*.5px);
+    margin-top:calc(var(--s)*1.55px);will-change:transform,opacity}
+  .vscan{position:absolute;top:0;bottom:0;width:calc(var(--s)*7px);pointer-events:none;
+    background:linear-gradient(90deg,rgba(59,130,246,0),rgba(59,130,246,.20),rgba(59,130,246,0))}
+  .vhead{position:relative;display:flex;align-items:center;justify-content:space-between;
+    padding-bottom:calc(var(--s)*.85px)}
+  .vhead span{font-size:calc(var(--s)*.9px);text-transform:uppercase;letter-spacing:.15em;
+    color:var(--mute);font-weight:700}
+  .vhead .ill{color:#E4785F}
+  .vrow{position:relative;display:flex;align-items:baseline;justify-content:space-between;
+    gap:calc(var(--s)*1px);padding:calc(var(--s)*.72px) 0;border-top:1px solid var(--line)}
+  .vrow .lk{font-size:calc(var(--s)*1.1px);color:var(--mute);white-space:nowrap}
+  .vrow .vv{font-family:var(--display);font-weight:800;letter-spacing:-.005em;
+    font-size:calc(var(--s)*1.55px);line-height:1.1;white-space:nowrap}
+  .vst{display:flex;align-items:center;gap:calc(var(--s)*.55px)}
+  .vst b{font-family:var(--display);font-weight:800;letter-spacing:.01em;
+    font-size:calc(var(--s)*1.55px);line-height:1.1;white-space:nowrap}
+  .tick{width:calc(var(--s)*1.7px);height:calc(var(--s)*1.7px);display:block;flex:none}
+  .vnote{font-size:calc(var(--s)*1.0px);line-height:1.4;color:var(--mute);
+    margin-top:calc(var(--s)*1.0px)}
+  #stage.tall .vnote{font-size:calc(var(--s)*1.08px)}
+
+  .stack{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*1.2px)}
+  .vtag{display:flex;align-items:center;gap:calc(var(--s)*.6px);
+    font-size:calc(var(--s)*1.08px);color:var(--mute);will-change:transform,opacity}
+  .vtag .tick{width:calc(var(--s)*1.3px);height:calc(var(--s)*1.3px)}
+</style>
+
+<div id="stage">
+  <div id="wash" data-decor></div>
+  <svg id="mesh" data-decor preserveAspectRatio="none"></svg>
+
+  <div id="brandbar">
+    <img src="../brand/logo.svg" alt="">
+    <div><div class="wm">PCI AI</div><div class="tag">Project Controls Institute</div></div>
+  </div>
+
+  <!-- 1 · the challenge, aimed straight at someone reading a CV -->
+  <section class="beat" id="b1">
+    <div class="eyebrow" id="e1">The line on their CV</div>
+    <div class="rule" id="u1"></div>
+    <div class="big" id="h1">Can you<br>check that<br><span class="crim">credential?</span></div>
+    <div class="sub" id="s1">Not the job title. The credential. Right now, in a browser, before you sign off on the hire.</div>
+  </section>
+
+  <!-- 2 · the diagnosis, structural and second-person: no rate, no other body -->
+  <section class="beat" id="b2">
+    <div class="eyebrow" id="e2">If the answer is no</div>
+    <div class="rule" id="u2"></div>
+    <div class="mid" id="h2">Then you are<br>not checking<br>anything.<br>You are trusting<br><span class="crim">the typing.</span></div>
+  </section>
+
+  <!-- 3 · the principle. The share line. -->
+  <section class="beat" id="b3">
+    <div class="eyebrow" id="e3">The rule we hold ourselves to</div>
+    <div class="rule" id="u3"></div>
+    <div class="principle" id="h3">A credential<br>that cannot<br>be checked<br><span class="hl">is not a<br>credential.</span></div>
+    <div class="attrib" id="a3">Project Controls Institute</div>
+  </section>
+
+  <!-- 4 · so ours can be. An abstract record, looked up and confirmed. -->
+  <section class="beat" id="b4">
+    <div class="eyebrow" id="e4">Public verification</div>
+    <div class="rule" id="u4"></div>
+    <div class="mid" id="h4">So ours<br>can be.</div>
+
+    <div class="vcard" id="vc">
+      <div class="vscan" id="vs"></div>
+      <div class="vhead"><span>Credential lookup</span><span class="ill">Illustrative</span></div>
+      <div class="vrow"><span class="lk">Reference</span><span class="vv" id="vref">PCL-AI-0000-SAMPLE</span></div>
+      <div class="vrow"><span class="lk">Credential</span><span class="vv">PCL-AI</span></div>
+      <div class="vrow"><span class="lk">Status</span>
+        <span class="vst">
+          <svg class="tick" id="tk" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path id="tkp"
+            d="M3.5 12.6 L9.6 18.7 L20.5 6.2" stroke="#3B82F6" stroke-width="3.1"
+            stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <b id="vstat">Checking</b>
+        </span>
+      </div>
+    </div>
+
+    <div class="vnote" id="vn">An illustrative record. Not a real person, not a real reference, and not a statistic about anybody.</div>
+  </section>
+
+  <!-- 5 · the offer, past the two-thirds point, then the address -->
+  <section class="beat" id="b5">
+    <div class="stack">
+      <div>
+        <div class="eyebrow" id="e5">Founding enrolment is open</div>
+        <div class="rule" id="u5"></div>
+        <div class="mid" id="h5">Get one that<br><span class="hl">checks out.</span></div>
+      </div>
+      <div class="offer" id="of">
+        <div class="lab">Apply code</div>
+        <div class="code">FOUNDINGFREE</div>
+        <div class="what">Free membership · free study access · free exam enrolment</div>
+      </div>
+      <div class="mail" id="ml"><b>info@pciai.org</b></div>
+      <div class="vtag" id="vt">
+        <svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path
+          d="M3.5 12.6 L9.6 18.7 L20.5 6.2" stroke="#3B82F6" stroke-width="3.1"
+          stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Every PCI credential is publicly verifiable</span>
+      </div>
+    </div>
+  </section>
+
+  <div id="foot"><span>pciai.org</span><span>A CREDENTIAL YOU CAN CHECK</span></div>
+  <div id="barwrap"><div id="bar"></div></div>
+</div>
+
+<script src="../common/kit.js"></script>
+<script>
+const P = PCI;
+const ST = P.setupStage();
+P.drawMesh(ST.W, ST.H, ST.SS);
+
+/* Beats. 30.00s total: inside the 28–32s window, and the offer opens at
+   t=21.80 — past the two-thirds point (20.00s), never in the hook. */
+const BEATS = [
+  { id:'b1', in:0.00,  out:4.40  },   // the challenge
+  { id:'b2', in:4.40,  out:9.60  },   // the diagnosis
+  { id:'b3', in:9.60,  out:14.20 },   // the principle
+  { id:'b4', in:14.20, out:21.80 },   // the lookup
+  { id:'b5', in:21.80, out:30.00 },   // the offer + address
+];
+const DUR = 30.00;
+window.__DUR = DUR;
+
+const $ = s => document.querySelector(s);
+const EL = {
+  e1:$('#e1'), u1:$('#u1'), h1:$('#h1'), s1:$('#s1'),
+  e2:$('#e2'), u2:$('#u2'), h2:$('#h2'),
+  e3:$('#e3'), u3:$('#u3'), h3:$('#h3'), a3:$('#a3'),
+  e4:$('#e4'), u4:$('#u4'), h4:$('#h4'),
+  vc:$('#vc'), vs:$('#vs'), vref:$('#vref'), tk:$('#tk'), tkp:$('#tkp'), vstat:$('#vstat'), vn:$('#vn'),
+  e5:$('#e5'), u5:$('#u5'), h5:$('#h5'), of:$('#of'), ml:$('#ml'), vt:$('#vt'),
+};
+window.__EL = EL;
+
+/* fade-and-rise, the one motion every beat shares */
+const rise = (el, u, t0, d = 0.50, em = 0.60) => {
+  if (!el) return;
+  const p = P.seg(u, t0, t0 + d, P.outExpo);
+  el.style.opacity = p.toFixed(3);
+  el.style.transform = `translateY(${((1 - p) * em).toFixed(2)}em)`;
+};
+const head = (e, u, u0) => { e.style.opacity = P.seg(u, u0, u0 + 0.28).toFixed(3); };
+
+/* The tick is drawn, not faded in: its dash offset is a function of t, so the
+   stroke writes itself exactly once and scrubs backwards identically. 40 is a
+   comfortable over-estimate of the path length in viewBox units. */
+const LEN = 40;
+const drawTick = (svg, path, p) => {
+  svg.style.opacity = (p > 0 ? 1 : 0).toFixed(3);
+  path.style.strokeDasharray = LEN;
+  path.style.strokeDashoffset = (LEN * (1 - p)).toFixed(2);
+};
+
+const FX = {
+  /* 0.00 cut · 0.10 headline · 1.30 sub — three changes, hook fully typeset
+     by t≈0.6s so frame one already carries the question. */
+  b1(u){ head(EL.e1,u,0.00); P.rule(EL.u1,u,0.06);
+         P.revealWords(EL.h1,u,0.10,{stagger:0.042,dur:0.34});
+         rise(EL.s1,u,1.30,0.55,0.5); },
+
+  /* 4.40 cut · 4.75 headline (rolls line by line to 6.3s) */
+  b2(u){ head(EL.e2,u,0.04); P.rule(EL.u2,u,0.12);
+         P.revealWords(EL.h2,u,0.35,{stagger:0.070,dur:0.42}); },
+
+  /* 9.60 cut · 10.05 principle · 11.80 attribution.
+     The principle finishes at ≈11.2 and holds 3.0s — the payoff hold. */
+  b3(u){ head(EL.e3,u,0.04); P.rule(EL.u3,u,0.12);
+         P.revealWords(EL.h3,u,0.45,{stagger:0.075,dur:0.46});
+         rise(EL.a3,u,2.20,0.55,0.45); },
+
+  /* 14.20 cut · 14.62 headline · 15.60 card + caveat · 17.20 confirmed */
+  b4(u){
+    head(EL.e4,u,0.04); P.rule(EL.u4,u,0.12);
+    P.revealWords(EL.h4,u,0.42,{stagger:0.070,dur:0.42});
+
+    // the card lands
+    const c = P.seg(u,1.40,2.05,P.outBack);
+    EL.vc.style.opacity = Math.min(1,c*1.35).toFixed(3);
+    EL.vc.style.transform = `translateY(${((1-c)*0.55).toFixed(2)}em)`;
+
+    // a lookup sweep crosses it once, between u 2.05 and 3.00
+    const sp = P.seg(u,2.05,3.00,P.inOut);
+    EL.vs.style.opacity = (u > 2.02 && u < 3.02 ? P.pulse(u,2.05,3.00) * 0.95 : 0).toFixed(3);
+    EL.vs.style.left = (-12 + sp * 112).toFixed(2) + '%';
+
+    // and the record resolves. Text is chosen from t, so it is still pure.
+    const done = u >= 3.00;
+    EL.vstat.textContent = done ? 'Active' : 'Checking';
+    EL.vstat.style.color = done ? '#fff' : '#7E90AC';
+    drawTick(EL.tk, EL.tkp, P.seg(u,3.00,3.55,P.outCubic));
+
+    // the caveat arrives with the record, not after it: the word ILLUSTRATIVE
+    // and the plain-English disclaimer are on screen for every frame the
+    // reference is, so the motif can never be read as a real lookup.
+    rise(EL.vn,u,1.52,0.65,0.4);
+  },
+
+  /* 21.80 cut · 22.30 headline · 23.10 offer · 24.30 address · 26.00 tag.
+     FOUNDINGFREE is up from 23.10 (6.9s) and info@pciai.org from 24.30
+     (5.7s) — both far beyond the 2s floor for a code or an address. */
+  b5(u){
+    head(EL.e5,u,0.04); P.rule(EL.u5,u,0.12);
+    P.revealWords(EL.h5,u,0.50,{stagger:0.070,dur:0.42});
+    const p = P.seg(u,1.30,1.95,P.outBack);
+    EL.of.style.opacity = Math.min(1,p*1.3).toFixed(3);
+    EL.of.style.transform = `translateY(${((1-p)*0.5).toFixed(2)}em) scale(${(0.965+0.035*Math.min(1,p)).toFixed(4)})`;
+    rise(EL.ml,u,2.50,0.50,0.45);
+    rise(EL.vt,u,4.20,0.55,0.40);
+  },
+};
+
+window.seek = function (t) {
+  t = Math.max(0, Math.min(DUR, +t || 0));
+  const live = P.activate(BEATS, t);
+  FX[live.id] && FX[live.id](t - live.in);
+  P.furniture(t, DUR, {});
+};
+window.seek(0);
+</script>

@@ -30,26 +30,50 @@ YouTube and Vimeo specs without re-encoding.
 
 ---
 
-## The one thing this pipeline cannot produce
+## The voiceover
 
-**The voiceover.** A broadcast-quality human read is not something that can be
-synthesised here, and shipping a robotic scratch track labelled "professional
-voiceover" would be worse than shipping none. So the delivered masters carry
-**picture, captions and the music bed** — everything except the voice.
+**Delivered.** The narration is ElevenLabs *"Jim Executive — Authoritative,
+British and Warm"* (`tXxkePQsw0G69D8VeDzp`) — a stock library voice, **not a
+clone of any real person**. It is a **synthetic voice** and the asset manifest
+records it as such. It is the same narrator as the 75-second film and the
+explainer, so the three pieces read as one body of work.
 
 `script.md` has the read: four lines, 27 words, with in/out times to the
-hundredth of a second, casting direction and recording notes. It is written so a
-voice artist can record to time on the first take.
+hundredth of a second, casting direction and recording notes.
 
-### Laying the voiceover in
+### How it was laid in
 
-Record to the timings in `script.md`, export a 48 kHz WAV with the first word
-starting at **0.30 s**, then:
+The four lines were generated separately, one per caption window, so each could
+be placed against its own timecode:
+
+| Line | Window |
+|---|---|
+| 1 | 0.30 – 3.25 s |
+| 2 | 3.70 – 6.65 s |
+| 3 | 6.95 – 9.75 s |
+| 4 | 10.05 – 13.00 s |
+
+`src/vo-mix.sh` trims each take, fits it to its window with `librubberband`
+(formant-preserving — plain `atempo` thins the voice), lays the four into a
+15-second bed, side-chains the music under the voice and re-muxes. **Only line 3
+needed any stretch at all, at 1.018x** — inaudible. The picture is never
+re-encoded: the mix is muxed in with `-c:v copy`, so the masters keep the exact
+frames they were graded with.
+
+Delivered loudness is **−15.8 LUFS**, inside the −16 LUFS target for social
+delivery. `pci-launch-15s-1920x1080-silent.mp4` is deliberately left silent, for
+anyone who wants to lay their own read or bed over the picture.
+
+### Replacing the read with a human voice artist
+
+Record to the timings above, export a 48 kHz WAV with the first word starting at
+**0.30 s**, then re-run `src/vo-mix.sh` pointing at your takes — or, for a single
+pre-mixed read, mix it against the silent master directly:
 
 ```bash
-ffmpeg -i dist/pci-launch-15s-1920x1080-captions.mp4 \
-       -i vo.wav \
-       -filter_complex "[0:a]volume=0.42[bed];[1:a]volume=1.0[vo];[bed][vo]amix=inputs=2:duration=first:normalize=0[a]" \
+ffmpeg -i dist/pci-launch-15s-1920x1080-silent.mp4 \
+       -i vo.wav -i dist/pci-launch-15s-score.wav \
+       -filter_complex "[2:a]volume=0.42[bed];[bed][1:a]amix=inputs=2:duration=first:normalize=0[a]" \
        -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k \
        dist/pci-launch-15s-final.mp4
 ```
@@ -58,7 +82,7 @@ ffmpeg -i dist/pci-launch-15s-1920x1080-captions.mp4 \
 not a rule. If the read is quieter than expected, sidechain instead:
 
 ```bash
--filter_complex "[0:a][1:a]sidechaincompress=threshold=0.05:ratio=6:attack=12:release=280[bed];[bed][1:a]amix=inputs=2:normalize=0[a]"
+-filter_complex "[2:a][1:a]sidechaincompress=threshold=0.05:ratio=6:attack=12:release=280[bed];[bed][1:a]amix=inputs=2:normalize=0[a]"
 ```
 
 The music was written to leave room in the mid-range for a voice, so heavy ducking

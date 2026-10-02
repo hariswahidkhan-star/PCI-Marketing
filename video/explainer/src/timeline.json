@@ -1,0 +1,375 @@
+{
+  "total": 256.24,
+  "segments": {
+    "1": [
+      0.35,
+      6.0
+    ],
+    "2": [
+      6.0,
+      16.1
+    ],
+    "3": [
+      16.72,
+      25.67
+    ],
+    "4": [
+      25.67,
+      32.15
+    ],
+    "5": [
+      32.77,
+      40.04
+    ],
+    "6": [
+      40.04,
+      49.25
+    ],
+    "7": [
+      49.87,
+      62.26
+    ],
+    "8": [
+      62.26,
+      68.32
+    ],
+    "9": [
+      68.94,
+      80.11
+    ],
+    "10": [
+      80.73,
+      88.73
+    ],
+    "11": [
+      89.35,
+      97.27
+    ],
+    "12": [
+      97.89,
+      110.6
+    ],
+    "13": [
+      110.6,
+      116.13
+    ],
+    "14": [
+      116.75,
+      120.36
+    ],
+    "15": [
+      120.36,
+      128.27
+    ],
+    "16": [
+      128.89,
+      132.89
+    ],
+    "17": [
+      132.89,
+      142.65
+    ],
+    "18": [
+      143.27,
+      147.17
+    ],
+    "19": [
+      147.17,
+      159.59
+    ],
+    "20": [
+      160.21,
+      165.98
+    ],
+    "21": [
+      165.98,
+      175.47
+    ],
+    "22": [
+      176.09,
+      187.19
+    ],
+    "23": [
+      187.19,
+      195.3
+    ],
+    "24": [
+      195.3,
+      199.78
+    ],
+    "25": [
+      200.4,
+      210.82
+    ],
+    "26": [
+      211.44,
+      228.61
+    ],
+    "27": [
+      228.61,
+      234.19
+    ],
+    "28": [
+      234.19,
+      244.14
+    ],
+    "29": [
+      244.76,
+      248.97
+    ],
+    "30": [
+      248.97,
+      255.14
+    ]
+  },
+  "captions": [
+    [
+      0.35,
+      6.0,
+      "Project controls is the discipline\nthat turns intent into delivery."
+    ],
+    [
+      6.0,
+      16.1,
+      "Planning, cost, earned value, forecasting,\nrisk and project finance \u2014 practised as one\nintegrated whole, not as separate techniques."
+    ],
+    [
+      16.72,
+      25.67,
+      "Project management has PMI.\nAccountancy has ACCA. Finance has CFA."
+    ],
+    [
+      25.67,
+      32.15,
+      "Project controls has had no equivalent \u2014 no\nshared standard, and no professional home."
+    ],
+    [
+      32.77,
+      40.04,
+      "And the discipline is changing. Schedules, forecasts\nand cost reports are increasingly supported by AI."
+    ],
+    [
+      40.04,
+      49.25,
+      "It can accelerate analysis. It can also create false\nconfidence. Technology does not remove accountability."
+    ],
+    [
+      49.87,
+      62.26,
+      "PCI AI exists to close that gap: to give\nproject controls a shared standard, an\nindependent credential and a professional home."
+    ],
+    [
+      62.26,
+      68.32,
+      "Built for how the discipline is practised\nnow, with AI governance at its core."
+    ],
+    [
+      68.94,
+      80.11,
+      "Its mission is to advance the profession through\ncertification, research, professional development,\nstandards, publications and the responsible adoption\nof AI."
+    ],
+    [
+      80.73,
+      88.73,
+      "Its position on that adoption is\nexplicit. It certifies professionals\nwho govern AI \u2014 not who defer to it."
+    ],
+    [
+      89.35,
+      97.27,
+      "The framework is the PCI AI Project\nLeadership Certification Suite \u2014\nthree AI-era leadership credentials."
+    ],
+    [
+      97.89,
+      110.6,
+      "PCL-AI, for project controls. PFL-AI, for\nproject finance. PML-AI, for project management."
+    ],
+    [
+      110.6,
+      116.13,
+      "Finance intelligently. Control\npredictively. Deliver successfully."
+    ],
+    [
+      116.75,
+      120.36,
+      "Each credential rests on a\npublished Body of Knowledge."
+    ],
+    [
+      120.36,
+      128.27,
+      "Its first edition defines thirteen\ndomains and sixty-one knowledge\nareas, weighted forty, forty, twenty."
+    ],
+    [
+      128.89,
+      132.89,
+      "Project accounting and finance. Project\nmanagement principles. And governed AI."
+    ],
+    [
+      132.89,
+      142.65,
+      "AI is not an appendix. It is a domain in its own\nright, and it is embedded through the other twelve."
+    ],
+    [
+      143.27,
+      147.17,
+      "The examination is scenario-based\nand criterion-referenced."
+    ],
+    [
+      147.17,
+      159.59,
+      "It asks whether you can read a cost position,\ninterpret an earned-value index, judge a risk\nresponse, and decide whether an AI-generated forecast\ncan be trusted."
+    ],
+    [
+      160.21,
+      165.98,
+      "There are two routes in \u2014 an experience route\nfor practitioners, and a Foundation route."
+    ],
+    [
+      165.98,
+      175.47,
+      "The credential renews on a three-year CPD\ncycle with a mandatory AI-currency component,\nand every credential can be verified publicly."
+    ],
+    [
+      176.09,
+      187.19,
+      "The discipline is the same wherever\ncapital is deployed at scale, so the\ncredential is written to travel."
+    ],
+    [
+      187.19,
+      195.3,
+      "Energy and utilities. Rail and\ntransportation. Aerospace and defence. Oil\nand gas. Construction and infrastructure."
+    ],
+    [
+      195.3,
+      199.78,
+      "Aviation. Manufacturing. Data centres.\nSmart cities. And government programmes."
+    ],
+    [
+      200.4,
+      210.82,
+      "For organisations, the same standard supports team\nenrolment at scale through corporate programmes, and\ncurriculum alignment through university partnerships."
+    ],
+    [
+      211.44,
+      228.61,
+      "PCI is candid about what it is not.\nIt is not accredited by ANAB, IAS, or\nany ISO/IEC 17024 accreditation body."
+    ],
+    [
+      228.61,
+      234.19,
+      "Its framework is developed with reference\nto those personnel-certification\nprinciples, and it says so plainly."
+    ],
+    [
+      234.19,
+      244.14,
+      "For a body whose value rests on trust, that\nrestraint is the foundation \u2014 not a weakness."
+    ],
+    [
+      244.76,
+      248.97,
+      "AI proposes. The professional disposes."
+    ],
+    [
+      248.97,
+      255.14,
+      "Discover PCI AI at pciai.org"
+    ]
+  ],
+  "shots": [
+    [
+      "s1",
+      "Why PCI AI exists",
+      0.0,
+      16.41
+    ],
+    [
+      "s2",
+      "Why PCI AI exists",
+      16.41,
+      32.46
+    ],
+    [
+      "s3",
+      "Why PCI AI exists",
+      32.46,
+      49.56
+    ],
+    [
+      "s4",
+      "The objective",
+      49.56,
+      68.63
+    ],
+    [
+      "s5",
+      "The objective",
+      68.63,
+      80.42
+    ],
+    [
+      "s6",
+      "The objective",
+      80.42,
+      89.04
+    ],
+    [
+      "s7",
+      "The certifications",
+      89.04,
+      97.58
+    ],
+    [
+      "s8",
+      "The certifications",
+      97.58,
+      116.44
+    ],
+    [
+      "s9",
+      "What is assessed",
+      116.44,
+      128.58
+    ],
+    [
+      "s10",
+      "What is assessed",
+      128.58,
+      142.96
+    ],
+    [
+      "s11",
+      "What is assessed",
+      142.96,
+      159.9
+    ],
+    [
+      "s12",
+      "What is assessed",
+      159.9,
+      175.78
+    ],
+    [
+      "s13",
+      "Industries",
+      175.78,
+      200.09
+    ],
+    [
+      "s14",
+      "Industries",
+      200.09,
+      211.13
+    ],
+    [
+      "s15",
+      "Integrity",
+      211.13,
+      244.45
+    ],
+    [
+      "s16",
+      "Close",
+      244.45,
+      256.24
+    ]
+  ]
+}
